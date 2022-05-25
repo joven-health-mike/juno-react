@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from "react";
+import React from "react"
 
 const SchoolDetails = ({ school }) => {
   return (
@@ -20,7 +20,7 @@ const SchoolDetails = ({ school }) => {
         ))}
       </label>
     </>
-  );
-};
+  )
+}
 
-export default SchoolDetails;
+export default SchoolDetails
