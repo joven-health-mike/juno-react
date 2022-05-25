@@ -2,6 +2,7 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useState } from "react"
+import StudentDetails from "./components/details/StudentDetails"
 import CreateAppointmentForm from "./components/forms/CreateAppointmentForm"
 import { AppointmentsContext, exampleAppointments } from "./data/appointments"
 import { CounselorsContext, exampleCounselors } from "./data/counselors"
@@ -35,11 +36,7 @@ function App() {
           <SchoolsContext.Provider value={schools}>
             <StudentsContext.Provider value={students}>
               <UsersContext.Provider value={users}>
-                <CreateAppointmentForm
-                  defaultAppointment={exampleAppointments[0]}
-                  onSubmit={onAppointmentSubmit}
-                  onCancel={onAppointmentCancel}
-                />
+                <StudentDetails student={students[0]} />
               </UsersContext.Provider>
             </StudentsContext.Provider>
           </SchoolsContext.Provider>
