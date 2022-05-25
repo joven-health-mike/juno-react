@@ -15,21 +15,18 @@ const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
     const counselorName = e.target.value.includes("Select")
       ? ""
       : e.target.value
-    console.log("onCounselorChanged:", counselorName)
     setAppointment({ ...appointment, counselor: counselorName })
   }
 
   const onSchoolChanged = (e) => {
     e.preventDefault()
     const schoolName = e.target.value.includes("Select") ? "" : e.target.value
-    console.log("onSchoolChanged:", schoolName)
     setAppointment({ ...appointment, facilitator: schoolName })
   }
 
   const onStudentChanged = (e) => {
     e.preventDefault()
     const studentName = e.target.value.includes("Select") ? "" : e.target.value
-    console.log("onStudentChanged:", studentName)
     setAppointment({ ...appointment, student: studentName })
   }
 
