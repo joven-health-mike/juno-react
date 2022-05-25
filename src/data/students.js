@@ -12,6 +12,27 @@ export const studentSchema = {
   counselor: "string",
 }
 
+export const exampleStudents = [
+  {
+    first_name: "Johnny",
+    last_name: "Rickets",
+    school: "Aardvark Academy",
+    counselor: "Jacek McGuinness",
+  },
+  {
+    first_name: "Jennifer",
+    last_name: "Frigo",
+    school: "Aardvark Academy",
+    counselor: "Jacek McGuinness",
+  },
+  {
+    first_name: "Chris",
+    last_name: "Moon",
+    school: "Aardvark Academy",
+    counselor: "Jacek McGuinness",
+  },
+]
+
 const BASE_URL = "http://localhost:8080/api/students"
 export const initialStudents = []
 

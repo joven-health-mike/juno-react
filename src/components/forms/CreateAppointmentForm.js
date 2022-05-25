@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import DatePicker from "react-datepicker"
 import { CounselorsContext } from "../../data/counselors"
 import { SchoolsContext } from "../../data/schools"
@@ -8,12 +8,41 @@ import { StudentsContext } from "../../data/students"
 import "react-datepicker/dist/react-datepicker.css"
 
 const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
-  const [appointment, setAppointment] = useState({})
+  const [appointment, setAppointment] = useState(defaultAppointment ?? {})
 
-  useEffect(() => setAppointment(defaultAppointment), [defaultAppointment])
+  const onCounselorChanged = (e) => {
+    e.preventDefault()
+    const counselorName = e.target.value.includes("Select")
+      ? ""
+      : e.target.value
+    console.log("onCounselorChanged:", counselorName)
+    setAppointment({ ...appointment, counselor: counselorName })
+  }
+
+  const onSchoolChanged = (e) => {
+    e.preventDefault()
+    const schoolName = e.target.value.includes("Select") ? "" : e.target.value
+    console.log("onSchoolChanged:", schoolName)
+    setAppointment({ ...appointment, facilitator: schoolName })
+  }
+
+  const onStudentChanged = (e) => {
+    e.preventDefault()
+    const studentName = e.target.value.includes("Select") ? "" : e.target.value
+    console.log("onStudentChanged:", studentName)
+    setAppointment({ ...appointment, student: studentName })
+  }
+
+  const onFormSubmit = (e) => {
+    e.preventDefault()
+    if (appointment.school === "") return alert("Must select a school")
+    if (appointment.counselor === "") return alert("Must select a counselor")
+    if (appointment.student === "") return alert("Must select a student")
+    onSubmit(appointment)
+  }
 
   return (
-    <form>
+    <form onSubmit={onFormSubmit}>
       <h1>CreateAppointment</h1>
       <label>
         Title
@@ -23,7 +52,9 @@ const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
           name="title"
           value={appointment.title}
           required
-          onChange={(title) => setAppointment({ ...appointment, title: title })}
+          onChange={(e) =>
+            setAppointment({ ...appointment, title: e.target.value })
+          }
         />
       </label>
       <label>
@@ -54,7 +85,15 @@ const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
           {(counselors) => {
             return (
               <>
-                <select></select>
+                <select
+                  value={appointment.counselor}
+                  onChange={onCounselorChanged}
+                >
+                  <option key={"Select a Counselor"}>Select a Counselor</option>
+                  {counselors.map((counselor) => (
+                    <option key={counselor.name}>{counselor.name}</option>
+                  ))}
+                </select>
               </>
             )
           }}
@@ -66,7 +105,14 @@ const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
           {(students) => {
             return (
               <>
-                <select></select>
+                <select value={appointment.student} onChange={onStudentChanged}>
+                  <option key={"Select a Student"}>Select a Student</option>
+                  {students.map((student) => (
+                    <option key={student.first_name + " " + student.last_name}>
+                      {student.first_name + " " + student.last_name}
+                    </option>
+                  ))}
+                </select>
               </>
             )
           }}
@@ -78,12 +124,27 @@ const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
           {(schools) => {
             return (
               <>
-                <select></select>
+                <select
+                  value={appointment.facilitator}
+                  onChange={onSchoolChanged}
+                >
+                  <option key={"Select a Facilitator"}>
+                    Select a Facilitator
+                  </option>
+                  {schools.map((school) => (
+                    <option key={school.name}>{school.name}</option>
+                  ))}
+                </select>
               </>
             )
           }}
         </SchoolsContext.Consumer>
       </label>
+
+      <button type="submit">Submit</button>
+      <button type="button" onClick={onCancel}>
+        Cancel
+      </button>
     </form>
   )
 }

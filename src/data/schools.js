@@ -11,6 +11,14 @@ export const schoolSchema = {
   facilitators: "string[]",
 }
 
+export const exampleSchools = [
+  {
+    name: "Aardvark Academy",
+    email: "aardvark-academy@jovenhealth.com",
+    facilitators: ["Bruce Wayne", "Dwayne Johnson", "Antonio Banderez"],
+  },
+]
+
 const BASE_URL = "http://localhost:8080/api/schools"
 export const initialSchools = []
 

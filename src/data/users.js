@@ -3,7 +3,7 @@
 import React from "react"
 import { httpGet, httpPost, httpPut, httpDelete } from "../http/HttpWrapper"
 
-export const CounselorsContext = React.createContext([])
+export const UsersContext = React.createContext([])
 
 export const userSchema = {
   name: "string",

@@ -12,6 +12,15 @@ export const counselorSchema = {
   assignedSchools: "string[]",
 }
 
+export const exampleCounselors = [
+  {
+    name: "Jacek McGuinness",
+    email: "jacek-mcguinness@jovenhealth.com",
+    roomLink: "https://jovenhealth.com/room-jacek",
+    assignedSchools: ["Aardvark Academy"],
+  },
+]
+
 const BASE_URL = "http://localhost:8080/api/counselors"
 export const initialCounselors = []
 

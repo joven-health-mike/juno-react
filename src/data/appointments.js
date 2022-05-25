@@ -14,6 +14,33 @@ export const appointmentSchema = {
   facilitator: "id",
 }
 
+export const exampleAppointments = [
+  {
+    title: "Johnny R",
+    start: new Date(),
+    end: new Date(),
+    counselor: "Jacek McGuinness",
+    student: "Johnny Rickets",
+    facilitator: "Aardvark Academy",
+  },
+  {
+    title: "Jennifer F",
+    start: new Date(),
+    end: new Date(),
+    counselor: "Jacek McGuinness",
+    student: "Jennifer Frigo",
+    facilitator: "Aardvark Academy",
+  },
+  {
+    title: "Chris M",
+    start: new Date(),
+    end: new Date(),
+    counselor: "Jacek McGuinness",
+    student: "Chris Moon",
+    facilitator: "Aardvark Academy",
+  },
+]
+
 const BASE_URL = "http://localhost:8080/api/appointments"
 export const initialAppointments = []
 
