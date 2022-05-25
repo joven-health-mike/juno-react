@@ -2,20 +2,19 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useState } from "react"
-import StudentDetails from "./components/details/StudentDetails"
-import CreateAppointmentForm from "./components/forms/CreateAppointmentForm"
 import { AppointmentsContext, exampleAppointments } from "./data/appointments"
 import { CounselorsContext, exampleCounselors } from "./data/counselors"
 import { SchoolsContext, exampleSchools } from "./data/schools"
 import { exampleStudents, StudentsContext } from "./data/students"
-import { UsersContext } from "./data/users"
+import { UsersContext, exampleUsers } from "./data/users"
+import UserDetails from "./components/details/UserDetails"
 
 function App() {
   const [appointments, setAppointments] = useState(exampleAppointments)
   const [counselors, setCounselors] = useState(exampleCounselors)
   const [schools, setSchools] = useState(exampleSchools)
   const [students, setStudents] = useState(exampleStudents)
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState(exampleUsers)
 
   // This is just test code for now. Feel free to delete/modify it to test your components.
 
@@ -36,7 +35,7 @@ function App() {
           <SchoolsContext.Provider value={schools}>
             <StudentsContext.Provider value={students}>
               <UsersContext.Provider value={users}>
-                <StudentDetails student={students[0]} />
+                <UserDetails user={users[0]} />
               </UsersContext.Provider>
             </StudentsContext.Provider>
           </SchoolsContext.Provider>
