@@ -1,6 +1,9 @@
 // Copyright 2022 Social Fabric, LLC
 
+import React from "react"
 import { httpGet, httpPost, httpPut, httpDelete } from "../http/HttpWrapper"
+
+export const SchoolsContext = React.createContext([])
 
 export const schoolSchema = {
   name: "string",
