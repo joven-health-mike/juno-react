@@ -1,21 +1,24 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from "react"
-import AppointmentDetails from "./components/details/AppointmentDetails"
+import CounselorDetails from "./components/details/CounselorDetails"
 
 function App() {
-  const appointment = {
-    title: "My Appointment",
-    start: "8:00 am",
-    end: "8:30 am",
-    counselor: "Jacek McGuinness",
-    student: "Kaylee Macentire",
-    facilitator: "",
+  // This is just test code for now. Feel free to delete/modify it to test your components.
+  const counselor = {
+    name: "Jacek McGuinness",
+    email: "jacek-mcguinness@jovenhealth.com",
+    roomLink: "https://blahblahblah.com",
+    assignedSchools: [
+      "Aardvark Academy",
+      "Moose Middle School",
+      "Rattlesnake School",
+    ],
   }
 
   return (
     <>
-      <AppointmentDetails appointment={appointment} />
+      <CounselorDetails counselor={counselor} />
     </>
   )
 }
