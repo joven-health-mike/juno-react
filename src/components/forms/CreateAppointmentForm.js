@@ -43,7 +43,7 @@ const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
 
   return (
     <form onSubmit={onFormSubmit}>
-      <h1>CreateAppointment</h1>
+      <h1>Create Appointment</h1>
       <label>
         Title
         <input
