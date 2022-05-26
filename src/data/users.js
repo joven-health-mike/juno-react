@@ -13,6 +13,15 @@ export const userSchema = {
   associatedAccountId: "string",
 }
 
+export const ROLES = [
+  "admin",
+  "counselor",
+  "facilitator",
+  "school",
+  "student",
+  "guardian",
+]
+
 export const exampleUsers = [
   {
     name: "Mike Burke",
