@@ -10,10 +10,18 @@ export const userSchema = {
   email: "string",
   password: "string",
   role: "string",
-  associatedSchools: "string",
-  associatedCounselors: "string",
-  associatedStudents: "string",
+  associatedAccountId: "string",
 }
+
+export const exampleUsers = [
+  {
+    name: "Mike Burke",
+    email: "mike@jovenhealth.com",
+    password: "abcd",
+    role: "admin",
+    associatedAccountId: "admin",
+  },
+]
 
 const BASE_URL = "http://localhost:8080/api/users"
 export const initialUsers = []
