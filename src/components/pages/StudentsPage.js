@@ -3,7 +3,11 @@
 import React from "react"
 
 const StudentsPage = () => {
-  return <></>
+  return (
+    <>
+      <h1>Students</h1>
+    </>
+  )
 }
 
 export default StudentsPage

@@ -4,7 +4,12 @@ import React from "react"
 import AppointmentDetails from "../details/AppointmentDetails"
 
 const AppointmentDetailPage = ({ appointment }) => {
-  return <AppointmentDetails appointment={appointment} />
+  return (
+    <>
+      <h1>Appointment Details</h1>
+      <AppointmentDetails appointment={appointment} />
+    </>
+  )
 }
 
 export default AppointmentDetailPage

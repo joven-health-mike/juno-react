@@ -3,7 +3,11 @@
 import React from "react"
 
 const CounselorsPage = () => {
-  return <></>
+  return (
+    <>
+      <h1>Counselors</h1>
+    </>
+  )
 }
 
 export default CounselorsPage

@@ -3,7 +3,11 @@
 import React from "react"
 
 const CalendarPage = () => {
-  return <></>
+  return (
+    <>
+      <h1>Calendar</h1>
+    </>
+  )
 }
 
 export default CalendarPage

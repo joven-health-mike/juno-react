@@ -3,7 +3,11 @@
 import React from "react"
 
 const AppointmentsPage = () => {
-  return <></>
+  return (
+    <>
+      <h1>Appointments</h1>
+    </>
+  )
 }
 
 export default AppointmentsPage

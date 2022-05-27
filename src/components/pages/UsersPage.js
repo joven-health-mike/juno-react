@@ -3,7 +3,11 @@
 import React from "react"
 
 const UsersPage = () => {
-  return <></>
+  return (
+    <>
+      <h1>User</h1>
+    </>
+  )
 }
 
 export default UsersPage

@@ -4,7 +4,12 @@ import React from "react"
 import CreateUserForm from "../forms/CreateUserForm"
 
 const AccountDetailPage = ({ defaultUser }) => {
-  return <CreateUserForm />
+  return (
+    <>
+      <h1>Account Details</h1>
+      <CreateUserForm />
+    </>
+  )
 }
 
 export default AccountDetailPage
