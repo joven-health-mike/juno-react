@@ -3,17 +3,18 @@
 import React from "react"
 import Navbar from "../navbar/Navbar"
 import { getItems } from "../navbar/navBarItems"
+import styles from "./pages.module.css"
 
 const HomePage = () => {
   const role = "admin"
 
   return (
-    <>
+    <div className={styles.mainContainer}>
       <nav>
         <Navbar items={getItems(role)} />
       </nav>
-      <h1>Hello World!</h1>
-    </>
+      <h1>Home</h1>
+    </div>
   )
 }
 

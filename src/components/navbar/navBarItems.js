@@ -9,7 +9,7 @@ import {
   FaUserAstronaut,
 } from "react-icons/fa"
 import { IoMdLogOut, IoMdBusiness, IoMdContacts } from "react-icons/io"
-import image from "../../assets/Logo-180x60horiz-alphabg.png"
+import image from "../../assets/Logo-192sq-alphabg.png"
 
 export function getItems(role) {
   switch (role) {
@@ -42,14 +42,14 @@ const allItems = [
     path: "/",
   },
   {
-    title: "Calendar",
-    icon: <FaCalendarAlt />,
-    path: "/calendar",
-  },
-  {
     title: "Appointments",
     icon: <FaCalendarCheck />,
     path: "/appointments",
+  },
+  {
+    title: "Calendar",
+    icon: <FaCalendarAlt />,
+    path: "/calendar",
   },
   {
     title: "Counselors",
