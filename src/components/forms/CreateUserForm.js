@@ -4,15 +4,14 @@ import React, { useState } from "react"
 import { ROLES } from "../../data/users"
 
 const CreateUserForm = ({ defaultUser, onSubmit, onCancel }) => {
-  const [user, setUser] = useState(
-    defaultUser ?? {
-      name: "",
-      email: "",
-      password: "",
-      role: "",
-      associatedAccountId: "",
-    }
-  )
+  const emptyUser = {
+    name: "",
+    email: "",
+    password: "",
+    role: "",
+    associatedAccountId: "",
+  }
+  const [user, setUser] = useState(defaultUser ?? emptyUser)
 
   const onRoleChanged = (e) => {
     e.preventDefault()
@@ -25,9 +24,14 @@ const CreateUserForm = ({ defaultUser, onSubmit, onCancel }) => {
     onSubmit(user)
   }
 
+  const onFormCancel = (e) => {
+    e.preventDefault()
+    setUser(emptyUser)
+    onCancel()
+  }
+
   return (
     <form onSubmit={onFormSubmit}>
-      <h1>Create User</h1>
       <label>
         Name
         <input
@@ -72,7 +76,7 @@ const CreateUserForm = ({ defaultUser, onSubmit, onCancel }) => {
       </label>
       <label>Associated Account Id:</label>
       <button type="submit">Submit</button>
-      <button type="button" onClick={onCancel}>
+      <button type="button" onClick={onFormCancel}>
         Cancel
       </button>
     </form>

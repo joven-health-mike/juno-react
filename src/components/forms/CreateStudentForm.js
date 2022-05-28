@@ -5,14 +5,14 @@ import { CounselorsContext } from "../../data/counselors"
 import { SchoolsContext } from "../../data/schools"
 
 const CreateStudentForm = ({ defaultStudent, onSubmit, onCancel }) => {
-  const [student, setStudent] = useState(
-    defaultStudent ?? {
-      first_name: "",
-      last_name: "",
-      school: "",
-      counselor: "",
-    }
-  )
+  const emptyStudent = {
+    first_name: "",
+    last_name: "",
+    school: "",
+    counselor: "",
+  }
+
+  const [student, setStudent] = useState(defaultStudent ?? emptyStudent)
 
   const onCounselorChanged = (e) => {
     e.preventDefault()
@@ -33,9 +33,14 @@ const CreateStudentForm = ({ defaultStudent, onSubmit, onCancel }) => {
     onSubmit(student)
   }
 
+  const onFormCancel = (e) => {
+    e.preventDefault()
+    setStudent(emptyStudent)
+    onCancel()
+  }
+
   return (
     <form onSubmit={onFormSubmit}>
-      <h1>Create Student</h1>
       <label>
         First Name
         <input
@@ -98,7 +103,7 @@ const CreateStudentForm = ({ defaultStudent, onSubmit, onCancel }) => {
       </label>
 
       <button type="submit">Submit</button>
-      <button type="button" onClick={onCancel}>
+      <button type="button" onClick={onFormCancel}>
         Cancel
       </button>
     </form>

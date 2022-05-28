@@ -1,36 +1,46 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { SchoolsContext } from "../../data/schools"
 
 const CreateCounselorForm = ({ defaultCounselor, onSubmit, onCancel }) => {
-  const [counselor, setCounselor] = useState(
-    defaultCounselor ?? {
-      name: "",
-      email: "",
-      roomLink: "",
-      assignedSchools: [],
-    }
-  )
+  const emptyCounselor = {
+    name: "",
+    email: "",
+    roomLink: "",
+    assignedSchools: [],
+  }
 
-  useEffect(() => {
-    // set checkboxes based on initial assignedSchools
-  })
+  const [counselor, setCounselor] = useState(defaultCounselor ?? emptyCounselor)
+
+  // TODO: Figure out how to mark the checkboxes for assignedSchools in the defaultCounselor object.
 
   const onSchoolChecked = (e) => {
     const schoolName = e.target.value
-    const exists = counselor.assignedSchools.includes(schoolName)
-    let newAssignedSchools
-    if (exists) {
-      newAssignedSchools = counselor.assignedSchools.filter(
-        (school) => school !== schoolName
-      )
-    } else {
-      newAssignedSchools = [...counselor.assignedSchools]
-      newAssignedSchools.push(schoolName)
-    }
+    e.target.checked = toggleSchoolName(schoolName)
+  }
 
-    e.target.checked = !exists
+  const toggleSchoolName = (schoolName) => {
+    const exists = counselor.assignedSchools.includes(schoolName)
+
+    if (exists) {
+      removeSchool(schoolName)
+    } else {
+      addSchool(schoolName)
+    }
+    return !exists
+  }
+
+  const addSchool = (schoolName) => {
+    let newAssignedSchools = [...counselor.assignedSchools]
+    newAssignedSchools.push(schoolName)
+    setCounselor({ ...counselor, assignedSchools: newAssignedSchools })
+  }
+
+  const removeSchool = (schoolName) => {
+    let newAssignedSchools = counselor.assignedSchools.filter(
+      (school) => school !== schoolName
+    )
     setCounselor({ ...counselor, assignedSchools: newAssignedSchools })
   }
 
@@ -39,10 +49,15 @@ const CreateCounselorForm = ({ defaultCounselor, onSubmit, onCancel }) => {
     onSubmit(counselor)
   }
 
+  const onFormCancel = (e) => {
+    e.preventDefault()
+    setCounselor(emptyCounselor)
+    onCancel()
+  }
+
   return (
     <>
       <form onSubmit={onFormSubmit}>
-        <h1>Create Counselor</h1>
         <label>
           Name
           <input
@@ -84,24 +99,26 @@ const CreateCounselorForm = ({ defaultCounselor, onSubmit, onCancel }) => {
         </label>
         <label>
           Associated Schools:{" "}
-          <SchoolsContext.Consumer>
-            {(schools) =>
-              schools.map((school) => (
-                <label key={school.name}>
-                  {school.name}
-                  <input
-                    type="checkbox"
-                    value={school.name}
-                    onChange={onSchoolChecked}
-                  />
-                </label>
-              ))
-            }
-          </SchoolsContext.Consumer>
+          <div>
+            <SchoolsContext.Consumer>
+              {(schools) =>
+                schools.map((school, index) => (
+                  <label key={index}>
+                    {school.name}
+                    <input
+                      type="checkbox"
+                      value={school.name}
+                      onChange={onSchoolChecked}
+                    />
+                  </label>
+                ))
+              }
+            </SchoolsContext.Consumer>
+          </div>
         </label>
 
         <button type="submit">Submit</button>
-        <button type="button" onClick={onCancel}>
+        <button type="button" onClick={onFormCancel}>
           Cancel
         </button>
       </form>

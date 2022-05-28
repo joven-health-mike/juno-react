@@ -3,13 +3,13 @@
 import React, { useRef, useState } from "react"
 
 const CreateSchoolForm = ({ defaultSchool, onSubmit, onCancel }) => {
-  const [school, setSchool] = useState(
-    defaultSchool ?? {
-      name: "",
-      email: "",
-      facilitators: [],
-    }
-  )
+  const emptySchool = {
+    name: "",
+    email: "",
+    facilitators: [],
+  }
+
+  const [school, setSchool] = useState(defaultSchool ?? emptySchool)
 
   const onAddFacilitator = (facilitator) => {
     let newFacilitators = school.facilitators
@@ -32,10 +32,15 @@ const CreateSchoolForm = ({ defaultSchool, onSubmit, onCancel }) => {
     onSubmit(school)
   }
 
+  const onFormCancel = (e) => {
+    e.preventDefault()
+    setSchool(emptySchool)
+    onCancel()
+  }
+
   return (
     <>
       <form onSubmit={onFormSubmit}>
-        <h1>Create School</h1>
         <label>
           Name
           <input
@@ -80,7 +85,7 @@ const CreateSchoolForm = ({ defaultSchool, onSubmit, onCancel }) => {
         </label>
 
         <button type="submit">Submit</button>
-        <button type="button" onClick={onCancel}>
+        <button type="button" onClick={onFormCancel}>
           Cancel
         </button>
       </form>
@@ -97,6 +102,7 @@ const FacilitatorInput = ({ onAddFacilitator }) => {
 
     const facilitatorName = textBox.current.value
     onAddFacilitator(facilitatorName)
+    textBox.current.value = ""
   }
 
   return (
@@ -106,7 +112,6 @@ const FacilitatorInput = ({ onAddFacilitator }) => {
         type="text"
         placeholder="Facilitator Name"
         name="facilitatorName"
-        required
       />
       <button type="button" onClick={onFormSubmit}>
         +

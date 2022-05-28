@@ -8,7 +8,18 @@ import { StudentsContext } from "../../data/students"
 import "react-datepicker/dist/react-datepicker.css"
 
 const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
-  const [appointment, setAppointment] = useState(defaultAppointment ?? {})
+  const emptyAppointment = {
+    title: "",
+    start: "",
+    end: "",
+    counselor: "",
+    student: "",
+    facilitator: "",
+  }
+
+  const [appointment, setAppointment] = useState(
+    defaultAppointment ?? emptyAppointment
+  )
 
   const onCounselorChanged = (e) => {
     e.preventDefault()
@@ -32,15 +43,17 @@ const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
 
   const onFormSubmit = (e) => {
     e.preventDefault()
-    if (appointment.school === "") return alert("Must select a school")
-    if (appointment.counselor === "") return alert("Must select a counselor")
-    if (appointment.student === "") return alert("Must select a student")
     onSubmit(appointment)
+  }
+
+  const onFormCancel = (e) => {
+    e.preventDefault()
+    setAppointment(emptyAppointment)
+    onCancel()
   }
 
   return (
     <form onSubmit={onFormSubmit}>
-      <h1>Create Appointment</h1>
       <label>
         Title
         <input
@@ -139,7 +152,7 @@ const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
       </label>
 
       <button type="submit">Submit</button>
-      <button type="button" onClick={onCancel}>
+      <button type="button" onClick={onFormCancel}>
         Cancel
       </button>
     </form>

@@ -2,6 +2,7 @@
 
 import React from "react"
 import { SchoolsContext } from "../../data/schools"
+import CreateSchoolForm from "../forms/CreateSchoolForm"
 import Navbar from "../navbar/Navbar"
 import { getItems } from "../navbar/navBarItems"
 import SchoolsTable from "../tables/SchoolsTable"
@@ -9,6 +10,13 @@ import styles from "./pages.module.css"
 
 const SchoolsPage = () => {
   const role = "admin"
+
+  const onFormSubmit = (school) => {
+    console.log("addSchool:", school)
+    // figure out how to add the school to the global context object
+  }
+
+  const onFormCancel = () => {}
 
   return (
     <div className={styles.mainContainer}>
@@ -18,7 +26,15 @@ const SchoolsPage = () => {
       <h1>Schools</h1>
       <SchoolsContext.Consumer>
         {(schools) => {
-          return <SchoolsTable schools={schools} />
+          return (
+            <>
+              <CreateSchoolForm
+                onSubmit={onFormSubmit}
+                onCancel={onFormCancel}
+              />
+              <SchoolsTable schools={schools} />
+            </>
+          )
         }}
       </SchoolsContext.Consumer>
     </div>
