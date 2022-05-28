@@ -3,17 +3,6 @@
 import React from "react"
 import { httpGet, httpPost, httpPut, httpDelete } from "../http/HttpWrapper"
 
-export const AppointmentsContext = React.createContext([])
-
-export const appointmentSchema = {
-  title: "string",
-  start: "string",
-  end: "string",
-  counselor: "id",
-  student: "id",
-  facilitator: "id",
-}
-
 export const exampleAppointments = [
   {
     title: "Johnny R",
@@ -40,6 +29,20 @@ export const exampleAppointments = [
     facilitator: "Aardvark Academy",
   },
 ]
+
+export const AppointmentsContext = React.createContext({
+  appointments: exampleAppointments,
+  setAppointments: () => {},
+})
+
+export const appointmentSchema = {
+  title: "string",
+  start: "string",
+  end: "string",
+  counselor: "id",
+  student: "id",
+  facilitator: "id",
+}
 
 const BASE_URL = "http://localhost:8080/api/appointments"
 export const initialAppointments = []

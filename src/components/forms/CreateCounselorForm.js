@@ -101,8 +101,8 @@ const CreateCounselorForm = ({ defaultCounselor, onSubmit, onCancel }) => {
           Associated Schools:{" "}
           <div>
             <SchoolsContext.Consumer>
-              {(schools) =>
-                schools.map((school, index) => (
+              {(value) =>
+                value.schools.map((school, index) => (
                   <label key={index}>
                     {school.name}
                     <input

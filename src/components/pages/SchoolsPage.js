@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from "react"
+import React, { useContext } from "react"
 import { SchoolsContext } from "../../data/schools"
 import CreateSchoolForm from "../forms/CreateSchoolForm"
 import Navbar from "../navbar/Navbar"
@@ -11,12 +11,11 @@ import styles from "./pages.module.css"
 const SchoolsPage = () => {
   const role = "admin"
 
-  const onFormSubmit = (school) => {
-    console.log("addSchool:", school)
-    // figure out how to add the school to the global context object
-  }
+  const { schools, setSchools } = useContext(SchoolsContext)
 
-  const onFormCancel = () => {}
+  const onFormSubmit = (school) => {
+    setSchools([...schools, school])
+  }
 
   return (
     <div className={styles.mainContainer}>
@@ -24,19 +23,10 @@ const SchoolsPage = () => {
         <Navbar items={getItems(role)} />
       </nav>
       <h1>Schools</h1>
-      <SchoolsContext.Consumer>
-        {(schools) => {
-          return (
-            <>
-              <CreateSchoolForm
-                onSubmit={onFormSubmit}
-                onCancel={onFormCancel}
-              />
-              <SchoolsTable schools={schools} />
-            </>
-          )
-        }}
-      </SchoolsContext.Consumer>
+      <>
+        <CreateSchoolForm onSubmit={onFormSubmit} onCancel={() => {}} />
+        <SchoolsTable schools={schools} />
+      </>
     </div>
   )
 }

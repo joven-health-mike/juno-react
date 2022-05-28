@@ -15,8 +15,8 @@ const SchoolDetails = ({ school }) => {
       </label>
       <label>
         Facilitators:
-        {school.facilitators.map((facilitatorName) => (
-          <p>{facilitatorName}</p>
+        {school.facilitators.map((facilitatorName, index) => (
+          <p key={index}>{facilitatorName}</p>
         ))}
       </label>
     </>

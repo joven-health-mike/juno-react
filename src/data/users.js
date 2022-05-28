@@ -3,7 +3,20 @@
 import React from "react"
 import { httpGet, httpPost, httpPut, httpDelete } from "../http/HttpWrapper"
 
-export const UsersContext = React.createContext([])
+export const exampleUsers = [
+  {
+    name: "Mike Burke",
+    email: "mike@jovenhealth.com",
+    password: "abcd",
+    role: "admin",
+    associatedAccountId: "admin",
+  },
+]
+
+export const UsersContext = React.createContext({
+  users: exampleUsers,
+  setUsers: () => {},
+})
 
 export const userSchema = {
   name: "string",
@@ -20,16 +33,6 @@ export const ROLES = [
   "school",
   "student",
   "guardian",
-]
-
-export const exampleUsers = [
-  {
-    name: "Mike Burke",
-    email: "mike@jovenhealth.com",
-    password: "abcd",
-    role: "admin",
-    associatedAccountId: "admin",
-  },
 ]
 
 const BASE_URL = "http://localhost:8080/api/users"

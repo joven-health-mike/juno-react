@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from "react"
+import React, { useContext } from "react"
 import { AppointmentsContext } from "../../data/appointments"
 import CreateAppointmentForm from "../forms/CreateAppointmentForm"
 import Navbar from "../navbar/Navbar"
@@ -11,12 +11,11 @@ import styles from "./pages.module.css"
 const AppointmentsPage = () => {
   const role = "admin"
 
-  const onFormSubmit = (appointment) => {
-    console.log("addAppointment:", appointment)
-    // figure out how to add the appointment to the global context object
-  }
+  const { appointments, setAppointments } = useContext(AppointmentsContext)
 
-  const onFormCancel = () => {}
+  const onFormSubmit = (appointment) => {
+    setAppointments([...appointments, appointment])
+  }
 
   return (
     <div className={styles.mainContainer}>
@@ -24,19 +23,10 @@ const AppointmentsPage = () => {
         <Navbar items={getItems(role)} />
       </nav>
       <h1>Appointments</h1>
-      <AppointmentsContext.Consumer>
-        {(appointments) => {
-          return (
-            <>
-              <CreateAppointmentForm
-                onSubmit={onFormSubmit}
-                onCancel={onFormCancel}
-              />
-              <AppointmentsTable appointments={appointments} />
-            </>
-          )
-        }}
-      </AppointmentsContext.Consumer>
+      <>
+        <CreateAppointmentForm onSubmit={onFormSubmit} onCancel={() => {}} />
+        <AppointmentsTable appointments={appointments} />
+      </>
     </div>
   )
 }

@@ -13,7 +13,7 @@ const Navbar = ({ items }) => {
           <ul>
             {items.map((item, index) => (
               <li key={index} className={styles.navText}>
-                <Link key={index} to={item.path}>
+                <Link to={item.path}>
                   {item.icon}
                   <span>{item.title}</span>
                 </Link>

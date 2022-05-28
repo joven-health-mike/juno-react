@@ -19,8 +19,8 @@ const CounselorDetails = ({ counselor }) => {
       </label>
       <label>
         Assigned Schools:
-        {counselor.assignedSchools.map((schoolName) => (
-          <p>{schoolName}</p>
+        {counselor.assignedSchools.map((schoolName, index) => (
+          <p key={index}>{schoolName}</p>
         ))}
       </label>
     </>

@@ -69,8 +69,8 @@ const CreateUserForm = ({ defaultUser, onSubmit, onCancel }) => {
         Role:{" "}
         <select value={user.role} onChange={onRoleChanged}>
           <option key={"Select a Role"}>Select a Role</option>
-          {ROLES.map((role) => {
-            return <option key={role}>{role}</option>
+          {ROLES.map((role, index) => {
+            return <option key={index}>{role}</option>
           })}
         </select>
       </label>

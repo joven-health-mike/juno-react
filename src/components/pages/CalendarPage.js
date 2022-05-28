@@ -7,7 +7,6 @@ import interactionPlugin from "@fullcalendar/interaction"
 import { AppointmentsContext } from "../../data/appointments"
 import { CounselorsContext } from "../../data/counselors"
 import { SchoolsContext } from "../../data/schools"
-import { StudentsContext } from "../../data/students"
 import Calendar from "../calendar/Calendar"
 import Navbar from "../navbar/Navbar"
 import { getItems } from "../navbar/navBarItems"
@@ -19,9 +18,9 @@ const CalendarPage = () => {
   const [filteredEvents, setFilteredEvents] = useState([])
   const [schoolSelection, setSchoolSelection] = useState("")
   const [counselorSelection, setCounselorSelection] = useState("")
-  const appointments = useContext(AppointmentsContext)
-  const counselors = useContext(CounselorsContext)
-  const schools = useContext(SchoolsContext)
+  const { appointments } = useContext(AppointmentsContext)
+  const { counselors } = useContext(CounselorsContext)
+  const { schools } = useContext(SchoolsContext)
 
   const onEventClick = (event) => {
     // display AppointmentDetailPage with this event
@@ -75,44 +74,38 @@ const CalendarPage = () => {
         <Navbar items={getItems(role)} />
       </nav>
       <h1>Calendar</h1>
-      <StudentsContext.Consumer>
-        {(students) => (
-          <>
-            <label className={styles.flatLabel}>
-              School:{" "}
-              <select value={schoolSelection} onChange={handleSchoolChange}>
-                <option>Select a School</option>
-                {schools.map((school, index) => (
-                  <option key={index} value={school.name}>
-                    {school.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className={styles.flatLabel}>
-              Counselor:{" "}
-              <select
-                value={counselorSelection}
-                onChange={handleCounselorChange}
-              >
-                <option>Select a Counselor</option>
-                {counselors.map((counselor, index) => (
-                  <option key={index} value={counselor.name}>
-                    {counselor.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <Calendar
-              view="dayGridMonth"
-              plugins={[dayGridPlugin, interactionPlugin]}
-              appointments={filteredEvents}
-              onEventClick={onEventClick}
-              onDateClick={onDateClick}
-            />
-          </>
-        )}
-      </StudentsContext.Consumer>
+      <>
+        <label className={styles.flatLabel}>
+          School:{" "}
+          <select value={schoolSelection} onChange={handleSchoolChange}>
+            <option>Select a School</option>
+            {schools.map((school, index) => (
+              <option key={index} value={school.name}>
+                {school.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className={styles.flatLabel}>
+          Counselor:{" "}
+          <select value={counselorSelection} onChange={handleCounselorChange}>
+            <option>Select a Counselor</option>
+            {counselors.map((counselor, index) => (
+              <option key={index} value={counselor.name}>
+                {counselor.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <Calendar
+          view="dayGridMonth"
+          plugins={[dayGridPlugin, interactionPlugin]}
+          appointments={filteredEvents}
+          onEventClick={onEventClick}
+          onDateClick={onDateClick}
+        />
+      </>
+      )
     </div>
   )
 }

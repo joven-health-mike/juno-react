@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useState } from "react"
@@ -15,14 +14,19 @@ function App() {
   const [schools, setSchools] = useState(exampleSchools)
   const [students, setStudents] = useState(exampleStudents)
   const [users, setUsers] = useState(exampleUsers)
+  const appointmentsContextValue = { appointments, setAppointments }
+  const counselorsContextValue = { counselors, setCounselors }
+  const schoolsContextValue = { schools, setSchools }
+  const studentsContextValue = { students, setStudents }
+  const usersContextValue = { users, setUsers }
 
   return (
     <>
-      <AppointmentsContext.Provider value={appointments}>
-        <CounselorsContext.Provider value={counselors}>
-          <SchoolsContext.Provider value={schools}>
-            <StudentsContext.Provider value={students}>
-              <UsersContext.Provider value={users}>
+      <AppointmentsContext.Provider value={appointmentsContextValue}>
+        <CounselorsContext.Provider value={counselorsContextValue}>
+          <SchoolsContext.Provider value={schoolsContextValue}>
+            <StudentsContext.Provider value={studentsContextValue}>
+              <UsersContext.Provider value={usersContextValue}>
                 <AppRouter isLoggedIn={true} role={"admin"} />
               </UsersContext.Provider>
             </StudentsContext.Provider>

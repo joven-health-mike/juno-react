@@ -12,7 +12,7 @@ import styles from "./pages.module.css"
 const HomePage = () => {
   const role = "admin"
 
-  const appointments = useContext(AppointmentsContext)
+  const { appointments } = useContext(AppointmentsContext)
 
   const onEventClick = (event) => {
     // display AppointmentDetailPage with this event

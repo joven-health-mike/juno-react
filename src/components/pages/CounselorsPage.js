@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from "react"
+import React, { useContext } from "react"
 import { CounselorsContext } from "../../data/counselors"
 import CreateCounselorForm from "../forms/CreateCounselorForm"
 import Navbar from "../navbar/Navbar"
@@ -11,12 +11,11 @@ import styles from "./pages.module.css"
 const CounselorsPage = () => {
   const role = "admin"
 
-  const onFormSubmit = (counselor) => {
-    console.log("addCounselor:", counselor)
-    // figure out how to add the counselor to the global context object
-  }
+  const { counselors, setCounselors } = useContext(CounselorsContext)
 
-  const onFormCancel = () => {}
+  const onFormSubmit = (counselor) => {
+    setCounselors([...counselors, counselor])
+  }
 
   return (
     <div className={styles.mainContainer}>
@@ -24,19 +23,10 @@ const CounselorsPage = () => {
         <Navbar items={getItems(role)} />
       </nav>
       <h1>Counselors</h1>
-      <CounselorsContext.Consumer>
-        {(counselors) => {
-          return (
-            <>
-              <CreateCounselorForm
-                onSubmit={onFormSubmit}
-                onCancel={onFormCancel}
-              />
-              <CounselorsTable counselors={counselors} />
-            </>
-          )
-        }}
-      </CounselorsContext.Consumer>
+      <>
+        <CreateCounselorForm onSubmit={onFormSubmit} onCancel={() => {}} />
+        <CounselorsTable counselors={counselors} />
+      </>
     </div>
   )
 }

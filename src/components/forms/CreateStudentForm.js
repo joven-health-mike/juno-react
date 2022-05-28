@@ -70,13 +70,13 @@ const CreateStudentForm = ({ defaultStudent, onSubmit, onCancel }) => {
       <label>
         Counselor:{" "}
         <CounselorsContext.Consumer>
-          {(counselors) => {
+          {(value) => {
             return (
               <>
                 <select value={student.counselor} onChange={onCounselorChanged}>
                   <option key={"Select a Counselor"}>Select a Counselor</option>
-                  {counselors.map((counselor) => (
-                    <option key={counselor.name}>{counselor.name}</option>
+                  {value.counselors.map((counselor, index) => (
+                    <option key={index}>{counselor.name}</option>
                   ))}
                 </select>
               </>
@@ -87,13 +87,13 @@ const CreateStudentForm = ({ defaultStudent, onSubmit, onCancel }) => {
       <label>
         School:{" "}
         <SchoolsContext.Consumer>
-          {(schools) => {
+          {(value) => {
             return (
               <>
                 <select value={student.school} onChange={onSchoolChanged}>
                   <option key={"Select a School"}>Select a School</option>
-                  {schools.map((school) => (
-                    <option key={school.name}>{school.name}</option>
+                  {value.schools.map((school, index) => (
+                    <option key={index}>{school.name}</option>
                   ))}
                 </select>
               </>

@@ -66,9 +66,9 @@ const CreateSchoolForm = ({ defaultSchool, onSubmit, onCancel }) => {
         <label>
           Facilitators
           <div>
-            {school.facilitators.map((facilitatorName) => {
+            {school.facilitators.map((facilitatorName, index) => {
               return (
-                <div key={facilitatorName}>
+                <div key={index}>
                   <p>{facilitatorName}</p>
                   <button
                     type="button"

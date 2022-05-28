@@ -43,7 +43,13 @@ const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
 
   const onFormSubmit = (e) => {
     e.preventDefault()
-    onSubmit(appointment)
+    const returnAppointment = {
+      ...appointment,
+      // convert date picker values to strings
+      start: appointment.start.toISOString(),
+      end: appointment.end.toISOString(),
+    }
+    onSubmit(returnAppointment)
   }
 
   const onFormCancel = (e) => {
@@ -92,7 +98,7 @@ const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
       <label>
         Counselor:{" "}
         <CounselorsContext.Consumer>
-          {(counselors) => {
+          {(value) => {
             return (
               <>
                 <select
@@ -100,8 +106,8 @@ const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
                   onChange={onCounselorChanged}
                 >
                   <option key={"Select a Counselor"}>Select a Counselor</option>
-                  {counselors.map((counselor) => (
-                    <option key={counselor.name}>{counselor.name}</option>
+                  {value.counselors.map((counselor, index) => (
+                    <option key={index}>{counselor.name}</option>
                   ))}
                 </select>
               </>
@@ -112,13 +118,13 @@ const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
       <label>
         Student:{" "}
         <StudentsContext.Consumer>
-          {(students) => {
+          {(value) => {
             return (
               <>
                 <select value={appointment.student} onChange={onStudentChanged}>
                   <option key={"Select a Student"}>Select a Student</option>
-                  {students.map((student) => (
-                    <option key={student.first_name + " " + student.last_name}>
+                  {value.students.map((student, index) => (
+                    <option key={index}>
                       {student.first_name + " " + student.last_name}
                     </option>
                   ))}
@@ -131,7 +137,7 @@ const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
       <label>
         Facilitator:{" "}
         <SchoolsContext.Consumer>
-          {(schools) => {
+          {(value) => {
             return (
               <>
                 <select
@@ -141,8 +147,8 @@ const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
                   <option key={"Select a Facilitator"}>
                     Select a Facilitator
                   </option>
-                  {schools.map((school) => (
-                    <option key={school.name}>{school.name}</option>
+                  {value.schools.map((school, index) => (
+                    <option key={index}>{school.name}</option>
                   ))}
                 </select>
               </>
