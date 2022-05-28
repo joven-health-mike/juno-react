@@ -1,25 +1,24 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useRef } from "react"
+import React from "react"
 import FullCalendar from "@fullcalendar/react"
-import dayGridPlugin from "@fullcalendar/daygrid"
-import interactionPlugin from "@fullcalendar/interaction"
+import styles from "./calendar.module.css"
 
 const Calendar = ({
+  view,
+  plugins,
   appointments,
-  counselors,
-  schools,
-  students,
   onEventClick,
   onDateClick,
 }) => {
-  const calendarRef = useRef(null)
+  const shouldSetDateClick = onDateClick ? true : false
 
   const eventClicked = (info) => {
     info.jsEvent.preventDefault()
-    let eventId = info.event._def.extendedProps._id
-    const theEvent = appointments.filter((event) => {
-      return event._id === eventId
+    // this should use the ID instead of the title
+    let eventTitle = info.event._def.title
+    const theEvent = appointments.filter((appointment) => {
+      return appointment.title === eventTitle
     })[0]
     onEventClick(theEvent)
   }
@@ -29,16 +28,29 @@ const Calendar = ({
     onDateClick(info.dateStr)
   }
 
-  return (
-    <FullCalendar
-      ref={calendarRef}
-      events={appointments}
-      plugins={[dayGridPlugin, interactionPlugin]}
-      initialView="dayGridMonth"
-      eventClick={(info) => eventClicked(info)}
-      dateClick={(info) => dateClicked(info)}
-    />
-  )
+  if (shouldSetDateClick)
+    return (
+      <div className={styles.calendar}>
+        <FullCalendar
+          events={appointments}
+          plugins={plugins}
+          initialView={view}
+          eventClick={(info) => eventClicked(info)}
+          dateClick={(info) => dateClicked(info)}
+        />
+      </div>
+    )
+  else
+    return (
+      <div className={styles.calendar}>
+        <FullCalendar
+          events={appointments}
+          plugins={plugins}
+          initialView={view}
+          eventClick={(info) => eventClicked(info)}
+        />
+      </div>
+    )
 }
 
 export default Calendar

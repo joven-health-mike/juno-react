@@ -1,6 +1,9 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useContext, useEffect, useState } from "react"
+import "@fullcalendar/react"
+import dayGridPlugin from "@fullcalendar/daygrid"
+import interactionPlugin from "@fullcalendar/interaction"
 import { AppointmentsContext } from "../../data/appointments"
 import { CounselorsContext } from "../../data/counselors"
 import { SchoolsContext } from "../../data/schools"
@@ -21,10 +24,8 @@ const CalendarPage = () => {
   const schools = useContext(SchoolsContext)
 
   const onEventClick = (event) => {
+    // display AppointmentDetailPage with this event
     console.log("eventClicked:", event)
-    if (window.confirm("Delete the appointment?")) {
-      // delete the appointment
-    }
   }
 
   const onDateClick = (date) => {
@@ -103,10 +104,9 @@ const CalendarPage = () => {
               </select>
             </label>
             <Calendar
+              view="dayGridMonth"
+              plugins={[dayGridPlugin, interactionPlugin]}
               appointments={filteredEvents}
-              counselors={counselors}
-              schools={schools}
-              students={students}
               onEventClick={onEventClick}
               onDateClick={onDateClick}
             />
