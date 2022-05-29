@@ -25,6 +25,13 @@ const SchoolsTable = ({ schools }) => {
       {
         Header: "Facilitators",
         accessor: "facilitators",
+        Cell: ({ cell }) => (
+          <>
+            {cell.row.values.facilitators.map((facilitatorName, index) => {
+              return <p key={index}>{facilitatorName}</p>
+            })}
+          </>
+        ),
       },
     ],
     []
