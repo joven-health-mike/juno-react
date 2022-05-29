@@ -13,8 +13,6 @@ const CreateCounselorForm = ({ defaultCounselor, onSubmit, onCancel }) => {
 
   const [counselor, setCounselor] = useState(defaultCounselor ?? emptyCounselor)
 
-  // TODO: Figure out how to mark the checkboxes for assignedSchools in the defaultCounselor object.
-
   const onSchoolChecked = (e) => {
     const schoolName = e.target.value
     e.target.checked = toggleSchoolName(schoolName)
