@@ -20,8 +20,12 @@ const CreateCounselorForm = ({ defaultCounselor, onSubmit, onCancel }) => {
     e.target.checked = toggleSchoolName(schoolName)
   }
 
+  const isSchoolChecked = (schoolName) => {
+    return counselor.assignedSchools.includes(schoolName)
+  }
+
   const toggleSchoolName = (schoolName) => {
-    const exists = counselor.assignedSchools.includes(schoolName)
+    const exists = isSchoolChecked(schoolName)
 
     if (exists) {
       removeSchool(schoolName)
@@ -104,12 +108,13 @@ const CreateCounselorForm = ({ defaultCounselor, onSubmit, onCancel }) => {
               {(value) =>
                 value.schools.map((school, index) => (
                   <label key={index}>
-                    {school.name}
                     <input
                       type="checkbox"
+                      checked={isSchoolChecked(school.name)}
                       value={school.name}
                       onChange={onSchoolChecked}
                     />
+                    {school.name}
                   </label>
                 ))
               }
