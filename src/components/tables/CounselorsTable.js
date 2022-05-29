@@ -29,6 +29,13 @@ const CounselorsTable = ({ counselors }) => {
       {
         Header: "Assigned Schools",
         accessor: "assignedSchools",
+        Cell: ({ cell }) => (
+          <>
+            {cell.row.values.assignedSchools.map((schoolName, index) => {
+              return <p key={index}>{schoolName}</p>
+            })}
+          </>
+        ),
       },
     ],
     []
