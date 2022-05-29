@@ -31,8 +31,8 @@ const UsersTable = ({ users }) => {
         accessor: "role",
       },
       {
-        Header: "Associated Account ID",
-        accessor: "associatedAccountId",
+        Header: "Associated Account",
+        accessor: "associatedAccount",
       },
     ],
     []

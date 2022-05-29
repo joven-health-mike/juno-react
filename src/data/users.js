@@ -9,7 +9,14 @@ export const exampleUsers = [
     email: "mike@jovenhealth.com",
     password: "abcd",
     role: "admin",
-    associatedAccountId: "admin",
+    associatedAccount: "admin",
+  },
+  {
+    name: "Jacek McGuinness",
+    email: "jacek-mcguinness@jovenhealth.com",
+    password: "abcd",
+    role: "counselor",
+    associatedAccount: "Jacek McGuinness",
   },
 ]
 
