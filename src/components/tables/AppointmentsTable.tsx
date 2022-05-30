@@ -1,10 +1,15 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from "react"
+import { Appointment } from "../../data/appointments"
 import DataTable from "./DataTable"
 import TableSearchFilter from "./TableSearchFilter"
 
-const AppointmentsTable = ({ appointments }) => {
+type AppointmentsTableProps = {
+  appointments: Appointment[]
+}
+
+const AppointmentsTable = ({ appointments }: AppointmentsTableProps) => {
   const defaultColumn = React.useMemo(
     () => ({
       Filter: TableSearchFilter,
@@ -21,10 +26,20 @@ const AppointmentsTable = ({ appointments }) => {
       {
         Header: "Start",
         accessor: "start",
+        Cell: ({ cell }: any) => (
+          <>
+            <p>{cell.row.values.start.toISOString()}</p>
+          </>
+        ),
       },
       {
         Header: "End",
         accessor: "end",
+        Cell: ({ cell }) => (
+          <>
+            <p>{cell.row.values.end.toISOString()}</p>
+          </>
+        ),
       },
       {
         Header: "Counselor",

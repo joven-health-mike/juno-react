@@ -2,9 +2,14 @@
 
 import React from "react"
 import { useTable, useFilters, useGlobalFilter, useSortBy } from "react-table"
-import styles from "./tables.module.css"
 
-const DataTable = ({ data, defaultColumn, columns }) => {
+type DataTableProps = {
+  data: any
+  defaultColumn: any
+  columns: any
+}
+
+const DataTable = ({ data, defaultColumn, columns }: DataTableProps) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable(
       { columns, data, defaultColumn },
@@ -14,19 +19,19 @@ const DataTable = ({ data, defaultColumn, columns }) => {
     )
 
   return (
-    <table className={styles.jovenTable} {...getTableProps()}>
+    <table className={"jovenTable"} {...getTableProps()}>
       <thead>
         {headerGroups.map((headerGroup) => {
           const { key, ...restHeaderGroupProps } =
             headerGroup.getHeaderGroupProps()
           return (
-            <tr key={key} className={styles.jovenTr} {...restHeaderGroupProps}>
+            <tr key={key} className={"jovenTr"} {...restHeaderGroupProps}>
               {headerGroup.headers.map((column) => {
                 const { key, ...restColumn } = column.getHeaderProps(
                   column.getSortByToggleProps()
                 )
                 return (
-                  <th key={key} className={styles.jovenTh} {...restColumn}>
+                  <th key={key} className={"jovenTh"} {...restColumn}>
                     {column.render("Header")}
                     <span>
                       {column.isSorted
@@ -50,11 +55,11 @@ const DataTable = ({ data, defaultColumn, columns }) => {
           prepareRow(row)
           const { key, ...restRowProps } = row.getRowProps()
           return (
-            <tr key={key} className={styles.jovenTr} {...restRowProps}>
+            <tr key={key} className={"jovenTr"} {...restRowProps}>
               {row.cells.map((cell) => {
                 const { key, ...restCellProps } = cell.getCellProps()
                 return (
-                  <td key={key} className={styles.jovenTd} {...restCellProps}>
+                  <td key={key} className={"jovenTd"} {...restCellProps}>
                     {cell.render("Cell")}
                   </td>
                 )

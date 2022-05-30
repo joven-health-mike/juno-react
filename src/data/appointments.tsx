@@ -6,34 +6,34 @@ import { httpGet, httpPost, httpPut, httpDelete } from "../http/HttpWrapper"
 export const exampleAppointments = [
   {
     title: "Johnny R",
-    start: new Date().toISOString(),
-    end: new Date().toISOString(),
+    start: new Date(),
+    end: new Date(),
     counselor: "Jacek McGuinness",
     student: "Johnny Rickets",
-    facilitator: "Aardvark Academy",
+    facilitator: "Bruce Wayne",
   },
   {
     title: "Jennifer F",
-    start: new Date().toISOString(),
-    end: new Date().toISOString(),
+    start: new Date(),
+    end: new Date(),
     counselor: "Jacek McGuinness",
     student: "Jennifer Frigo",
-    facilitator: "Aardvark Academy",
+    facilitator: "Dwayne Johnson",
   },
   {
     title: "Chris M",
-    start: new Date().toISOString(),
-    end: new Date().toISOString(),
+    start: new Date(),
+    end: new Date(),
     counselor: "Jacek McGuinness",
     student: "Chris Moon",
-    facilitator: "Aardvark Academy",
+    facilitator: "Antonio Banderez",
   },
 ]
 
 export type Appointment = {
   title: string
-  start: string
-  end: string
+  start: Date
+  end: Date
   counselor: string
   student: string
   facilitator: string

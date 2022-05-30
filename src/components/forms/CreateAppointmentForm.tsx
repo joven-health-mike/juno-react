@@ -3,17 +3,28 @@
 import React, { useState } from "react"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
+import { Appointment } from "../../data/appointments"
 import {
   SelectCounselorList,
   SelectFacilitatorList,
   SelectStudentList,
 } from "./SelectList"
 
-const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
+type CreateAppointmentFormProps = {
+  defaultAppointment?: Appointment
+  onSubmit: any
+  onCancel: any
+}
+
+const CreateAppointmentForm = ({
+  defaultAppointment,
+  onSubmit,
+  onCancel,
+}: CreateAppointmentFormProps) => {
   const emptyAppointment = {
     title: "",
-    start: "",
-    end: "",
+    start: new Date(),
+    end: new Date(),
     counselor: "",
     student: "",
     facilitator: "",
@@ -23,30 +34,24 @@ const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
     defaultAppointment ?? emptyAppointment
   )
 
-  const onCounselorChanged = (counselorName) => {
+  const onCounselorChanged = (counselorName: string) => {
     setAppointment({ ...appointment, counselor: counselorName })
   }
 
-  const onFacilitatorChanged = (facilitatorname) => {
-    setAppointment({ ...appointment, facilitator: facilitatorname })
+  const onFacilitatorChanged = (facilitatorName: string) => {
+    setAppointment({ ...appointment, facilitator: facilitatorName })
   }
 
-  const onStudentChanged = (studentName) => {
+  const onStudentChanged = (studentName: string) => {
     setAppointment({ ...appointment, student: studentName })
   }
 
-  const onFormSubmit = (e) => {
+  const onFormSubmit = (e: any) => {
     e.preventDefault()
-    const returnAppointment = {
-      ...appointment,
-      // convert date picker values to strings
-      start: appointment.start.toISOString(),
-      end: appointment.end.toISOString(),
-    }
-    onSubmit(returnAppointment)
+    onSubmit(appointment)
   }
 
-  const onFormCancel = (e) => {
+  const onFormCancel = (e: any) => {
     e.preventDefault()
     setAppointment(emptyAppointment)
     onCancel()
@@ -70,8 +75,10 @@ const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
       <label>
         Start Time
         <DatePicker
-          selected={appointment.start}
-          onChange={(date) => setAppointment({ ...appointment, start: date })}
+          selected={new Date(appointment.start)}
+          onChange={(date: Date) =>
+            setAppointment({ ...appointment, start: date })
+          }
           showTimeSelect
           timeFormat="h:mm"
           timeCaption="Start Time"
@@ -81,8 +88,10 @@ const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
       <label>
         End Time
         <DatePicker
-          selected={appointment.end}
-          onChange={(date) => setAppointment({ ...appointment, end: date })}
+          selected={new Date(appointment.end)}
+          onChange={(date: Date) =>
+            setAppointment({ ...appointment, end: date })
+          }
           showTimeSelect
           timeFormat="h:mm"
           timeCaption="End Time"

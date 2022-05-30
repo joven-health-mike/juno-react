@@ -1,24 +1,23 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useContext } from "react"
-import { AppointmentsContext } from "../../data/appointments"
+import { Appointment, AppointmentsContext } from "../../data/appointments"
 import CreateAppointmentForm from "../forms/CreateAppointmentForm"
 import Navbar from "../navbar/Navbar"
 import { getItems } from "../navbar/navBarItems"
 import AppointmentsTable from "../tables/AppointmentsTable"
-import styles from "./pages.module.css"
 
-const AppointmentsPage = () => {
+const AppointmentsPage: React.FC = () => {
   const role = "admin"
 
   const { appointments, setAppointments } = useContext(AppointmentsContext)
 
-  const onFormSubmit = (appointment) => {
+  const onFormSubmit = (appointment: Appointment) => {
     setAppointments([...appointments, appointment])
   }
 
   return (
-    <div className={styles.mainContainer}>
+    <div className={"mainContainer"}>
       <nav>
         <Navbar items={getItems(role)} />
       </nav>
