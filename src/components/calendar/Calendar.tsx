@@ -2,18 +2,32 @@
 
 import React from "react"
 import FullCalendar from "@fullcalendar/react"
-import styles from "./calendar.module.css"
+import { Appointment } from "../../data/appointments"
 
-const Calendar = ({
+type CalendarProps = {
+  view: string
+  plugins: any[]
+  appointments: Appointment[]
+  onEventClick: any
+  onDateClick: any
+}
+
+type FCEventProps = {
+  jsEvent: any
+  event: any
+  dateStr: string
+}
+
+const Calendar: React.FC<CalendarProps> = ({
   view,
   plugins,
   appointments,
   onEventClick,
   onDateClick,
-}) => {
+}: CalendarProps) => {
   const shouldSetDateClick = onDateClick ? true : false
 
-  const eventClicked = (info) => {
+  const eventClicked = (info: FCEventProps) => {
     info.jsEvent.preventDefault()
     // this should use the ID instead of the title
     let eventTitle = info.event._def.title
@@ -23,31 +37,31 @@ const Calendar = ({
     onEventClick(theEvent)
   }
 
-  const dateClicked = (info) => {
+  const dateClicked = (info: FCEventProps) => {
     info.jsEvent.preventDefault()
     onDateClick(info.dateStr)
   }
 
   if (shouldSetDateClick)
     return (
-      <div className={styles.calendar}>
+      <div className={"calendar"}>
         <FullCalendar
           events={appointments}
           plugins={plugins}
           initialView={view}
-          eventClick={(info) => eventClicked(info)}
-          dateClick={(info) => dateClicked(info)}
+          eventClick={(info: any) => eventClicked(info)}
+          dateClick={(info: any) => dateClicked(info)}
         />
       </div>
     )
   else
     return (
-      <div className={styles.calendar}>
+      <div className={"calendar"}>
         <FullCalendar
           events={appointments}
           plugins={plugins}
           initialView={view}
-          eventClick={(info) => eventClicked(info)}
+          eventClick={(info: any) => eventClicked(info)}
         />
       </div>
     )

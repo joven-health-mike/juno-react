@@ -30,7 +30,7 @@ export const exampleAppointments = [
   },
 ]
 
-type Appointment = {
+export type Appointment = {
   title: string
   start: string
   end: string

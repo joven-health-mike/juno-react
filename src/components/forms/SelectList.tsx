@@ -3,8 +3,20 @@ import { CounselorsContext } from "../../data/counselors"
 import { SchoolsContext } from "../../data/schools"
 import { StudentsContext } from "../../data/students"
 
-const SelectList = ({ labelText, value, items, onItemChanged }) => {
-  const itemChanged = (e) => {
+type SelectListProps = {
+  labelText: string
+  value: any
+  items: any[]
+  onItemChanged: any
+}
+
+const SelectList = ({
+  labelText,
+  value,
+  items,
+  onItemChanged,
+}: SelectListProps) => {
+  const itemChanged = (e: any) => {
     e.preventDefault()
     const item = e.target.value === labelText ? "" : e.target.value
     onItemChanged(item)
@@ -22,7 +34,15 @@ const SelectList = ({ labelText, value, items, onItemChanged }) => {
 
 export default SelectList
 
-export function SelectCounselorList({ value, onCounselorChanged }) {
+type SelectCounselorListProps = {
+  value: any
+  onCounselorChanged: any
+}
+
+export function SelectCounselorList({
+  value,
+  onCounselorChanged,
+}: SelectCounselorListProps) {
   const { counselors } = useContext(CounselorsContext)
   const counselorNames = counselors.map((counselor) => counselor.name)
 
@@ -38,7 +58,15 @@ export function SelectCounselorList({ value, onCounselorChanged }) {
   )
 }
 
-export function SelectSchoolList({ value, onSchoolChanged }) {
+type SelectSchoolListProps = {
+  value: any
+  onSchoolChanged: any
+}
+
+export function SelectSchoolList({
+  value,
+  onSchoolChanged,
+}: SelectSchoolListProps) {
   const { schools } = useContext(SchoolsContext)
   const schoolNames = schools.map((school) => school.name)
 
@@ -54,7 +82,15 @@ export function SelectSchoolList({ value, onSchoolChanged }) {
   )
 }
 
-export function SelectStudentList({ value, onStudentChanged }) {
+type SelectStudentListProps = {
+  value: any
+  onStudentChanged: any
+}
+
+export function SelectStudentList({
+  value,
+  onStudentChanged,
+}: SelectStudentListProps) {
   const { students } = useContext(StudentsContext)
   const studentNames = students.map(
     (student) => student.first_name + " " + student.last_name
@@ -70,9 +106,17 @@ export function SelectStudentList({ value, onStudentChanged }) {
   )
 }
 
-export function SelectFacilitatorList({ value, onFacilitatorChanged }) {
+type SelectFacilitatorListProps = {
+  value: any
+  onFacilitatorChanged: any
+}
+
+export function SelectFacilitatorList({
+  value,
+  onFacilitatorChanged,
+}: SelectFacilitatorListProps) {
   const { schools } = useContext(SchoolsContext)
-  const facilitatorNames = []
+  const facilitatorNames = Array<string>()
   schools.forEach((school) => {
     school.facilitators.forEach((facilitator) =>
       facilitatorNames.push(facilitator)

@@ -12,7 +12,7 @@ export const exampleCounselors = [
   },
 ]
 
-interface Counselor {
+export type Counselor = {
   name: string
   email: string
   roomLink: string

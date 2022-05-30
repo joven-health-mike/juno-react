@@ -4,38 +4,37 @@ import React, { useContext, useEffect, useState } from "react"
 import "@fullcalendar/react"
 import dayGridPlugin from "@fullcalendar/daygrid"
 import interactionPlugin from "@fullcalendar/interaction"
-import { AppointmentsContext } from "../../data/appointments"
+import { Appointment, AppointmentsContext } from "../../data/appointments"
 import { CounselorsContext } from "../../data/counselors"
 import { SchoolsContext } from "../../data/schools"
 import Calendar from "../calendar/Calendar"
 import Navbar from "../navbar/Navbar"
 import { getItems } from "../navbar/navBarItems"
-import styles from "./pages.module.css"
 import { SelectCounselorList, SelectSchoolList } from "../forms/SelectList"
 
-const CalendarPage = () => {
+const CalendarPage: React.FC = () => {
   const role = "admin"
 
-  const [filteredEvents, setFilteredEvents] = useState([])
-  const [schoolSelection, setSchoolSelection] = useState("")
-  const [counselorSelection, setCounselorSelection] = useState("")
+  const [filteredEvents, setFilteredEvents] = useState<Appointment[]>([])
+  const [schoolSelection, setSchoolSelection] = useState<string>("")
+  const [counselorSelection, setCounselorSelection] = useState<string>("")
   const { appointments } = useContext(AppointmentsContext)
   const { counselors } = useContext(CounselorsContext)
   const { schools } = useContext(SchoolsContext)
 
-  const onEventClick = (event) => {
+  const onEventClick = (event: Appointment) => {
     // display AppointmentDetailPage with this event
     console.log("eventClicked:", event)
   }
 
-  const onDateClick = (date) => {
+  const onDateClick = (date: string) => {
     // display new appointment form
     console.log("dateClicked:", date)
   }
 
-  const handleSchoolChange = async (e) => {
+  const handleSchoolChange = async (selectedSchoolName: string) => {
     const selectedSchool = schools.filter(
-      (school) => school.name === e.target.value
+      (school) => school.name === selectedSchoolName
     )[0]
     const schoolName = selectedSchool === undefined ? "" : selectedSchool.name
     console.log("Selected school changed", schoolName)
@@ -43,9 +42,9 @@ const CalendarPage = () => {
     filterEvents(counselorSelection, schoolName)
   }
 
-  const handleCounselorChange = async (e) => {
+  const handleCounselorChange = async (selectedCounselorName: string) => {
     const selectedCounselor = counselors.filter(
-      (counselor) => counselor.name === e.target.value
+      (counselor) => counselor.name === selectedCounselorName
     )[0]
     const counselorName =
       selectedCounselor === undefined ? "" : selectedCounselor.name
@@ -54,7 +53,7 @@ const CalendarPage = () => {
     filterEvents(counselorName, schoolSelection)
   }
 
-  const filterEvents = (counselorName, schoolName) => {
+  const filterEvents = (counselorName: string, schoolName: string) => {
     console.log("filterEvents:", counselorName, schoolName)
     const filteredEvents = appointments.filter((event) => {
       let counselorMatch =
@@ -70,20 +69,20 @@ const CalendarPage = () => {
   }, [appointments])
 
   return (
-    <div className={styles.mainContainer}>
+    <div className={"mainContainer"}>
       <nav>
         <Navbar items={getItems(role)} />
       </nav>
       <h1>Calendar</h1>
       <>
-        <label className={styles.flatLabel}>
+        <label>
           Counselor:{" "}
           <SelectCounselorList
             value={counselorSelection}
             onCounselorChanged={handleCounselorChange}
           />
         </label>
-        <label className={styles.flatLabel}>
+        <label>
           School:{" "}
           <SelectSchoolList
             value={schoolSelection}
@@ -98,7 +97,6 @@ const CalendarPage = () => {
           onDateClick={onDateClick}
         />
       </>
-      )
     </div>
   )
 }

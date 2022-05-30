@@ -11,7 +11,7 @@ export const exampleSchools = [
   },
 ]
 
-interface School {
+export type School = {
   name: string
   email: string
   facilitators: string[]

@@ -24,7 +24,7 @@ export const exampleStudents = [
   },
 ]
 
-interface Student {
+export type Student = {
   first_name: string
   last_name: string
   school: string

@@ -7,6 +7,7 @@ import { SchoolsContext, exampleSchools } from "./data/schools"
 import { exampleStudents, StudentsContext } from "./data/students"
 import { UsersContext, exampleUsers } from "./data/users"
 import AppRouter from "./routes/AppRouter"
+import { APP_CSS } from "./appStyles"
 
 function App() {
   const [appointments, setAppointments] = useState(exampleAppointments)
@@ -22,6 +23,7 @@ function App() {
 
   return (
     <>
+      <style>{APP_CSS}</style>
       <AppointmentsContext.Provider value={appointmentsContextValue}>
         <CounselorsContext.Provider value={counselorsContextValue}>
           <SchoolsContext.Provider value={schoolsContextValue}>
