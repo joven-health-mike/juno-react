@@ -24,17 +24,22 @@ export const exampleStudents = [
   },
 ]
 
-export const StudentsContext = React.createContext({
+interface Student {
+  first_name: string
+  last_name: string
+  school: string
+  counselor: string
+}
+
+interface IStudentsContext {
+  students: Student[]
+  setStudents: any
+}
+
+export const StudentsContext = React.createContext<IStudentsContext>({
   students: exampleStudents,
   setStudents: () => {},
 })
-
-export const studentSchema = {
-  first_name: "string",
-  last_name: "string",
-  school: "string",
-  counselor: "string",
-}
 
 const BASE_URL = "http://localhost:8080/api/students"
 export const initialStudents = []
@@ -45,19 +50,19 @@ export async function getAllStudents() {
   return result
 }
 
-export async function addStudent(student) {
+export async function addStudent(student: Student) {
   const result = await httpPost(BASE_URL, student)
   //convert http result to student
   return result
 }
 
-export async function updateStudent(id, student) {
+export async function updateStudent(id: string, student: Student) {
   const result = await httpPut(BASE_URL, id, student)
   // convert http result to student
   return result
 }
 
-export async function deleteStudent(id) {
+export async function deleteStudent(id: string) {
   const result = await httpDelete(BASE_URL, id)
   // convert http result to student
   return result

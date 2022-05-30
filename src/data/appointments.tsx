@@ -30,19 +30,24 @@ export const exampleAppointments = [
   },
 ]
 
-export const AppointmentsContext = React.createContext({
+type Appointment = {
+  title: string
+  start: string
+  end: string
+  counselor: string
+  student: string
+  facilitator: string
+}
+
+interface IAppointmentsContext {
+  appointments: Appointment[]
+  setAppointments: any
+}
+
+export const AppointmentsContext = React.createContext<IAppointmentsContext>({
   appointments: exampleAppointments,
   setAppointments: () => {},
 })
-
-export const appointmentSchema = {
-  title: "string",
-  start: "string",
-  end: "string",
-  counselor: "id",
-  student: "id",
-  facilitator: "id",
-}
 
 const BASE_URL = "http://localhost:8080/api/appointments"
 export const initialAppointments = []
@@ -53,19 +58,19 @@ export async function getAllAppointments() {
   return result
 }
 
-export async function addAppointment(appointment) {
+export async function addAppointment(appointment: Appointment) {
   const result = await httpPost(BASE_URL, appointment)
   //convert http result to appointment
   return result
 }
 
-export async function updateAppointment(id, appointment) {
+export async function updateAppointment(id: String, appointment: Appointment) {
   const result = await httpPut(BASE_URL, id, appointment)
   // convert http result to appointment
   return result
 }
 
-export async function deleteAppointment(id) {
+export async function deleteAppointment(id: String) {
   const result = await httpDelete(BASE_URL, id)
   // convert http result to appointment
   return result

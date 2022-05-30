@@ -20,18 +20,23 @@ export const exampleUsers = [
   },
 ]
 
-export const UsersContext = React.createContext({
+interface User {
+  name: string
+  email: string
+  password: string
+  role: string
+  associatedAccount: string
+}
+
+interface IUsersContext {
+  users: User[]
+  setUsers: any
+}
+
+export const UsersContext = React.createContext<IUsersContext>({
   users: exampleUsers,
   setUsers: () => {},
 })
-
-export const userSchema = {
-  name: "string",
-  email: "string",
-  password: "string",
-  role: "string",
-  associatedAccountId: "string",
-}
 
 export const ROLES = [
   "admin",
@@ -51,19 +56,19 @@ export async function getAllUsers() {
   return result
 }
 
-export async function addUser(user) {
+export async function addUser(user: User) {
   const result = await httpPost(BASE_URL, user)
   //convert http result to user
   return result
 }
 
-export async function updateUser(id, user) {
+export async function updateUser(id: string, user: User) {
   const result = await httpPut(BASE_URL, id, user)
   // convert http result to user
   return result
 }
 
-export async function deleteUser(id) {
+export async function deleteUser(id: string) {
   const result = await httpDelete(BASE_URL, id)
   // convert http result to user
   return result

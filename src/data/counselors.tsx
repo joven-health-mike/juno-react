@@ -12,17 +12,22 @@ export const exampleCounselors = [
   },
 ]
 
-export const CounselorsContext = React.createContext({
+interface Counselor {
+  name: string
+  email: string
+  roomLink: string
+  assignedSchools: string[]
+}
+
+interface ICounselorsContext {
+  counselors: Counselor[]
+  setCounselors: any
+}
+
+export const CounselorsContext = React.createContext<ICounselorsContext>({
   counselors: exampleCounselors,
   setCounselors: () => {},
 })
-
-export const counselorSchema = {
-  name: "string",
-  email: "string",
-  roomLink: "string",
-  assignedSchools: "string[]",
-}
 
 const BASE_URL = "http://localhost:8080/api/counselors"
 export const initialCounselors = []
@@ -33,19 +38,19 @@ export async function getAllCounselors() {
   return result
 }
 
-export async function addCounselor(counselor) {
+export async function addCounselor(counselor: Counselor) {
   const result = await httpPost(BASE_URL, counselor)
   //convert http result to counselor
   return result
 }
 
-export async function updateCounselor(id, counselor) {
+export async function updateCounselor(id: string, counselor: Counselor) {
   const result = await httpPut(BASE_URL, id, counselor)
   // convert http result to counselor
   return result
 }
 
-export async function deleteCounselor(id) {
+export async function deleteCounselor(id: string) {
   const result = await httpDelete(BASE_URL, id)
   // convert http result to counselor
   return result

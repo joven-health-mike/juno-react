@@ -11,16 +11,21 @@ export const exampleSchools = [
   },
 ]
 
-export const SchoolsContext = React.createContext({
+interface School {
+  name: string
+  email: string
+  facilitators: string[]
+}
+
+interface ISchoolsContext {
+  schools: School[]
+  setSchools: any
+}
+
+export const SchoolsContext = React.createContext<ISchoolsContext>({
   schools: exampleSchools,
   setSchools: () => {},
 })
-
-export const schoolSchema = {
-  name: "string",
-  email: "string",
-  facilitators: "string[]",
-}
 
 const BASE_URL = "http://localhost:8080/api/schools"
 export const initialSchools = []
@@ -31,19 +36,19 @@ export async function getAllSchools() {
   return result
 }
 
-export async function addSchool(school) {
+export async function addSchool(school: School) {
   const result = await httpPost(BASE_URL, school)
   //convert http result to school
   return result
 }
 
-export async function updateSchool(id, school) {
+export async function updateSchool(id: string, school: School) {
   const result = await httpPut(BASE_URL, id, school)
   // convert http result to school
   return result
 }
 
-export async function deleteSchool(id) {
+export async function deleteSchool(id: string) {
   const result = await httpDelete(BASE_URL, id)
   // convert http result to school
   return result
