@@ -1,6 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from "react"
+import React, { useContext } from "react"
+import { UsersContext } from "../../data/users"
 import CreateUserForm from "../forms/CreateUserForm"
 import Navbar from "../navbar/Navbar"
 import { getItems } from "../navbar/navBarItems"
@@ -9,15 +10,20 @@ import styles from "./pages.module.css"
 const AccountDetailPage = ({ defaultUser }) => {
   const role = "admin"
 
+  const { users, setUsers } = useContext(UsersContext)
+
   const onFormSubmit = (user) => {
-    if (defaultUser) {
-      modifyUser(user)
-    }
+    if (defaultUser) modifyUser(user)
+    else throw new Error() // parent page didn't pass in a default user
   }
 
-  const modifyUser = (user) => {
-    console.log("modifyUser:", user)
-    // figure out how to modify the user in the global context object
+  const modifyUser = (modifiedUser) => {
+    const newUsers = users.map((mappedUser) => {
+      // this should use an ID instead of the name - changes to the name won't save using this code.
+      if (modifiedUser.name === mappedUser.name) return modifiedUser
+      else return mappedUser
+    })
+    setUsers(newUsers)
   }
 
   const onFormCancel = () => {

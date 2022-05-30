@@ -2,10 +2,12 @@
 
 import React, { useState } from "react"
 import DatePicker from "react-datepicker"
-import { CounselorsContext } from "../../data/counselors"
-import { SchoolsContext } from "../../data/schools"
-import { StudentsContext } from "../../data/students"
 import "react-datepicker/dist/react-datepicker.css"
+import {
+  SelectCounselorList,
+  SelectFacilitatorList,
+  SelectStudentList,
+} from "./SelectList"
 
 const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
   const emptyAppointment = {
@@ -21,23 +23,15 @@ const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
     defaultAppointment ?? emptyAppointment
   )
 
-  const onCounselorChanged = (e) => {
-    e.preventDefault()
-    const counselorName = e.target.value.includes("Select")
-      ? ""
-      : e.target.value
+  const onCounselorChanged = (counselorName) => {
     setAppointment({ ...appointment, counselor: counselorName })
   }
 
-  const onSchoolChanged = (e) => {
-    e.preventDefault()
-    const schoolName = e.target.value.includes("Select") ? "" : e.target.value
-    setAppointment({ ...appointment, facilitator: schoolName })
+  const onFacilitatorChanged = (facilitatorname) => {
+    setAppointment({ ...appointment, facilitator: facilitatorname })
   }
 
-  const onStudentChanged = (e) => {
-    e.preventDefault()
-    const studentName = e.target.value.includes("Select") ? "" : e.target.value
+  const onStudentChanged = (studentName) => {
     setAppointment({ ...appointment, student: studentName })
   }
 
@@ -97,64 +91,24 @@ const CreateAppointmentForm = ({ defaultAppointment, onSubmit, onCancel }) => {
       </label>
       <label>
         Counselor:{" "}
-        <CounselorsContext.Consumer>
-          {(value) => {
-            return (
-              <>
-                <select
-                  value={appointment.counselor}
-                  onChange={onCounselorChanged}
-                >
-                  <option key={"Select a Counselor"}>Select a Counselor</option>
-                  {value.counselors.map((counselor, index) => (
-                    <option key={index}>{counselor.name}</option>
-                  ))}
-                </select>
-              </>
-            )
-          }}
-        </CounselorsContext.Consumer>
+        <SelectCounselorList
+          value={appointment.counselor}
+          onCounselorChanged={onCounselorChanged}
+        />
       </label>
       <label>
         Student:{" "}
-        <StudentsContext.Consumer>
-          {(value) => {
-            return (
-              <>
-                <select value={appointment.student} onChange={onStudentChanged}>
-                  <option key={"Select a Student"}>Select a Student</option>
-                  {value.students.map((student, index) => (
-                    <option key={index}>
-                      {student.first_name + " " + student.last_name}
-                    </option>
-                  ))}
-                </select>
-              </>
-            )
-          }}
-        </StudentsContext.Consumer>
+        <SelectStudentList
+          value={appointment.student}
+          onStudentChanged={onStudentChanged}
+        />
       </label>
       <label>
         Facilitator:{" "}
-        <SchoolsContext.Consumer>
-          {(value) => {
-            return (
-              <>
-                <select
-                  value={appointment.facilitator}
-                  onChange={onSchoolChanged}
-                >
-                  <option key={"Select a Facilitator"}>
-                    Select a Facilitator
-                  </option>
-                  {value.schools.map((school, index) => (
-                    <option key={index}>{school.name}</option>
-                  ))}
-                </select>
-              </>
-            )
-          }}
-        </SchoolsContext.Consumer>
+        <SelectFacilitatorList
+          value={appointment.facilitator}
+          onFacilitatorChanged={onFacilitatorChanged}
+        />
       </label>
 
       <button type="submit">Submit</button>

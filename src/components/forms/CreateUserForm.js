@@ -5,6 +5,7 @@ import { CounselorsContext } from "../../data/counselors"
 import { SchoolsContext } from "../../data/schools"
 import { StudentsContext } from "../../data/students"
 import { ROLES } from "../../data/users"
+import SelectList from "./SelectList"
 
 const CreateUserForm = ({ defaultUser, onSubmit, onCancel }) => {
   const emptyUser = {
@@ -22,9 +23,9 @@ const CreateUserForm = ({ defaultUser, onSubmit, onCancel }) => {
 
   // update account drop-down options anytime the role changes
   const updateAccountOptions = useCallback(() => {
-    console.log("updateAccountOptions for role:", user.role)
     let data = []
 
+    // there's probably a better way to do this...
     switch (user.role) {
       case "admin":
         data.push("admin")
@@ -56,26 +57,21 @@ const CreateUserForm = ({ defaultUser, onSubmit, onCancel }) => {
         break
     }
     setAccountOptions(data)
-  }, [counselors, schools, students, user.role])
+  }, [user.role, counselors, schools, students])
 
   // set up initial account options based on the defaultUser role
   useEffect(() => {
     updateAccountOptions(user.role)
   }, [updateAccountOptions, user.role])
 
-  const onRoleChanged = (e) => {
-    e.preventDefault()
-    const role = e.target.value.includes("Select") ? "" : e.target.value
-    setUser({ ...user, role: role })
+  const onRoleChanged = (role) => {
+    // if role changes, clear out any previous account selection
+    setUser({ ...user, role: role, associatedAccount: "" })
     updateAccountOptions(role)
   }
 
-  const onAccountChanged = (e) => {
-    e.preventDefault()
-    const associatedAccount = e.target.value.includes("Select")
-      ? ""
-      : e.target.value
-    setUser({ ...user, associatedAccount: associatedAccount })
+  const onAccountChanged = (account) => {
+    setUser({ ...user, associatedAccount: account })
   }
 
   const onFormSubmit = (e) => {
@@ -85,7 +81,7 @@ const CreateUserForm = ({ defaultUser, onSubmit, onCancel }) => {
 
   const onFormCancel = (e) => {
     e.preventDefault()
-    setUser(emptyUser)
+    setUser(defaultUser ?? emptyUser)
     onCancel()
   }
 
@@ -126,21 +122,21 @@ const CreateUserForm = ({ defaultUser, onSubmit, onCancel }) => {
       </label>
       <label>
         Role:{" "}
-        <select value={user.role} onChange={onRoleChanged}>
-          <option key={"Select a Role"}>Select a Role</option>
-          {ROLES.map((role, index) => {
-            return <option key={index}>{role}</option>
-          })}
-        </select>
+        <SelectList
+          labelText="Select a Role"
+          items={ROLES}
+          value={user.role}
+          onItemChanged={onRoleChanged}
+        />
       </label>
       <label>
         Associated Account:{" "}
-        <select value={user.associatedAccount} onChange={onAccountChanged}>
-          <option key={"Select an Account"}>Select an Account</option>
-          {accountOptions.map((option, index) => {
-            return <option key={index}>{option}</option>
-          })}
-        </select>
+        <SelectList
+          labelText="Select an Account"
+          items={accountOptions}
+          value={user.associatedAccount}
+          onItemChanged={onAccountChanged}
+        />
       </label>
       <button type="submit">Submit</button>
       <button type="button" onClick={onFormCancel}>

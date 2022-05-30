@@ -11,6 +11,7 @@ import Calendar from "../calendar/Calendar"
 import Navbar from "../navbar/Navbar"
 import { getItems } from "../navbar/navBarItems"
 import styles from "./pages.module.css"
+import { SelectCounselorList, SelectSchoolList } from "../forms/SelectList"
 
 const CalendarPage = () => {
   const role = "admin"
@@ -76,26 +77,18 @@ const CalendarPage = () => {
       <h1>Calendar</h1>
       <>
         <label className={styles.flatLabel}>
-          School:{" "}
-          <select value={schoolSelection} onChange={handleSchoolChange}>
-            <option>Select a School</option>
-            {schools.map((school, index) => (
-              <option key={index} value={school.name}>
-                {school.name}
-              </option>
-            ))}
-          </select>
+          Counselor:{" "}
+          <SelectCounselorList
+            value={counselorSelection}
+            onCounselorChanged={handleCounselorChange}
+          />
         </label>
         <label className={styles.flatLabel}>
-          Counselor:{" "}
-          <select value={counselorSelection} onChange={handleCounselorChange}>
-            <option>Select a Counselor</option>
-            {counselors.map((counselor, index) => (
-              <option key={index} value={counselor.name}>
-                {counselor.name}
-              </option>
-            ))}
-          </select>
+          School:{" "}
+          <SelectSchoolList
+            value={schoolSelection}
+            onSchoolChanged={handleSchoolChange}
+          />
         </label>
         <Calendar
           view="dayGridMonth"

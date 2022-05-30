@@ -1,8 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useState } from "react"
-import { CounselorsContext } from "../../data/counselors"
-import { SchoolsContext } from "../../data/schools"
+import { SelectCounselorList, SelectSchoolList } from "./SelectList"
 
 const CreateStudentForm = ({ defaultStudent, onSubmit, onCancel }) => {
   const emptyStudent = {
@@ -14,17 +13,11 @@ const CreateStudentForm = ({ defaultStudent, onSubmit, onCancel }) => {
 
   const [student, setStudent] = useState(defaultStudent ?? emptyStudent)
 
-  const onCounselorChanged = (e) => {
-    e.preventDefault()
-    const counselorName = e.target.value.includes("Select")
-      ? ""
-      : e.target.value
+  const onCounselorChanged = (counselorName) => {
     setStudent({ ...student, counselor: counselorName })
   }
 
-  const onSchoolChanged = (e) => {
-    e.preventDefault()
-    const schoolName = e.target.value.includes("Select") ? "" : e.target.value
+  const onSchoolChanged = (schoolName) => {
     setStudent({ ...student, school: schoolName })
   }
 
@@ -69,37 +62,17 @@ const CreateStudentForm = ({ defaultStudent, onSubmit, onCancel }) => {
       </label>
       <label>
         Counselor:{" "}
-        <CounselorsContext.Consumer>
-          {(value) => {
-            return (
-              <>
-                <select value={student.counselor} onChange={onCounselorChanged}>
-                  <option key={"Select a Counselor"}>Select a Counselor</option>
-                  {value.counselors.map((counselor, index) => (
-                    <option key={index}>{counselor.name}</option>
-                  ))}
-                </select>
-              </>
-            )
-          }}
-        </CounselorsContext.Consumer>
+        <SelectCounselorList
+          value={student.counselor}
+          onCounselorChanged={onCounselorChanged}
+        />
       </label>
       <label>
         School:{" "}
-        <SchoolsContext.Consumer>
-          {(value) => {
-            return (
-              <>
-                <select value={student.school} onChange={onSchoolChanged}>
-                  <option key={"Select a School"}>Select a School</option>
-                  {value.schools.map((school, index) => (
-                    <option key={index}>{school.name}</option>
-                  ))}
-                </select>
-              </>
-            )
-          }}
-        </SchoolsContext.Consumer>
+        <SelectSchoolList
+          value={student.school}
+          onSchoolChanged={onSchoolChanged}
+        />
       </label>
 
       <button type="submit">Submit</button>

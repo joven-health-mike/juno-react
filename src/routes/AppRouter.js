@@ -10,13 +10,19 @@ import HomePage from "../components/pages/HomePage"
 import SchoolsPage from "../components/pages/SchoolsPage"
 import StudentsPage from "../components/pages/StudentsPage"
 import UsersPage from "../components/pages/UsersPage"
+import AccountDetailPage from "../components/pages/AccountDetailPage"
 
-const AppRouter = ({ isLoggedIn, role }) => {
+const AppRouter = ({ isLoggedIn, loggedInUser, role }) => {
   return (
     <Routes>
       {isLoggedIn && (
         <>
           <Route path="/" exact element={<HomePage />} />
+          <Route
+            path="/account"
+            exact
+            element={<AccountDetailPage defaultUser={loggedInUser} />}
+          />
           <Route path="/appointments" exact element={<AppointmentsPage />} />
           <Route path="/calendar" exact element={<CalendarPage />} />
           <Route path="/counselors" exact element={<CounselorsPage />} />
@@ -28,6 +34,7 @@ const AppRouter = ({ isLoggedIn, role }) => {
         </>
       )}
       <Route path="/" exact element={<Navigate replace to="/login" />} />
+      <Route path="/account" exact element={<Navigate replace to="/login" />} />
       <Route
         path="/appointments"
         exact

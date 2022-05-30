@@ -27,7 +27,11 @@ function App() {
           <SchoolsContext.Provider value={schoolsContextValue}>
             <StudentsContext.Provider value={studentsContextValue}>
               <UsersContext.Provider value={usersContextValue}>
-                <AppRouter isLoggedIn={true} role={"admin"} />
+                <AppRouter
+                  isLoggedIn={true}
+                  role={"admin"}
+                  loggedInUser={users[0]}
+                />
               </UsersContext.Provider>
             </StudentsContext.Provider>
           </SchoolsContext.Provider>
