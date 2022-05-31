@@ -16,7 +16,7 @@ const AppointmentsPage: React.FC = () => {
     setAppointments([...appointments, appointment])
   }
 
-  const onAppointmentDeleteClicked = (appointmentTitle) => {
+  const onAppointmentDeleteClicked = (appointmentTitle: string) => {
     if (window.confirm("Delete this appointment?")) {
       let newAppointments = appointments.filter(
         (appointment) => appointment.title !== appointmentTitle
