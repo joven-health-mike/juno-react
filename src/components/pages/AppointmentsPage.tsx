@@ -16,6 +16,15 @@ const AppointmentsPage: React.FC = () => {
     setAppointments([...appointments, appointment])
   }
 
+  const onAppointmentDeleteClicked = (appointmentTitle) => {
+    if (window.confirm("Delete this appointment?")) {
+      let newAppointments = appointments.filter(
+        (appointment) => appointment.title !== appointmentTitle
+      )
+      setAppointments(newAppointments)
+    }
+  }
+
   return (
     <div className={"mainContainer"}>
       <nav>
@@ -24,7 +33,10 @@ const AppointmentsPage: React.FC = () => {
       <h1>Appointments</h1>
       <>
         <CreateAppointmentForm onSubmit={onFormSubmit} onCancel={() => {}} />
-        <AppointmentsTable appointments={appointments} />
+        <AppointmentsTable
+          appointments={appointments}
+          onDeleteClicked={onAppointmentDeleteClicked}
+        />
       </>
     </div>
   )

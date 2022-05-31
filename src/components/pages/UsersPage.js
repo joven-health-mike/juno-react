@@ -17,6 +17,13 @@ const UsersPage = () => {
     setUsers([...users, user])
   }
 
+  const onUserDeleteClicked = (userName) => {
+    if (window.confirm("Delete this user?")) {
+      let newUsers = users.filter((user) => user.name !== userName)
+      setUsers(newUsers)
+    }
+  }
+
   return (
     <div className={styles.mainContainer}>
       <nav>
@@ -25,7 +32,7 @@ const UsersPage = () => {
       <h1>Users</h1>
       <>
         <CreateUserForm onSubmit={onFormSubmit} onCancel={() => {}} />
-        <UsersTable users={users} />
+        <UsersTable users={users} onDeleteClicked={onUserDeleteClicked} />
       </>
     </div>
   )

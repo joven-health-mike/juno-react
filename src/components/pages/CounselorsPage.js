@@ -17,6 +17,15 @@ const CounselorsPage = () => {
     setCounselors([...counselors, counselor])
   }
 
+  const onCounselorDeleteClicked = (counselorName) => {
+    if (window.confirm("Delete this counselor?")) {
+      let newCounselors = counselors.filter(
+        (counselor) => counselor.name !== counselorName
+      )
+      setCounselors(newCounselors)
+    }
+  }
+
   return (
     <div className={styles.mainContainer}>
       <nav>
@@ -25,7 +34,10 @@ const CounselorsPage = () => {
       <h1>Counselors</h1>
       <>
         <CreateCounselorForm onSubmit={onFormSubmit} onCancel={() => {}} />
-        <CounselorsTable counselors={counselors} />
+        <CounselorsTable
+          counselors={counselors}
+          onDeleteClicked={onCounselorDeleteClicked}
+        />
       </>
     </div>
   )
