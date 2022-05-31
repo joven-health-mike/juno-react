@@ -17,6 +17,15 @@ const AppointmentsPage = () => {
     setAppointments([...appointments, appointment])
   }
 
+  const onAppointmentDeleteClicked = (appointmentTitle) => {
+    if (window.confirm("Delete this appointment?")) {
+      let newAppointments = appointments.filter(
+        (appointment) => appointment.title !== appointmentTitle
+      )
+      setAppointments(newAppointments)
+    }
+  }
+
   return (
     <div className={styles.mainContainer}>
       <nav>
@@ -25,7 +34,10 @@ const AppointmentsPage = () => {
       <h1>Appointments</h1>
       <>
         <CreateAppointmentForm onSubmit={onFormSubmit} onCancel={() => {}} />
-        <AppointmentsTable appointments={appointments} />
+        <AppointmentsTable
+          appointments={appointments}
+          onDeleteClicked={onAppointmentDeleteClicked}
+        />
       </>
     </div>
   )

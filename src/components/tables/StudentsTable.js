@@ -1,10 +1,11 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from "react"
+import XButton from "../buttons/XButton"
 import DataTable from "./DataTable"
 import TableSearchFilter from "./TableSearchFilter"
 
-const StudentsTable = ({ students }) => {
+const StudentsTable = ({ students, onDeleteClicked }) => {
   const defaultColumn = React.useMemo(
     () => ({
       Filter: TableSearchFilter,
@@ -14,6 +15,18 @@ const StudentsTable = ({ students }) => {
 
   const columns = React.useMemo(
     () => [
+      {
+        Header: " ",
+        Cell: ({ cell }) => (
+          <XButton
+            value={cell.row.values.first_name + " " + cell.row.values.last_name}
+            onClick={(e) => {
+              e.preventDefault()
+              onDeleteClicked(e.target.value)
+            }}
+          />
+        ),
+      },
       {
         Header: "First Name",
         accessor: "first_name",
@@ -31,7 +44,7 @@ const StudentsTable = ({ students }) => {
         accessor: "counselor",
       },
     ],
-    []
+    [onDeleteClicked]
   )
 
   return (

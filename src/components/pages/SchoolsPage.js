@@ -17,6 +17,13 @@ const SchoolsPage = () => {
     setSchools([...schools, school])
   }
 
+  const onSchoolDeleteClicked = (schoolName) => {
+    if (window.confirm("Delete this school?")) {
+      let newSchools = schools.filter((school) => school.name !== schoolName)
+      setSchools(newSchools)
+    }
+  }
+
   return (
     <div className={styles.mainContainer}>
       <nav>
@@ -25,7 +32,10 @@ const SchoolsPage = () => {
       <h1>Schools</h1>
       <>
         <CreateSchoolForm onSubmit={onFormSubmit} onCancel={() => {}} />
-        <SchoolsTable schools={schools} />
+        <SchoolsTable
+          schools={schools}
+          onDeleteClicked={onSchoolDeleteClicked}
+        />
       </>
     </div>
   )
