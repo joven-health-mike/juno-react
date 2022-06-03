@@ -9,7 +9,7 @@ import {
   FaUserAstronaut,
 } from "react-icons/fa"
 import { IoMdLogOut, IoMdBusiness, IoMdContacts } from "react-icons/io"
-import image from "../../assets/Logo-192sq-alphabg.png"
+import image from "../../assets/Logo-192sq-alphabg.png" // TODO: How do we import images in TS?
 
 export function getItems(role) {
   switch (role) {
