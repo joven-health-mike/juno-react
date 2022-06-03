@@ -1,9 +1,20 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useState } from "react"
+import { Counselor } from "../../data/counselors"
 import { SchoolsContext } from "../../data/schools"
 
-const CreateCounselorForm = ({ defaultCounselor, onSubmit, onCancel }) => {
+type CreateCounselorFormProps = {
+  defaultCounselor?: Counselor
+  onSubmit: (counselor: Counselor) => void
+  onCancel: () => void
+}
+
+const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
+  defaultCounselor,
+  onSubmit,
+  onCancel,
+}) => {
   const emptyCounselor = {
     name: "",
     email: "",
@@ -13,16 +24,16 @@ const CreateCounselorForm = ({ defaultCounselor, onSubmit, onCancel }) => {
 
   const [counselor, setCounselor] = useState(defaultCounselor ?? emptyCounselor)
 
-  const onSchoolChecked = (e) => {
+  const onSchoolChecked = (e: any) => {
     const schoolName = e.target.value
     e.target.checked = toggleSchoolName(schoolName)
   }
 
-  const isSchoolChecked = (schoolName) => {
+  const isSchoolChecked = (schoolName: string) => {
     return counselor.assignedSchools.includes(schoolName)
   }
 
-  const toggleSchoolName = (schoolName) => {
+  const toggleSchoolName = (schoolName: string) => {
     const exists = isSchoolChecked(schoolName)
 
     if (exists) {
@@ -33,25 +44,25 @@ const CreateCounselorForm = ({ defaultCounselor, onSubmit, onCancel }) => {
     return !exists
   }
 
-  const addSchool = (schoolName) => {
+  const addSchool = (schoolName: string) => {
     let newAssignedSchools = [...counselor.assignedSchools]
     newAssignedSchools.push(schoolName)
     setCounselor({ ...counselor, assignedSchools: newAssignedSchools })
   }
 
-  const removeSchool = (schoolName) => {
+  const removeSchool = (schoolName: string) => {
     let newAssignedSchools = counselor.assignedSchools.filter(
       (school) => school !== schoolName
     )
     setCounselor({ ...counselor, assignedSchools: newAssignedSchools })
   }
 
-  const onFormSubmit = (e) => {
+  const onFormSubmit = (e: any) => {
     e.preventDefault()
     onSubmit(counselor)
   }
 
-  const onFormCancel = (e) => {
+  const onFormCancel = (e: any) => {
     e.preventDefault()
     setCounselor(emptyCounselor)
     onCancel()

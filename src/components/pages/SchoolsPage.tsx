@@ -1,23 +1,22 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useContext } from "react"
-import { SchoolsContext } from "../../data/schools"
+import { School, SchoolsContext } from "../../data/schools"
 import CreateSchoolForm from "../forms/CreateSchoolForm"
 import Navbar from "../navbar/Navbar"
 import { getItems } from "../navbar/navBarItems"
 import SchoolsTable from "../tables/SchoolsTable"
-import styles from "./pages.module.css"
 
 const SchoolsPage = () => {
   const role = "admin"
 
   const { schools, setSchools } = useContext(SchoolsContext)
 
-  const onFormSubmit = (school) => {
+  const onFormSubmit = (school: School) => {
     setSchools([...schools, school])
   }
 
-  const onSchoolDeleteClicked = (schoolName) => {
+  const onSchoolDeleteClicked = (schoolName: string) => {
     if (window.confirm("Delete this school?")) {
       let newSchools = schools.filter((school) => school.name !== schoolName)
       setSchools(newSchools)
@@ -25,7 +24,7 @@ const SchoolsPage = () => {
   }
 
   return (
-    <div className={styles.mainContainer}>
+    <div className={"mainContainer"}>
       <nav>
         <Navbar items={getItems(role)} />
       </nav>

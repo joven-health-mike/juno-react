@@ -1,11 +1,20 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from "react"
+import { Counselor } from "../../data/counselors"
 import XButton from "../buttons/XButton"
 import DataTable from "./DataTable"
 import TableSearchFilter from "./TableSearchFilter"
 
-const CounselorsTable = ({ counselors, onDeleteClicked }) => {
+type CounselorsTableProps = {
+  counselors: Counselor[]
+  onDeleteClicked: (counselorName: string) => void
+}
+
+const CounselorsTable: React.FC<CounselorsTableProps> = ({
+  counselors,
+  onDeleteClicked,
+}) => {
   const defaultColumn = React.useMemo(
     () => ({
       Filter: TableSearchFilter,
@@ -17,10 +26,10 @@ const CounselorsTable = ({ counselors, onDeleteClicked }) => {
     () => [
       {
         Header: " ",
-        Cell: ({ cell }) => (
+        Cell: ({ cell }: any) => (
           <XButton
             value={cell.row.values.name}
-            onClick={(e) => {
+            onClick={(e: any) => {
               e.preventDefault()
               onDeleteClicked(e.target.value)
             }}
@@ -42,11 +51,13 @@ const CounselorsTable = ({ counselors, onDeleteClicked }) => {
       {
         Header: "Assigned Schools",
         accessor: "assignedSchools",
-        Cell: ({ cell }) => (
+        Cell: ({ cell }: any) => (
           <>
-            {cell.row.values.assignedSchools.map((schoolName, index) => {
-              return <p key={index}>{schoolName}</p>
-            })}
+            {cell.row.values.assignedSchools.map(
+              (schoolName: string, index: number) => {
+                return <p key={index}>{schoolName}</p>
+              }
+            )}
           </>
         ),
       },

@@ -1,8 +1,19 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useRef, useState } from "react"
+import { School } from "../../data/schools"
 
-const CreateSchoolForm = ({ defaultSchool, onSubmit, onCancel }) => {
+type CreateSchoolFormProps = {
+  defaultSchool?: School
+  onSubmit: (school: School) => void
+  onCancel: () => void
+}
+
+const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
+  defaultSchool,
+  onSubmit,
+  onCancel,
+}) => {
   const emptySchool = {
     name: "",
     email: "",
@@ -11,14 +22,14 @@ const CreateSchoolForm = ({ defaultSchool, onSubmit, onCancel }) => {
 
   const [school, setSchool] = useState(defaultSchool ?? emptySchool)
 
-  const onAddFacilitator = (facilitator) => {
+  const onAddFacilitator = (facilitator: string) => {
     let newFacilitators = school.facilitators
     newFacilitators.push(facilitator)
 
     setSchool({ ...school, facilitators: newFacilitators })
   }
 
-  const onDeleteFacilitator = (e) => {
+  const onDeleteFacilitator = (e: any) => {
     e.preventDefault()
     let newFacilitators = school.facilitators.filter(
       (facilitatorName) => facilitatorName !== e.target.value
@@ -27,12 +38,12 @@ const CreateSchoolForm = ({ defaultSchool, onSubmit, onCancel }) => {
     setSchool({ ...school, facilitators: newFacilitators })
   }
 
-  const onFormSubmit = (e) => {
+  const onFormSubmit = (e: any) => {
     e.preventDefault()
     onSubmit(school)
   }
 
-  const onFormCancel = (e) => {
+  const onFormCancel = (e: any) => {
     e.preventDefault()
     setSchool(emptySchool)
     onCancel()
@@ -94,15 +105,23 @@ const CreateSchoolForm = ({ defaultSchool, onSubmit, onCancel }) => {
 }
 
 // a separate component to hold the facilitator input box and + button
-const FacilitatorInput = ({ onAddFacilitator }) => {
-  const textBox = useRef(null)
+type FacilitatorInputProps = {
+  onAddFacilitator: (facilitator: string) => void
+}
 
-  const onFormSubmit = (e) => {
+const FacilitatorInput: React.FC<FacilitatorInputProps> = ({
+  onAddFacilitator,
+}) => {
+  const textBox = useRef<HTMLInputElement>(null)
+
+  const onFormSubmit = (e: any) => {
     e.preventDefault()
 
-    const facilitatorName = textBox.current.value
-    onAddFacilitator(facilitatorName)
-    textBox.current.value = ""
+    if (textBox && textBox.current) {
+      const facilitatorName = textBox.current.value
+      onAddFacilitator(facilitatorName)
+      textBox.current.value = ""
+    }
   }
 
   return (

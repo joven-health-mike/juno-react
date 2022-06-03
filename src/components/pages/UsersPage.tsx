@@ -1,23 +1,22 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useContext } from "react"
-import { UsersContext } from "../../data/users"
+import { User, UsersContext } from "../../data/users"
 import CreateUserForm from "../forms/CreateUserForm"
 import Navbar from "../navbar/Navbar"
 import { getItems } from "../navbar/navBarItems"
 import UsersTable from "../tables/UsersTable"
-import styles from "./pages.module.css"
 
 const UsersPage = () => {
   const role = "admin"
 
   const { users, setUsers } = useContext(UsersContext)
 
-  const onFormSubmit = (user) => {
+  const onFormSubmit = (user: User) => {
     setUsers([...users, user])
   }
 
-  const onUserDeleteClicked = (userName) => {
+  const onUserDeleteClicked = (userName: string) => {
     if (window.confirm("Delete this user?")) {
       let newUsers = users.filter((user) => user.name !== userName)
       setUsers(newUsers)
@@ -25,7 +24,7 @@ const UsersPage = () => {
   }
 
   return (
-    <div className={styles.mainContainer}>
+    <div className={"mainContainer"}>
       <nav>
         <Navbar items={getItems(role)} />
       </nav>

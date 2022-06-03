@@ -4,10 +4,20 @@ import React, { useCallback, useContext, useEffect, useState } from "react"
 import { CounselorsContext } from "../../data/counselors"
 import { SchoolsContext } from "../../data/schools"
 import { StudentsContext } from "../../data/students"
-import { ROLES } from "../../data/users"
-import SelectList from "./SelectList"
+import { ROLES, User } from "../../data/users"
+import SelectList from "../selectList/SelectList"
 
-const CreateUserForm = ({ defaultUser, onSubmit, onCancel }) => {
+type CreateUserFormProps = {
+  defaultUser?: User
+  onSubmit: (user: User) => void
+  onCancel: () => void
+}
+
+const CreateUserForm: React.FC<CreateUserFormProps> = ({
+  defaultUser,
+  onSubmit,
+  onCancel,
+}) => {
   const emptyUser = {
     name: "",
     email: "",
@@ -16,7 +26,7 @@ const CreateUserForm = ({ defaultUser, onSubmit, onCancel }) => {
     associatedAccount: "",
   }
   const [user, setUser] = useState(defaultUser ?? emptyUser)
-  const [accountOptions, setAccountOptions] = useState([])
+  const [accountOptions, setAccountOptions] = useState<String[]>([])
   const { counselors } = useContext(CounselorsContext)
   const { schools } = useContext(SchoolsContext)
   const { students } = useContext(StudentsContext)
@@ -61,25 +71,25 @@ const CreateUserForm = ({ defaultUser, onSubmit, onCancel }) => {
 
   // set up initial account options based on the defaultUser role
   useEffect(() => {
-    updateAccountOptions(user.role)
+    updateAccountOptions()
   }, [updateAccountOptions, user.role])
 
-  const onRoleChanged = (role) => {
+  const onRoleChanged = (role: string) => {
     // if role changes, clear out any previous account selection
     setUser({ ...user, role: role, associatedAccount: "" })
-    updateAccountOptions(role)
+    updateAccountOptions()
   }
 
-  const onAccountChanged = (account) => {
+  const onAccountChanged = (account: string) => {
     setUser({ ...user, associatedAccount: account })
   }
 
-  const onFormSubmit = (e) => {
+  const onFormSubmit = (e: any) => {
     e.preventDefault()
     onSubmit(user)
   }
 
-  const onFormCancel = (e) => {
+  const onFormCancel = (e: any) => {
     e.preventDefault()
     setUser(defaultUser ?? emptyUser)
     onCancel()

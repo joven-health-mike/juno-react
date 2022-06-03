@@ -1,11 +1,17 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from "react"
+import { User } from "../../data/users"
 import XButton from "../buttons/XButton"
 import DataTable from "./DataTable"
 import TableSearchFilter from "./TableSearchFilter"
 
-const UsersTable = ({ users, onDeleteClicked }) => {
+type UsersTableProps = {
+  users: User[]
+  onDeleteClicked: (userName: string) => void
+}
+
+const UsersTable: React.FC<UsersTableProps> = ({ users, onDeleteClicked }) => {
   const defaultColumn = React.useMemo(
     () => ({
       Filter: TableSearchFilter,
@@ -17,10 +23,10 @@ const UsersTable = ({ users, onDeleteClicked }) => {
     () => [
       {
         Header: " ",
-        Cell: ({ cell }) => (
+        Cell: ({ cell }: any) => (
           <XButton
             value={cell.row.values.name}
-            onClick={(e) => {
+            onClick={(e: any) => {
               e.preventDefault()
               onDeleteClicked(e.target.value)
             }}

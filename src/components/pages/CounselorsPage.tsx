@@ -1,23 +1,22 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useContext } from "react"
-import { CounselorsContext } from "../../data/counselors"
+import { Counselor, CounselorsContext } from "../../data/counselors"
 import CreateCounselorForm from "../forms/CreateCounselorForm"
 import Navbar from "../navbar/Navbar"
 import { getItems } from "../navbar/navBarItems"
 import CounselorsTable from "../tables/CounselorsTable"
-import styles from "./pages.module.css"
 
-const CounselorsPage = () => {
+const CounselorsPage: React.FC = () => {
   const role = "admin"
 
   const { counselors, setCounselors } = useContext(CounselorsContext)
 
-  const onFormSubmit = (counselor) => {
+  const onFormSubmit = (counselor: Counselor) => {
     setCounselors([...counselors, counselor])
   }
 
-  const onCounselorDeleteClicked = (counselorName) => {
+  const onCounselorDeleteClicked = (counselorName: string) => {
     if (window.confirm("Delete this counselor?")) {
       let newCounselors = counselors.filter(
         (counselor) => counselor.name !== counselorName
@@ -27,7 +26,7 @@ const CounselorsPage = () => {
   }
 
   return (
-    <div className={styles.mainContainer}>
+    <div className={"mainContainer"}>
       <nav>
         <Navbar items={getItems(role)} />
       </nav>

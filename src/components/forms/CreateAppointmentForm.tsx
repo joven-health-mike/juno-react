@@ -8,12 +8,12 @@ import {
   SelectCounselorList,
   SelectFacilitatorList,
   SelectStudentList,
-} from "./SelectList"
+} from "../selectList/SelectList"
 
 type CreateAppointmentFormProps = {
   defaultAppointment?: Appointment
-  onSubmit: any
-  onCancel: any
+  onSubmit: (appointment: Appointment) => void
+  onCancel: () => void
 }
 
 const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({

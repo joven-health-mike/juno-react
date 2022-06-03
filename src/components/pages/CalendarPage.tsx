@@ -10,7 +10,7 @@ import { SchoolsContext } from "../../data/schools"
 import Calendar from "../calendar/Calendar"
 import Navbar from "../navbar/Navbar"
 import { getItems } from "../navbar/navBarItems"
-import { SelectCounselorList, SelectSchoolList } from "../forms/SelectList"
+import { SelectCounselorList, SelectSchoolList } from "../selectList/SelectList"
 
 const CalendarPage: React.FC = () => {
   const role = "admin"

@@ -1,9 +1,20 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useState } from "react"
-import { SelectCounselorList, SelectSchoolList } from "./SelectList"
+import { Student } from "../../data/students"
+import { SelectCounselorList, SelectSchoolList } from "../selectList/SelectList"
 
-const CreateStudentForm = ({ defaultStudent, onSubmit, onCancel }) => {
+type CreateStudentFormProps = {
+  defaultStudent?: Student
+  onSubmit: (student: Student) => void
+  onCancel: () => void
+}
+
+const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
+  defaultStudent,
+  onSubmit,
+  onCancel,
+}) => {
   const emptyStudent = {
     first_name: "",
     last_name: "",
@@ -13,20 +24,20 @@ const CreateStudentForm = ({ defaultStudent, onSubmit, onCancel }) => {
 
   const [student, setStudent] = useState(defaultStudent ?? emptyStudent)
 
-  const onCounselorChanged = (counselorName) => {
+  const onCounselorChanged = (counselorName: string) => {
     setStudent({ ...student, counselor: counselorName })
   }
 
-  const onSchoolChanged = (schoolName) => {
+  const onSchoolChanged = (schoolName: string) => {
     setStudent({ ...student, school: schoolName })
   }
 
-  const onFormSubmit = (e) => {
+  const onFormSubmit = (e: any) => {
     e.preventDefault()
     onSubmit(student)
   }
 
-  const onFormCancel = (e) => {
+  const onFormCancel = (e: any) => {
     e.preventDefault()
     setStudent(emptyStudent)
     onCancel()

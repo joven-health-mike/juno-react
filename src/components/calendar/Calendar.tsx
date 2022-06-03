@@ -9,7 +9,7 @@ type CalendarProps = {
   plugins: any[]
   appointments: Appointment[]
   onEventClick: any
-  onDateClick: any
+  onDateClick?: any
 }
 
 const Calendar: React.FC<CalendarProps> = ({

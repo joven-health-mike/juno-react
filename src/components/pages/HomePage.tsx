@@ -6,21 +6,20 @@ import listPlugin from "@fullcalendar/list"
 import Navbar from "../navbar/Navbar"
 import { getItems } from "../navbar/navBarItems"
 import Calendar from "../calendar/Calendar"
-import { AppointmentsContext } from "../../data/appointments"
-import styles from "./pages.module.css"
+import { Appointment, AppointmentsContext } from "../../data/appointments"
 
-const HomePage = () => {
+const HomePage: React.FC = () => {
   const role = "admin"
 
   const { appointments } = useContext(AppointmentsContext)
 
-  const onEventClick = (event) => {
+  const onEventClick = (event: Appointment) => {
     // display AppointmentDetailPage with this event
     console.log("eventClicked:", event)
   }
 
   return (
-    <div className={styles.mainContainer}>
+    <div className={"mainContainer"}>
       <nav>
         <Navbar items={getItems(role)} />
       </nav>

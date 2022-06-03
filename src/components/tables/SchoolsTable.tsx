@@ -1,11 +1,20 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from "react"
+import { School } from "../../data/schools"
 import XButton from "../buttons/XButton"
 import DataTable from "./DataTable"
 import TableSearchFilter from "./TableSearchFilter"
 
-const SchoolsTable = ({ schools, onDeleteClicked }) => {
+type SchoolsTableProps = {
+  schools: School[]
+  onDeleteClicked: (schoolName: string) => void
+}
+
+const SchoolsTable: React.FC<SchoolsTableProps> = ({
+  schools,
+  onDeleteClicked,
+}) => {
   const defaultColumn = React.useMemo(
     () => ({
       Filter: TableSearchFilter,
@@ -17,10 +26,10 @@ const SchoolsTable = ({ schools, onDeleteClicked }) => {
     () => [
       {
         Header: " ",
-        Cell: ({ cell }) => (
+        Cell: ({ cell }: any) => (
           <XButton
             value={cell.row.values.name}
-            onClick={(e) => {
+            onClick={(e: any) => {
               e.preventDefault()
               onDeleteClicked(e.target.value)
             }}
@@ -38,11 +47,13 @@ const SchoolsTable = ({ schools, onDeleteClicked }) => {
       {
         Header: "Facilitators",
         accessor: "facilitators",
-        Cell: ({ cell }) => (
+        Cell: ({ cell }: any) => (
           <>
-            {cell.row.values.facilitators.map((facilitatorName, index) => {
-              return <p key={index}>{facilitatorName}</p>
-            })}
+            {cell.row.values.facilitators.map(
+              (facilitatorName: string, index: number) => {
+                return <p key={index}>{facilitatorName}</p>
+              }
+            )}
           </>
         ),
       },
