@@ -14,7 +14,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
   defaultCounselor,
   onSubmit,
   onCancel,
-}) => {
+}: CreateCounselorFormProps) => {
   const emptyCounselor = {
     name: '',
     email: '',
@@ -26,9 +26,9 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
     defaultCounselor ?? emptyCounselor
   );
 
-  const onSchoolChecked = (e: any) => {
-    const schoolName = e.target.value;
-    e.target.checked = toggleSchoolName(schoolName);
+  const onSchoolChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const schoolName = event.target.value;
+    event.target.checked = toggleSchoolName(schoolName);
   };
 
   const isSchoolChecked = (schoolName: string) => {
@@ -59,13 +59,15 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
     setCounselor({ ...counselor, assignedSchools: newAssignedSchools });
   };
 
-  const onFormSubmit = (e: any) => {
-    e.preventDefault();
+  const onFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     onSubmit(counselor);
   };
 
-  const onFormCancel = (e: any) => {
-    e.preventDefault();
+  const onFormCancel = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
     setCounselor(emptyCounselor);
     onCancel();
   };
