@@ -1,14 +1,14 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useState } from "react"
-import { Counselor } from "../../data/counselors"
-import { SchoolsContext } from "../../data/schools"
+import React, { useState } from 'react';
+import { Counselor } from '../../data/counselors';
+import { SchoolsContext } from '../../data/schools';
 
 type CreateCounselorFormProps = {
-  defaultCounselor?: Counselor
-  onSubmit: (counselor: Counselor) => void
-  onCancel: () => void
-}
+  defaultCounselor?: Counselor;
+  onSubmit: (counselor: Counselor) => void;
+  onCancel: () => void;
+};
 
 const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
   defaultCounselor,
@@ -16,57 +16,59 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
   onCancel,
 }) => {
   const emptyCounselor = {
-    name: "",
-    email: "",
-    roomLink: "",
+    name: '',
+    email: '',
+    roomLink: '',
     assignedSchools: [],
-  }
+  };
 
-  const [counselor, setCounselor] = useState(defaultCounselor ?? emptyCounselor)
+  const [counselor, setCounselor] = useState(
+    defaultCounselor ?? emptyCounselor
+  );
 
   const onSchoolChecked = (e: any) => {
-    const schoolName = e.target.value
-    e.target.checked = toggleSchoolName(schoolName)
-  }
+    const schoolName = e.target.value;
+    e.target.checked = toggleSchoolName(schoolName);
+  };
 
   const isSchoolChecked = (schoolName: string) => {
-    return counselor.assignedSchools.includes(schoolName)
-  }
+    return counselor.assignedSchools.includes(schoolName);
+  };
 
   const toggleSchoolName = (schoolName: string) => {
-    const exists = isSchoolChecked(schoolName)
+    const exists = isSchoolChecked(schoolName);
 
     if (exists) {
-      removeSchool(schoolName)
+      removeSchool(schoolName);
     } else {
-      addSchool(schoolName)
+      addSchool(schoolName);
     }
-    return !exists
-  }
+    return !exists;
+  };
 
   const addSchool = (schoolName: string) => {
-    let newAssignedSchools = [...counselor.assignedSchools]
-    newAssignedSchools.push(schoolName)
-    setCounselor({ ...counselor, assignedSchools: newAssignedSchools })
-  }
+    let newAssignedSchools = [...counselor.assignedSchools];
+    newAssignedSchools.push(schoolName);
+    setCounselor({ ...counselor, assignedSchools: newAssignedSchools });
+  };
 
   const removeSchool = (schoolName: string) => {
     let newAssignedSchools = counselor.assignedSchools.filter(
-      (school) => school !== schoolName
-    )
-    setCounselor({ ...counselor, assignedSchools: newAssignedSchools })
-  }
+      school => school !== schoolName
+    );
+    setCounselor({ ...counselor, assignedSchools: newAssignedSchools });
+  };
 
   const onFormSubmit = (e: any) => {
-    e.preventDefault()
-    onSubmit(counselor)
-  }
+    e.preventDefault();
+    onSubmit(counselor);
+  };
 
   const onFormCancel = (e: any) => {
-    e.preventDefault()
-    setCounselor(emptyCounselor)
-    onCancel()
-  }
+    e.preventDefault();
+    setCounselor(emptyCounselor);
+    onCancel();
+  };
 
   return (
     <>
@@ -79,9 +81,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
             name="name"
             value={counselor.name}
             required
-            onChange={(e) =>
-              setCounselor({ ...counselor, name: e.target.value })
-            }
+            onChange={e => setCounselor({ ...counselor, name: e.target.value })}
           />
         </label>
         <label>
@@ -92,7 +92,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
             name="email"
             value={counselor.email}
             required
-            onChange={(e) =>
+            onChange={e =>
               setCounselor({ ...counselor, email: e.target.value })
             }
           />
@@ -105,16 +105,16 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
             name="roomLink"
             value={counselor.roomLink}
             required
-            onChange={(e) =>
+            onChange={e =>
               setCounselor({ ...counselor, roomLink: e.target.value })
             }
           />
         </label>
         <label>
-          Associated Schools:{" "}
+          Associated Schools:{' '}
           <div>
             <SchoolsContext.Consumer>
-              {(value) =>
+              {value =>
                 value.schools.map((school, index) => (
                   <label key={index}>
                     <input
@@ -137,7 +137,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
         </button>
       </form>
     </>
-  )
-}
+  );
+};
 
-export default CreateCounselorForm
+export default CreateCounselorForm;

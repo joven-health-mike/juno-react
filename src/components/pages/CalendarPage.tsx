@@ -14,7 +14,7 @@ import { SelectCounselorList, SelectSchoolList } from "../selectList/SelectList"
 import AddAppointmentModal from "../modals/AddAppointmentModal"
 
 const CalendarPage: React.FC = () => {
-  const role = "admin"
+  const role = 'admin';
 
   const emptyAppointment: Appointment = {
     title: "",
@@ -39,8 +39,8 @@ const CalendarPage: React.FC = () => {
 
   const onEventClick = (event: Appointment) => {
     // display AppointmentDetailPage with this event
-    console.log("eventClicked:", event)
-  }
+    console.log('eventClicked:', event);
+  };
 
   const onDateClick = (date: string) => {
     setInitialAppointment({
@@ -62,42 +62,42 @@ const CalendarPage: React.FC = () => {
 
   const handleSchoolChange = async (selectedSchoolName: string) => {
     const selectedSchool = schools.filter(
-      (school) => school.name === selectedSchoolName
-    )[0]
-    const schoolName = selectedSchool === undefined ? "" : selectedSchool.name
-    console.log("Selected school changed", schoolName)
-    setSchoolSelection(schoolName)
-    filterEvents(counselorSelection, schoolName)
-  }
+      school => school.name === selectedSchoolName
+    )[0];
+    const schoolName = selectedSchool === undefined ? '' : selectedSchool.name;
+    console.log('Selected school changed', schoolName);
+    setSchoolSelection(schoolName);
+    filterEvents(counselorSelection, schoolName);
+  };
 
   const handleCounselorChange = async (selectedCounselorName: string) => {
     const selectedCounselor = counselors.filter(
-      (counselor) => counselor.name === selectedCounselorName
-    )[0]
+      counselor => counselor.name === selectedCounselorName
+    )[0];
     const counselorName =
-      selectedCounselor === undefined ? "" : selectedCounselor.name
-    console.log("Selected counselor changed", counselorName)
-    setCounselorSelection(counselorName)
-    filterEvents(counselorName, schoolSelection)
-  }
+      selectedCounselor === undefined ? '' : selectedCounselor.name;
+    console.log('Selected counselor changed', counselorName);
+    setCounselorSelection(counselorName);
+    filterEvents(counselorName, schoolSelection);
+  };
 
   const filterEvents = (counselorName: string, schoolName: string) => {
-    console.log("filterEvents:", counselorName, schoolName)
-    const filteredEvents = appointments.filter((event) => {
+    console.log('filterEvents:', counselorName, schoolName);
+    const filteredEvents = appointments.filter(event => {
       let counselorMatch =
-        counselorName === "" || counselorName === event.counselor
-      let schoolMatch = schoolName === "" || schoolName === event.facilitator
-      return counselorMatch && schoolMatch
-    })
-    setFilteredEvents(filteredEvents)
-  }
+        counselorName === '' || counselorName === event.counselor;
+      let schoolMatch = schoolName === '' || schoolName === event.facilitator;
+      return counselorMatch && schoolMatch;
+    });
+    setFilteredEvents(filteredEvents);
+  };
 
   useEffect(() => {
-    setFilteredEvents(appointments)
-  }, [appointments])
+    setFilteredEvents(appointments);
+  }, [appointments]);
 
   return (
-    <div className={"mainContainer"}>
+    <div className={'mainContainer'}>
       <nav>
         <Navbar items={getItems(role)} />
       </nav>
@@ -132,7 +132,7 @@ const CalendarPage: React.FC = () => {
         initialAppointment={initialAppointment}
       />
     </div>
-  )
-}
+  );
+};
 
-export default CalendarPage
+export default CalendarPage;

@@ -1,15 +1,15 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from "react"
-import { Appointment } from "../../data/appointments"
-import XButton from "../buttons/XButton"
-import DataTable from "./DataTable"
-import TableSearchFilter from "./TableSearchFilter"
+import React from 'react';
+import { Appointment } from '../../data/appointments';
+import XButton from '../buttons/XButton';
+import DataTable from './DataTable';
+import TableSearchFilter from './TableSearchFilter';
 
 type AppointmentsTableProps = {
-  appointments: Appointment[]
-  onDeleteClicked: any
-}
+  appointments: Appointment[];
+  onDeleteClicked: any;
+};
 
 const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
   appointments,
@@ -20,51 +20,51 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
       Filter: TableSearchFilter,
     }),
     []
-  )
+  );
 
   const columns = React.useMemo(
     () => [
       {
-        Header: " ",
+        Header: ' ',
         Cell: ({ cell }: any) => (
           <XButton
             value={cell.row.values.title}
             onClick={(e: any) => {
-              e.preventDefault()
-              onDeleteClicked(e.target.value)
+              e.preventDefault();
+              onDeleteClicked(e.target.value);
             }}
           />
         ),
       },
       {
-        Header: "Title",
-        accessor: "title",
+        Header: 'Title',
+        accessor: 'title',
       },
       {
-        Header: "Start",
-        accessor: "start",
+        Header: 'Start',
+        accessor: 'start',
         Cell: ({ cell }: any) => <p>{cell.row.values.start.toISOString()}</p>,
       },
       {
-        Header: "End",
-        accessor: "end",
+        Header: 'End',
+        accessor: 'end',
         Cell: ({ cell }: any) => <p>{cell.row.values.end.toISOString()}</p>,
       },
       {
-        Header: "Counselor",
-        accessor: "counselor",
+        Header: 'Counselor',
+        accessor: 'counselor',
       },
       {
-        Header: "Student",
-        accessor: "student",
+        Header: 'Student',
+        accessor: 'student',
       },
       {
-        Header: "Facilitator",
-        accessor: "facilitator",
+        Header: 'Facilitator',
+        accessor: 'facilitator',
       },
     ],
     [onDeleteClicked]
-  )
+  );
 
   return (
     <DataTable
@@ -72,7 +72,7 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
       defaultColumn={defaultColumn}
       columns={columns}
     />
-  )
-}
+  );
+};
 
-export default AppointmentsTable
+export default AppointmentsTable;

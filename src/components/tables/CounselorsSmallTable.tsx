@@ -1,13 +1,13 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from "react"
-import { Counselor } from "../../data/counselors"
-import DataTable from "./DataTable"
-import TableSearchFilter from "./TableSearchFilter"
+import React from 'react';
+import { Counselor } from '../../data/counselors';
+import DataTable from './DataTable';
+import TableSearchFilter from './TableSearchFilter';
 
 type CounselorsSmallTableProps = {
-  counselors: Counselor[]
-}
+  counselors: Counselor[];
+};
 
 const CounselorsSmallTable: React.FC<CounselorsSmallTableProps> = ({
   counselors,
@@ -17,21 +17,21 @@ const CounselorsSmallTable: React.FC<CounselorsSmallTableProps> = ({
       Filter: TableSearchFilter,
     }),
     []
-  )
+  );
 
   const columns = React.useMemo(
     () => [
       {
-        Header: "Name",
-        accessor: "name",
+        Header: 'Name',
+        accessor: 'name',
       },
       {
-        Header: "Email",
-        accessor: "email",
+        Header: 'Email',
+        accessor: 'email',
       },
     ],
     []
-  )
+  );
 
   return (
     <DataTable
@@ -39,7 +39,7 @@ const CounselorsSmallTable: React.FC<CounselorsSmallTableProps> = ({
       defaultColumn={defaultColumn}
       columns={columns}
     />
-  )
-}
+  );
+};
 
-export default CounselorsSmallTable
+export default CounselorsSmallTable;

@@ -12,16 +12,16 @@ import AppRouter from "./routes/AppRouter"
 Modal.setAppElement("#root")
 
 function App() {
-  const [appointments, setAppointments] = useState(exampleAppointments)
-  const [counselors, setCounselors] = useState(exampleCounselors)
-  const [schools, setSchools] = useState(exampleSchools)
-  const [students, setStudents] = useState(exampleStudents)
-  const [users, setUsers] = useState(exampleUsers)
-  const appointmentsContextValue = { appointments, setAppointments }
-  const counselorsContextValue = { counselors, setCounselors }
-  const schoolsContextValue = { schools, setSchools }
-  const studentsContextValue = { students, setStudents }
-  const usersContextValue = { users, setUsers }
+  const [appointments, setAppointments] = useState(exampleAppointments);
+  const [counselors, setCounselors] = useState(exampleCounselors);
+  const [schools, setSchools] = useState(exampleSchools);
+  const [students, setStudents] = useState(exampleStudents);
+  const [users, setUsers] = useState(exampleUsers);
+  const appointmentsContextValue = { appointments, setAppointments };
+  const counselorsContextValue = { counselors, setCounselors };
+  const schoolsContextValue = { schools, setSchools };
+  const studentsContextValue = { students, setStudents };
+  const usersContextValue = { users, setUsers };
 
   return (
     <AppointmentsContext.Provider value={appointmentsContextValue}>
@@ -31,7 +31,7 @@ function App() {
             <UsersContext.Provider value={usersContextValue}>
               <AppRouter
                 isLoggedIn={true}
-                role={"admin"}
+                role={'admin'}
                 loggedInUser={users[0]}
               />
             </UsersContext.Provider>
@@ -39,7 +39,7 @@ function App() {
         </SchoolsContext.Provider>
       </CounselorsContext.Provider>
     </AppointmentsContext.Provider>
-  )
+  );
 }
 
-export default App
+export default App;

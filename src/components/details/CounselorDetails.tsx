@@ -1,11 +1,11 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from "react"
-import { Counselor } from "../../data/counselors"
+import React from 'react';
+import { Counselor } from '../../data/counselors';
 
 type CounselorDetailsProps = {
-  counselor: Counselor
-}
+  counselor: Counselor;
+};
 
 const CounselorDetails: React.FC<CounselorDetailsProps> = ({ counselor }) => {
   return (
@@ -29,7 +29,7 @@ const CounselorDetails: React.FC<CounselorDetailsProps> = ({ counselor }) => {
         ))}
       </label>
     </>
-  )
-}
+  );
+};
 
-export default CounselorDetails
+export default CounselorDetails;

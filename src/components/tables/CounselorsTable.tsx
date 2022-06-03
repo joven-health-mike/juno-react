@@ -1,15 +1,15 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from "react"
-import { Counselor } from "../../data/counselors"
-import XButton from "../buttons/XButton"
-import DataTable from "./DataTable"
-import TableSearchFilter from "./TableSearchFilter"
+import React from 'react';
+import { Counselor } from '../../data/counselors';
+import XButton from '../buttons/XButton';
+import DataTable from './DataTable';
+import TableSearchFilter from './TableSearchFilter';
 
 type CounselorsTableProps = {
-  counselors: Counselor[]
-  onDeleteClicked: (counselorName: string) => void
-}
+  counselors: Counselor[];
+  onDeleteClicked: (counselorName: string) => void;
+};
 
 const CounselorsTable: React.FC<CounselorsTableProps> = ({
   counselors,
@@ -20,42 +20,42 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
       Filter: TableSearchFilter,
     }),
     []
-  )
+  );
 
   const columns = React.useMemo(
     () => [
       {
-        Header: " ",
+        Header: ' ',
         Cell: ({ cell }: any) => (
           <XButton
             value={cell.row.values.name}
             onClick={(e: any) => {
-              e.preventDefault()
-              onDeleteClicked(e.target.value)
+              e.preventDefault();
+              onDeleteClicked(e.target.value);
             }}
           />
         ),
       },
       {
-        Header: "Name",
-        accessor: "name",
+        Header: 'Name',
+        accessor: 'name',
       },
       {
-        Header: "Email",
-        accessor: "email",
+        Header: 'Email',
+        accessor: 'email',
       },
       {
-        Header: "Room Link",
-        accessor: "roomLink",
+        Header: 'Room Link',
+        accessor: 'roomLink',
       },
       {
-        Header: "Assigned Schools",
-        accessor: "assignedSchools",
+        Header: 'Assigned Schools',
+        accessor: 'assignedSchools',
         Cell: ({ cell }: any) => (
           <>
             {cell.row.values.assignedSchools.map(
               (schoolName: string, index: number) => {
-                return <p key={index}>{schoolName}</p>
+                return <p key={index}>{schoolName}</p>;
               }
             )}
           </>
@@ -63,7 +63,7 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
       },
     ],
     [onDeleteClicked]
-  )
+  );
 
   return (
     <DataTable
@@ -71,7 +71,7 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
       defaultColumn={defaultColumn}
       columns={columns}
     />
-  )
-}
+  );
+};
 
-export default CounselorsTable
+export default CounselorsTable;

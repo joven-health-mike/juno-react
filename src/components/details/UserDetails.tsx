@@ -1,11 +1,11 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from "react"
-import { User } from "../../data/users"
+import React from 'react';
+import { User } from '../../data/users';
 
 type UserDetailsProps = {
-  user: User
-}
+  user: User;
+};
 
 const UserDetails: React.FC<UserDetailsProps> = ({ user }) => {
   return (
@@ -31,7 +31,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user }) => {
         <p>{user.associatedAccount}</p>
       </label>
     </>
-  )
-}
+  );
+};
 
-export default UserDetails
+export default UserDetails;
