@@ -1,22 +1,17 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from "react"
-import FullCalendar from "@fullcalendar/react"
-import { Appointment } from "../../data/appointments"
+import React from 'react';
+import FullCalendar, { EventClickArg } from '@fullcalendar/react';
+import { Appointment } from '../../data/appointments';
+import { DateClickArg } from '@fullcalendar/interaction';
 
 type CalendarProps = {
-  view: string
-  plugins: any[]
-  appointments: Appointment[]
-  onEventClick: any
-  onDateClick: any
-}
-
-type FCEventProps = {
-  jsEvent: any
-  event: any
-  dateStr: string
-}
+  view: string;
+  plugins: any[];
+  appointments: Appointment[];
+  onEventClick: (appointment: Appointment) => void;
+  onDateClick: (date: string) => void;
+};
 
 const Calendar: React.FC<CalendarProps> = ({
   view,
@@ -25,46 +20,32 @@ const Calendar: React.FC<CalendarProps> = ({
   onEventClick,
   onDateClick,
 }: CalendarProps) => {
-  const shouldSetDateClick = onDateClick ? true : false
-
-  const eventClicked = (info: FCEventProps) => {
-    info.jsEvent.preventDefault()
+  const eventClicked = (info: EventClickArg) => {
+    info.jsEvent.preventDefault();
     // this should use the ID instead of the title
-    let eventTitle = info.event._def.title
-    const theEvent = appointments.filter((appointment) => {
-      return appointment.title === eventTitle
-    })[0]
-    onEventClick(theEvent)
-  }
+    let eventTitle = info.event._def.title;
+    const theEvent = appointments.filter(appointment => {
+      return appointment.title === eventTitle;
+    })[0];
+    onEventClick(theEvent);
+  };
 
-  const dateClicked = (info: FCEventProps) => {
-    info.jsEvent.preventDefault()
-    onDateClick(info.dateStr)
-  }
+  const dateClicked = (info: DateClickArg) => {
+    info.jsEvent.preventDefault();
+    onDateClick(info.dateStr);
+  };
 
-  if (shouldSetDateClick)
-    return (
-      <div className={"calendar"}>
-        <FullCalendar
-          events={appointments}
-          plugins={plugins}
-          initialView={view}
-          eventClick={(info: any) => eventClicked(info)}
-          dateClick={(info: any) => dateClicked(info)}
-        />
-      </div>
-    )
-  else
-    return (
-      <div className={"calendar"}>
-        <FullCalendar
-          events={appointments}
-          plugins={plugins}
-          initialView={view}
-          eventClick={(info: any) => eventClicked(info)}
-        />
-      </div>
-    )
-}
+  return (
+    <div className={'calendar'}>
+      <FullCalendar
+        events={appointments}
+        plugins={plugins}
+        initialView={view}
+        eventClick={(info: EventClickArg) => eventClicked(info)}
+        dateClick={(info: DateClickArg) => dateClicked(info)}
+      />
+    </div>
+  );
+};
 
-export default Calendar
+export default Calendar;
