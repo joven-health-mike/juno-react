@@ -3,14 +3,14 @@ import Modal from "react-modal"
 import { Appointment } from "../../data/appointments"
 import CreateAppointmentForm from "../forms/CreateAppointmentForm"
 
-type AddAppointmentModalProps = {
+type CreateAppointmentModalProps = {
   isOpen: boolean
   onClose: () => void
   onAppointmentAdded: (appointment: Appointment) => void
   initialAppointment: Appointment
 }
 
-const AddAppointmentModal: React.FC<AddAppointmentModalProps> = ({
+const CreateAppointmentModal: React.FC<CreateAppointmentModalProps> = ({
   isOpen,
   onClose,
   onAppointmentAdded,
@@ -33,4 +33,4 @@ const AddAppointmentModal: React.FC<AddAppointmentModalProps> = ({
   )
 }
 
-export default AddAppointmentModal
+export default CreateAppointmentModal

@@ -11,7 +11,7 @@ import Calendar from "../calendar/Calendar"
 import Navbar from "../navbar/Navbar"
 import { getItems } from "../navbar/navBarItems"
 import { SelectCounselorList, SelectSchoolList } from "../selectList/SelectList"
-import AddAppointmentModal from "../modals/AddAppointmentModal"
+import CreateAppointmentModal from "../modals/CreateAppointmentModal"
 
 const CalendarPage: React.FC = () => {
   const role = 'admin';
@@ -125,7 +125,7 @@ const CalendarPage: React.FC = () => {
           onDateClick={onDateClick}
         />
       )}
-      <AddAppointmentModal
+      <CreateAppointmentModal
         isOpen={isAddAppointmentModalOpen}
         onClose={() => setIsAddAppointmentModalOpen(false)}
         onAppointmentAdded={handleAppointmentAdded}
