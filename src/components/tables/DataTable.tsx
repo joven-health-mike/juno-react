@@ -9,7 +9,11 @@ type DataTableProps = {
   columns: any
 }
 
-const DataTable = ({ data, defaultColumn, columns }: DataTableProps) => {
+const DataTable: React.FC<DataTableProps> = ({
+  data,
+  defaultColumn,
+  columns,
+}) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable(
       { columns, data, defaultColumn },

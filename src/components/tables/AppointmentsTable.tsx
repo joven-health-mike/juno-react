@@ -11,10 +11,10 @@ type AppointmentsTableProps = {
   onDeleteClicked: any
 }
 
-const AppointmentsTable = ({
+const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
   appointments,
   onDeleteClicked,
-}: AppointmentsTableProps) => {
+}) => {
   const defaultColumn = React.useMemo(
     () => ({
       Filter: TableSearchFilter,

@@ -7,7 +7,6 @@ import { SchoolsContext, exampleSchools } from "./data/schools"
 import { exampleStudents, StudentsContext } from "./data/students"
 import { UsersContext, exampleUsers } from "./data/users"
 import AppRouter from "./routes/AppRouter"
-import { APP_CSS } from "./appStyles"
 
 function App() {
   const [appointments, setAppointments] = useState(exampleAppointments)
@@ -22,24 +21,21 @@ function App() {
   const usersContextValue = { users, setUsers }
 
   return (
-    <>
-      <style>{APP_CSS}</style>
-      <AppointmentsContext.Provider value={appointmentsContextValue}>
-        <CounselorsContext.Provider value={counselorsContextValue}>
-          <SchoolsContext.Provider value={schoolsContextValue}>
-            <StudentsContext.Provider value={studentsContextValue}>
-              <UsersContext.Provider value={usersContextValue}>
-                <AppRouter
-                  isLoggedIn={true}
-                  role={"admin"}
-                  loggedInUser={users[0]}
-                />
-              </UsersContext.Provider>
-            </StudentsContext.Provider>
-          </SchoolsContext.Provider>
-        </CounselorsContext.Provider>
-      </AppointmentsContext.Provider>
-    </>
+    <AppointmentsContext.Provider value={appointmentsContextValue}>
+      <CounselorsContext.Provider value={counselorsContextValue}>
+        <SchoolsContext.Provider value={schoolsContextValue}>
+          <StudentsContext.Provider value={studentsContextValue}>
+            <UsersContext.Provider value={usersContextValue}>
+              <AppRouter
+                isLoggedIn={true}
+                role={"admin"}
+                loggedInUser={users[0]}
+              />
+            </UsersContext.Provider>
+          </StudentsContext.Provider>
+        </SchoolsContext.Provider>
+      </CounselorsContext.Provider>
+    </AppointmentsContext.Provider>
   )
 }
 

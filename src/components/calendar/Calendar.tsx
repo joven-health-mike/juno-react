@@ -12,22 +12,16 @@ type CalendarProps = {
   onDateClick: any
 }
 
-type FCEventProps = {
-  jsEvent: any
-  event: any
-  dateStr: string
-}
-
 const Calendar: React.FC<CalendarProps> = ({
   view,
   plugins,
   appointments,
   onEventClick,
   onDateClick,
-}: CalendarProps) => {
+}) => {
   const shouldSetDateClick = onDateClick ? true : false
 
-  const eventClicked = (info: FCEventProps) => {
+  const eventClicked = (info: any) => {
     info.jsEvent.preventDefault()
     // this should use the ID instead of the title
     let eventTitle = info.event._def.title
@@ -37,7 +31,7 @@ const Calendar: React.FC<CalendarProps> = ({
     onEventClick(theEvent)
   }
 
-  const dateClicked = (info: FCEventProps) => {
+  const dateClicked = (info: any) => {
     info.jsEvent.preventDefault()
     onDateClick(info.dateStr)
   }

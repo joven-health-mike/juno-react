@@ -1,4 +1,3 @@
-export const APP_CSS = `
 button {
     margin-left: 25px;
     margin-bottom: 10px;
@@ -158,5 +157,3 @@ img {
     height: 19px;
     width: 19px;
 }
-
-`

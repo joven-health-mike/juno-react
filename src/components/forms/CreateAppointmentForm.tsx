@@ -16,11 +16,11 @@ type CreateAppointmentFormProps = {
   onCancel: any
 }
 
-const CreateAppointmentForm = ({
+const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   defaultAppointment,
   onSubmit,
   onCancel,
-}: CreateAppointmentFormProps) => {
+}) => {
   const emptyAppointment = {
     title: "",
     start: new Date(),
