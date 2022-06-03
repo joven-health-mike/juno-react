@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 
 type XButtonProps = {
-  value: any;
-  onClick: (e: any) => void;
+  value: string;
+  onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
-const XButton: React.FC<XButtonProps> = ({ value, onClick }) => {
+const XButton: React.FC<XButtonProps> = ({ value, onClick }: XButtonProps) => {
   return (
     <>
       <button className={'button-x'} value={value} onClick={onClick}>
