@@ -1,23 +1,23 @@
 /* eslint-disable no-unused-vars */
-import React from "react"
-import { Navigate, Route, Routes } from "react-router-dom"
-import AppointmentsPage from "../components/pages/AppointmentsPage"
-import CalendarPage from "../components/pages/CalendarPage"
-import CounselorsPage from "../components/pages/CounselorsPage"
-import LoginPage from "../components/pages/LoginPage"
-import LogoutPage from "../components/pages/LogoutPage"
-import HomePage from "../components/pages/HomePage"
-import SchoolsPage from "../components/pages/SchoolsPage"
-import StudentsPage from "../components/pages/StudentsPage"
-import UsersPage from "../components/pages/UsersPage"
-import AccountDetailPage from "../components/pages/AccountDetailPage"
-import { User } from "../data/users"
+import React from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import AppointmentsPage from '../components/pages/AppointmentsPage';
+import CalendarPage from '../components/pages/CalendarPage';
+import CounselorsPage from '../components/pages/CounselorsPage';
+import LoginPage from '../components/pages/LoginPage';
+import LogoutPage from '../components/pages/LogoutPage';
+import HomePage from '../components/pages/HomePage';
+import SchoolsPage from '../components/pages/SchoolsPage';
+import StudentsPage from '../components/pages/StudentsPage';
+import UsersPage from '../components/pages/UsersPage';
+import AccountDetailPage from '../components/pages/AccountDetailPage';
+import { User } from '../data/users';
 
 type AppRouterProps = {
-  isLoggedIn: boolean
-  loggedInUser: User
-  role: string
-}
+  isLoggedIn: boolean;
+  loggedInUser: User;
+  role: string;
+};
 
 const AppRouter: React.FC<AppRouterProps> = ({
   isLoggedIn,
@@ -52,7 +52,7 @@ const AppRouter: React.FC<AppRouterProps> = ({
       <Route path="/students" element={<Navigate replace to="/login" />} />
       <Route path="/users" element={<Navigate replace to="/login" />} />
     </Routes>
-  )
-}
+  );
+};
 
-export default AppRouter
+export default AppRouter;

@@ -1,17 +1,17 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useCallback, useContext, useEffect, useState } from "react"
-import { CounselorsContext } from "../../data/counselors"
-import { SchoolsContext } from "../../data/schools"
-import { StudentsContext } from "../../data/students"
-import { ROLES, User } from "../../data/users"
-import SelectList from "../selectList/SelectList"
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { CounselorsContext } from '../../data/counselors';
+import { SchoolsContext } from '../../data/schools';
+import { StudentsContext } from '../../data/students';
+import { ROLES, User } from '../../data/users';
+import SelectList from '../selectList/SelectList';
 
 type CreateUserFormProps = {
-  defaultUser?: User
-  onSubmit: (user: User) => void
-  onCancel: () => void
-}
+  defaultUser?: User;
+  onSubmit: (user: User) => void;
+  onCancel: () => void;
+};
 
 const CreateUserForm: React.FC<CreateUserFormProps> = ({
   defaultUser,
@@ -19,81 +19,81 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
   onCancel,
 }) => {
   const emptyUser = {
-    name: "",
-    email: "",
-    password: "",
-    role: "",
-    associatedAccount: "",
-  }
-  const [user, setUser] = useState(defaultUser ?? emptyUser)
-  const [accountOptions, setAccountOptions] = useState<String[]>([])
-  const { counselors } = useContext(CounselorsContext)
-  const { schools } = useContext(SchoolsContext)
-  const { students } = useContext(StudentsContext)
+    name: '',
+    email: '',
+    password: '',
+    role: '',
+    associatedAccount: '',
+  };
+  const [user, setUser] = useState(defaultUser ?? emptyUser);
+  const [accountOptions, setAccountOptions] = useState<String[]>([]);
+  const { counselors } = useContext(CounselorsContext);
+  const { schools } = useContext(SchoolsContext);
+  const { students } = useContext(StudentsContext);
 
   // update account drop-down options anytime the role changes
   const updateAccountOptions = useCallback(() => {
-    let data = []
+    let data = [];
 
     // there's probably a better way to do this...
     switch (user.role) {
-      case "admin":
-        data.push("admin")
-        break
-      case "counselor":
-        counselors.forEach((counselor) => {
-          data.push(counselor.name)
-        })
-        break
-      case "facilitator":
-        schools.forEach((school) => {
-          school.facilitators.forEach((facilitatorName) => {
-            data.push(facilitatorName)
-          })
-        })
-        break
-      case "school":
-        schools.forEach((school) => {
-          data.push(school.name)
-        })
-        break
-      case "student":
-      case "guardian":
-        students.forEach((student) => {
-          data.push(student.first_name + " " + student.last_name)
-        })
-        break
+      case 'admin':
+        data.push('admin');
+        break;
+      case 'counselor':
+        counselors.forEach(counselor => {
+          data.push(counselor.name);
+        });
+        break;
+      case 'facilitator':
+        schools.forEach(school => {
+          school.facilitators.forEach(facilitatorName => {
+            data.push(facilitatorName);
+          });
+        });
+        break;
+      case 'school':
+        schools.forEach(school => {
+          data.push(school.name);
+        });
+        break;
+      case 'student':
+      case 'guardian':
+        students.forEach(student => {
+          data.push(student.first_name + ' ' + student.last_name);
+        });
+        break;
       default:
-        break
+        break;
     }
-    setAccountOptions(data)
-  }, [user.role, counselors, schools, students])
+    setAccountOptions(data);
+  }, [user.role, counselors, schools, students]);
 
   // set up initial account options based on the defaultUser role
   useEffect(() => {
-    updateAccountOptions()
-  }, [updateAccountOptions, user.role])
+    updateAccountOptions();
+  }, [updateAccountOptions, user.role]);
 
   const onRoleChanged = (role: string) => {
     // if role changes, clear out any previous account selection
-    setUser({ ...user, role: role, associatedAccount: "" })
-    updateAccountOptions()
-  }
+    setUser({ ...user, role: role, associatedAccount: '' });
+    updateAccountOptions();
+  };
 
   const onAccountChanged = (account: string) => {
-    setUser({ ...user, associatedAccount: account })
-  }
+    setUser({ ...user, associatedAccount: account });
+  };
 
   const onFormSubmit = (e: any) => {
-    e.preventDefault()
-    onSubmit(user)
-  }
+    e.preventDefault();
+    onSubmit(user);
+  };
 
   const onFormCancel = (e: any) => {
-    e.preventDefault()
-    setUser(defaultUser ?? emptyUser)
-    onCancel()
-  }
+    e.preventDefault();
+    setUser(defaultUser ?? emptyUser);
+    onCancel();
+  };
 
   return (
     <form onSubmit={onFormSubmit}>
@@ -105,7 +105,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
           name="name"
           value={user.name}
           required
-          onChange={(e) => setUser({ ...user, name: e.target.value })}
+          onChange={e => setUser({ ...user, name: e.target.value })}
         />
       </label>
       <label>
@@ -116,7 +116,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
           name="email"
           value={user.email}
           required
-          onChange={(e) => setUser({ ...user, email: e.target.value })}
+          onChange={e => setUser({ ...user, email: e.target.value })}
         />
       </label>
       <label>
@@ -127,11 +127,11 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
           name="password"
           value={user.password}
           required
-          onChange={(e) => setUser({ ...user, password: e.target.value })}
+          onChange={e => setUser({ ...user, password: e.target.value })}
         />
       </label>
       <label>
-        Role:{" "}
+        Role:{' '}
         <SelectList
           labelText="Select a Role"
           items={ROLES}
@@ -140,7 +140,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
         />
       </label>
       <label>
-        Associated Account:{" "}
+        Associated Account:{' '}
         <SelectList
           labelText="Select an Account"
           items={accountOptions}
@@ -153,7 +153,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
         Cancel
       </button>
     </form>
-  )
-}
+  );
+};
 
-export default CreateUserForm
+export default CreateUserForm;

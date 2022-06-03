@@ -1,20 +1,20 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useState } from "react"
-import DatePicker from "react-datepicker"
-import "react-datepicker/dist/react-datepicker.css"
-import { Appointment } from "../../data/appointments"
+import React, { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { Appointment } from '../../data/appointments';
 import {
   SelectCounselorList,
   SelectFacilitatorList,
   SelectStudentList,
-} from "../selectList/SelectList"
+} from '../selectList/SelectList';
 
 type CreateAppointmentFormProps = {
-  defaultAppointment?: Appointment
-  onSubmit: (appointment: Appointment) => void
-  onCancel: () => void
-}
+  defaultAppointment?: Appointment;
+  onSubmit: (appointment: Appointment) => void;
+  onCancel: () => void;
+};
 
 const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   defaultAppointment,
@@ -22,40 +22,40 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   onCancel,
 }) => {
   const emptyAppointment = {
-    title: "",
+    title: '',
     start: new Date(),
     end: new Date(),
-    counselor: "",
-    student: "",
-    facilitator: "",
-  }
+    counselor: '',
+    student: '',
+    facilitator: '',
+  };
 
   const [appointment, setAppointment] = useState(
     defaultAppointment ?? emptyAppointment
-  )
+  );
 
   const onCounselorChanged = (counselorName: string) => {
-    setAppointment({ ...appointment, counselor: counselorName })
-  }
+    setAppointment({ ...appointment, counselor: counselorName });
+  };
 
   const onFacilitatorChanged = (facilitatorName: string) => {
-    setAppointment({ ...appointment, facilitator: facilitatorName })
-  }
+    setAppointment({ ...appointment, facilitator: facilitatorName });
+  };
 
   const onStudentChanged = (studentName: string) => {
-    setAppointment({ ...appointment, student: studentName })
-  }
+    setAppointment({ ...appointment, student: studentName });
+  };
 
   const onFormSubmit = (e: any) => {
-    e.preventDefault()
-    onSubmit(appointment)
-  }
+    e.preventDefault();
+    onSubmit(appointment);
+  };
 
   const onFormCancel = (e: any) => {
-    e.preventDefault()
-    setAppointment(emptyAppointment)
-    onCancel()
-  }
+    e.preventDefault();
+    setAppointment(emptyAppointment);
+    onCancel();
+  };
 
   return (
     <form onSubmit={onFormSubmit}>
@@ -67,7 +67,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
           name="title"
           value={appointment.title}
           required
-          onChange={(e) =>
+          onChange={e =>
             setAppointment({ ...appointment, title: e.target.value })
           }
         />
@@ -99,21 +99,21 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
         />
       </label>
       <label>
-        Counselor:{" "}
+        Counselor:{' '}
         <SelectCounselorList
           value={appointment.counselor}
           onCounselorChanged={onCounselorChanged}
         />
       </label>
       <label>
-        Student:{" "}
+        Student:{' '}
         <SelectStudentList
           value={appointment.student}
           onStudentChanged={onStudentChanged}
         />
       </label>
       <label>
-        Facilitator:{" "}
+        Facilitator:{' '}
         <SelectFacilitatorList
           value={appointment.facilitator}
           onFacilitatorChanged={onFacilitatorChanged}
@@ -125,7 +125,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
         Cancel
       </button>
     </form>
-  )
-}
+  );
+};
 
-export default CreateAppointmentForm
+export default CreateAppointmentForm;

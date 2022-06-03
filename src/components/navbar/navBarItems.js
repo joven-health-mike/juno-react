@@ -1,79 +1,79 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from "react"
+import React from 'react';
 import {
   FaUserTie,
   FaCalendarAlt,
   FaHome,
   FaCalendarCheck,
   FaUserAstronaut,
-} from "react-icons/fa"
-import { IoMdLogOut, IoMdBusiness, IoMdContacts } from "react-icons/io"
-import image from "../../assets/Logo-192sq-alphabg.png" // TODO: How do we import images in TS?
+} from 'react-icons/fa';
+import { IoMdLogOut, IoMdBusiness, IoMdContacts } from 'react-icons/io';
+import image from '../../assets/Logo-192sq-alphabg.png'; // TODO: How do we import images in TS?
 
 export function getItems(role) {
   switch (role) {
-    case "admin":
-      return allItems
-    case "counselor":
-      return allItems
-    case "facilitator":
-      return allItems
-    case "school":
-      return allItems
-    case "student":
-      return allItems
-    case "guardian":
-      return allItems
+    case 'admin':
+      return allItems;
+    case 'counselor':
+      return allItems;
+    case 'facilitator':
+      return allItems;
+    case 'school':
+      return allItems;
+    case 'student':
+      return allItems;
+    case 'guardian':
+      return allItems;
     default:
-      throw new Error()
+      throw new Error();
   }
 }
 
 const allItems = [
   {
-    title: "Joven Health",
+    title: 'Joven Health',
     icon: <img src={image} alt="logo" />,
-    path: "/",
+    path: '/',
   },
   {
-    title: "Home",
+    title: 'Home',
     icon: <FaHome />,
-    path: "/",
+    path: '/',
   },
   {
-    title: "Appointments",
+    title: 'Appointments',
     icon: <FaCalendarCheck />,
-    path: "/appointments",
+    path: '/appointments',
   },
   {
-    title: "Calendar",
+    title: 'Calendar',
     icon: <FaCalendarAlt />,
-    path: "/calendar",
+    path: '/calendar',
   },
   {
-    title: "Counselors",
+    title: 'Counselors',
     icon: <FaUserTie />,
-    path: "/counselors",
+    path: '/counselors',
   },
   {
-    title: "Schools",
+    title: 'Schools',
     icon: <IoMdBusiness />,
-    path: "/schools",
+    path: '/schools',
   },
   {
-    title: "Students",
+    title: 'Students',
     icon: <IoMdContacts />,
-    path: "/students",
+    path: '/students',
   },
   {
-    title: "Users",
+    title: 'Users',
     icon: <FaUserAstronaut />,
-    path: "/users",
+    path: '/users',
   },
   {
-    title: "Logout",
+    title: 'Logout',
     icon: <IoMdLogOut />,
-    path: "/logout",
+    path: '/logout',
   },
-]
+];

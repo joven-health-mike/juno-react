@@ -1,15 +1,15 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from "react"
-import { School } from "../../data/schools"
-import XButton from "../buttons/XButton"
-import DataTable from "./DataTable"
-import TableSearchFilter from "./TableSearchFilter"
+import React from 'react';
+import { School } from '../../data/schools';
+import XButton from '../buttons/XButton';
+import DataTable from './DataTable';
+import TableSearchFilter from './TableSearchFilter';
 
 type SchoolsTableProps = {
-  schools: School[]
-  onDeleteClicked: (schoolName: string) => void
-}
+  schools: School[];
+  onDeleteClicked: (schoolName: string) => void;
+};
 
 const SchoolsTable: React.FC<SchoolsTableProps> = ({
   schools,
@@ -20,38 +20,38 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
       Filter: TableSearchFilter,
     }),
     []
-  )
+  );
 
   const columns = React.useMemo(
     () => [
       {
-        Header: " ",
+        Header: ' ',
         Cell: ({ cell }: any) => (
           <XButton
             value={cell.row.values.name}
             onClick={(e: any) => {
-              e.preventDefault()
-              onDeleteClicked(e.target.value)
+              e.preventDefault();
+              onDeleteClicked(e.target.value);
             }}
           />
         ),
       },
       {
-        Header: "Name",
-        accessor: "name",
+        Header: 'Name',
+        accessor: 'name',
       },
       {
-        Header: "Email",
-        accessor: "email",
+        Header: 'Email',
+        accessor: 'email',
       },
       {
-        Header: "Facilitators",
-        accessor: "facilitators",
+        Header: 'Facilitators',
+        accessor: 'facilitators',
         Cell: ({ cell }: any) => (
           <>
             {cell.row.values.facilitators.map(
               (facilitatorName: string, index: number) => {
-                return <p key={index}>{facilitatorName}</p>
+                return <p key={index}>{facilitatorName}</p>;
               }
             )}
           </>
@@ -59,11 +59,11 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
       },
     ],
     [onDeleteClicked]
-  )
+  );
 
   return (
     <DataTable data={schools} defaultColumn={defaultColumn} columns={columns} />
-  )
-}
+  );
+};
 
-export default SchoolsTable
+export default SchoolsTable;

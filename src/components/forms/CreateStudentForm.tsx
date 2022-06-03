@@ -1,14 +1,17 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useState } from "react"
-import { Student } from "../../data/students"
-import { SelectCounselorList, SelectSchoolList } from "../selectList/SelectList"
+import React, { useState } from 'react';
+import { Student } from '../../data/students';
+import {
+  SelectCounselorList,
+  SelectSchoolList,
+} from '../selectList/SelectList';
 
 type CreateStudentFormProps = {
-  defaultStudent?: Student
-  onSubmit: (student: Student) => void
-  onCancel: () => void
-}
+  defaultStudent?: Student;
+  onSubmit: (student: Student) => void;
+  onCancel: () => void;
+};
 
 const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
   defaultStudent,
@@ -16,32 +19,32 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
   onCancel,
 }) => {
   const emptyStudent = {
-    first_name: "",
-    last_name: "",
-    school: "",
-    counselor: "",
-  }
+    first_name: '',
+    last_name: '',
+    school: '',
+    counselor: '',
+  };
 
-  const [student, setStudent] = useState(defaultStudent ?? emptyStudent)
+  const [student, setStudent] = useState(defaultStudent ?? emptyStudent);
 
   const onCounselorChanged = (counselorName: string) => {
-    setStudent({ ...student, counselor: counselorName })
-  }
+    setStudent({ ...student, counselor: counselorName });
+  };
 
   const onSchoolChanged = (schoolName: string) => {
-    setStudent({ ...student, school: schoolName })
-  }
+    setStudent({ ...student, school: schoolName });
+  };
 
   const onFormSubmit = (e: any) => {
-    e.preventDefault()
-    onSubmit(student)
-  }
+    e.preventDefault();
+    onSubmit(student);
+  };
 
   const onFormCancel = (e: any) => {
-    e.preventDefault()
-    setStudent(emptyStudent)
-    onCancel()
-  }
+    e.preventDefault();
+    setStudent(emptyStudent);
+    onCancel();
+  };
 
   return (
     <form onSubmit={onFormSubmit}>
@@ -53,9 +56,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
           name="first_name"
           value={student.first_name}
           required
-          onChange={(e) =>
-            setStudent({ ...student, first_name: e.target.value })
-          }
+          onChange={e => setStudent({ ...student, first_name: e.target.value })}
         />
       </label>
       <label>
@@ -66,20 +67,18 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
           name="last_name"
           value={student.last_name}
           required
-          onChange={(e) =>
-            setStudent({ ...student, last_name: e.target.value })
-          }
+          onChange={e => setStudent({ ...student, last_name: e.target.value })}
         />
       </label>
       <label>
-        Counselor:{" "}
+        Counselor:{' '}
         <SelectCounselorList
           value={student.counselor}
           onCounselorChanged={onCounselorChanged}
         />
       </label>
       <label>
-        School:{" "}
+        School:{' '}
         <SelectSchoolList
           value={student.school}
           onSchoolChanged={onSchoolChanged}
@@ -91,7 +90,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
         Cancel
       </button>
     </form>
-  )
-}
+  );
+};
 
-export default CreateStudentForm
+export default CreateStudentForm;

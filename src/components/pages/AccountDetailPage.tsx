@@ -1,43 +1,43 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext } from "react"
-import { User, UsersContext } from "../../data/users"
-import CreateUserForm from "../forms/CreateUserForm"
-import Navbar from "../navbar/Navbar"
-import { getItems } from "../navbar/navBarItems"
+import React, { useContext } from 'react';
+import { User, UsersContext } from '../../data/users';
+import CreateUserForm from '../forms/CreateUserForm';
+import Navbar from '../navbar/Navbar';
+import { getItems } from '../navbar/navBarItems';
 
 type AccountDetailPageProps = {
-  defaultUser: User
-}
+  defaultUser: User;
+};
 
 const AccountDetailPage: React.FC<AccountDetailPageProps> = ({
   defaultUser,
 }) => {
-  const role = "admin"
+  const role = 'admin';
 
-  const { users, setUsers } = useContext(UsersContext)
+  const { users, setUsers } = useContext(UsersContext);
 
   const onFormSubmit = (user: User) => {
-    if (defaultUser) modifyUser(user)
-    else throw new Error() // parent page didn't pass in a default user
-  }
+    if (defaultUser) modifyUser(user);
+    else throw new Error(); // parent page didn't pass in a default user
+  };
 
   const modifyUser = (modifiedUser: User) => {
-    const newUsers = users.map((mappedUser) => {
+    const newUsers = users.map(mappedUser => {
       // this should use an ID instead of the name - changes to the name won't save using this code.
-      if (modifiedUser.name === mappedUser.name) return modifiedUser
-      else return mappedUser
-    })
-    setUsers(newUsers)
-  }
+      if (modifiedUser.name === mappedUser.name) return modifiedUser;
+      else return mappedUser;
+    });
+    setUsers(newUsers);
+  };
 
   const onFormCancel = () => {
     // what should we do if cancel is clicked here? go to Users page? go back?
     //window.location.href = "/users"
-  }
+  };
 
   return (
-    <div className={"mainContainer"}>
+    <div className={'mainContainer'}>
       <nav>
         <Navbar items={getItems(role)} />
       </nav>
@@ -48,7 +48,7 @@ const AccountDetailPage: React.FC<AccountDetailPageProps> = ({
         onCancel={onFormCancel}
       />
     </div>
-  )
-}
+  );
+};
 
-export default AccountDetailPage
+export default AccountDetailPage;

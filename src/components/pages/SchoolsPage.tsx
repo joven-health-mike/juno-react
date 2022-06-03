@@ -1,30 +1,30 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext } from "react"
-import { School, SchoolsContext } from "../../data/schools"
-import CreateSchoolForm from "../forms/CreateSchoolForm"
-import Navbar from "../navbar/Navbar"
-import { getItems } from "../navbar/navBarItems"
-import SchoolsTable from "../tables/SchoolsTable"
+import React, { useContext } from 'react';
+import { School, SchoolsContext } from '../../data/schools';
+import CreateSchoolForm from '../forms/CreateSchoolForm';
+import Navbar from '../navbar/Navbar';
+import { getItems } from '../navbar/navBarItems';
+import SchoolsTable from '../tables/SchoolsTable';
 
 const SchoolsPage = () => {
-  const role = "admin"
+  const role = 'admin';
 
-  const { schools, setSchools } = useContext(SchoolsContext)
+  const { schools, setSchools } = useContext(SchoolsContext);
 
   const onFormSubmit = (school: School) => {
-    setSchools([...schools, school])
-  }
+    setSchools([...schools, school]);
+  };
 
   const onSchoolDeleteClicked = (schoolName: string) => {
-    if (window.confirm("Delete this school?")) {
-      let newSchools = schools.filter((school) => school.name !== schoolName)
-      setSchools(newSchools)
+    if (window.confirm('Delete this school?')) {
+      let newSchools = schools.filter(school => school.name !== schoolName);
+      setSchools(newSchools);
     }
-  }
+  };
 
   return (
-    <div className={"mainContainer"}>
+    <div className={'mainContainer'}>
       <nav>
         <Navbar items={getItems(role)} />
       </nav>
@@ -37,7 +37,7 @@ const SchoolsPage = () => {
         />
       </>
     </div>
-  )
-}
+  );
+};
 
-export default SchoolsPage
+export default SchoolsPage;

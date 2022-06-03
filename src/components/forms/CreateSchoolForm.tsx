@@ -1,13 +1,13 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useRef, useState } from "react"
-import { School } from "../../data/schools"
+import React, { useRef, useState } from 'react';
+import { School } from '../../data/schools';
 
 type CreateSchoolFormProps = {
-  defaultSchool?: School
-  onSubmit: (school: School) => void
-  onCancel: () => void
-}
+  defaultSchool?: School;
+  onSubmit: (school: School) => void;
+  onCancel: () => void;
+};
 
 const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
   defaultSchool,
@@ -15,39 +15,39 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
   onCancel,
 }) => {
   const emptySchool = {
-    name: "",
-    email: "",
+    name: '',
+    email: '',
     facilitators: [],
-  }
+  };
 
-  const [school, setSchool] = useState(defaultSchool ?? emptySchool)
+  const [school, setSchool] = useState(defaultSchool ?? emptySchool);
 
   const onAddFacilitator = (facilitator: string) => {
-    let newFacilitators = school.facilitators
-    newFacilitators.push(facilitator)
+    let newFacilitators = school.facilitators;
+    newFacilitators.push(facilitator);
 
-    setSchool({ ...school, facilitators: newFacilitators })
-  }
+    setSchool({ ...school, facilitators: newFacilitators });
+  };
 
   const onDeleteFacilitator = (e: any) => {
-    e.preventDefault()
+    e.preventDefault();
     let newFacilitators = school.facilitators.filter(
-      (facilitatorName) => facilitatorName !== e.target.value
-    )
+      facilitatorName => facilitatorName !== e.target.value
+    );
 
-    setSchool({ ...school, facilitators: newFacilitators })
-  }
+    setSchool({ ...school, facilitators: newFacilitators });
+  };
 
   const onFormSubmit = (e: any) => {
-    e.preventDefault()
-    onSubmit(school)
-  }
+    e.preventDefault();
+    onSubmit(school);
+  };
 
   const onFormCancel = (e: any) => {
-    e.preventDefault()
-    setSchool(emptySchool)
-    onCancel()
-  }
+    e.preventDefault();
+    setSchool(emptySchool);
+    onCancel();
+  };
 
   return (
     <>
@@ -60,7 +60,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
             name="name"
             value={school.name}
             required
-            onChange={(e) => setSchool({ ...school, name: e.target.value })}
+            onChange={e => setSchool({ ...school, name: e.target.value })}
           />
         </label>
         <label>
@@ -71,7 +71,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
             name="email"
             value={school.email}
             required
-            onChange={(e) => setSchool({ ...school, email: e.target.value })}
+            onChange={e => setSchool({ ...school, email: e.target.value })}
           />
         </label>
         <label>
@@ -89,7 +89,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
                     X
                   </button>
                 </div>
-              )
+              );
             })}
             <FacilitatorInput onAddFacilitator={onAddFacilitator} />
           </div>
@@ -101,28 +101,28 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
         </button>
       </form>
     </>
-  )
-}
+  );
+};
 
 // a separate component to hold the facilitator input box and + button
 type FacilitatorInputProps = {
-  onAddFacilitator: (facilitator: string) => void
-}
+  onAddFacilitator: (facilitator: string) => void;
+};
 
 const FacilitatorInput: React.FC<FacilitatorInputProps> = ({
   onAddFacilitator,
 }) => {
-  const textBox = useRef<HTMLInputElement>(null)
+  const textBox = useRef<HTMLInputElement>(null);
 
   const onFormSubmit = (e: any) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (textBox && textBox.current) {
-      const facilitatorName = textBox.current.value
-      onAddFacilitator(facilitatorName)
-      textBox.current.value = ""
+      const facilitatorName = textBox.current.value;
+      onAddFacilitator(facilitatorName);
+      textBox.current.value = '';
     }
-  }
+  };
 
   return (
     <>
@@ -136,7 +136,7 @@ const FacilitatorInput: React.FC<FacilitatorInputProps> = ({
         +
       </button>
     </>
-  )
-}
+  );
+};
 
-export default CreateSchoolForm
+export default CreateSchoolForm;

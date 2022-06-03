@@ -1,11 +1,11 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from "react"
-import { Appointment } from "../../data/appointments"
+import React from 'react';
+import { Appointment } from '../../data/appointments';
 
 type AppointmentDetailsProps = {
-  appointment: Appointment
-}
+  appointment: Appointment;
+};
 
 const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
   appointment,
@@ -37,7 +37,7 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
         <p>{appointment.facilitator}</p>
       </label>
     </>
-  )
-}
+  );
+};
 
-export default AppointmentDetails
+export default AppointmentDetails;
