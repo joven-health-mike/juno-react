@@ -31,7 +31,7 @@ export type Student = {
   counselor: string
 }
 
-interface IStudentsContext {
+type IStudentsContext = {
   students: Student[]
   setStudents: any
 }

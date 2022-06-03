@@ -39,7 +39,7 @@ export type Appointment = {
   facilitator: string
 }
 
-interface IAppointmentsContext {
+type IAppointmentsContext = {
   appointments: Appointment[]
   setAppointments: any
 }

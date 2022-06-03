@@ -28,7 +28,7 @@ export type User = {
   associatedAccount: string
 }
 
-interface IUsersContext {
+type IUsersContext = {
   users: User[]
   setUsers: any
 }

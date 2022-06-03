@@ -17,7 +17,7 @@ export type School = {
   facilitators: string[]
 }
 
-interface ISchoolsContext {
+type ISchoolsContext = {
   schools: School[]
   setSchools: any
 }

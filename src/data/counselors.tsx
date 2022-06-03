@@ -19,7 +19,7 @@ export type Counselor = {
   assignedSchools: string[]
 }
 
-interface ICounselorsContext {
+type ICounselorsContext = {
   counselors: Counselor[]
   setCounselors: any
 }
