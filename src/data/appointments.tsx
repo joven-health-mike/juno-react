@@ -64,13 +64,13 @@ export async function addAppointment(appointment: Appointment) {
   return result
 }
 
-export async function updateAppointment(id: String, appointment: Appointment) {
+export async function updateAppointment(id: string, appointment: Appointment) {
   const result = await httpPut(BASE_URL, id, appointment)
   // convert http result to appointment
   return result
 }
 
-export async function deleteAppointment(id: String) {
+export async function deleteAppointment(id: string) {
   const result = await httpDelete(BASE_URL, id)
   // convert http result to appointment
   return result

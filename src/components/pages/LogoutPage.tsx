@@ -2,7 +2,7 @@
 
 import React from "react"
 
-const LogoutPage = () => {
+const LogoutPage: React.FC = () => {
   return (
     <>
       <h1>Logout</h1>

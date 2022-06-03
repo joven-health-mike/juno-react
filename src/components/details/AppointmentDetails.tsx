@@ -1,8 +1,15 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from "react"
+import { Appointment } from "../../data/appointments"
 
-const AppointmentDetails = ({ appointment }) => {
+type AppointmentDetailsProps = {
+  appointment: Appointment
+}
+
+const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
+  appointment,
+}) => {
   return (
     <>
       <label>
@@ -11,11 +18,11 @@ const AppointmentDetails = ({ appointment }) => {
       </label>
       <label>
         Start Time:
-        <p>{appointment.start}</p>
+        <p>{appointment.start.toISOString()}</p>
       </label>
       <label>
         End Time:
-        <p>{appointment.end}</p>
+        <p>{appointment.end.toISOString()}</p>
       </label>
       <label>
         Counselor:

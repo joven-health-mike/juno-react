@@ -1,16 +1,22 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from "react"
+import { Counselor } from "../../data/counselors"
 import CounselorDetails from "../details/CounselorDetails"
 import Navbar from "../navbar/Navbar"
 import { getItems } from "../navbar/navBarItems"
-import styles from "./pages.module.css"
 
-const CounselorDetailPage = ({ counselor }) => {
+type CounselorDetailPageProps = {
+  counselor: Counselor
+}
+
+const CounselorDetailPage: React.FC<CounselorDetailPageProps> = ({
+  counselor,
+}) => {
   const role = "admin"
 
   return (
-    <div className={styles.mainContainer}>
+    <div className={"mainContainer"}>
       <nav>
         <Navbar items={getItems(role)} />
       </nav>

@@ -1,8 +1,13 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from "react"
+import { User } from "../../data/users"
 
-const UserDetails = ({ user }) => {
+type UserDetailsProps = {
+  user: User
+}
+
+const UserDetails: React.FC<UserDetailsProps> = ({ user }) => {
   return (
     <>
       <label>
@@ -23,7 +28,7 @@ const UserDetails = ({ user }) => {
       </label>
       <label>
         Associated Account:
-        <p>{user.associatedAccountId}</p>
+        <p>{user.associatedAccount}</p>
       </label>
     </>
   )

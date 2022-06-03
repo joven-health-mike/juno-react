@@ -1,23 +1,28 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useContext } from "react"
-import { UsersContext } from "../../data/users"
+import { User, UsersContext } from "../../data/users"
 import CreateUserForm from "../forms/CreateUserForm"
 import Navbar from "../navbar/Navbar"
 import { getItems } from "../navbar/navBarItems"
-import styles from "./pages.module.css"
 
-const AccountDetailPage = ({ defaultUser }) => {
+type AccountDetailPageProps = {
+  defaultUser: User
+}
+
+const AccountDetailPage: React.FC<AccountDetailPageProps> = ({
+  defaultUser,
+}) => {
   const role = "admin"
 
   const { users, setUsers } = useContext(UsersContext)
 
-  const onFormSubmit = (user) => {
+  const onFormSubmit = (user: User) => {
     if (defaultUser) modifyUser(user)
     else throw new Error() // parent page didn't pass in a default user
   }
 
-  const modifyUser = (modifiedUser) => {
+  const modifyUser = (modifiedUser: User) => {
     const newUsers = users.map((mappedUser) => {
       // this should use an ID instead of the name - changes to the name won't save using this code.
       if (modifiedUser.name === mappedUser.name) return modifiedUser
@@ -32,7 +37,7 @@ const AccountDetailPage = ({ defaultUser }) => {
   }
 
   return (
-    <div className={styles.mainContainer}>
+    <div className={"mainContainer"}>
       <nav>
         <Navbar items={getItems(role)} />
       </nav>

@@ -3,16 +3,19 @@
 import React from "react"
 import { IconContext } from "react-icons"
 import { Link } from "react-router-dom"
-import styles from "./navbar.module.css"
 
-const Navbar = ({ items }) => {
+type NavbarProps = {
+  items: any[]
+}
+
+const Navbar: React.FC<NavbarProps> = ({ items }) => {
   return (
     <>
       <IconContext.Provider value={{ color: "#fff" }}>
-        <div className={styles.navMenu}>
+        <div className={"navMenu"}>
           <ul>
-            {items.map((item, index) => (
-              <li key={index} className={styles.navText}>
+            {items.map((item: any, index: number) => (
+              <li key={index} className={"navText"}>
                 <Link to={item.path}>
                   {item.icon}
                   <span>{item.title}</span>

@@ -2,7 +2,7 @@
 
 import React from "react"
 
-const LoginPage = () => {
+const LoginPage: React.FC = () => {
   return (
     <>
       <h1>Login</h1>

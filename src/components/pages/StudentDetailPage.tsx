@@ -1,16 +1,20 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from "react"
+import { Student } from "../../data/students"
 import StudentDetails from "../details/StudentDetails"
 import Navbar from "../navbar/Navbar"
 import { getItems } from "../navbar/navBarItems"
-import styles from "./pages.module.css"
 
-const StudentDetailPage = ({ student }) => {
+type StudentDetailPageProps = {
+  student: Student
+}
+
+const StudentDetailPage: React.FC<StudentDetailPageProps> = ({ student }) => {
   const role = "admin"
 
   return (
-    <div className={styles.mainContainer}>
+    <div className={"mainContainer"}>
       <nav>
         <Navbar items={getItems(role)} />
       </nav>

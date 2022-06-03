@@ -2,7 +2,15 @@
 
 import React from "react"
 
-const TableSearchFilter = ({
+type TableSearchFilterProps = {
+  column: {
+    filterValue: any
+    preFilteredRows: any
+    setFilter: any
+  }
+}
+
+const TableSearchFilter: React.FC<TableSearchFilterProps> = ({
   column: { filterValue, preFilteredRows, setFilter },
 }) => {
   const count = preFilteredRows.length

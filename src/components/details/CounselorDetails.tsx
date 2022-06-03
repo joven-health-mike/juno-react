@@ -1,8 +1,13 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from "react"
+import { Counselor } from "../../data/counselors"
 
-const CounselorDetails = ({ counselor }) => {
+type CounselorDetailsProps = {
+  counselor: Counselor
+}
+
+const CounselorDetails: React.FC<CounselorDetailsProps> = ({ counselor }) => {
   return (
     <>
       <label>

@@ -1,23 +1,20 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from "react"
-import UserDetails from "../details/UserDetails"
 import Navbar from "../navbar/Navbar"
 import { getItems } from "../navbar/navBarItems"
-import styles from "./pages.module.css"
 
-const UserDetailPage = ({ user }) => {
+const NotFoundPage = () => {
   const role = "admin"
 
   return (
-    <div className={styles.mainContainer}>
+    <div className={"mainContainer"}>
       <nav>
         <Navbar items={getItems(role)} />
       </nav>
-      <h1>User Details</h1>
-      <UserDetails user={user} />
+      <h1>404 - Not Found</h1>
     </div>
   )
 }
 
-export default UserDetailPage
+export default NotFoundPage

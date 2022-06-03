@@ -1,16 +1,22 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from "react"
+import { Appointment } from "../../data/appointments"
 import AppointmentDetails from "../details/AppointmentDetails"
 import Navbar from "../navbar/Navbar"
 import { getItems } from "../navbar/navBarItems"
-import styles from "./pages.module.css"
 
-const AppointmentDetailPage = ({ appointment }) => {
+type AppointmentDetailPageProps = {
+  appointment: Appointment
+}
+
+const AppointmentDetailPage: React.FC<AppointmentDetailPageProps> = ({
+  appointment,
+}) => {
   const role = "admin"
 
   return (
-    <div className={styles.mainContainer}>
+    <div className={"mainContainer"}>
       <nav>
         <Navbar items={getItems(role)} />
       </nav>

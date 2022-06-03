@@ -3,19 +3,18 @@
 import React from "react"
 import Navbar from "../navbar/Navbar"
 import { getItems } from "../navbar/navBarItems"
-import styles from "./pages.module.css"
 
-const NotFoundPage = () => {
+const ForgotPasswordPage = () => {
   const role = "admin"
 
   return (
-    <div className={styles.mainContainer}>
+    <div className={"mainContainer"}>
       <nav>
         <Navbar items={getItems(role)} />
       </nav>
-      <h1>404 - Not Found</h1>
+      <h1>Forgot Password</h1>
     </div>
   )
 }
 
-export default NotFoundPage
+export default ForgotPasswordPage

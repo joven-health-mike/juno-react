@@ -1,8 +1,13 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from "react"
+import { School } from "../../data/schools"
 
-const SchoolDetails = ({ school }) => {
+type SchoolDetailsProps = {
+  school: School
+}
+
+const SchoolDetails: React.FC<SchoolDetailsProps> = ({ school }) => {
   return (
     <>
       <label>

@@ -1,10 +1,17 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from "react"
+import { Counselor } from "../../data/counselors"
 import DataTable from "./DataTable"
 import TableSearchFilter from "./TableSearchFilter"
 
-const CounselorsSmallTable = ({ counselors }) => {
+type CounselorsSmallTableProps = {
+  counselors: Counselor[]
+}
+
+const CounselorsSmallTable: React.FC<CounselorsSmallTableProps> = ({
+  counselors,
+}) => {
   const defaultColumn = React.useMemo(
     () => ({
       Filter: TableSearchFilter,
