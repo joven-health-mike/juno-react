@@ -46,13 +46,15 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     setAppointment({ ...appointment, student: studentName });
   };
 
-  const onFormSubmit = (e: any) => {
-    e.preventDefault();
+  const onFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     onSubmit(appointment);
   };
 
-  const onFormCancel = (e: any) => {
-    e.preventDefault();
+  const onFormCancel = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
     setAppointment(emptyAppointment);
     onCancel();
   };
