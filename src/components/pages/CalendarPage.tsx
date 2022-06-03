@@ -12,6 +12,7 @@ import Navbar from "../navbar/Navbar"
 import { getItems } from "../navbar/navBarItems"
 import { SelectCounselorList, SelectSchoolList } from "../selectList/SelectList"
 import CreateAppointmentModal from "../modals/CreateAppointmentModal"
+import AppointmentDetailsModal from "../modals/AppointmentDetailsModal"
 
 const CalendarPage: React.FC = () => {
   const role = 'admin';
@@ -25,7 +26,9 @@ const CalendarPage: React.FC = () => {
     facilitator: "",
   }
 
-  const [isAddAppointmentModalOpen, setIsAddAppointmentModalOpen] =
+  const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
+    useState<boolean>(false)
+  const [isAppointmentDetailsModalOpen, setIsAppointmentDetailsModalOpen] =
     useState<boolean>(false)
   const [showCalendar, setShowCalendar] = useState<boolean>(true)
   const [filteredEvents, setFilteredEvents] = useState<Appointment[]>([])
@@ -33,31 +36,32 @@ const CalendarPage: React.FC = () => {
   const [counselorSelection, setCounselorSelection] = useState<string>("")
   const [initialAppointment, setInitialAppointment] =
     useState<Appointment>(emptyAppointment)
+  const [clickedAppointment, setClickedAppointment] = useState<Appointment>(emptyAppointment)
   const { appointments, setAppointments } = useContext(AppointmentsContext)
   const { counselors } = useContext(CounselorsContext)
   const { schools } = useContext(SchoolsContext)
 
-  const onEventClick = (event: Appointment) => {
-    // display AppointmentDetailPage with this event
-    console.log('eventClicked:', event);
+  const handleAppointmentClick = (appointment: Appointment) => {
+    setClickedAppointment(appointment)
+    setIsAppointmentDetailsModalOpen(true)
   };
 
-  const onDateClick = (date: string) => {
+  const handleDateClick = (date: string) => {
     setInitialAppointment({
       ...initialAppointment,
       start: new Date(date + "T08:00"),
       end: new Date(date + "T08:30"),
     })
-    setIsAddAppointmentModalOpen(true)
+    setIsCreateAppointmentModalOpen(true)
   }
 
   useEffect(() => {
-    setShowCalendar(!isAddAppointmentModalOpen)
-  }, [isAddAppointmentModalOpen])
+    setShowCalendar(!isCreateAppointmentModalOpen && !isAppointmentDetailsModalOpen)
+  }, [isCreateAppointmentModalOpen, isAppointmentDetailsModalOpen])
 
   const handleAppointmentAdded = (appointment: Appointment) => {
     setAppointments([...appointments, appointment])
-    setIsAddAppointmentModalOpen(false)
+    setIsCreateAppointmentModalOpen(false)
   }
 
   const handleSchoolChange = async (selectedSchoolName: string) => {
@@ -121,16 +125,17 @@ const CalendarPage: React.FC = () => {
           view="dayGridMonth"
           plugins={[dayGridPlugin, interactionPlugin]}
           appointments={filteredEvents}
-          onEventClick={onEventClick}
-          onDateClick={onDateClick}
+          onEventClick={handleAppointmentClick}
+          onDateClick={handleDateClick}
         />
       )}
       <CreateAppointmentModal
-        isOpen={isAddAppointmentModalOpen}
-        onClose={() => setIsAddAppointmentModalOpen(false)}
+        isOpen={isCreateAppointmentModalOpen}
+        onClose={() => setIsCreateAppointmentModalOpen(false)}
         onAppointmentAdded={handleAppointmentAdded}
         initialAppointment={initialAppointment}
       />
+      <AppointmentDetailsModal isOpen={isAppointmentDetailsModalOpen} onClose={() => setIsAppointmentDetailsModalOpen(false)} appointment={clickedAppointment} />
     </div>
   );
 };
