@@ -1,12 +1,15 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useState } from "react"
+import Modal from "react-modal"
 import { AppointmentsContext, exampleAppointments } from "./data/appointments"
 import { CounselorsContext, exampleCounselors } from "./data/counselors"
 import { SchoolsContext, exampleSchools } from "./data/schools"
 import { exampleStudents, StudentsContext } from "./data/students"
 import { UsersContext, exampleUsers } from "./data/users"
 import AppRouter from "./routes/AppRouter"
+
+Modal.setAppElement("#root")
 
 function App() {
   const [appointments, setAppointments] = useState(exampleAppointments)

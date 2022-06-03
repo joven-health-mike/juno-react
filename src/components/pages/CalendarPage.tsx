@@ -11,14 +11,29 @@ import Calendar from "../calendar/Calendar"
 import Navbar from "../navbar/Navbar"
 import { getItems } from "../navbar/navBarItems"
 import { SelectCounselorList, SelectSchoolList } from "../selectList/SelectList"
+import AddAppointmentModal from "../modals/AddAppointmentModal"
 
 const CalendarPage: React.FC = () => {
   const role = "admin"
 
+  const emptyAppointment: Appointment = {
+    title: "",
+    start: new Date(),
+    end: new Date(),
+    counselor: "",
+    student: "",
+    facilitator: "",
+  }
+
+  const [isAddAppointmentModalOpen, setIsAddAppointmentModalOpen] =
+    useState<boolean>(false)
+  const [showCalendar, setShowCalendar] = useState<boolean>(true)
   const [filteredEvents, setFilteredEvents] = useState<Appointment[]>([])
   const [schoolSelection, setSchoolSelection] = useState<string>("")
   const [counselorSelection, setCounselorSelection] = useState<string>("")
-  const { appointments } = useContext(AppointmentsContext)
+  const [initialAppointment, setInitialAppointment] =
+    useState<Appointment>(emptyAppointment)
+  const { appointments, setAppointments } = useContext(AppointmentsContext)
   const { counselors } = useContext(CounselorsContext)
   const { schools } = useContext(SchoolsContext)
 
@@ -28,8 +43,21 @@ const CalendarPage: React.FC = () => {
   }
 
   const onDateClick = (date: string) => {
-    // display new appointment form
-    console.log("dateClicked:", date)
+    setInitialAppointment({
+      ...initialAppointment,
+      start: new Date(date + "T08:00"),
+      end: new Date(date + "T08:30"),
+    })
+    setIsAddAppointmentModalOpen(true)
+  }
+
+  useEffect(() => {
+    setShowCalendar(!isAddAppointmentModalOpen)
+  }, [isAddAppointmentModalOpen])
+
+  const handleAppointmentAdded = (appointment: Appointment) => {
+    setAppointments([...appointments, appointment])
+    setIsAddAppointmentModalOpen(false)
   }
 
   const handleSchoolChange = async (selectedSchoolName: string) => {
@@ -74,21 +102,21 @@ const CalendarPage: React.FC = () => {
         <Navbar items={getItems(role)} />
       </nav>
       <h1>Calendar</h1>
-      <>
-        <label>
-          Counselor:{" "}
-          <SelectCounselorList
-            value={counselorSelection}
-            onCounselorChanged={handleCounselorChange}
-          />
-        </label>
-        <label>
-          School:{" "}
-          <SelectSchoolList
-            value={schoolSelection}
-            onSchoolChanged={handleSchoolChange}
-          />
-        </label>
+      <label>
+        Counselor:{" "}
+        <SelectCounselorList
+          value={counselorSelection}
+          onCounselorChanged={handleCounselorChange}
+        />
+      </label>
+      <label>
+        School:{" "}
+        <SelectSchoolList
+          value={schoolSelection}
+          onSchoolChanged={handleSchoolChange}
+        />
+      </label>
+      {showCalendar && (
         <Calendar
           view="dayGridMonth"
           plugins={[dayGridPlugin, interactionPlugin]}
@@ -96,7 +124,13 @@ const CalendarPage: React.FC = () => {
           onEventClick={onEventClick}
           onDateClick={onDateClick}
         />
-      </>
+      )}
+      <AddAppointmentModal
+        isOpen={isAddAppointmentModalOpen}
+        onClose={() => setIsAddAppointmentModalOpen(false)}
+        onAppointmentAdded={handleAppointmentAdded}
+        initialAppointment={initialAppointment}
+      />
     </div>
   )
 }
