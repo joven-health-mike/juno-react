@@ -3,9 +3,13 @@
 import React from 'react';
 import { Appointment } from '../../data/appointments';
 
-const AppointmentDetails: React.FC<Appointment> = (
-  appointment: Appointment
-) => {
+type AppointmentDetailsProps = {
+  appointment: Appointment;
+};
+
+const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
+  appointment,
+}: AppointmentDetailsProps) => {
   return (
     <>
       <label>
