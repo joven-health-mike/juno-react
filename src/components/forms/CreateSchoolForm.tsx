@@ -1,7 +1,8 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useRef, useState } from 'react';
+import React, { FormEvent, useRef, useState } from 'react';
 import { School } from '../../data/schools';
+import XButton from '../buttons/XButton';
 
 type CreateSchoolFormProps = {
   defaultSchool?: School;
@@ -13,7 +14,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
   defaultSchool,
   onSubmit,
   onCancel,
-}) => {
+}: CreateSchoolFormProps) => {
   const emptySchool = {
     name: '',
     email: '',
@@ -29,22 +30,26 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
     setSchool({ ...school, facilitators: newFacilitators });
   };
 
-  const onDeleteFacilitator = (e: any) => {
-    e.preventDefault();
+  const onDeleteFacilitator = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
     let newFacilitators = school.facilitators.filter(
-      facilitatorName => facilitatorName !== e.target.value
+      facilitatorName => facilitatorName !== event.currentTarget.value
     );
 
     setSchool({ ...school, facilitators: newFacilitators });
   };
 
-  const onFormSubmit = (e: any) => {
-    e.preventDefault();
+  const onFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     onSubmit(school);
   };
 
-  const onFormCancel = (e: any) => {
-    e.preventDefault();
+  const onFormCancel = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
     setSchool(emptySchool);
     onCancel();
   };
@@ -81,13 +86,11 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
               return (
                 <div key={index}>
                   <p>{facilitatorName}</p>
-                  <button
+                  <XButton
                     type="button"
                     value={facilitatorName}
                     onClick={onDeleteFacilitator}
-                  >
-                    X
-                  </button>
+                  />
                 </div>
               );
             })}
@@ -111,11 +114,13 @@ type FacilitatorInputProps = {
 
 const FacilitatorInput: React.FC<FacilitatorInputProps> = ({
   onAddFacilitator,
-}) => {
+}: FacilitatorInputProps) => {
   const textBox = useRef<HTMLInputElement>(null);
 
-  const onFormSubmit = (e: any) => {
-    e.preventDefault();
+  const onFormSubmit = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
 
     if (textBox && textBox.current) {
       const facilitatorName = textBox.current.value;
@@ -132,6 +137,7 @@ const FacilitatorInput: React.FC<FacilitatorInputProps> = ({
         placeholder="Facilitator Name"
         name="facilitatorName"
       />
+      // TODO create + button component like XButton
       <button type="button" onClick={onFormSubmit}>
         +
       </button>
