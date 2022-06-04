@@ -29,7 +29,7 @@ const HomePage: React.FC = () => {
         plugins={[listPlugin]}
         appointments={appointments}
         onEventClick={onEventClick}
-        onDateClick={() => { }}
+        onDateClick={() => {}}
       />
     </div>
   );
