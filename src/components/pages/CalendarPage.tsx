@@ -59,9 +59,11 @@ const CalendarPage: React.FC = () => {
   const filterEvents = (counselorName: string, schoolName: string) => {
     console.log('filterEvents:', counselorName, schoolName);
     const filteredEvents = appointments.filter(event => {
+      // TODO: Need to refactor the inputs here to be School objects or schoolId values.
       let counselorMatch =
-        counselorName === '' || counselorName === event.counselor;
-      let schoolMatch = schoolName === '' || schoolName === event.facilitator;
+        counselorName === '' || /*counselorName === event.counselorId;*/ true;
+      let schoolMatch =
+        schoolName === '' || /*schoolName === event.facilitatorId;*/ true;
       return counselorMatch && schoolMatch;
     });
     setFilteredEvents(filteredEvents);
