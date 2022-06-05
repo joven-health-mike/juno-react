@@ -45,13 +45,6 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
           data.push(counselor.name);
         });
         break;
-      case 'facilitator':
-        schools.forEach(school => {
-          school.facilitators.forEach(facilitatorName => {
-            data.push(facilitatorName);
-          });
-        });
-        break;
       case 'school':
         schools.forEach(school => {
           data.push(school.name);

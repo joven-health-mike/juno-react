@@ -37,25 +37,16 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
         ),
       },
       {
+        Header: 'ID',
+        accessor: '_id',
+      },
+      {
         Header: 'Name',
         accessor: 'name',
       },
       {
         Header: 'Email',
         accessor: 'email',
-      },
-      {
-        Header: 'Facilitators',
-        accessor: 'facilitators',
-        Cell: ({ cell }: any) => (
-          <>
-            {cell.row.values.facilitators.map(
-              (facilitatorName: string, index: number) => {
-                return <p key={index}>{facilitatorName}</p>;
-              }
-            )}
-          </>
-        ),
       },
     ],
     [onDeleteClicked]

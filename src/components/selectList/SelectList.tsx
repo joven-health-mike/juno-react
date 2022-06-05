@@ -112,30 +112,3 @@ export function SelectStudentList({
     />
   );
 }
-
-type SelectFacilitatorListProps = {
-  value: any;
-  onFacilitatorChanged: any;
-};
-
-export function SelectFacilitatorList({
-  value,
-  onFacilitatorChanged,
-}: SelectFacilitatorListProps) {
-  const { schools } = useContext(SchoolsContext);
-  const facilitatorNames = Array<string>();
-  schools.forEach(school => {
-    school.facilitators.forEach(facilitator =>
-      facilitatorNames.push(facilitator)
-    );
-  });
-
-  return (
-    <SelectList
-      labelText={'Select a Facilitator'}
-      items={facilitatorNames}
-      value={value}
-      onItemChanged={onFacilitatorChanged}
-    />
-  );
-}

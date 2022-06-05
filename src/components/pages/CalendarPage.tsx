@@ -5,11 +5,7 @@ import '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { Appointment, AppointmentsContext } from '../../data/appointments';
-import {
-  Counselor,
-  CounselorsContext,
-  emptyCounselor,
-} from '../../data/counselors';
+import { Counselor, emptyCounselor } from '../../data/counselors';
 import { SchoolsContext } from '../../data/schools';
 import Calendar from '../calendar/Calendar';
 import Navbar from '../navbar/Navbar';

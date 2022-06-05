@@ -10,7 +10,6 @@ import {
 } from '../../data/appointments';
 import {
   SelectCounselorList,
-  SelectFacilitatorList,
   SelectStudentList,
 } from '../selectList/SelectList';
 
@@ -32,10 +31,6 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
   const onCounselorChanged = (counselorId: number) => {
     setAppointment({ ...appointment, counselorId: counselorId });
-  };
-
-  const onFacilitatorChanged = (facilitatorId: number) => {
-    setAppointment({ ...appointment, facilitatorId: facilitatorId });
   };
 
   const onStudentChanged = (studentId: number) => {
@@ -106,13 +101,6 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
         <SelectStudentList
           value={appointment.studentId}
           onStudentChanged={onStudentChanged}
-        />
-      </label>
-      <label>
-        Facilitator:{' '}
-        <SelectFacilitatorList
-          value={appointment.facilitatorId}
-          onFacilitatorChanged={onFacilitatorChanged}
         />
       </label>
 

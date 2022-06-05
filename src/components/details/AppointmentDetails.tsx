@@ -13,6 +13,7 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
   return (
     <>
       <h2>{appointment.title}</h2>
+      <p>{appointment._id}</p>
       <p>{appointment.start.toISOString()}</p>
       <p>{appointment.end.toISOString()}</p>
       <p>{appointment.counselorId}</p>
