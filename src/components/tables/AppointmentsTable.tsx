@@ -37,6 +37,10 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
         ),
       },
       {
+        Header: 'ID',
+        accessor: '_id',
+      },
+      {
         Header: 'Title',
         accessor: 'title',
       },
@@ -51,16 +55,16 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
         Cell: ({ cell }: any) => <p>{cell.row.values.end.toISOString()}</p>,
       },
       {
-        Header: 'Counselor',
-        accessor: 'counselor',
+        Header: 'Counselor ID',
+        accessor: 'counselorId',
       },
       {
-        Header: 'Student',
-        accessor: 'student',
+        Header: 'Student ID',
+        accessor: 'studentId',
       },
       {
-        Header: 'Facilitator',
-        accessor: 'facilitator',
+        Header: 'Facilitator ID',
+        accessor: 'facilitatorId',
       },
     ],
     [onDeleteClicked]
