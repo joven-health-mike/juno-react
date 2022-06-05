@@ -1,7 +1,11 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useState } from 'react';
-import { Counselor, emptyCounselor } from '../../data/counselors';
+import React, { SyntheticEvent, useContext, useState } from 'react';
+import {
+  Counselor,
+  CounselorsContext,
+  emptyCounselor,
+} from '../../data/counselors';
 
 type CreateCounselorFormProps = {
   defaultCounselor?: Counselor;
@@ -17,13 +21,14 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
   const [counselor, setCounselor] = useState(
     defaultCounselor ?? emptyCounselor
   );
+  const { counselors } = useContext(CounselorsContext);
 
-  const onFormSubmit = (e: any) => {
+  const onFormSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    onSubmit(counselor);
+    onSubmit({ ...counselor, _id: counselors.length });
   };
 
-  const onFormCancel = (e: any) => {
+  const onFormCancel = (e: SyntheticEvent) => {
     e.preventDefault();
     setCounselor(emptyCounselor);
     onCancel();

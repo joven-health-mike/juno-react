@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext, useState } from 'react';
+import React, { SyntheticEvent, useContext, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import {
@@ -42,13 +42,12 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     setAppointment({ ...appointment, studentId: studentId });
   };
 
-  const onFormSubmit = (e: any) => {
+  const onFormSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    setAppointment({ ...appointment, _id: appointments.length });
-    onSubmit(appointment);
+    onSubmit({ ...appointment, _id: appointments.length });
   };
 
-  const onFormCancel = (e: any) => {
+  const onFormCancel = (e: SyntheticEvent) => {
     e.preventDefault();
     setAppointment(emptyAppointment);
     onCancel();
