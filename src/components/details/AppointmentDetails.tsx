@@ -18,7 +18,6 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
       <p>{appointment.end.toISOString()}</p>
       <p>{appointment.counselorId}</p>
       <p>{appointment.studentId}</p>
-      <p>{appointment.facilitatorId}</p>
     </>
   );
 };

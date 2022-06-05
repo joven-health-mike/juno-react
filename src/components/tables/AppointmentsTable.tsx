@@ -62,10 +62,6 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
         Header: 'Student ID',
         accessor: 'studentId',
       },
-      {
-        Header: 'Facilitator ID',
-        accessor: 'facilitatorId',
-      },
     ],
     [onDeleteClicked]
   );

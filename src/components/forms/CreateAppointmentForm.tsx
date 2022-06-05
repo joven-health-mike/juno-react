@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { SyntheticEvent, useContext, useState } from 'react';
+import React, { SyntheticEvent, useContext, useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import {
@@ -8,6 +8,8 @@ import {
   AppointmentsContext,
   emptyAppointment,
 } from '../../data/appointments';
+import { Counselor, emptyCounselor } from '../../data/counselors';
+import { emptyStudent, Student } from '../../data/students';
 import {
   SelectCounselorList,
   SelectStudentList,
@@ -27,15 +29,27 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   const [appointment, setAppointment] = useState(
     defaultAppointment ?? emptyAppointment
   );
+  const [studentSelection, setStudentSelection] = useState(emptyStudent);
+  const [counselorSelection, setCounselorSelection] = useState(emptyCounselor);
   const { appointments } = useContext(AppointmentsContext);
 
-  const onCounselorChanged = (counselorId: number) => {
-    setAppointment({ ...appointment, counselorId: counselorId });
+  const onCounselorChanged = (counselor: Counselor) => {
+    setCounselorSelection(counselor);
   };
 
-  const onStudentChanged = (studentId: number) => {
-    setAppointment({ ...appointment, studentId: studentId });
+  const onStudentChanged = (student: Student) => {
+    setStudentSelection(student);
   };
+
+  useEffect(() => {
+    setAppointment(prevAppointment => {
+      return {
+        ...prevAppointment,
+        studentId: studentSelection._id,
+        counselorId: counselorSelection._id,
+      };
+    });
+  }, [studentSelection, counselorSelection]);
 
   const onFormSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -92,14 +106,14 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
       <label>
         Counselor:{' '}
         <SelectCounselorList
-          value={appointment.counselorId}
+          value={counselorSelection.name}
           onCounselorChanged={onCounselorChanged}
         />
       </label>
       <label>
         Student:{' '}
         <SelectStudentList
-          value={appointment.studentId}
+          value={studentSelection.first_name + ' ' + studentSelection.last_name}
           onStudentChanged={onStudentChanged}
         />
       </label>

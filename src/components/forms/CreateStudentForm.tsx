@@ -1,7 +1,9 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useState } from 'react';
-import { Student } from '../../data/students';
+import React, { useContext, useEffect, useState } from 'react';
+import { Counselor, emptyCounselor } from '../../data/counselors';
+import { emptySchool, School } from '../../data/schools';
+import { emptyStudent, Student, StudentsContext } from '../../data/students';
 import {
   SelectCounselorList,
   SelectSchoolList,
@@ -18,30 +20,39 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
-  const emptyStudent = {
-    first_name: '',
-    last_name: '',
-    school: '',
-    counselor: '',
-  };
-
   const [student, setStudent] = useState(defaultStudent ?? emptyStudent);
+  const [counselorSelection, setCounselorSelection] = useState(emptyCounselor);
+  const [schoolSelection, setSchoolSelection] = useState(emptySchool);
+  const { students } = useContext(StudentsContext);
 
-  const onCounselorChanged = (counselorName: string) => {
-    setStudent({ ...student, counselor: counselorName });
+  const onCounselorChanged = (counselor: Counselor) => {
+    setCounselorSelection(counselor);
   };
 
-  const onSchoolChanged = (schoolName: string) => {
-    setStudent({ ...student, school: schoolName });
+  const onSchoolChanged = (school: School) => {
+    setSchoolSelection(school);
   };
+
+  useEffect(() => {
+    console.log('setting student');
+    setStudent(prevStudent => {
+      return {
+        ...prevStudent,
+        counselorId: counselorSelection._id,
+        schoolId: schoolSelection._id,
+      };
+    });
+  }, [counselorSelection, schoolSelection]);
 
   const onFormSubmit = (e: any) => {
     e.preventDefault();
-    onSubmit(student);
+    onSubmit({ ...student, _id: students.length });
   };
 
   const onFormCancel = (e: any) => {
     e.preventDefault();
+    setCounselorSelection(emptyCounselor);
+    setSchoolSelection(emptySchool);
     setStudent(emptyStudent);
     onCancel();
   };
@@ -73,14 +84,14 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       <label>
         Counselor:{' '}
         <SelectCounselorList
-          value={student.counselor}
+          value={counselorSelection.name}
           onCounselorChanged={onCounselorChanged}
         />
       </label>
       <label>
         School:{' '}
         <SelectSchoolList
-          value={student.school}
+          value={schoolSelection.name}
           onSchoolChanged={onSchoolChanged}
         />
       </label>
