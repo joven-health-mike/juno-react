@@ -34,7 +34,6 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
   };
 
   useEffect(() => {
-    console.log('setting student');
     setStudent(prevStudent => {
       return {
         ...prevStudent,
