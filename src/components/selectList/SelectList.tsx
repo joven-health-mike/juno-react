@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { CounselorsContext } from '../../data/counselors';
+import { CounselorsContext, emptyCounselor } from '../../data/counselors';
 import { SchoolsContext } from '../../data/schools';
 import { StudentsContext } from '../../data/students';
 
@@ -46,13 +46,20 @@ export function SelectCounselorList({
   const { counselors } = useContext(CounselorsContext);
   const counselorNames = counselors.map(counselor => counselor.name);
 
+  const handleCounselorChange = (counselorName: string) => {
+    let counselor = counselors.find(
+      counselor => counselor.name === counselorName
+    );
+    onCounselorChanged(counselor ?? emptyCounselor);
+  };
+
   return (
     <>
       <SelectList
         labelText={'Select a Counselor'}
         items={counselorNames}
         value={value}
-        onItemChanged={onCounselorChanged}
+        onItemChanged={handleCounselorChange}
       />
     </>
   );

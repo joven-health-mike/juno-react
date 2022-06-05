@@ -1,8 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useState } from 'react';
-import { Counselor } from '../../data/counselors';
-import { SchoolsContext } from '../../data/schools';
+import { Counselor, emptyCounselor } from '../../data/counselors';
 
 type CreateCounselorFormProps = {
   defaultCounselor?: Counselor;
@@ -15,49 +14,9 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
-  const emptyCounselor = {
-    name: '',
-    email: '',
-    roomLink: '',
-    assignedSchools: [],
-  };
-
   const [counselor, setCounselor] = useState(
     defaultCounselor ?? emptyCounselor
   );
-
-  const onSchoolChecked = (e: any) => {
-    const schoolName = e.target.value;
-    e.target.checked = toggleSchoolName(schoolName);
-  };
-
-  const isSchoolChecked = (schoolName: string) => {
-    return counselor.assignedSchools.includes(schoolName);
-  };
-
-  const toggleSchoolName = (schoolName: string) => {
-    const exists = isSchoolChecked(schoolName);
-
-    if (exists) {
-      removeSchool(schoolName);
-    } else {
-      addSchool(schoolName);
-    }
-    return !exists;
-  };
-
-  const addSchool = (schoolName: string) => {
-    let newAssignedSchools = [...counselor.assignedSchools];
-    newAssignedSchools.push(schoolName);
-    setCounselor({ ...counselor, assignedSchools: newAssignedSchools });
-  };
-
-  const removeSchool = (schoolName: string) => {
-    let newAssignedSchools = counselor.assignedSchools.filter(
-      school => school !== schoolName
-    );
-    setCounselor({ ...counselor, assignedSchools: newAssignedSchools });
-  };
 
   const onFormSubmit = (e: any) => {
     e.preventDefault();
@@ -109,26 +68,6 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
               setCounselor({ ...counselor, roomLink: e.target.value })
             }
           />
-        </label>
-        <label>
-          Associated Schools:{' '}
-          <div>
-            <SchoolsContext.Consumer>
-              {value =>
-                value.schools.map((school, index) => (
-                  <label key={index}>
-                    <input
-                      type="checkbox"
-                      checked={isSchoolChecked(school.name)}
-                      value={school.name}
-                      onChange={onSchoolChecked}
-                    />
-                    {school.name}
-                  </label>
-                ))
-              }
-            </SchoolsContext.Consumer>
-          </div>
         </label>
 
         <button type="submit">Submit</button>

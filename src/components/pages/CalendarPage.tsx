@@ -5,7 +5,11 @@ import '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { Appointment, AppointmentsContext } from '../../data/appointments';
-import { CounselorsContext } from '../../data/counselors';
+import {
+  Counselor,
+  CounselorsContext,
+  emptyCounselor,
+} from '../../data/counselors';
 import { SchoolsContext } from '../../data/schools';
 import Calendar from '../calendar/Calendar';
 import Navbar from '../navbar/Navbar';
@@ -20,9 +24,9 @@ const CalendarPage: React.FC = () => {
 
   const [filteredEvents, setFilteredEvents] = useState<Appointment[]>([]);
   const [schoolSelection, setSchoolSelection] = useState<string>('');
-  const [counselorSelection, setCounselorSelection] = useState<string>('');
+  const [counselorSelection, setCounselorSelection] =
+    useState<Counselor>(emptyCounselor);
   const { appointments } = useContext(AppointmentsContext);
-  const { counselors } = useContext(CounselorsContext);
   const { schools } = useContext(SchoolsContext);
 
   const onEventClick = (event: Appointment) => {
@@ -35,39 +39,39 @@ const CalendarPage: React.FC = () => {
     console.log('dateClicked:', date);
   };
 
-  const handleSchoolChange = async (selectedSchoolName: string) => {
+  const handleSchoolChange = (selectedSchoolName: string) => {
     const selectedSchool = schools.filter(
       school => school.name === selectedSchoolName
     )[0];
     const schoolName = selectedSchool === undefined ? '' : selectedSchool.name;
     console.log('Selected school changed', schoolName);
     setSchoolSelection(schoolName);
-    filterEvents(counselorSelection, schoolName);
   };
 
-  const handleCounselorChange = async (selectedCounselorName: string) => {
-    const selectedCounselor = counselors.filter(
-      counselor => counselor.name === selectedCounselorName
-    )[0];
-    const counselorName =
-      selectedCounselor === undefined ? '' : selectedCounselor.name;
-    console.log('Selected counselor changed', counselorName);
-    setCounselorSelection(counselorName);
-    filterEvents(counselorName, schoolSelection);
+  const handleCounselorChange = (selectedCounselor: Counselor) => {
+    console.log(
+      'Selected counselor changed. old value:',
+      counselorSelection,
+      'new value:',
+      selectedCounselor
+    );
+    setCounselorSelection(selectedCounselor);
   };
 
-  const filterEvents = (counselorName: string, schoolName: string) => {
-    console.log('filterEvents:', counselorName, schoolName);
-    const filteredEvents = appointments.filter(event => {
+  useEffect(() => {
+    console.log('filterEvents:', counselorSelection.name, schoolSelection);
+    const filteredEvents = appointments.filter(appointment => {
       // TODO: Need to refactor the inputs here to be School objects or schoolId values.
       let counselorMatch =
-        counselorName === '' || /*counselorName === event.counselorId;*/ true;
+        counselorSelection._id === -1 ||
+        counselorSelection._id === appointment.counselorId;
       let schoolMatch =
-        schoolName === '' || /*schoolName === event.facilitatorId;*/ true;
+        schoolSelection === '' ||
+        /*schoolName === appointment.facilitatorId;*/ true;
       return counselorMatch && schoolMatch;
     });
     setFilteredEvents(filteredEvents);
-  };
+  }, [counselorSelection, schoolSelection, appointments]);
 
   useEffect(() => {
     setFilteredEvents(appointments);
@@ -83,7 +87,7 @@ const CalendarPage: React.FC = () => {
         <label>
           Counselor:{' '}
           <SelectCounselorList
-            value={counselorSelection}
+            value={counselorSelection.name}
             onCounselorChanged={handleCounselorChange}
           />
         </label>
