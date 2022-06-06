@@ -12,7 +12,7 @@ const XButton: React.FC<XButtonProps> = ({
   className = 'button-x',
   type = undefined,
   onClick,
-}: XButtonProps) => {
+}) => {
   return (
     <>
       <button className={className} value={value} onClick={onClick} type={type}>
