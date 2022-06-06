@@ -25,9 +25,9 @@ export const exampleCounselors = [
   },
 ];
 
-type ICounselorsContext = {
+export type ICounselorsContext = {
   counselors: Counselor[];
-  setCounselors: any;
+  setCounselors: (counselors: Counselor[]) => void;
 };
 
 export const CounselorsContext = React.createContext<ICounselorsContext>({

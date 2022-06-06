@@ -1,7 +1,19 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext, useState } from 'react';
-import { emptyUser, ROLES, User, UsersContext } from '../../data/users';
+import React, {
+  ChangeEvent,
+  FormEvent,
+  MouseEvent,
+  useContext,
+  useState,
+} from 'react';
+import {
+  emptyUser,
+  IUsersContext,
+  ROLES,
+  User,
+  UsersContext,
+} from '../../data/users';
 import SelectList from '../selectList/SelectList';
 
 type CreateUserFormProps = {
@@ -15,19 +27,19 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
-  const [user, setUser] = useState(defaultUser ?? emptyUser);
-  const { users } = useContext(UsersContext);
+  const [user, setUser] = useState<User>(defaultUser ?? emptyUser);
+  const { users } = useContext<IUsersContext>(UsersContext);
 
   const onRoleChanged = (role: string) => {
     setUser({ ...user, role: role });
   };
 
-  const onFormSubmit = (e: any) => {
+  const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
     onSubmit({ ...user, _id: users.length });
   };
 
-  const onFormCancel = (e: any) => {
+  const onFormCancel = (e: MouseEvent) => {
     e.preventDefault();
     setUser(defaultUser ?? emptyUser);
     onCancel();
@@ -43,7 +55,9 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
           name="name"
           value={user.name}
           required
-          onChange={e => setUser({ ...user, name: e.target.value })}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setUser({ ...user, name: e.target.value })
+          }
         />
       </label>
       <label>
@@ -54,7 +68,9 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
           name="email"
           value={user.email}
           required
-          onChange={e => setUser({ ...user, email: e.target.value })}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setUser({ ...user, email: e.target.value })
+          }
         />
       </label>
       <label>
@@ -65,7 +81,9 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
           name="password"
           value={user.password}
           required
-          onChange={e => setUser({ ...user, password: e.target.value })}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setUser({ ...user, password: e.target.value })
+          }
         />
       </label>
       <label>

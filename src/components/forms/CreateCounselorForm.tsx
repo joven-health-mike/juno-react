@@ -1,10 +1,17 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { SyntheticEvent, useContext, useState } from 'react';
+import React, {
+  ChangeEvent,
+  FormEvent,
+  MouseEvent,
+  useContext,
+  useState,
+} from 'react';
 import {
   Counselor,
   CounselorsContext,
   emptyCounselor,
+  ICounselorsContext,
 } from '../../data/counselors';
 
 type CreateCounselorFormProps = {
@@ -18,17 +25,17 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
-  const [counselor, setCounselor] = useState(
+  const [counselor, setCounselor] = useState<Counselor>(
     defaultCounselor ?? emptyCounselor
   );
-  const { counselors } = useContext(CounselorsContext);
+  const { counselors } = useContext<ICounselorsContext>(CounselorsContext);
 
-  const onFormSubmit = (e: SyntheticEvent) => {
+  const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
     onSubmit({ ...counselor, _id: counselors.length });
   };
 
-  const onFormCancel = (e: SyntheticEvent) => {
+  const onFormCancel = (e: MouseEvent) => {
     e.preventDefault();
     setCounselor(emptyCounselor);
     onCancel();
@@ -45,7 +52,9 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
             name="name"
             value={counselor.name}
             required
-            onChange={e => setCounselor({ ...counselor, name: e.target.value })}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setCounselor({ ...counselor, name: e.target.value })
+            }
           />
         </label>
         <label>
@@ -56,7 +65,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
             name="email"
             value={counselor.email}
             required
-            onChange={e =>
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setCounselor({ ...counselor, email: e.target.value })
             }
           />
@@ -69,7 +78,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
             name="roomLink"
             value={counselor.roomLink}
             required
-            onChange={e =>
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setCounselor({ ...counselor, roomLink: e.target.value })
             }
           />

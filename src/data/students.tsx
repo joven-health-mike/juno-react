@@ -42,9 +42,9 @@ export const exampleStudents = [
   },
 ];
 
-type IStudentsContext = {
+export type IStudentsContext = {
   students: Student[];
-  setStudents: any;
+  setStudents: (students: Student[]) => void;
 };
 
 export const StudentsContext = React.createContext<IStudentsContext>({

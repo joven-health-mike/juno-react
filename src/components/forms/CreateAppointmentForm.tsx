@@ -1,12 +1,20 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { SyntheticEvent, useContext, useEffect, useState } from 'react';
+import React, {
+  ChangeEvent,
+  FormEvent,
+  MouseEvent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import {
   Appointment,
   AppointmentsContext,
   emptyAppointment,
+  IAppointmentsContext,
 } from '../../data/appointments';
 import { Counselor, emptyCounselor } from '../../data/counselors';
 import { emptyStudent, Student } from '../../data/students';
@@ -26,12 +34,15 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
-  const [appointment, setAppointment] = useState(
+  const [appointment, setAppointment] = useState<Appointment>(
     defaultAppointment ?? emptyAppointment
   );
-  const [studentSelection, setStudentSelection] = useState(emptyStudent);
-  const [counselorSelection, setCounselorSelection] = useState(emptyCounselor);
-  const { appointments } = useContext(AppointmentsContext);
+  const [studentSelection, setStudentSelection] =
+    useState<Student>(emptyStudent);
+  const [counselorSelection, setCounselorSelection] =
+    useState<Counselor>(emptyCounselor);
+  const { appointments } =
+    useContext<IAppointmentsContext>(AppointmentsContext);
 
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelection(counselor);
@@ -41,6 +52,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     setStudentSelection(student);
   };
 
+  // update the appointment whenever counselor or student selection is changed
   useEffect(() => {
     setAppointment(prevAppointment => {
       return {
@@ -51,13 +63,15 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     });
   }, [studentSelection, counselorSelection]);
 
-  const onFormSubmit = (e: SyntheticEvent) => {
+  const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
     onSubmit({ ...appointment, _id: appointments.length });
   };
 
-  const onFormCancel = (e: SyntheticEvent) => {
+  const onFormCancel = (e: MouseEvent) => {
     e.preventDefault();
+    setStudentSelection(emptyStudent);
+    setCounselorSelection(emptyCounselor);
     setAppointment(emptyAppointment);
     onCancel();
   };
@@ -72,7 +86,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
           name="title"
           value={appointment.title}
           required
-          onChange={e =>
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setAppointment({ ...appointment, title: e.target.value })
           }
         />

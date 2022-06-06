@@ -47,9 +47,9 @@ export const exampleAppointments = [
   },
 ];
 
-type IAppointmentsContext = {
+export type IAppointmentsContext = {
   appointments: Appointment[];
-  setAppointments: any;
+  setAppointments: (appointments: Appointment[]) => void;
 };
 
 export const AppointmentsContext = React.createContext<IAppointmentsContext>({

@@ -22,9 +22,9 @@ export const exampleSchools = [
   },
 ];
 
-type ISchoolsContext = {
+export type ISchoolsContext = {
   schools: School[];
-  setSchools: any;
+  setSchools: (schools: School[]) => void;
 };
 
 export const SchoolsContext = React.createContext<ISchoolsContext>({

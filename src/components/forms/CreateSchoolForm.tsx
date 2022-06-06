@@ -1,7 +1,18 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext, useState } from 'react';
-import { emptySchool, School, SchoolsContext } from '../../data/schools';
+import React, {
+  ChangeEvent,
+  FormEvent,
+  MouseEvent,
+  useContext,
+  useState,
+} from 'react';
+import {
+  emptySchool,
+  ISchoolsContext,
+  School,
+  SchoolsContext,
+} from '../../data/schools';
 
 type CreateSchoolFormProps = {
   defaultSchool?: School;
@@ -14,15 +25,15 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
-  const [school, setSchool] = useState(defaultSchool ?? emptySchool);
-  const { schools } = useContext(SchoolsContext);
+  const [school, setSchool] = useState<School>(defaultSchool ?? emptySchool);
+  const { schools } = useContext<ISchoolsContext>(SchoolsContext);
 
-  const onFormSubmit = (e: any) => {
+  const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
     onSubmit({ ...school, _id: schools.length });
   };
 
-  const onFormCancel = (e: any) => {
+  const onFormCancel = (e: MouseEvent) => {
     e.preventDefault();
     setSchool(emptySchool);
     onCancel();
@@ -39,7 +50,9 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
             name="name"
             value={school.name}
             required
-            onChange={e => setSchool({ ...school, name: e.target.value })}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setSchool({ ...school, name: e.target.value })
+            }
           />
         </label>
         <label>
@@ -50,7 +63,9 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
             name="email"
             value={school.email}
             required
-            onChange={e => setSchool({ ...school, email: e.target.value })}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setSchool({ ...school, email: e.target.value })
+            }
           />
         </label>
 

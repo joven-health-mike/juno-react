@@ -1,9 +1,21 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  ChangeEvent,
+  FormEvent,
+  MouseEvent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { Counselor, emptyCounselor } from '../../data/counselors';
 import { emptySchool, School } from '../../data/schools';
-import { emptyStudent, Student, StudentsContext } from '../../data/students';
+import {
+  emptyStudent,
+  IStudentsContext,
+  Student,
+  StudentsContext,
+} from '../../data/students';
 import {
   SelectCounselorList,
   SelectSchoolList,
@@ -20,10 +32,13 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
-  const [student, setStudent] = useState(defaultStudent ?? emptyStudent);
-  const [counselorSelection, setCounselorSelection] = useState(emptyCounselor);
-  const [schoolSelection, setSchoolSelection] = useState(emptySchool);
-  const { students } = useContext(StudentsContext);
+  const [student, setStudent] = useState<Student>(
+    defaultStudent ?? emptyStudent
+  );
+  const [counselorSelection, setCounselorSelection] =
+    useState<Counselor>(emptyCounselor);
+  const [schoolSelection, setSchoolSelection] = useState<School>(emptySchool);
+  const { students } = useContext<IStudentsContext>(StudentsContext);
 
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelection(counselor);
@@ -33,6 +48,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
     setSchoolSelection(school);
   };
 
+  // update the student whenever counselor or school selection is changed
   useEffect(() => {
     setStudent(prevStudent => {
       return {
@@ -43,12 +59,12 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
     });
   }, [counselorSelection, schoolSelection]);
 
-  const onFormSubmit = (e: any) => {
+  const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
     onSubmit({ ...student, _id: students.length });
   };
 
-  const onFormCancel = (e: any) => {
+  const onFormCancel = (e: MouseEvent) => {
     e.preventDefault();
     setCounselorSelection(emptyCounselor);
     setSchoolSelection(emptySchool);
@@ -66,7 +82,9 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
           name="first_name"
           value={student.first_name}
           required
-          onChange={e => setStudent({ ...student, first_name: e.target.value })}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setStudent({ ...student, first_name: e.target.value })
+          }
         />
       </label>
       <label>
@@ -77,7 +95,9 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
           name="last_name"
           value={student.last_name}
           required
-          onChange={e => setStudent({ ...student, last_name: e.target.value })}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setStudent({ ...student, last_name: e.target.value })
+          }
         />
       </label>
       <label>

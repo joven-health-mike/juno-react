@@ -35,9 +35,9 @@ export const exampleUsers = [
   },
 ];
 
-type IUsersContext = {
+export type IUsersContext = {
   users: User[];
-  setUsers: any;
+  setUsers: (users: User[]) => void;
 };
 
 export const UsersContext = React.createContext<IUsersContext>({
