@@ -1,8 +1,18 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useState } from 'react';
-import { Counselor } from '../../data/counselors';
-import { SchoolsContext } from '../../data/schools';
+import React, {
+  ChangeEvent,
+  FormEvent,
+  MouseEvent,
+  useContext,
+  useState,
+} from 'react';
+import {
+  Counselor,
+  CounselorsContext,
+  emptyCounselor,
+  ICounselorsContext,
+} from '../../data/counselors';
 
 type CreateCounselorFormProps = {
   defaultCounselor?: Counselor;
@@ -15,56 +25,17 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
-  const emptyCounselor = {
-    name: '',
-    email: '',
-    roomLink: '',
-    assignedSchools: [],
-  };
-
-  const [counselor, setCounselor] = useState(
+  const [counselor, setCounselor] = useState<Counselor>(
     defaultCounselor ?? emptyCounselor
   );
+  const { counselors } = useContext<ICounselorsContext>(CounselorsContext);
 
-  const onSchoolChecked = (e: any) => {
-    const schoolName = e.target.value;
-    e.target.checked = toggleSchoolName(schoolName);
-  };
-
-  const isSchoolChecked = (schoolName: string) => {
-    return counselor.assignedSchools.includes(schoolName);
-  };
-
-  const toggleSchoolName = (schoolName: string) => {
-    const exists = isSchoolChecked(schoolName);
-
-    if (exists) {
-      removeSchool(schoolName);
-    } else {
-      addSchool(schoolName);
-    }
-    return !exists;
-  };
-
-  const addSchool = (schoolName: string) => {
-    let newAssignedSchools = [...counselor.assignedSchools];
-    newAssignedSchools.push(schoolName);
-    setCounselor({ ...counselor, assignedSchools: newAssignedSchools });
-  };
-
-  const removeSchool = (schoolName: string) => {
-    let newAssignedSchools = counselor.assignedSchools.filter(
-      school => school !== schoolName
-    );
-    setCounselor({ ...counselor, assignedSchools: newAssignedSchools });
-  };
-
-  const onFormSubmit = (e: any) => {
+  const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    onSubmit(counselor);
+    onSubmit({ ...counselor, _id: counselors.length });
   };
 
-  const onFormCancel = (e: any) => {
+  const onFormCancel = (e: MouseEvent) => {
     e.preventDefault();
     setCounselor(emptyCounselor);
     onCancel();
@@ -81,7 +52,9 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
             name="name"
             value={counselor.name}
             required
-            onChange={e => setCounselor({ ...counselor, name: e.target.value })}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setCounselor({ ...counselor, name: e.target.value })
+            }
           />
         </label>
         <label>
@@ -92,7 +65,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
             name="email"
             value={counselor.email}
             required
-            onChange={e =>
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setCounselor({ ...counselor, email: e.target.value })
             }
           />
@@ -105,30 +78,10 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
             name="roomLink"
             value={counselor.roomLink}
             required
-            onChange={e =>
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setCounselor({ ...counselor, roomLink: e.target.value })
             }
           />
-        </label>
-        <label>
-          Associated Schools:{' '}
-          <div>
-            <SchoolsContext.Consumer>
-              {value =>
-                value.schools.map((school, index) => (
-                  <label key={index}>
-                    <input
-                      type="checkbox"
-                      checked={isSchoolChecked(school.name)}
-                      value={school.name}
-                      onChange={onSchoolChecked}
-                    />
-                    {school.name}
-                  </label>
-                ))
-              }
-            </SchoolsContext.Consumer>
-          </div>
         </label>
 
         <button type="submit">Submit</button>

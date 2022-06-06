@@ -1,100 +1,94 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext, useEffect, useState } from "react"
-import "@fullcalendar/react"
-import dayGridPlugin from "@fullcalendar/daygrid"
-import interactionPlugin from "@fullcalendar/interaction"
-import { Appointment, AppointmentsContext } from "../../data/appointments"
-import { CounselorsContext } from "../../data/counselors"
-import { SchoolsContext } from "../../data/schools"
-import Calendar from "../calendar/Calendar"
-import Navbar from "../navbar/Navbar"
-import { getItems } from "../navbar/navBarItems"
-import { SelectCounselorList, SelectSchoolList } from "../selectList/SelectList"
-import CreateAppointmentModal from "../modals/CreateAppointmentModal"
-import AppointmentDetailsModal from "../modals/AppointmentDetailsModal"
+import React, { useContext, useEffect, useState } from 'react';
+import '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import {
+  Appointment,
+  AppointmentsContext,
+  emptyAppointment,
+} from '../../data/appointments';
+import { Counselor, emptyCounselor } from '../../data/counselors';
+import { emptySchool, School } from '../../data/schools';
+import Calendar from '../calendar/Calendar';
+import Navbar from '../navbar/Navbar';
+import { getItems } from '../navbar/navBarItems';
+import {
+  SelectCounselorList,
+  SelectSchoolList,
+} from '../selectList/SelectList';
+import { StudentsContext } from '../../data/students';
+import CreateAppointmentModal from '../modals/CreateAppointmentModal';
+import AppointmentDetailsModal from '../modals/AppointmentDetailsModal';
 
 const CalendarPage: React.FC = () => {
   const role = 'admin';
 
-  const emptyAppointment: Appointment = {
-    title: "",
-    start: new Date(),
-    end: new Date(),
-    counselor: "",
-    student: "",
-    facilitator: "",
-  }
-
   const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
-    useState<boolean>(false)
+    useState<boolean>(false);
   const [isAppointmentDetailsModalOpen, setIsAppointmentDetailsModalOpen] =
-    useState<boolean>(false)
-  const [showCalendar, setShowCalendar] = useState<boolean>(true)
-  const [filteredEvents, setFilteredEvents] = useState<Appointment[]>([])
-  const [schoolSelection, setSchoolSelection] = useState<string>("")
-  const [counselorSelection, setCounselorSelection] = useState<string>("")
+    useState<boolean>(false);
+  const [showCalendar, setShowCalendar] = useState<boolean>(true);
+  const [filteredEvents, setFilteredEvents] = useState<Appointment[]>([]);
+  const [schoolSelection, setSchoolSelection] = useState<School>(emptySchool);
+  const [counselorSelection, setCounselorSelection] =
+    useState<Counselor>(emptyCounselor);
   const [initialAppointment, setInitialAppointment] =
-    useState<Appointment>(emptyAppointment)
-  const [clickedAppointment, setClickedAppointment] = useState<Appointment>(emptyAppointment)
-  const { appointments, setAppointments } = useContext(AppointmentsContext)
-  const { counselors } = useContext(CounselorsContext)
-  const { schools } = useContext(SchoolsContext)
+    useState<Appointment>(emptyAppointment);
+  const [clickedAppointment, setClickedAppointment] =
+    useState<Appointment>(emptyAppointment);
+  const { appointments, setAppointments } = useContext(AppointmentsContext);
+  const { students } = useContext(StudentsContext);
 
   const handleAppointmentClick = (appointment: Appointment) => {
-    setClickedAppointment(appointment)
-    setIsAppointmentDetailsModalOpen(true)
+    setClickedAppointment(appointment);
+    setIsAppointmentDetailsModalOpen(true);
   };
 
   const handleDateClick = (date: string) => {
     setInitialAppointment({
       ...initialAppointment,
-      start: new Date(date + "T08:00"),
-      end: new Date(date + "T08:30"),
-    })
-    setIsCreateAppointmentModalOpen(true)
-  }
+      start: new Date(date + 'T08:00'),
+      end: new Date(date + 'T08:30'),
+    });
+    setIsCreateAppointmentModalOpen(true);
+  };
 
   useEffect(() => {
-    setShowCalendar(!isCreateAppointmentModalOpen && !isAppointmentDetailsModalOpen)
-  }, [isCreateAppointmentModalOpen, isAppointmentDetailsModalOpen])
+    setShowCalendar(
+      !isCreateAppointmentModalOpen && !isAppointmentDetailsModalOpen
+    );
+  }, [isCreateAppointmentModalOpen, isAppointmentDetailsModalOpen]);
 
   const handleAppointmentAdded = (appointment: Appointment) => {
-    setAppointments([...appointments, appointment])
-    setIsCreateAppointmentModalOpen(false)
-  }
-
-  const handleSchoolChange = async (selectedSchoolName: string) => {
-    const selectedSchool = schools.filter(
-      school => school.name === selectedSchoolName
-    )[0];
-    const schoolName = selectedSchool === undefined ? '' : selectedSchool.name;
-    console.log('Selected school changed', schoolName);
-    setSchoolSelection(schoolName);
-    filterEvents(counselorSelection, schoolName);
+    setAppointments([...appointments, appointment]);
+    setIsCreateAppointmentModalOpen(false);
   };
 
-  const handleCounselorChange = async (selectedCounselorName: string) => {
-    const selectedCounselor = counselors.filter(
-      counselor => counselor.name === selectedCounselorName
-    )[0];
-    const counselorName =
-      selectedCounselor === undefined ? '' : selectedCounselor.name;
-    console.log('Selected counselor changed', counselorName);
-    setCounselorSelection(counselorName);
-    filterEvents(counselorName, schoolSelection);
+  const handleSchoolChange = (selectedSchool: School) => {
+    setSchoolSelection(selectedSchool);
   };
 
-  const filterEvents = (counselorName: string, schoolName: string) => {
-    console.log('filterEvents:', counselorName, schoolName);
-    const filteredEvents = appointments.filter(event => {
-      let counselorMatch =
-        counselorName === '' || counselorName === event.counselor;
-      let schoolMatch = schoolName === '' || schoolName === event.facilitator;
+  const handleCounselorChange = (selectedCounselor: Counselor) => {
+    setCounselorSelection(selectedCounselor);
+  };
+
+  useEffect(() => {
+    const filteredEvents = appointments.filter(appointment => {
+      const counselorMatch =
+        counselorSelection._id === -1 ||
+        counselorSelection._id === appointment.counselorId;
+      const student = students.find(
+        student => student._id === appointment.studentId
+      );
+      const schoolMatch = student
+        ? schoolSelection._id === -1 || schoolSelection._id === student.schoolId
+        : false;
       return counselorMatch && schoolMatch;
     });
     setFilteredEvents(filteredEvents);
-  };
+  }, [counselorSelection, schoolSelection, appointments, students]);
 
   useEffect(() => {
     setFilteredEvents(appointments);
@@ -107,16 +101,16 @@ const CalendarPage: React.FC = () => {
       </nav>
       <h1>Calendar</h1>
       <label>
-        Counselor:{" "}
+        Counselor:{' '}
         <SelectCounselorList
-          value={counselorSelection}
+          value={counselorSelection.name}
           onCounselorChanged={handleCounselorChange}
         />
       </label>
       <label>
-        School:{" "}
+        School:{' '}
         <SelectSchoolList
-          value={schoolSelection}
+          value={schoolSelection.name}
           onSchoolChanged={handleSchoolChange}
         />
       </label>
@@ -135,7 +129,11 @@ const CalendarPage: React.FC = () => {
         onAppointmentAdded={handleAppointmentAdded}
         initialAppointment={initialAppointment}
       />
-      <AppointmentDetailsModal isOpen={isAppointmentDetailsModalOpen} onClose={() => setIsAppointmentDetailsModalOpen(false)} appointment={clickedAppointment} />
+      <AppointmentDetailsModal
+        isOpen={isAppointmentDetailsModalOpen}
+        onClose={() => setIsAppointmentDetailsModalOpen(false)}
+        appointment={clickedAppointment}
+      />
     </div>
   );
 };

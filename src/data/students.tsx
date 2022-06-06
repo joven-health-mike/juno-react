@@ -1,69 +1,53 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from 'react';
-import { httpGet, httpPost, httpPut, httpDelete } from '../http/HttpWrapper';
+
+export type Student = {
+  _id: number;
+  first_name: string;
+  last_name: string;
+  schoolId: number;
+  counselorId: number;
+};
+
+export const emptyStudent = {
+  _id: -1,
+  first_name: '',
+  last_name: '',
+  schoolId: -1,
+  counselorId: -1,
+};
 
 export const exampleStudents = [
   {
+    _id: 0,
     first_name: 'Johnny',
     last_name: 'Rickets',
-    school: 'Aardvark Academy',
-    counselor: 'Jacek McGuinness',
+    schoolId: 0,
+    counselorId: 0,
   },
   {
+    _id: 1,
     first_name: 'Jennifer',
     last_name: 'Frigo',
-    school: 'Aardvark Academy',
-    counselor: 'Jacek McGuinness',
+    schoolId: 0,
+    counselorId: 0,
   },
   {
+    _id: 2,
     first_name: 'Chris',
     last_name: 'Moon',
-    school: 'Aardvark Academy',
-    counselor: 'Jacek McGuinness',
+    schoolId: 0,
+    counselorId: 0,
   },
 ];
 
-export type Student = {
-  first_name: string;
-  last_name: string;
-  school: string;
-  counselor: string;
-};
-
-type IStudentsContext = {
+export type IStudentsContext = {
   students: Student[];
-  setStudents: any;
+  setStudents: (students: Student[]) => void;
 };
 
 export const StudentsContext = React.createContext<IStudentsContext>({
   students: exampleStudents,
   setStudents: () => {},
 });
-
-const BASE_URL = 'http://localhost:8080/api/students';
-export const initialStudents = [];
-
-export async function getAllStudents() {
-  const result = await httpGet(BASE_URL);
-  //convert http result to list of students
-  return result;
-}
-
-export async function addStudent(student: Student) {
-  const result = await httpPost(BASE_URL, student);
-  //convert http result to student
-  return result;
-}
-
-export async function updateStudent(id: string, student: Student) {
-  const result = await httpPut(BASE_URL, id, student);
-  // convert http result to student
-  return result;
-}
-
-export async function deleteStudent(id: string) {
-  const result = await httpDelete(BASE_URL, id);
-  // convert http result to student
-  return result;
-}

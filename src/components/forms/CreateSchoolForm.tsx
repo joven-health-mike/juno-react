@@ -1,7 +1,18 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useRef, useState } from 'react';
-import { School } from '../../data/schools';
+import React, {
+  ChangeEvent,
+  FormEvent,
+  MouseEvent,
+  useContext,
+  useState,
+} from 'react';
+import {
+  emptySchool,
+  ISchoolsContext,
+  School,
+  SchoolsContext,
+} from '../../data/schools';
 
 type CreateSchoolFormProps = {
   defaultSchool?: School;
@@ -14,36 +25,15 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
-  const emptySchool = {
-    name: '',
-    email: '',
-    facilitators: [],
-  };
+  const [school, setSchool] = useState<School>(defaultSchool ?? emptySchool);
+  const { schools } = useContext<ISchoolsContext>(SchoolsContext);
 
-  const [school, setSchool] = useState(defaultSchool ?? emptySchool);
-
-  const onAddFacilitator = (facilitator: string) => {
-    let newFacilitators = school.facilitators;
-    newFacilitators.push(facilitator);
-
-    setSchool({ ...school, facilitators: newFacilitators });
-  };
-
-  const onDeleteFacilitator = (e: any) => {
+  const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    let newFacilitators = school.facilitators.filter(
-      facilitatorName => facilitatorName !== e.target.value
-    );
-
-    setSchool({ ...school, facilitators: newFacilitators });
+    onSubmit({ ...school, _id: schools.length });
   };
 
-  const onFormSubmit = (e: any) => {
-    e.preventDefault();
-    onSubmit(school);
-  };
-
-  const onFormCancel = (e: any) => {
+  const onFormCancel = (e: MouseEvent) => {
     e.preventDefault();
     setSchool(emptySchool);
     onCancel();
@@ -60,7 +50,9 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
             name="name"
             value={school.name}
             required
-            onChange={e => setSchool({ ...school, name: e.target.value })}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setSchool({ ...school, name: e.target.value })
+            }
           />
         </label>
         <label>
@@ -71,28 +63,10 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
             name="email"
             value={school.email}
             required
-            onChange={e => setSchool({ ...school, email: e.target.value })}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setSchool({ ...school, email: e.target.value })
+            }
           />
-        </label>
-        <label>
-          Facilitators
-          <div>
-            {school.facilitators.map((facilitatorName, index) => {
-              return (
-                <div key={index}>
-                  <p>{facilitatorName}</p>
-                  <button
-                    type="button"
-                    value={facilitatorName}
-                    onClick={onDeleteFacilitator}
-                  >
-                    X
-                  </button>
-                </div>
-              );
-            })}
-            <FacilitatorInput onAddFacilitator={onAddFacilitator} />
-          </div>
         </label>
 
         <button type="submit">Submit</button>
@@ -100,41 +74,6 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
           Cancel
         </button>
       </form>
-    </>
-  );
-};
-
-// a separate component to hold the facilitator input box and + button
-type FacilitatorInputProps = {
-  onAddFacilitator: (facilitator: string) => void;
-};
-
-const FacilitatorInput: React.FC<FacilitatorInputProps> = ({
-  onAddFacilitator,
-}) => {
-  const textBox = useRef<HTMLInputElement>(null);
-
-  const onFormSubmit = (e: any) => {
-    e.preventDefault();
-
-    if (textBox && textBox.current) {
-      const facilitatorName = textBox.current.value;
-      onAddFacilitator(facilitatorName);
-      textBox.current.value = '';
-    }
-  };
-
-  return (
-    <>
-      <input
-        ref={textBox}
-        type="text"
-        placeholder="Facilitator Name"
-        name="facilitatorName"
-      />
-      <button type="button" onClick={onFormSubmit}>
-        +
-      </button>
     </>
   );
 };

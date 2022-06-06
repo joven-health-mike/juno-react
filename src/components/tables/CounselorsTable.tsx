@@ -37,6 +37,10 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
         ),
       },
       {
+        Header: 'ID',
+        accessor: '_id',
+      },
+      {
         Header: 'Name',
         accessor: 'name',
       },
@@ -47,19 +51,6 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
       {
         Header: 'Room Link',
         accessor: 'roomLink',
-      },
-      {
-        Header: 'Assigned Schools',
-        accessor: 'assignedSchools',
-        Cell: ({ cell }: any) => (
-          <>
-            {cell.row.values.assignedSchools.map(
-              (schoolName: string, index: number) => {
-                return <p key={index}>{schoolName}</p>;
-              }
-            )}
-          </>
-        ),
       },
     ],
     [onDeleteClicked]
