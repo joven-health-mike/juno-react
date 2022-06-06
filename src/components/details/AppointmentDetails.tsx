@@ -12,30 +12,12 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
 }) => {
   return (
     <>
-      <label>
-        Title:
-        <h1>{appointment.title}</h1>
-      </label>
-      <label>
-        Start Time:
-        <p>{appointment.start.toISOString()}</p>
-      </label>
-      <label>
-        End Time:
-        <p>{appointment.end.toISOString()}</p>
-      </label>
-      <label>
-        Counselor:
-        <p>{appointment.counselor}</p>
-      </label>
-      <label>
-        Student:
-        <p>{appointment.student}</p>
-      </label>
-      <label>
-        Facilitator:
-        <p>{appointment.facilitator}</p>
-      </label>
+      <h2>{appointment.title}</h2>
+      <p>{appointment.start.toISOString()}</p>
+      <p>{appointment.end.toISOString()}</p>
+      <p>{appointment.counselor}</p>
+      <p>{appointment.student}</p>
+      <p>{appointment.facilitator}</p>
     </>
   );
 };
