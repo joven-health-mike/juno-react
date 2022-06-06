@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-import { CounselorsContext } from '../../data/counselors';
-import { SchoolsContext } from '../../data/schools';
-import { StudentsContext } from '../../data/students';
+import { CounselorsContext, emptyCounselor } from '../../data/counselors';
+import { emptySchool, SchoolsContext } from '../../data/schools';
+import { emptyStudent, StudentsContext } from '../../data/students';
 
 type SelectListProps = {
   labelText: string;
@@ -46,13 +46,20 @@ export function SelectCounselorList({
   const { counselors } = useContext(CounselorsContext);
   const counselorNames = counselors.map(counselor => counselor.name);
 
+  const handleCounselorChange = (counselorName: string) => {
+    const counselor = counselors.find(
+      counselor => counselor.name === counselorName
+    );
+    onCounselorChanged(counselor ?? emptyCounselor);
+  };
+
   return (
     <>
       <SelectList
         labelText={'Select a Counselor'}
         items={counselorNames}
         value={value}
-        onItemChanged={onCounselorChanged}
+        onItemChanged={handleCounselorChange}
       />
     </>
   );
@@ -70,13 +77,18 @@ export function SelectSchoolList({
   const { schools } = useContext(SchoolsContext);
   const schoolNames = schools.map(school => school.name);
 
+  const handleSchoolChange = (schoolName: string) => {
+    const school = schools.find(school => school.name === schoolName);
+    onSchoolChanged(school ?? emptySchool);
+  };
+
   return (
     <>
       <SelectList
         labelText={'Select a School'}
         items={schoolNames}
         value={value}
-        onItemChanged={onSchoolChanged}
+        onItemChanged={handleSchoolChange}
       />
     </>
   );
@@ -96,39 +108,19 @@ export function SelectStudentList({
     student => student.first_name + ' ' + student.last_name
   );
 
+  const handleStudentChange = (studentName: string) => {
+    const student = students.find(
+      student => student.first_name + ' ' + student.last_name === studentName
+    );
+    onStudentChanged(student ?? emptyStudent);
+  };
+
   return (
     <SelectList
       labelText={'Select a Student'}
       items={studentNames}
       value={value}
-      onItemChanged={onStudentChanged}
-    />
-  );
-}
-
-type SelectFacilitatorListProps = {
-  value: any;
-  onFacilitatorChanged: any;
-};
-
-export function SelectFacilitatorList({
-  value,
-  onFacilitatorChanged,
-}: SelectFacilitatorListProps) {
-  const { schools } = useContext(SchoolsContext);
-  const facilitatorNames = Array<string>();
-  schools.forEach(school => {
-    school.facilitators.forEach(facilitator =>
-      facilitatorNames.push(facilitator)
-    );
-  });
-
-  return (
-    <SelectList
-      labelText={'Select a Facilitator'}
-      items={facilitatorNames}
-      value={value}
-      onItemChanged={onFacilitatorChanged}
+      onItemChanged={handleStudentChange}
     />
   );
 }

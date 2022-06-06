@@ -1,12 +1,25 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useState } from 'react';
+import React, {
+  ChangeEvent,
+  FormEvent,
+  MouseEvent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Appointment } from '../../data/appointments';
+import {
+  Appointment,
+  AppointmentsContext,
+  emptyAppointment,
+  IAppointmentsContext,
+} from '../../data/appointments';
+import { Counselor, emptyCounselor } from '../../data/counselors';
+import { emptyStudent, Student } from '../../data/students';
 import {
   SelectCounselorList,
-  SelectFacilitatorList,
   SelectStudentList,
 } from '../selectList/SelectList';
 
@@ -21,40 +34,44 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
-  const emptyAppointment = {
-    title: '',
-    start: new Date(),
-    end: new Date(),
-    counselor: '',
-    student: '',
-    facilitator: '',
-  };
-
-  const [appointment, setAppointment] = useState(
+  const [appointment, setAppointment] = useState<Appointment>(
     defaultAppointment ?? emptyAppointment
   );
+  const [studentSelection, setStudentSelection] =
+    useState<Student>(emptyStudent);
+  const [counselorSelection, setCounselorSelection] =
+    useState<Counselor>(emptyCounselor);
+  const { appointments } =
+    useContext<IAppointmentsContext>(AppointmentsContext);
 
-  const onCounselorChanged = (counselorName: string) => {
-    setAppointment({ ...appointment, counselor: counselorName });
+  const onCounselorChanged = (counselor: Counselor) => {
+    setCounselorSelection(counselor);
   };
 
-  const onFacilitatorChanged = (facilitatorName: string) => {
-    setAppointment({ ...appointment, facilitator: facilitatorName });
+  const onStudentChanged = (student: Student) => {
+    setStudentSelection(student);
   };
 
-  const onStudentChanged = (studentName: string) => {
-    setAppointment({ ...appointment, student: studentName });
+  // update the appointment whenever counselor or student selection is changed
+  useEffect(() => {
+    setAppointment(prevAppointment => {
+      return {
+        ...prevAppointment,
+        studentId: studentSelection._id,
+        counselorId: counselorSelection._id,
+      };
+    });
+  }, [studentSelection, counselorSelection]);
+
+  const onFormSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    onSubmit({ ...appointment, _id: appointments.length });
   };
 
-  const onFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    onSubmit(appointment);
-  };
-
-  const onFormCancel = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    event.preventDefault();
+  const onFormCancel = (e: MouseEvent) => {
+    e.preventDefault();
+    setStudentSelection(emptyStudent);
+    setCounselorSelection(emptyCounselor);
     setAppointment(emptyAppointment);
     onCancel();
   };
@@ -69,7 +86,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
           name="title"
           value={appointment.title}
           required
-          onChange={e =>
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setAppointment({ ...appointment, title: e.target.value })
           }
         />
@@ -103,22 +120,15 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
       <label>
         Counselor:{' '}
         <SelectCounselorList
-          value={appointment.counselor}
+          value={counselorSelection.name}
           onCounselorChanged={onCounselorChanged}
         />
       </label>
       <label>
         Student:{' '}
         <SelectStudentList
-          value={appointment.student}
+          value={studentSelection.first_name + ' ' + studentSelection.last_name}
           onStudentChanged={onStudentChanged}
-        />
-      </label>
-      <label>
-        Facilitator:{' '}
-        <SelectFacilitatorList
-          value={appointment.facilitator}
-          onFacilitatorChanged={onFacilitatorChanged}
         />
       </label>
 

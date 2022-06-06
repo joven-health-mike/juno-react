@@ -10,20 +10,9 @@ type SchoolDetailsProps = {
 const SchoolDetails: React.FC<SchoolDetailsProps> = ({ school }) => {
   return (
     <>
-      <label>
-        Name:
-        <h1>{school.name}</h1>
-      </label>
-      <label>
-        Email:
-        <p>{school.email}</p>
-      </label>
-      <label>
-        Facilitators:
-        {school.facilitators.map((facilitatorName, index) => (
-          <p key={index}>{facilitatorName}</p>
-        ))}
-      </label>
+      <h2>{school.name}</h2>
+      <p>{school._id}</p>
+      <p>{school.email}</p>
     </>
   );
 };
