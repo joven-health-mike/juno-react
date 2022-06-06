@@ -1,7 +1,21 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useState } from 'react';
-import { Student } from '../../data/students';
+import React, {
+  ChangeEvent,
+  FormEvent,
+  MouseEvent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { Counselor, emptyCounselor } from '../../data/counselors';
+import { emptySchool, School } from '../../data/schools';
+import {
+  emptyStudent,
+  IStudentsContext,
+  Student,
+  StudentsContext,
+} from '../../data/students';
 import {
   SelectCounselorList,
   SelectSchoolList,
@@ -18,30 +32,42 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
-  const emptyStudent = {
-    first_name: '',
-    last_name: '',
-    school: '',
-    counselor: '',
+  const [student, setStudent] = useState<Student>(
+    defaultStudent ?? emptyStudent
+  );
+  const [counselorSelection, setCounselorSelection] =
+    useState<Counselor>(emptyCounselor);
+  const [schoolSelection, setSchoolSelection] = useState<School>(emptySchool);
+  const { students } = useContext<IStudentsContext>(StudentsContext);
+
+  const onCounselorChanged = (counselor: Counselor) => {
+    setCounselorSelection(counselor);
   };
 
-  const [student, setStudent] = useState(defaultStudent ?? emptyStudent);
-
-  const onCounselorChanged = (counselorName: string) => {
-    setStudent({ ...student, counselor: counselorName });
+  const onSchoolChanged = (school: School) => {
+    setSchoolSelection(school);
   };
 
-  const onSchoolChanged = (schoolName: string) => {
-    setStudent({ ...student, school: schoolName });
-  };
+  // update the student whenever counselor or school selection is changed
+  useEffect(() => {
+    setStudent(prevStudent => {
+      return {
+        ...prevStudent,
+        counselorId: counselorSelection._id,
+        schoolId: schoolSelection._id,
+      };
+    });
+  }, [counselorSelection, schoolSelection]);
 
-  const onFormSubmit = (e: any) => {
+  const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    onSubmit(student);
+    onSubmit({ ...student, _id: students.length });
   };
 
-  const onFormCancel = (e: any) => {
+  const onFormCancel = (e: MouseEvent) => {
     e.preventDefault();
+    setCounselorSelection(emptyCounselor);
+    setSchoolSelection(emptySchool);
     setStudent(emptyStudent);
     onCancel();
   };
@@ -56,7 +82,9 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
           name="first_name"
           value={student.first_name}
           required
-          onChange={e => setStudent({ ...student, first_name: e.target.value })}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setStudent({ ...student, first_name: e.target.value })
+          }
         />
       </label>
       <label>
@@ -67,20 +95,22 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
           name="last_name"
           value={student.last_name}
           required
-          onChange={e => setStudent({ ...student, last_name: e.target.value })}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setStudent({ ...student, last_name: e.target.value })
+          }
         />
       </label>
       <label>
         Counselor:{' '}
         <SelectCounselorList
-          value={student.counselor}
+          value={counselorSelection.name}
           onCounselorChanged={onCounselorChanged}
         />
       </label>
       <label>
         School:{' '}
         <SelectSchoolList
-          value={student.school}
+          value={schoolSelection.name}
           onSchoolChanged={onSchoolChanged}
         />
       </label>

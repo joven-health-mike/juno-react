@@ -1,10 +1,19 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { CounselorsContext } from '../../data/counselors';
-import { SchoolsContext } from '../../data/schools';
-import { StudentsContext } from '../../data/students';
-import { ROLES, User } from '../../data/users';
+import React, {
+  ChangeEvent,
+  FormEvent,
+  MouseEvent,
+  useContext,
+  useState,
+} from 'react';
+import {
+  emptyUser,
+  IUsersContext,
+  ROLES,
+  User,
+  UsersContext,
+} from '../../data/users';
 import SelectList from '../selectList/SelectList';
 
 type CreateUserFormProps = {
@@ -18,78 +27,19 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
-  const emptyUser = {
-    name: '',
-    email: '',
-    password: '',
-    role: '',
-    associatedAccount: '',
-  };
-  const [user, setUser] = useState(defaultUser ?? emptyUser);
-  const [accountOptions, setAccountOptions] = useState<String[]>([]);
-  const { counselors } = useContext(CounselorsContext);
-  const { schools } = useContext(SchoolsContext);
-  const { students } = useContext(StudentsContext);
-
-  // update account drop-down options anytime the role changes
-  const updateAccountOptions = useCallback(() => {
-    let data = [];
-
-    // there's probably a better way to do this...
-    switch (user.role) {
-      case 'admin':
-        data.push('admin');
-        break;
-      case 'counselor':
-        counselors.forEach(counselor => {
-          data.push(counselor.name);
-        });
-        break;
-      case 'facilitator':
-        schools.forEach(school => {
-          school.facilitators.forEach(facilitatorName => {
-            data.push(facilitatorName);
-          });
-        });
-        break;
-      case 'school':
-        schools.forEach(school => {
-          data.push(school.name);
-        });
-        break;
-      case 'student':
-      case 'guardian':
-        students.forEach(student => {
-          data.push(student.first_name + ' ' + student.last_name);
-        });
-        break;
-      default:
-        break;
-    }
-    setAccountOptions(data);
-  }, [user.role, counselors, schools, students]);
-
-  // set up initial account options based on the defaultUser role
-  useEffect(() => {
-    updateAccountOptions();
-  }, [updateAccountOptions, user.role]);
+  const [user, setUser] = useState<User>(defaultUser ?? emptyUser);
+  const { users } = useContext<IUsersContext>(UsersContext);
 
   const onRoleChanged = (role: string) => {
-    // if role changes, clear out any previous account selection
-    setUser({ ...user, role: role, associatedAccount: '' });
-    updateAccountOptions();
+    setUser({ ...user, role: role });
   };
 
-  const onAccountChanged = (account: string) => {
-    setUser({ ...user, associatedAccount: account });
-  };
-
-  const onFormSubmit = (e: any) => {
+  const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    onSubmit(user);
+    onSubmit({ ...user, _id: users.length });
   };
 
-  const onFormCancel = (e: any) => {
+  const onFormCancel = (e: MouseEvent) => {
     e.preventDefault();
     setUser(defaultUser ?? emptyUser);
     onCancel();
@@ -105,7 +55,9 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
           name="name"
           value={user.name}
           required
-          onChange={e => setUser({ ...user, name: e.target.value })}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setUser({ ...user, name: e.target.value })
+          }
         />
       </label>
       <label>
@@ -116,7 +68,9 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
           name="email"
           value={user.email}
           required
-          onChange={e => setUser({ ...user, email: e.target.value })}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setUser({ ...user, email: e.target.value })
+          }
         />
       </label>
       <label>
@@ -127,7 +81,9 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
           name="password"
           value={user.password}
           required
-          onChange={e => setUser({ ...user, password: e.target.value })}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setUser({ ...user, password: e.target.value })
+          }
         />
       </label>
       <label>
@@ -139,15 +95,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
           onItemChanged={onRoleChanged}
         />
       </label>
-      <label>
-        Associated Account:{' '}
-        <SelectList
-          labelText="Select an Account"
-          items={accountOptions}
-          value={user.associatedAccount}
-          onItemChanged={onAccountChanged}
-        />
-      </label>
+
       <button type="submit">Submit</button>
       <button type="button" onClick={onFormCancel}>
         Cancel

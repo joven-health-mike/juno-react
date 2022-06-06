@@ -157,3 +157,24 @@ img {
   height: 19px;
   width: 19px;
 }
+
+.modal {
+  position: absolute;
+  height: auto;
+  width: auto;
+  top: 25%;
+  left: 25%;
+  background-color: #f6f740;
+  border: 2px solid darkslateblue;
+  border-radius: 25px;
+  padding: 50px 150px;
+  box-shadow: 5px 5px 10px 5px #385aa8;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

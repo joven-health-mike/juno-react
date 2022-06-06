@@ -37,6 +37,10 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
         ),
       },
       {
+        Header: 'ID',
+        accessor: '_id',
+      },
+      {
         Header: 'First Name',
         accessor: 'first_name',
       },
@@ -45,12 +49,12 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
         accessor: 'last_name',
       },
       {
-        Header: 'School',
-        accessor: 'school',
+        Header: 'School ID',
+        accessor: 'schoolId',
       },
       {
-        Header: 'Counselor',
-        accessor: 'counselor',
+        Header: 'Counselor ID',
+        accessor: 'counselorId',
       },
     ],
     [onDeleteClicked]
