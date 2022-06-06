@@ -9,7 +9,7 @@ type AppointmentDetailsProps = {
 
 const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
   appointment,
-}: AppointmentDetailsProps) => {
+}) => {
   return (
     <>
       <h2>{appointment.title}</h2>
