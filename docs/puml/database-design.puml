@@ -1,0 +1,47 @@
+@startuml
+
+entity User {
+  *PK_user
+  --
+  FK_role
+  --
+  name
+  email
+  password
+  roomLink?
+}
+
+entity Role {
+  *PK_role
+  --
+  name = admin | student | counselor | facilitator | sysadmin | parent
+}
+
+entity School {
+  *PK_school
+  --
+  name
+  address
+  primaryEmail?
+}
+
+entity Appointment {
+  *PK_appointment
+  --
+  FK_user as counselor
+  FK_user as student
+  FK_school as school
+  --
+  dateTime
+}
+
+map Users_to_Schools {
+  PK_user => PK_school
+}
+
+User ||--|| Role
+User }--{ Users_to_Schools
+Users_to_Schools }--{ School
+User ||--{ Appointment
+
+@enduml

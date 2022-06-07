@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="495px" preserveAspectRatio="none" style="width:708px;height:495px;background:#FFFFFF;" version="1.1" viewBox="0 0 708 495" width="708px" zoomAndPan="magnify"><defs><filter height="300%" id="f1e71594l83b68" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--MD5=[3fd616f346a44cd59a91eb10b19e157c]
+class User--><rect codeLine="2" fill="#FEFECE" filter="url(#f1e71594l83b68)" height="133.7305" id="User" style="stroke:#A80036;stroke-width:1.5;" width="69" x="442" y="7"/><ellipse cx="461.95" cy="23" fill="#ADD1B2" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M465.5643,29.5 L457.8445,29.5 L457.8445,17.1069 L465.5643,17.1069 L465.5643,19.2651 L460.2933,19.2651 L460.2933,21.938 L465.0662,21.938 L465.0662,24.0962 L460.2933,24.0962 L460.2933,27.3418 L465.5643,27.3418 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="26" x="477.05" y="27.5352">User</text><line style="stroke:#A80036;stroke-width:1.5;" x1="443" x2="510" y1="39" y2="39"/><ellipse cx="453" cy="50" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="43" x="462" y="53.6348">PK_user</text><line style="stroke:#A80036;stroke-width:1.0;" x1="443" x2="510" y1="59.9551" y2="59.9551"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="40" x="448" y="74.5898">FK_role</text><line style="stroke:#A80036;stroke-width:1.0;" x1="443" x2="510" y1="80.9102" y2="80.9102"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="29" x="448" y="95.5449">name</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="28" x="448" y="108.5">email</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="52" x="448" y="121.4551">password</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="56" x="448" y="134.4102">roomLink?</text><!--MD5=[a3638c1e5b65d287ecad7f06f5c0f212]
+class Role--><rect codeLine="13" fill="#FEFECE" filter="url(#f1e71594l83b68)" height="73.9102" id="Role" style="stroke:#A80036;stroke-width:1.5;" width="371" x="7" y="224.5"/><ellipse cx="175.75" cy="240.5" fill="#ADD1B2" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M179.3643,247 L171.6445,247 L171.6445,234.6069 L179.3643,234.6069 L179.3643,236.7651 L174.0933,236.7651 L174.0933,239.438 L178.8662,239.438 L178.8662,241.5962 L174.0933,241.5962 L174.0933,244.8418 L179.3643,244.8418 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="25" x="196.25" y="245.0352">Role</text><line style="stroke:#A80036;stroke-width:1.5;" x1="8" x2="377" y1="256.5" y2="256.5"/><ellipse cx="18" cy="267.5" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="40" x="27" y="271.1348">PK_role</text><line style="stroke:#A80036;stroke-width:1.0;" x1="8" x2="377" y1="277.4551" y2="277.4551"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="359" x="13" y="292.0898">name = admin | student | counselor | facilitator | sysadmin | parent</text><!--MD5=[10a9fff9df9a76a22f65fd5d58adb785]
+class School--><rect codeLine="19" fill="#FEFECE" filter="url(#f1e71594l83b68)" height="99.8203" id="School" style="stroke:#A80036;stroke-width:1.5;" width="87" x="595" y="382"/><ellipse cx="618.55" cy="398" fill="#ADD1B2" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M622.1643,404.5 L614.4445,404.5 L614.4445,392.1069 L622.1643,392.1069 L622.1643,394.2651 L616.8933,394.2651 L616.8933,396.938 L621.6662,396.938 L621.6662,399.0962 L616.8933,399.0962 L616.8933,402.3418 L622.1643,402.3418 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="36" x="634.45" y="402.5352">School</text><line style="stroke:#A80036;stroke-width:1.5;" x1="596" x2="681" y1="414" y2="414"/><ellipse cx="606" cy="425" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="55" x="615" y="428.6348">PK_school</text><line style="stroke:#A80036;stroke-width:1.0;" x1="596" x2="681" y1="434.9551" y2="434.9551"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="29" x="601" y="449.5898">name</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="43" x="601" y="462.5449">address</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="75" x="601" y="475.5">primaryEmail?</text><!--MD5=[c508b5b6bbe276ff5e2700b6641f837f]
+class Appointment--><rect codeLine="27" fill="#FEFECE" filter="url(#f1e71594l83b68)" height="120.7754" id="Appointment" style="stroke:#A80036;stroke-width:1.5;" width="127" x="413" y="201"/><ellipse cx="437.45" cy="217" fill="#ADD1B2" rx="11" ry="11" style="stroke:#A80036;stroke-width:1.0;"/><path d="M441.0643,223.5 L433.3445,223.5 L433.3445,211.1069 L441.0643,211.1069 L441.0643,213.2651 L435.7933,213.2651 L435.7933,215.938 L440.5662,215.938 L440.5662,218.0962 L435.7933,218.0962 L435.7933,221.3418 L441.0643,221.3418 Z " fill="#000000"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="74" x="453.55" y="221.5352">Appointment</text><line style="stroke:#A80036;stroke-width:1.5;" x1="414" x2="539" y1="233" y2="233"/><ellipse cx="424" cy="244" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="87" x="433" y="247.6348">PK_appointment</text><line style="stroke:#A80036;stroke-width:1.0;" x1="414" x2="539" y1="253.9551" y2="253.9551"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="115" x="419" y="268.5898">FK_user as counselor</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="102" x="419" y="281.5449">FK_user as student</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="109" x="419" y="294.5">FK_school as school</text><line style="stroke:#A80036;stroke-width:1.0;" x1="414" x2="539" y1="300.8203" y2="300.8203"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="49" x="419" y="315.4551">dateTime</text><rect fill="#FEFECE" filter="url(#f1e71594l83b68)" height="33.9102" style="stroke:#A80036;stroke-width:1.5;" width="111" x="583" y="245"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="97" x="590" y="258.6016">Users_to_Schools</text><line style="stroke:#A80036;stroke-width:1.0;" x1="583" x2="694" y1="263.1328" y2="263.1328"/><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="39" x="588" y="274.8008">PK_user</text><text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing" textLength="49" x="637" y="274.8008">PK_school</text><line style="stroke:#A80036;stroke-width:1.0;" x1="632" x2="632" y1="263.1328" y2="278.9102"/><!--MD5=[70c37dc9bfbc8656942103c36f1181e4]
+link User to Role--><path codeLine="41" d="M435.81,101.57 C388.16,132.7 308.74,184.57 253.66,220.55 " fill="none" id="User-Role" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="253.2767" x2="248.8996" y1="225.5796" y2="218.8833"/><line style="stroke:#A80036;stroke-width:1.0;" x1="255.7878" x2="251.4107" y1="223.9382" y2="217.2419"/><line style="stroke:#A80036;stroke-width:1.0;" x1="254.4363" x2="247.74" y1="220.0429" y2="224.42"/><line style="stroke:#A80036;stroke-width:1.0;" x1="436.4233" x2="440.8004" y1="96.4004" y2="103.0967"/><line style="stroke:#A80036;stroke-width:1.0;" x1="433.9122" x2="438.2893" y1="98.0418" y2="104.7381"/><line style="stroke:#A80036;stroke-width:1.0;" x1="435.2637" x2="441.96" y1="101.9371" y2="97.56"/><!--MD5=[591b1fdb2014fbbc185128cc0974f7d4]
+link User to Users_to_Schools--><path codeLine="42" d="M516.53,120.84 C547.75,156.59 590,204.97 615.7,234.39 " fill="none" id="User-Users_to_Schools" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="615.9721" x2="627.2595" y1="234.7005" y2="240.73"/><line style="stroke:#A80036;stroke-width:1.0;" x1="615.9721" x2="615.2005" y1="234.7005" y2="240.73"/><line style="stroke:#A80036;stroke-width:1.0;" x1="615.9721" x2="621.23" y1="234.7005" y2="240.73"/><line style="stroke:#A80036;stroke-width:1.0;" x1="516.515" x2="511.25" y1="120.8133" y2="120.055"/><line style="stroke:#A80036;stroke-width:1.0;" x1="516.515" x2="511.25" y1="120.8133" y2="109.525"/><line style="stroke:#A80036;stroke-width:1.0;" x1="516.515" x2="511.25" y1="120.8133" y2="114.79"/><!--MD5=[f6c895822b726e2dcb78b6318b21a806]
+link Users_to_Schools to School--><path codeLine="43" d="M638.5,290.42 C638.5,313.04 638.5,345.67 638.5,373.8 " fill="none" id="Users_to_Schools-School" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="638.5" x2="646.5" y1="373.99" y2="381.99"/><line style="stroke:#A80036;stroke-width:1.0;" x1="638.5" x2="630.5" y1="373.99" y2="381.99"/><line style="stroke:#A80036;stroke-width:1.0;" x1="638.5" x2="638.5" y1="373.99" y2="381.99"/><line style="stroke:#A80036;stroke-width:1.0;" x1="638.5" x2="630.5" y1="290.16" y2="282.16"/><line style="stroke:#A80036;stroke-width:1.0;" x1="638.5" x2="646.5" y1="290.16" y2="282.16"/><line style="stroke:#A80036;stroke-width:1.0;" x1="638.5" x2="638.5" y1="290.16" y2="282.16"/><!--MD5=[1c9396dae922085b5363899af1fbb255]
+link User to Appointment--><path codeLine="44" d="M476.5,149.48 C476.5,163.75 476.5,178.62 476.5,192.66 " fill="none" id="User-Appointment" style="stroke:#A80036;stroke-width:1.0;"/><line style="stroke:#A80036;stroke-width:1.0;" x1="476.5" x2="484.5" y1="192.83" y2="200.83"/><line style="stroke:#A80036;stroke-width:1.0;" x1="476.5" x2="468.5" y1="192.83" y2="200.83"/><line style="stroke:#A80036;stroke-width:1.0;" x1="476.5" x2="476.5" y1="192.83" y2="200.83"/><line style="stroke:#A80036;stroke-width:1.0;" x1="472.5" x2="480.5" y1="145.18" y2="145.18"/><line style="stroke:#A80036;stroke-width:1.0;" x1="472.5" x2="480.5" y1="148.18" y2="148.18"/><line style="stroke:#A80036;stroke-width:1.0;" x1="476.5" x2="476.5" y1="149.18" y2="141.18"/><!--MD5=[64f8f46f1b7d9ce2dd52b49263d3466c]
+@startuml
+
+entity User {
+  *PK_user
+  - -
+  FK_role
+  - -
+  name
+  email
+  password
+  roomLink?
+}
+
+entity Role {
+  *PK_role
+  - -
+  name = admin | student | counselor | facilitator | sysadmin | parent
+}
+
+entity School {
+  *PK_school
+  - -
+  name
+  address
+  primaryEmail?
+}
+
+entity Appointment {
+  *PK_appointment
+  - -
+  FK_user as counselor
+  FK_user as student
+  FK_school as school
+  - -
+  dateTime
+}
+
+map Users_to_Schools {
+  PK_user => PK_school
+}
+
+User ||- -|| Role
+User }- -{ Users_to_Schools
+Users_to_Schools }- -{ School
+User ||- -{ Appointment
+
+@enduml
+
+PlantUML version 1.2022.0(Tue Jan 11 09:16:42 MST 2022)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>
