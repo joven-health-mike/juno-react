@@ -43,5 +43,6 @@ User ||--|| Role
 User }--{ Users_to_Schools
 Users_to_Schools }--{ School
 User ||--{ Appointment
+Appointment }--|| School
 
 @enduml
