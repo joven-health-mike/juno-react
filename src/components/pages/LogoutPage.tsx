@@ -1,7 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from 'react';
-import LogoutButton from '../buttons/LogoutButton';
+import LogoutButton from '../auth0/LogoutButton';
 
 const LogoutPage: React.FC = () => {
   return (

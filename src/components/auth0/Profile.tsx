@@ -8,22 +8,15 @@ const Profile = () => {
     return <div>Loading ...</div>;
   }
 
-  if (!isAuthenticated) return null;
-
-  let definedUser = user;
-  if (definedUser === undefined) {
-    definedUser = {
-      picture: '',
-      name: 'User Name',
-      email: 'user@email.com',
-    };
+  if (!isAuthenticated || !user) {
+    return <div>Nobody is signed in...</div>;
   }
 
   return (
     <div>
-      <img src={definedUser.picture} alt={definedUser.name} />
-      <h2>{definedUser.name}</h2>
-      <p>{definedUser.email}</p>
+      <img src={user.picture} alt={user.name} />
+      <h2>{user.name}</h2>
+      <p>{user.email}</p>
     </div>
   );
 };
