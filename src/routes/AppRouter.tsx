@@ -12,6 +12,7 @@ import StudentsPage from '../components/pages/StudentsPage';
 import UsersPage from '../components/pages/UsersPage';
 import AccountDetailPage from '../components/pages/AccountDetailPage';
 import { User } from '../data/users';
+import ProfilePage from '../components/pages/ProfilePage';
 
 type AppRouterProps = {
   isLoggedIn: boolean;
@@ -36,6 +37,7 @@ const AppRouter: React.FC<AppRouterProps> = ({
           <Route path="/appointments" element={<AppointmentsPage />} />
           <Route path="/calendar" element={<CalendarPage />} />
           <Route path="/counselors" element={<CounselorsPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/schools" element={<SchoolsPage />} />
           <Route path="/students" element={<StudentsPage />} />
           <Route path="/users" element={<UsersPage />} />
@@ -48,6 +50,7 @@ const AppRouter: React.FC<AppRouterProps> = ({
       <Route path="/appointments" element={<Navigate replace to="/login" />} />
       <Route path="/calendar" element={<Navigate replace to="/login" />} />
       <Route path="/counselors" element={<Navigate replace to="/login" />} />
+      <Route path="/profile" element={<Navigate replace to="/login" />} />
       <Route path="/schools" element={<Navigate replace to="/login" />} />
       <Route path="/students" element={<Navigate replace to="/login" />} />
       <Route path="/users" element={<Navigate replace to="/login" />} />

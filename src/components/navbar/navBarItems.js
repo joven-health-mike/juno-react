@@ -72,6 +72,11 @@ const allItems = [
     path: '/users',
   },
   {
+    title: 'My Profile',
+    icon: <FaUserAstronaut />,
+    path: '/profile',
+  },
+  {
     title: 'Logout',
     icon: <IoMdLogOut />,
     path: '/logout',
