@@ -28,18 +28,14 @@ function App() {
     <Auth0Provider
       domain="dev-9e-ctbg8.us.auth0.com"
       clientId="gRTSrWR4kDPpH28Udftm6X3H35kmFUKD"
-      redirectUri={window.location.origin}
+      redirectUri={'http://localhost:3000'}
     >
       <AppointmentsContext.Provider value={appointmentsContextValue}>
         <CounselorsContext.Provider value={counselorsContextValue}>
           <SchoolsContext.Provider value={schoolsContextValue}>
             <StudentsContext.Provider value={studentsContextValue}>
               <UsersContext.Provider value={usersContextValue}>
-                <AppRouter
-                  isLoggedIn={true}
-                  role={'admin'}
-                  loggedInUser={users[0]}
-                />
+                <AppRouter />
               </UsersContext.Provider>
             </StudentsContext.Provider>
           </SchoolsContext.Provider>

@@ -1,15 +1,17 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from 'react';
-import LoginButton from '../auth0/LoginButton';
+import React, { useEffect } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const LoginPage: React.FC = () => {
-  return (
-    <>
-      <h1>Login</h1>
-      <LoginButton />
-    </>
-  );
+  const { loginWithRedirect } = useAuth0();
+
+  // redirect to login page as soon as this page loads
+  useEffect(() => {
+    loginWithRedirect();
+  });
+
+  return <></>;
 };
 
 export default LoginPage;
