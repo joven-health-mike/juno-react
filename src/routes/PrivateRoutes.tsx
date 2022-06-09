@@ -9,7 +9,6 @@ import SchoolsPage from '../components/pages/SchoolsPage';
 import StudentsPage from '../components/pages/StudentsPage';
 import UsersPage from '../components/pages/UsersPage';
 import LogoutPage from '../components/pages/LogoutPage';
-import NotFoundPage from '../components/pages/NotFoundPage';
 
 const PrivateRoutes = () => {
   return (
@@ -23,7 +22,7 @@ const PrivateRoutes = () => {
       <Route path="/students" element={<StudentsPage />} />
       <Route path="/users" element={<UsersPage />} />
       <Route path="/logout" element={<LogoutPage />} />
-      <Route path="*" element={<NotFoundPage />} />
+      <Route path="*" element={<h1>404 - Not Found</h1>} />
     </Routes>
   );
 };
