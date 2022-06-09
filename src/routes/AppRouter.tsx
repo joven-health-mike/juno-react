@@ -6,9 +6,6 @@ import PrivateRoutes from './PrivateRoutes';
 
 const AppRouter: React.FC = () => {
   const { isAuthenticated } = useAuth0();
-
-  console.log('isAuthenticated:', isAuthenticated);
-
   return isAuthenticated ? <PrivateRoutes /> : <PublicRoutes />;
 };
 
