@@ -1,6 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { MouseEvent } from 'react';
+import { Column } from 'react-table';
 import { User } from '../../data/users';
 import XButton from '../buttons/XButton';
 import DataTable from './DataTable';
@@ -12,14 +13,14 @@ type UsersTableProps = {
 };
 
 const UsersTable: React.FC<UsersTableProps> = ({ users, onDeleteClicked }) => {
-  const defaultColumn = React.useMemo(
+  const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
       Filter: TableSearchFilter,
     }),
     []
   );
 
-  const columns = React.useMemo(
+  const columns: Column[] = React.useMemo(
     () => [
       {
         Header: ' ',

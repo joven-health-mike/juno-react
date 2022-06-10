@@ -1,6 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { MouseEvent } from 'react';
+import { Column } from 'react-table';
 import { Appointment } from '../../data/appointments';
 import XButton from '../buttons/XButton';
 import DataTable from './DataTable';
@@ -15,14 +16,14 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
   appointments,
   onDeleteClicked,
 }) => {
-  const defaultColumn = React.useMemo(
+  const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
       Filter: TableSearchFilter,
     }),
     []
   );
 
-  const columns = React.useMemo(
+  const columns: Column[] = React.useMemo(
     () => [
       {
         Header: ' ',
