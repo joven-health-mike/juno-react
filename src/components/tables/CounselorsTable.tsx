@@ -1,7 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { MouseEvent } from 'react';
-import { Column } from 'react-table';
+import { CellProps, Column } from 'react-table';
 import { Counselor } from '../../data/counselors';
 import XButton from '../buttons/XButton';
 import DataTable from './DataTable';
@@ -27,7 +27,7 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
     () => [
       {
         Header: ' ',
-        Cell: ({ cell }: any) => (
+        Cell: ({ cell }: CellProps<object>) => (
           <XButton
             value={cell.row.values.name}
             onClick={(e: MouseEvent<HTMLButtonElement>) => {
