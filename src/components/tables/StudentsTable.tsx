@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import { Student } from '../../data/students';
 import XButton from '../buttons/XButton';
 import DataTable from './DataTable';
@@ -29,9 +29,9 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
         Cell: ({ cell }: any) => (
           <XButton
             value={cell.row.values.first_name + ' ' + cell.row.values.last_name}
-            onClick={(e: any) => {
+            onClick={(e: MouseEvent<HTMLButtonElement>) => {
               e.preventDefault();
-              onDeleteClicked(e.target.value);
+              onDeleteClicked((e.target as HTMLInputElement).value);
             }}
           />
         ),

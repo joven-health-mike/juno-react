@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import { Appointment } from '../../data/appointments';
 import XButton from '../buttons/XButton';
 import DataTable from './DataTable';
@@ -8,7 +8,7 @@ import TableSearchFilter from './TableSearchFilter';
 
 type AppointmentsTableProps = {
   appointments: Appointment[];
-  onDeleteClicked: any;
+  onDeleteClicked: (item: string) => void;
 };
 
 const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
@@ -29,9 +29,9 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
         Cell: ({ cell }: any) => (
           <XButton
             value={cell.row.values.title}
-            onClick={(e: any) => {
+            onClick={(e: MouseEvent<HTMLButtonElement>) => {
               e.preventDefault();
-              onDeleteClicked(e.target.value);
+              onDeleteClicked((e.target as HTMLInputElement).value);
             }}
           />
         ),
