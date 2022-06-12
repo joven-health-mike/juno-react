@@ -32,7 +32,10 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    onSubmit({ ...counselor, _id: counselors.length });
+    const submittedCounselor = defaultCounselor
+      ? counselor
+      : { ...counselor, _id: counselors.length };
+    onSubmit(submittedCounselor);
   };
 
   const onFormCancel = (e: MouseEvent) => {
@@ -47,6 +50,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
         <label>
           Name
           <input
+            data-testid={'input-name'}
             type="text"
             placeholder="Name"
             name="name"
@@ -60,6 +64,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
         <label>
           Email
           <input
+            data-testid={'input-email'}
             type="email"
             placeholder="Email"
             name="email"
@@ -73,6 +78,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
         <label>
           Room Link
           <input
+            data-testid={'input-roomLink'}
             type="text"
             placeholder="Room Link"
             name="roomLink"
@@ -84,8 +90,14 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
           />
         </label>
 
-        <button type="submit">Submit</button>
-        <button type="button" onClick={onFormCancel}>
+        <button type="submit" data-testid={'button-submit'}>
+          Submit
+        </button>
+        <button
+          type="button"
+          data-testid={'button-cancel'}
+          onClick={onFormCancel}
+        >
           Cancel
         </button>
       </form>
