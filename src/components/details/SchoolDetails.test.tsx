@@ -1,0 +1,47 @@
+/**
+ * @jest-environment jsdom
+ */
+/* eslint-disable testing-library/prefer-screen-queries */
+
+import React from 'react';
+import { render } from '@testing-library/react';
+import SchoolDetails from './SchoolDetails';
+
+const testSchool = {
+  name: 'name',
+  _id: 0,
+  email: 'email@test.com',
+};
+
+describe('SchoolDetails', () => {
+  it('should display name', async () => {
+    const view = render(<SchoolDetails school={testSchool} />);
+    const nameView = await view.findByTestId('name');
+    expect(nameView.innerHTML).toEqual(testSchool.name);
+  });
+  it('should display ID as a string', async () => {
+    const view = render(<SchoolDetails school={testSchool} />);
+    const idView = await view.findByTestId('id');
+    expect(idView.innerHTML).toEqual(testSchool._id.toString());
+  });
+  it('should display email as a string', async () => {
+    const view = render(<SchoolDetails school={testSchool} />);
+    const emailView = await view.findByTestId('email');
+    expect(emailView.innerHTML).toEqual(testSchool.email.toString());
+  });
+  it('should display ID as <p>', async () => {
+    const view = render(<SchoolDetails school={testSchool} />);
+    const idView = await view.findByTestId('id');
+    expect(idView.nodeName.toLowerCase()).toEqual('p');
+  });
+  it('should display name as <h2>', async () => {
+    const view = render(<SchoolDetails school={testSchool} />);
+    const nameView = await view.findByTestId('name');
+    expect(nameView.nodeName.toLowerCase()).toEqual('h2');
+  });
+  it('should display email as <p>', async () => {
+    const view = render(<SchoolDetails school={testSchool} />);
+    const emailView = await view.findByTestId('email');
+    expect(emailView.nodeName.toLowerCase()).toEqual('p');
+  });
+});
