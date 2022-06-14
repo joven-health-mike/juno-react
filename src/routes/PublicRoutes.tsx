@@ -1,16 +1,18 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import AuthPage from '../components/pages/AuthPage';
-import LoginPage from '../components/pages/LoginPage';
 
 const PublicRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<AuthPage />} />
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/login" element={<RedirectToLoginPage />} />
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
   );
+};
+
+const RedirectToLoginPage: React.FC = () => {
+  window.location.href = 'http://localhost:8080/login';
+  return <></>;
 };
 
 export default PublicRoutes;

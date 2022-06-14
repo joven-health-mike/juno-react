@@ -7,7 +7,6 @@ import {
   FaHome,
   FaCalendarCheck,
   FaUserAstronaut,
-  FaUserCircle,
 } from 'react-icons/fa';
 import { IoMdLogOut, IoMdBusiness, IoMdContacts } from 'react-icons/io';
 import image from '../../assets/Logo-192sq-alphabg.png';
@@ -78,11 +77,6 @@ const allItems: NavItem[] = [
     title: 'Users',
     icon: <FaUserAstronaut />,
     path: '/users',
-  },
-  {
-    title: 'My Profile',
-    icon: <FaUserCircle />,
-    path: '/profile',
   },
   {
     title: 'Logout',

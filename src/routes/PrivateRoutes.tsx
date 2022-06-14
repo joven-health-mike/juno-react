@@ -4,11 +4,9 @@ import HomePage from '../components/pages/HomePage';
 import AppointmentsPage from '../components/pages/AppointmentsPage';
 import CalendarPage from '../components/pages/CalendarPage';
 import CounselorsPage from '../components/pages/CounselorsPage';
-import ProfilePage from '../components/pages/ProfilePage';
 import SchoolsPage from '../components/pages/SchoolsPage';
 import StudentsPage from '../components/pages/StudentsPage';
 import UsersPage from '../components/pages/UsersPage';
-import LogoutPage from '../components/pages/LogoutPage';
 
 const PrivateRoutes = () => {
   return (
@@ -17,14 +15,18 @@ const PrivateRoutes = () => {
       <Route path="/appointments" element={<AppointmentsPage />} />
       <Route path="/calendar" element={<CalendarPage />} />
       <Route path="/counselors" element={<CounselorsPage />} />
-      <Route path="/profile" element={<ProfilePage />} />
       <Route path="/schools" element={<SchoolsPage />} />
       <Route path="/students" element={<StudentsPage />} />
       <Route path="/users" element={<UsersPage />} />
-      <Route path="/logout" element={<LogoutPage />} />
+      <Route path="/logout" element={<RedirectToLogoutPage />} />
       <Route path="*" element={<h1>404 - Not Found</h1>} />
     </Routes>
   );
+};
+
+const RedirectToLogoutPage: React.FC = () => {
+  window.location.href = 'http://localhost:8080/logout';
+  return <></>;
 };
 
 export default PrivateRoutes;

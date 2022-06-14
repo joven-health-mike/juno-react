@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import Modal from 'react-modal';
-import { Auth0Provider } from '@auth0/auth0-react';
 import { AppointmentsContext, exampleAppointments } from './data/appointments';
 import { CounselorsContext, exampleCounselors } from './data/counselors';
 import { SchoolsContext, exampleSchools } from './data/schools';
@@ -25,23 +24,17 @@ function App() {
   const usersContextValue = { users, setUsers };
 
   return (
-    <Auth0Provider
-      domain="dev-9e-ctbg8.us.auth0.com"
-      clientId="gRTSrWR4kDPpH28Udftm6X3H35kmFUKD"
-      redirectUri={'http://localhost:3000'}
-    >
-      <AppointmentsContext.Provider value={appointmentsContextValue}>
-        <CounselorsContext.Provider value={counselorsContextValue}>
-          <SchoolsContext.Provider value={schoolsContextValue}>
-            <StudentsContext.Provider value={studentsContextValue}>
-              <UsersContext.Provider value={usersContextValue}>
-                <AppRouter />
-              </UsersContext.Provider>
-            </StudentsContext.Provider>
-          </SchoolsContext.Provider>
-        </CounselorsContext.Provider>
-      </AppointmentsContext.Provider>
-    </Auth0Provider>
+    <AppointmentsContext.Provider value={appointmentsContextValue}>
+      <CounselorsContext.Provider value={counselorsContextValue}>
+        <SchoolsContext.Provider value={schoolsContextValue}>
+          <StudentsContext.Provider value={studentsContextValue}>
+            <UsersContext.Provider value={usersContextValue}>
+              <AppRouter />
+            </UsersContext.Provider>
+          </StudentsContext.Provider>
+        </SchoolsContext.Provider>
+      </CounselorsContext.Provider>
+    </AppointmentsContext.Provider>
   );
 }
 
