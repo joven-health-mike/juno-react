@@ -1,3 +1,5 @@
+// Copyright 2022 Social Fabric, LLC
+
 import React from 'react';
 import Modal from 'react-modal';
 import { Appointment } from '../../data/appointments';

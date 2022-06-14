@@ -1,12 +1,30 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from 'react';
-import { useTable, useFilters, useGlobalFilter, useSortBy } from 'react-table';
+import {
+  useTable,
+  useFilters,
+  useGlobalFilter,
+  useSortBy,
+  Column,
+} from 'react-table';
+import { Appointment } from '../../data/appointments';
+import { Counselor } from '../../data/counselors';
+import { School } from '../../data/schools';
+import { Student } from '../../data/students';
+import { User } from '../../data/users';
+
+type DataTableData =
+  | Appointment[]
+  | Counselor[]
+  | School[]
+  | Student[]
+  | User[];
 
 type DataTableProps = {
-  data: any;
-  defaultColumn: any;
-  columns: any;
+  data: DataTableData;
+  defaultColumn: Record<string, unknown>;
+  columns: Column[];
 };
 
 const DataTable: React.FC<DataTableProps> = ({

@@ -1,13 +1,17 @@
-import React, { useContext } from 'react';
-import { CounselorsContext, emptyCounselor } from '../../data/counselors';
-import { emptySchool, SchoolsContext } from '../../data/schools';
-import { emptyStudent, StudentsContext } from '../../data/students';
+import React, { ChangeEvent, useContext } from 'react';
+import {
+  Counselor,
+  CounselorsContext,
+  emptyCounselor,
+} from '../../data/counselors';
+import { emptySchool, School, SchoolsContext } from '../../data/schools';
+import { emptyStudent, Student, StudentsContext } from '../../data/students';
 
 type SelectListProps = {
   labelText: string;
-  value: any;
-  items: any[];
-  onItemChanged: any;
+  value: string;
+  items: string[];
+  onItemChanged: (item: string) => void;
 };
 
 const SelectList = ({
@@ -16,7 +20,7 @@ const SelectList = ({
   items,
   onItemChanged,
 }: SelectListProps) => {
-  const itemChanged = (e: any) => {
+  const itemChanged = (e: ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault();
     const item = e.target.value === labelText ? '' : e.target.value;
     onItemChanged(item);
@@ -35,8 +39,8 @@ const SelectList = ({
 export default SelectList;
 
 type SelectCounselorListProps = {
-  value: any;
-  onCounselorChanged: any;
+  value: string;
+  onCounselorChanged: (counselor: Counselor) => void;
 };
 
 export function SelectCounselorList({
@@ -66,8 +70,8 @@ export function SelectCounselorList({
 }
 
 type SelectSchoolListProps = {
-  value: any;
-  onSchoolChanged: any;
+  value: string;
+  onSchoolChanged: (school: School) => void;
 };
 
 export function SelectSchoolList({
@@ -95,8 +99,8 @@ export function SelectSchoolList({
 }
 
 type SelectStudentListProps = {
-  value: any;
-  onStudentChanged: any;
+  value: string;
+  onStudentChanged: (student: Student) => void;
 };
 
 export function SelectStudentList({

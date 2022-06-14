@@ -1,12 +1,13 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from 'react';
+import { Row } from 'react-table';
 
 type TableSearchFilterProps = {
   column: {
-    filterValue: any;
-    preFilteredRows: any;
-    setFilter: any;
+    filterValue: string;
+    preFilteredRows: Row[];
+    setFilter: (input: string) => void;
   };
 };
 
@@ -20,7 +21,7 @@ const TableSearchFilter: React.FC<TableSearchFilterProps> = ({
       <input
         value={filterValue || ''}
         onChange={e => {
-          setFilter(e.target.value || undefined);
+          setFilter(e.target.value);
         }}
         placeholder={`Search ${count} records...`}
       ></input>

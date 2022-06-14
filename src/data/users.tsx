@@ -45,6 +45,14 @@ export const UsersContext = React.createContext<IUsersContext>({
   setUsers: () => {},
 });
 
+export type Role =
+  | 'admin'
+  | 'counselor'
+  | 'facilitator'
+  | 'school'
+  | 'student'
+  | 'guardian';
+
 export const ROLES = [
   'admin',
   'counselor',
