@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
   FaUserTie,
   FaCalendarAlt,
@@ -10,9 +10,10 @@ import {
   FaUserCircle,
 } from 'react-icons/fa';
 import { IoMdLogOut, IoMdBusiness, IoMdContacts } from 'react-icons/io';
-import image from '../../assets/Logo-192sq-alphabg.png'; // TODO: How do we import images in TS?
+import image from '../../assets/Logo-192sq-alphabg.png';
+import { Role } from '../../data/users';
 
-export function getItems(role) {
+export function getItems(role: Role) {
   switch (role) {
     case 'admin':
       return allItems;
@@ -31,7 +32,13 @@ export function getItems(role) {
   }
 }
 
-const allItems = [
+export type NavItem = {
+  title: string;
+  icon: ReactElement;
+  path: string;
+};
+
+const allItems: NavItem[] = [
   {
     title: 'Joven Health',
     icon: <img src={image} alt="logo" />,

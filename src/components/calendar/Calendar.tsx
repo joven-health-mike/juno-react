@@ -1,13 +1,13 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from 'react';
-import FullCalendar, { EventClickArg } from '@fullcalendar/react';
+import FullCalendar, { EventClickArg, PluginDef } from '@fullcalendar/react';
 import { Appointment } from '../../data/appointments';
 import { DateClickArg } from '@fullcalendar/interaction';
 
 type CalendarProps = {
   view: string;
-  plugins: any[];
+  plugins: PluginDef[];
   appointments: Appointment[];
   onEventClick: (appointment: Appointment) => void;
   onDateClick: (date: string) => void;

@@ -1,6 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from 'react';
+import React, { MouseEvent } from 'react';
+import { CellProps, Column } from 'react-table';
 import { Student } from '../../data/students';
 import XButton from '../buttons/XButton';
 import DataTable from './DataTable';
@@ -15,23 +16,23 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
   students,
   onDeleteClicked,
 }) => {
-  const defaultColumn = React.useMemo(
+  const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
       Filter: TableSearchFilter,
     }),
     []
   );
 
-  const columns = React.useMemo(
+  const columns: Column[] = React.useMemo(
     () => [
       {
         Header: ' ',
-        Cell: ({ cell }: any) => (
+        Cell: ({ cell }: CellProps<object>) => (
           <XButton
             value={cell.row.values.first_name + ' ' + cell.row.values.last_name}
-            onClick={(e: any) => {
+            onClick={(e: MouseEvent<HTMLButtonElement>) => {
               e.preventDefault();
-              onDeleteClicked(e.target.value);
+              onDeleteClicked((e.target as HTMLInputElement).value);
             }}
           />
         ),

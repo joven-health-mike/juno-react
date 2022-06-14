@@ -1,6 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from 'react';
+import React, { MouseEvent } from 'react';
+import { CellProps, Column } from 'react-table';
 import { Appointment } from '../../data/appointments';
 import XButton from '../buttons/XButton';
 import DataTable from './DataTable';
@@ -8,30 +9,30 @@ import TableSearchFilter from './TableSearchFilter';
 
 type AppointmentsTableProps = {
   appointments: Appointment[];
-  onDeleteClicked: any;
+  onDeleteClicked: (item: string) => void;
 };
 
 const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
   appointments,
   onDeleteClicked,
 }) => {
-  const defaultColumn = React.useMemo(
+  const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
       Filter: TableSearchFilter,
     }),
     []
   );
 
-  const columns = React.useMemo(
+  const columns: Column[] = React.useMemo(
     () => [
       {
         Header: ' ',
-        Cell: ({ cell }: any) => (
+        Cell: ({ cell }: CellProps<object>) => (
           <XButton
             value={cell.row.values.title}
-            onClick={(e: any) => {
+            onClick={(e: MouseEvent<HTMLButtonElement>) => {
               e.preventDefault();
-              onDeleteClicked(e.target.value);
+              onDeleteClicked((e.target as HTMLInputElement).value);
             }}
           />
         ),
@@ -47,12 +48,16 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
       {
         Header: 'Start',
         accessor: 'start',
-        Cell: ({ cell }: any) => <p>{cell.row.values.start.toISOString()}</p>,
+        Cell: ({ cell }: CellProps<object>) => (
+          <p>{cell.row.values.start.toISOString()}</p>
+        ),
       },
       {
         Header: 'End',
         accessor: 'end',
-        Cell: ({ cell }: any) => <p>{cell.row.values.end.toISOString()}</p>,
+        Cell: ({ cell }: CellProps<object>) => (
+          <p>{cell.row.values.end.toISOString()}</p>
+        ),
       },
       {
         Header: 'Counselor ID',
