@@ -87,9 +87,9 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
       <label>
         Start Time
         <DateSelector
-          selected={new Date(appointment.end)}
+          selected={new Date(appointment.start)}
           onChange={(date: Date) =>
-            setAppointment({ ...appointment, end: date })
+            setAppointment({ ...appointment, start: date })
           }
           label={'Start Time'}
         />
