@@ -70,4 +70,16 @@ describe('CreateCounselorForm', () => {
     //check that the ID is positive
     expect(submitCallback.mock.calls[0][0]._id).toBeGreaterThanOrEqual(0);
   });
+
+  test('Check if names match', () => {
+    expect(testCounselor.name).toBe('name');
+  });
+
+  test('Check if emails match', () => {
+    expect(testCounselor.email).toBe('email@test.com');
+  });
+
+  test('Check if room links match', () => {
+    expect(testCounselor.roomLink).toBe('https://www.zoomtest.com');
+  });
 });
