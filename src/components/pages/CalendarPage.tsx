@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { MouseEvent, useContext, useEffect, useState } from 'react';
 import '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -21,6 +21,7 @@ import {
 import { StudentsContext } from '../../data/students';
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import AppointmentDetailsModal from '../modals/AppointmentDetailsModal';
+import { apiCalendar } from '../calendar/calendarConfig';
 
 const CalendarPage: React.FC = () => {
   const role = 'admin';
@@ -94,12 +95,24 @@ const CalendarPage: React.FC = () => {
     setFilteredEvents(appointments);
   }, [appointments]);
 
+  const handleSignInOutClick = (e: MouseEvent, name: string) => {
+    if (name === 'sign-in') {
+      apiCalendar.handleAuthClick();
+    } else if (name === 'sign-out') {
+      apiCalendar.handleSignoutClick();
+    }
+  };
+
   return (
     <div className={'mainContainer'}>
       <nav>
         <Navbar items={getItems(role)} />
       </nav>
       <h1>Calendar</h1>
+      <button onClick={e => handleSignInOutClick(e, 'sign-in')}>Sign In</button>
+      <button onClick={e => handleSignInOutClick(e, 'sign-out')}>
+        Sign Out
+      </button>
       <label>
         Counselor:{' '}
         <SelectCounselorList
