@@ -32,7 +32,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
     e.preventDefault();
     const submittedSchool = defaultSchool
       ? school
-      : { ...school, id: schools.length };
+      : { ...school, _id: schools.length };
     onSubmit(submittedSchool);
   };
 
