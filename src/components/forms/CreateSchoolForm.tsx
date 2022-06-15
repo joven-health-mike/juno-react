@@ -30,7 +30,10 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    onSubmit({ ...school, _id: schools.length });
+    const submittedSchool = defaultSchool
+      ? school
+      : { ...school, id: schools.length };
+    onSubmit(submittedSchool);
   };
 
   const onFormCancel = (e: MouseEvent) => {
@@ -45,6 +48,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
         <label>
           Name
           <input
+            data-testid={'input-name'}
             type="text"
             placeholder="Name"
             name="name"
@@ -58,6 +62,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
         <label>
           Email
           <input
+            data-testid={'input-email'}
             type="email"
             placeholder="Email"
             name="email"
@@ -69,8 +74,14 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
           />
         </label>
 
-        <button type="submit">Submit</button>
-        <button type="button" onClick={onFormCancel}>
+        <button type="submit" data-testid={'button-submit'}>
+          Submit
+        </button>
+        <button
+          type="button"
+          data-testid={'button-cancel'}
+          onClick={onFormCancel}
+        >
           Cancel
         </button>
       </form>
