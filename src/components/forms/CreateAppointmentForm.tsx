@@ -50,6 +50,10 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
   const onStudentChanged = (student: Student) => {
     setStudentSelection(student);
+    setAppointment({
+      ...appointment,
+      title: student.first_name + ' ' + student.last_name.substring(0, 1),
+    });
   };
 
   // update the appointment whenever counselor or student selection is changed
@@ -78,19 +82,6 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
   return (
     <form onSubmit={onFormSubmit}>
-      <label>
-        Title
-        <input
-          type="text"
-          placeholder="Title"
-          name="title"
-          value={appointment.title}
-          required
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setAppointment({ ...appointment, title: e.target.value })
-          }
-        />
-      </label>
       <label>
         Start Time
         <DatePicker
