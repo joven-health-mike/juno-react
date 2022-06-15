@@ -61,7 +61,10 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    onSubmit({ ...student, _id: students.length });
+    const submittedStudent = defaultStudent
+      ? student
+      : { ...student, _id: students.length };
+    onSubmit(submittedStudent);
   };
 
   const onFormCancel = (e: MouseEvent) => {
@@ -77,6 +80,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       <label>
         First Name
         <input
+          data-testid="firstName"
           type="text"
           placeholder="First Name"
           name="first_name"
@@ -90,6 +94,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       <label>
         Last Name
         <input
+          data-testid="lastName"
           type="text"
           placeholder="Last Name"
           name="last_name"
@@ -115,8 +120,10 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
         />
       </label>
 
-      <button type="submit">Submit</button>
-      <button type="button" onClick={onFormCancel}>
+      <button type="submit" data-testid="button-submit">
+        Submit
+      </button>
+      <button type="button" data-testid="button-cancel" onClick={onFormCancel}>
         Cancel
       </button>
     </form>
