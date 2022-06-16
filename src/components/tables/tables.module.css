@@ -1,0 +1,38 @@
+.jovenTable {
+    padding: 5px;
+    border: 1px solid;
+    margin: 10px;
+    width: 99%;
+    table-layout: fixed;
+}
+
+.jovenTh {
+    padding: 5px;
+    border: 1px solid;
+    margin: 10px;
+    width: 99%;
+    background-color: #385aa8;
+    color: whitesmoke;
+}
+
+.jovenTr {
+    padding: 5px;
+}
+
+.jovenTr:nth-child(even) {
+    background-color: #77caf2;
+}
+
+.jovenTr:nth-child(odd) {
+    background-color: #4891ce;
+}
+
+.jovenTr:hover {
+    background-color: #f6f740;
+}
+
+.jovenTd {
+    padding: 5px;
+    border: 1px solid;
+    text-align: center;
+}
