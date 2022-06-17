@@ -1,9 +1,10 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { MouseEvent } from 'react';
-import { CellProps, Column } from 'react-table';
+import React, { MouseEvent, useCallback } from 'react';
+import { CellProps, Column, Row } from 'react-table';
 import { School } from '../../data/schools';
 import XButton from '../buttons/XButton';
+import SchoolDetails from '../details/SchoolDetails';
 import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
 
@@ -26,15 +27,25 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
   const columns: Column[] = React.useMemo(
     () => [
       {
-        Header: ' ',
-        Cell: ({ cell }: CellProps<object>) => (
-          <XButton
-            value={cell.row.values.name}
-            onClick={(e: MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault();
-              onDeleteClicked((e.target as HTMLInputElement).value);
-            }}
-          />
+        id: 'expander',
+        Header: ({ getToggleAllRowsExpandedProps, isAllRowsExpanded }) => (
+          <span {...getToggleAllRowsExpandedProps()}>
+            {isAllRowsExpanded ? '👇' : '👉'}
+          </span>
+        ),
+        Cell: ({ cell, row }: CellProps<object>) => (
+          <>
+            <XButton
+              value={cell.row.values.name}
+              onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                e.preventDefault();
+                onDeleteClicked((e.target as HTMLInputElement).value);
+              }}
+            />
+            <span {...row.getToggleRowExpandedProps()}>
+              {row.isExpanded ? '👇' : '👉'}
+            </span>
+          </>
         ),
       },
       {
@@ -53,8 +64,18 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
     [onDeleteClicked]
   );
 
+  const renderRowSubComponent = useCallback((row: Row) => {
+    const rowObject = row.original as School;
+    return <SchoolDetails school={rowObject} />;
+  }, []);
+
   return (
-    <DataTable data={schools} defaultColumn={defaultColumn} columns={columns} />
+    <DataTable
+      data={schools}
+      defaultColumn={defaultColumn}
+      columns={columns}
+      renderRowSubComponent={renderRowSubComponent}
+    />
   );
 };
 

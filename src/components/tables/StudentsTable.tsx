@@ -1,9 +1,10 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { MouseEvent } from 'react';
-import { CellProps, Column } from 'react-table';
+import React, { MouseEvent, useCallback } from 'react';
+import { CellProps, Column, Row } from 'react-table';
 import { Student } from '../../data/students';
 import XButton from '../buttons/XButton';
+import StudentDetails from '../details/StudentDetails';
 import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
 
@@ -26,15 +27,27 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
   const columns: Column[] = React.useMemo(
     () => [
       {
-        Header: ' ',
-        Cell: ({ cell }: CellProps<object>) => (
-          <XButton
-            value={cell.row.values.first_name + ' ' + cell.row.values.last_name}
-            onClick={(e: MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault();
-              onDeleteClicked((e.target as HTMLInputElement).value);
-            }}
-          />
+        id: 'expander',
+        Header: ({ getToggleAllRowsExpandedProps, isAllRowsExpanded }) => (
+          <span {...getToggleAllRowsExpandedProps()}>
+            {isAllRowsExpanded ? '👇' : '👉'}
+          </span>
+        ),
+        Cell: ({ cell, row }: CellProps<object>) => (
+          <>
+            <XButton
+              value={
+                cell.row.values.first_name + ' ' + cell.row.values.last_name
+              }
+              onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                e.preventDefault();
+                onDeleteClicked((e.target as HTMLInputElement).value);
+              }}
+            />
+            <span {...row.getToggleRowExpandedProps()}>
+              {row.isExpanded ? '👇' : '👉'}
+            </span>
+          </>
         ),
       },
       {
@@ -61,11 +74,17 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
     [onDeleteClicked]
   );
 
+  const renderRowSubComponent = useCallback((row: Row) => {
+    const rowObject = row.original as Student;
+    return <StudentDetails student={rowObject} />;
+  }, []);
+
   return (
     <DataTable
       data={students}
       defaultColumn={defaultColumn}
       columns={columns}
+      renderRowSubComponent={renderRowSubComponent}
     />
   );
 };
