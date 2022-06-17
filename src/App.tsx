@@ -29,11 +29,7 @@ function App() {
         <SchoolsContext.Provider value={schoolsContextValue}>
           <StudentsContext.Provider value={studentsContextValue}>
             <UsersContext.Provider value={usersContextValue}>
-              <AppRouter
-                isLoggedIn={true}
-                role={'admin'}
-                loggedInUser={users[0]}
-              />
+              <AppRouter />
             </UsersContext.Provider>
           </StudentsContext.Provider>
         </SchoolsContext.Provider>
