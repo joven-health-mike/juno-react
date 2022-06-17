@@ -12,6 +12,7 @@ import {
   TableBodyProps,
   Cell,
   useExpanded,
+  usePagination,
 } from 'react-table';
 import { Appointment } from '../../data/appointments';
 import { Counselor } from '../../data/counselors';
@@ -37,24 +38,73 @@ const DataTable: React.FC<DataTableProps> = ({
   defaultColumn,
   columns,
 }) => {
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable(
-      { columns, data, defaultColumn },
-      useFilters,
-      useGlobalFilter,
-      useSortBy,
-      useExpanded
-    );
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    prepareRow,
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    state: { pageIndex, pageSize },
+  } = useTable(
+    { columns, data, defaultColumn },
+    useFilters,
+    useGlobalFilter,
+    useSortBy,
+    useExpanded,
+    usePagination
+  );
 
   return (
-    <table className={'jovenTable'} {...getTableProps()}>
-      <HeaderRows headerGroups={headerGroups} isSortable={true} />
-      <BodyRows
-        getTableBodyProps={getTableBodyProps}
-        rows={rows}
-        prepareRow={prepareRow}
-      />
-    </table>
+    <>
+      <table className={'jovenTable'} {...getTableProps()}>
+        <HeaderRows headerGroups={headerGroups} isSortable={true} />
+        <BodyRows
+          getTableBodyProps={getTableBodyProps}
+          rows={page}
+          prepareRow={prepareRow}
+        />
+      </table>
+      <div className="pagination">
+        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+          {'<<'}
+        </button>{' '}
+        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+          {'<'}
+        </button>{' '}
+        <button onClick={() => nextPage()} disabled={!canNextPage}>
+          {'>'}
+        </button>{' '}
+        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+          {'>>'}
+        </button>{' '}
+        <span>
+          Page{' '}
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>{' '}
+        </span>
+        <select
+          value={pageSize}
+          onChange={e => {
+            setPageSize(Number(e.target.value));
+          }}
+        >
+          {[10, 20, 30, 40, 50].map(pageSize => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select>
+      </div>
+    </>
   );
 };
 
