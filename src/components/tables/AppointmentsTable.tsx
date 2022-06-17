@@ -26,15 +26,27 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
   const columns: Column[] = React.useMemo(
     () => [
       {
-        Header: ' ',
-        Cell: ({ cell }: CellProps<object>) => (
-          <XButton
-            value={cell.row.values.title}
-            onClick={(e: MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault();
-              onDeleteClicked((e.target as HTMLInputElement).value);
-            }}
-          />
+        id: 'expander',
+        Header: ({ getToggleAllRowsExpandedProps, isAllRowsExpanded }) => (
+          <span {...getToggleAllRowsExpandedProps()}>
+            {isAllRowsExpanded ? '👇' : '👉'}
+          </span>
+        ),
+        Cell: ({ cell, row }: CellProps<object>) => (
+          <>
+            <XButton
+              value={cell.row.values.title}
+              onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                e.preventDefault();
+                onDeleteClicked((e.target as HTMLInputElement).value);
+              }}
+            />
+            {row.canExpand ? (
+              <span {...row.getToggleRowExpandedProps()}>
+                {row.isExpanded ? '👇' : '👉'}
+              </span>
+            ) : null}
+          </>
         ),
       },
       {

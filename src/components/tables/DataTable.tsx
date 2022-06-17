@@ -11,6 +11,7 @@ import {
   Row,
   TableBodyProps,
   Cell,
+  useExpanded,
 } from 'react-table';
 import { Appointment } from '../../data/appointments';
 import { Counselor } from '../../data/counselors';
@@ -41,7 +42,8 @@ const DataTable: React.FC<DataTableProps> = ({
       { columns, data, defaultColumn },
       useFilters,
       useGlobalFilter,
-      useSortBy
+      useSortBy,
+      useExpanded
     );
 
   return (
@@ -69,9 +71,16 @@ const HeaderRows: React.FC<HeaderRowsProps> = ({
 }) => {
   return (
     <thead>
-      {headerGroups.map(headerGroup => (
-        <HeaderRow headerGroup={headerGroup} isSortable={isSortable} />
-      ))}
+      {headerGroups.map(headerGroup => {
+        const { key } = headerGroup.getHeaderGroupProps();
+        return (
+          <HeaderRow
+            key={key}
+            headerGroup={headerGroup}
+            isSortable={isSortable}
+          />
+        );
+      })}
     </thead>
   );
 };
@@ -82,11 +91,14 @@ type HeaderRowProps = {
 };
 
 const HeaderRow: React.FC<HeaderRowProps> = ({ headerGroup, isSortable }) => {
-  const { key, ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps();
+  const { ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps();
   return (
-    <tr key={key} className={'jovenTr'} {...restHeaderGroupProps}>
+    <tr className={'jovenTr'} {...restHeaderGroupProps}>
       {headerGroup.headers.map(column => {
-        return <TableHeaderCell column={column} isSortable={isSortable} />;
+        const { key } = column.getHeaderProps(column.getSortByToggleProps());
+        return (
+          <TableHeaderCell key={key} column={column} isSortable={isSortable} />
+        );
       })}
     </tr>
   );
@@ -101,11 +113,11 @@ const TableHeaderCell: React.FC<TableHeaderCellProps> = ({
   column,
   isSortable,
 }) => {
-  const { key, ...restColumn } = column.getHeaderProps(
+  const { ...restColumn } = column.getHeaderProps(
     column.getSortByToggleProps()
   );
   return (
-    <th key={key} className={'jovenTh'} {...restColumn}>
+    <th className={'jovenTh'} {...restColumn}>
       {column.render('Header')}
       {isSortable && (
         <span>
@@ -132,7 +144,8 @@ const BodyRows: React.FC<BodyRowsProps> = ({
     <tbody {...getTableBodyProps()}>
       {rows.map(row => {
         prepareRow(row);
-        return <BodyRow row={row} />;
+        const { key } = row.getRowProps();
+        return <BodyRow key={key} row={row} />;
       })}
     </tbody>
   );
@@ -143,11 +156,12 @@ type BodyRowProps = {
 };
 
 const BodyRow: React.FC<BodyRowProps> = ({ row }) => {
-  const { key, ...restRowProps } = row.getRowProps();
+  const { ...restRowProps } = row.getRowProps();
   return (
-    <tr key={key} className={'jovenTr'} {...restRowProps}>
+    <tr className={'jovenTr'} {...restRowProps}>
       {row.cells.map(cell => {
-        return <BodyRowCell cell={cell} />;
+        const { key } = cell.getCellProps();
+        return <BodyRowCell key={key} cell={cell} />;
       })}
     </tr>
   );
@@ -158,9 +172,9 @@ type BodyRowCellProps = {
 };
 
 const BodyRowCell: React.FC<BodyRowCellProps> = ({ cell }) => {
-  const { key, ...restCellProps } = cell.getCellProps();
+  const { ...restCellProps } = cell.getCellProps();
   return (
-    <td key={key} className={'jovenTd'} {...restCellProps}>
+    <td className={'jovenTd'} {...restCellProps}>
       {cell.render('Cell')}
     </td>
   );
