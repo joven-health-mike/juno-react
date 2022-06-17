@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import {
   useTable,
   useFilters,
@@ -31,12 +31,14 @@ type DataTableProps = {
   data: DataTableData;
   defaultColumn: Record<string, unknown>;
   columns: Column[];
+  renderRowSubComponent?: (row: Row) => ReactNode;
 };
 
 const DataTable: React.FC<DataTableProps> = ({
   data,
   defaultColumn,
   columns,
+  renderRowSubComponent,
 }) => {
   const {
     getTableProps,
@@ -52,6 +54,7 @@ const DataTable: React.FC<DataTableProps> = ({
     nextPage,
     previousPage,
     setPageSize,
+    visibleColumns,
     state: { pageIndex, pageSize },
   } = useTable(
     { columns, data, defaultColumn },
@@ -70,6 +73,8 @@ const DataTable: React.FC<DataTableProps> = ({
           getTableBodyProps={getTableBodyProps}
           rows={page}
           prepareRow={prepareRow}
+          visibleColumns={visibleColumns}
+          renderRowSubComponent={renderRowSubComponent}
         />
       </table>
       <div className="pagination">
@@ -183,19 +188,34 @@ type BodyRowsProps = {
   getTableBodyProps: () => TableBodyProps;
   prepareRow: (row: Row) => void;
   rows: Row[];
+  visibleColumns: Column[];
+  renderRowSubComponent?: (row: Row) => ReactNode;
 };
 
 const BodyRows: React.FC<BodyRowsProps> = ({
   getTableBodyProps,
   prepareRow,
   rows,
+  visibleColumns,
+  renderRowSubComponent,
 }) => {
   return (
     <tbody {...getTableBodyProps()}>
       {rows.map(row => {
         prepareRow(row);
         const { key } = row.getRowProps();
-        return <BodyRow key={key} row={row} />;
+        return (
+          <React.Fragment key={key}>
+            <BodyRow row={row} />
+            {row.isExpanded && (
+              <ExpandableBodyRow
+                row={row}
+                visibleColumns={visibleColumns}
+                renderRowSubComponent={renderRowSubComponent}
+              />
+            )}
+          </React.Fragment>
+        );
       })}
     </tbody>
   );
@@ -206,13 +226,35 @@ type BodyRowProps = {
 };
 
 const BodyRow: React.FC<BodyRowProps> = ({ row }) => {
-  const { ...restRowProps } = row.getRowProps();
   return (
-    <tr className={'jovenTr'} {...restRowProps}>
+    <tr className={'jovenTr'}>
       {row.cells.map(cell => {
         const { key } = cell.getCellProps();
         return <BodyRowCell key={key} cell={cell} />;
       })}
+    </tr>
+  );
+};
+
+type ExpandableBodyRowProps = {
+  row: Row;
+  visibleColumns: Column[];
+  renderRowSubComponent?: (row: Row) => ReactNode;
+};
+
+const ExpandableBodyRow: React.FC<ExpandableBodyRowProps> = ({
+  row,
+  visibleColumns,
+  renderRowSubComponent,
+}) => {
+  if (!renderRowSubComponent) {
+    renderRowSubComponent = () => <></>;
+  }
+  return (
+    <tr className={'jovenTr'}>
+      <td className={'jovenTd'} colSpan={visibleColumns.length}>
+        {renderRowSubComponent(row)}
+      </td>
     </tr>
   );
 };

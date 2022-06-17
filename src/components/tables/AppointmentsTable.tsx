@@ -1,9 +1,10 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { MouseEvent } from 'react';
-import { CellProps, Column } from 'react-table';
+import React, { MouseEvent, useCallback } from 'react';
+import { CellProps, Column, Row } from 'react-table';
 import { Appointment } from '../../data/appointments';
 import XButton from '../buttons/XButton';
+import AppointmentDetails from '../details/AppointmentDetails';
 import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
 
@@ -41,11 +42,9 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
                 onDeleteClicked((e.target as HTMLInputElement).value);
               }}
             />
-            {row.canExpand ? (
-              <span {...row.getToggleRowExpandedProps()}>
-                {row.isExpanded ? '👇' : '👉'}
-              </span>
-            ) : null}
+            <span {...row.getToggleRowExpandedProps()}>
+              {row.isExpanded ? '👇' : '👉'}
+            </span>
           </>
         ),
       },
@@ -83,11 +82,17 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
     [onDeleteClicked]
   );
 
+  const renderRowSubComponent = useCallback((row: Row) => {
+    const rowObject = row.original as Appointment;
+    return <AppointmentDetails appointment={rowObject} />;
+  }, []);
+
   return (
     <DataTable
       data={appointments}
       defaultColumn={defaultColumn}
       columns={columns}
+      renderRowSubComponent={renderRowSubComponent}
     />
   );
 };
