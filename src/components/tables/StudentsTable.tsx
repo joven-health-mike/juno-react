@@ -85,6 +85,7 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
       defaultColumn={defaultColumn}
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
+      hiddenColumns={['_id']}
     />
   );
 };

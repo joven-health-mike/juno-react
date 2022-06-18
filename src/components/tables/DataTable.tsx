@@ -32,6 +32,7 @@ type DataTableProps = {
   defaultColumn: Record<string, unknown>;
   columns: Column[];
   renderRowSubComponent?: (row: Row) => ReactNode;
+  hiddenColumns?: string[];
 };
 
 const DataTable: React.FC<DataTableProps> = ({
@@ -39,6 +40,7 @@ const DataTable: React.FC<DataTableProps> = ({
   defaultColumn,
   columns,
   renderRowSubComponent,
+  hiddenColumns,
 }) => {
   const {
     getTableProps,
@@ -57,7 +59,12 @@ const DataTable: React.FC<DataTableProps> = ({
     visibleColumns,
     state: { pageIndex, pageSize },
   } = useTable(
-    { columns, data, defaultColumn },
+    {
+      columns,
+      data,
+      defaultColumn,
+      initialState: { hiddenColumns: hiddenColumns || [] },
+    },
     useFilters,
     useGlobalFilter,
     useSortBy,

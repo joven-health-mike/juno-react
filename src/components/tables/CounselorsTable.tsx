@@ -79,6 +79,7 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
       defaultColumn={defaultColumn}
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
+      hiddenColumns={['_id']}
     />
   );
 };

@@ -93,6 +93,7 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
       defaultColumn={defaultColumn}
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
+      hiddenColumns={['_id']}
     />
   );
 };

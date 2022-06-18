@@ -80,6 +80,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, onDeleteClicked }) => {
       defaultColumn={defaultColumn}
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
+      hiddenColumns={['_id']}
     />
   );
 };
