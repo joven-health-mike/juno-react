@@ -68,7 +68,7 @@ const DataTable: React.FC<DataTableProps> = ({
   return (
     <>
       <table className={'jovenTable'} {...getTableProps()}>
-        <HeaderRows headerGroups={headerGroups} isSortable={true} />
+        <HeaderGroups headerGroups={headerGroups} isSortable={true} />
         <BodyRows
           getTableBodyProps={getTableBodyProps}
           rows={page}
@@ -115,12 +115,13 @@ const DataTable: React.FC<DataTableProps> = ({
 
 // Helper components
 
-type HeaderRowsProps = {
+// Component representing the groups of headers for the table
+type HeaderGroupsProps = {
   headerGroups: HeaderGroup[];
   isSortable: boolean;
 };
 
-const HeaderRows: React.FC<HeaderRowsProps> = ({
+const HeaderGroups: React.FC<HeaderGroupsProps> = ({
   headerGroups,
   isSortable,
 }) => {
@@ -140,6 +141,7 @@ const HeaderRows: React.FC<HeaderRowsProps> = ({
   );
 };
 
+// Component representing a single group of headers
 type HeaderRowProps = {
   headerGroup: HeaderGroup;
   isSortable: boolean;
@@ -159,6 +161,7 @@ const HeaderRow: React.FC<HeaderRowProps> = ({ headerGroup, isSortable }) => {
   );
 };
 
+// Component representing a header cell
 type TableHeaderCellProps = {
   column: HeaderGroup;
   isSortable: boolean;
@@ -174,16 +177,17 @@ const TableHeaderCell: React.FC<TableHeaderCellProps> = ({
   return (
     <th className={'jovenTh'} {...restColumn}>
       {column.render('Header')}
-      {isSortable && (
-        <span>
-          {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-        </span>
+      {isSortable && column.id !== 'expander' && (
+        <button>
+          {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : '-'}
+        </button>
       )}
       {column.canFilter && <div>{column.render('Filter')}</div>}
     </th>
   );
 };
 
+// Component representing the body rows of the table
 type BodyRowsProps = {
   getTableBodyProps: () => TableBodyProps;
   prepareRow: (row: Row) => void;
@@ -221,6 +225,7 @@ const BodyRows: React.FC<BodyRowsProps> = ({
   );
 };
 
+// Component representing a row of data
 type BodyRowProps = {
   row: Row;
 };
@@ -236,6 +241,7 @@ const BodyRow: React.FC<BodyRowProps> = ({ row }) => {
   );
 };
 
+// Component representing a row of data that can expand
 type ExpandableBodyRowProps = {
   row: Row;
   visibleColumns: Column[];
@@ -259,6 +265,7 @@ const ExpandableBodyRow: React.FC<ExpandableBodyRowProps> = ({
   );
 };
 
+// Component representing a cell of data
 type BodyRowCellProps = {
   cell: Cell;
 };

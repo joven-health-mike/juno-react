@@ -26,9 +26,9 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, onDeleteClicked }) => {
       {
         id: 'expander',
         Header: ({ getToggleAllRowsExpandedProps, isAllRowsExpanded }) => (
-          <span {...getToggleAllRowsExpandedProps()}>
+          <button {...getToggleAllRowsExpandedProps()}>
             {isAllRowsExpanded ? '👇' : '👉'}
-          </span>
+          </button>
         ),
         Cell: ({ cell, row }: CellProps<object>) => (
           <>
@@ -39,9 +39,9 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, onDeleteClicked }) => {
                 onDeleteClicked((e.target as HTMLInputElement).value);
               }}
             />
-            <span {...row.getToggleRowExpandedProps()}>
+            <button {...row.getToggleRowExpandedProps()}>
               {row.isExpanded ? '👇' : '👉'}
-            </span>
+            </button>
           </>
         ),
       },

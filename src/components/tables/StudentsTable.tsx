@@ -29,9 +29,9 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
       {
         id: 'expander',
         Header: ({ getToggleAllRowsExpandedProps, isAllRowsExpanded }) => (
-          <span {...getToggleAllRowsExpandedProps()}>
+          <button {...getToggleAllRowsExpandedProps()}>
             {isAllRowsExpanded ? '👇' : '👉'}
-          </span>
+          </button>
         ),
         Cell: ({ cell, row }: CellProps<object>) => (
           <>
@@ -44,9 +44,9 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
                 onDeleteClicked((e.target as HTMLInputElement).value);
               }}
             />
-            <span {...row.getToggleRowExpandedProps()}>
+            <button {...row.getToggleRowExpandedProps()}>
               {row.isExpanded ? '👇' : '👉'}
-            </span>
+            </button>
           </>
         ),
       },
