@@ -11,9 +11,9 @@ const CounselorDetails: React.FC<CounselorDetailsProps> = ({ counselor }) => {
   return (
     <>
       <h2>{counselor.name}</h2>
-      <p>{counselor._id}</p>
-      <p>{counselor.email}</p>
-      <p>{counselor.roomLink}</p>
+      <p>ID: {counselor._id}</p>
+      <p>Email: {counselor.email}</p>
+      <p>Room Link: {counselor.roomLink}</p>
     </>
   );
 };
