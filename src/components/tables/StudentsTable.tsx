@@ -56,16 +56,20 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
         ),
       },
       {
-        Header: 'ID',
+        Header: 'Name',
         accessor: '_id',
-      },
-      {
-        Header: 'First Name',
-        accessor: 'first_name',
-      },
-      {
-        Header: 'Last Name',
-        accessor: 'last_name',
+        Cell: ({ cell }: CellProps<object>) => (
+          <p>
+            {(() => {
+              const foundStudent = students.filter(
+                student => student._id === cell.row.values._id
+              )[0];
+              return (
+                <>{foundStudent.first_name + ' ' + foundStudent.last_name}</>
+              );
+            })()}
+          </p>
+        ),
       },
       {
         Header: 'School',
@@ -96,7 +100,7 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
         ),
       },
     ],
-    [onDeleteClicked, counselors, schools]
+    [onDeleteClicked, counselors, schools, students]
   );
 
   const renderRowSubComponent = useCallback((row: Row) => {
@@ -110,7 +114,6 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
       defaultColumn={defaultColumn}
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
-      hiddenColumns={['_id']}
     />
   );
 };
