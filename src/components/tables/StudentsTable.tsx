@@ -1,7 +1,9 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { MouseEvent, useCallback } from 'react';
+import React, { MouseEvent, useCallback, useContext } from 'react';
 import { CellProps, Column, Row } from 'react-table';
+import { CounselorsContext } from '../../data/counselors';
+import { SchoolsContext } from '../../data/schools';
 import { Student } from '../../data/students';
 import XButton from '../buttons/XButton';
 import StudentDetails from '../details/StudentDetails';
@@ -17,6 +19,9 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
   students,
   onDeleteClicked,
 }) => {
+  const { counselors } = useContext(CounselorsContext);
+  const { schools } = useContext(SchoolsContext);
+
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
       Filter: TableSearchFilter,
@@ -63,15 +68,35 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
         accessor: 'last_name',
       },
       {
-        Header: 'School ID',
+        Header: 'School',
         accessor: 'schoolId',
+        Cell: ({ cell }: CellProps<object>) => (
+          <p>
+            {(() => {
+              const foundSchool = schools.filter(
+                school => school._id === cell.row.values.schoolId
+              )[0];
+              return <>{foundSchool.name}</>;
+            })()}
+          </p>
+        ),
       },
       {
-        Header: 'Counselor ID',
+        Header: 'Counselor',
         accessor: 'counselorId',
+        Cell: ({ cell }: CellProps<object>) => (
+          <p>
+            {(() => {
+              const foundCounselor = counselors.filter(
+                counselor => counselor._id === cell.row.values.counselorId
+              )[0];
+              return <>{foundCounselor.name}</>;
+            })()}
+          </p>
+        ),
       },
     ],
-    [onDeleteClicked]
+    [onDeleteClicked, counselors, schools]
   );
 
   const renderRowSubComponent = useCallback((row: Row) => {
