@@ -2,7 +2,11 @@
 
 import React, { MouseEvent, useCallback, useContext } from 'react';
 import { CellProps, Column, Row } from 'react-table';
-import { Appointment } from '../../data/appointments';
+import {
+  Appointment,
+  AppointmentsContext,
+  emptyAppointment,
+} from '../../data/appointments';
 import { CounselorsContext } from '../../data/counselors';
 import { StudentsContext } from '../../data/students';
 import { formatDateTime } from '../../utils/DateUtils';
@@ -20,6 +24,7 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
   appointments,
   onDeleteClicked,
 }) => {
+  const { setAppointments } = useContext(AppointmentsContext);
   const { counselors } = useContext(CounselorsContext);
   const { students } = useContext(StudentsContext);
 
@@ -85,7 +90,7 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
               const foundCounselor = counselors.filter(
                 counselor => counselor._id === cell.row.values.counselorId
               )[0];
-              return <>{foundCounselor.name}</>;
+              return <>{foundCounselor ? foundCounselor.name : 'Not Found'}</>;
             })()}
           </p>
         ),
@@ -100,7 +105,11 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
                 student => student._id === cell.row.values.studentId
               )[0];
               return (
-                <>{foundStudent.first_name + ' ' + foundStudent.last_name}</>
+                <>
+                  {foundStudent
+                    ? foundStudent.first_name + ' ' + foundStudent.last_name
+                    : 'Not Found'}
+                </>
               );
             })()}
           </p>
@@ -122,6 +131,7 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
       hiddenColumns={['_id']}
+      addNewItem={() => setAppointments([...appointments, emptyAppointment])}
     />
   );
 };

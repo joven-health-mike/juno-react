@@ -1,8 +1,8 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { MouseEvent, useCallback } from 'react';
+import React, { MouseEvent, useCallback, useContext } from 'react';
 import { CellProps, Column, Row } from 'react-table';
-import { User } from '../../data/users';
+import { emptyUser, User, UsersContext } from '../../data/users';
 import XButton from '../buttons/XButton';
 import UserDetails from '../details/UserDetails';
 import DataTable from './DataTable';
@@ -14,6 +14,8 @@ type UsersTableProps = {
 };
 
 const UsersTable: React.FC<UsersTableProps> = ({ users, onDeleteClicked }) => {
+  const { setUsers } = useContext(UsersContext);
+
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
       Filter: TableSearchFilter,
@@ -81,6 +83,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, onDeleteClicked }) => {
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
       hiddenColumns={['_id']}
+      addNewItem={() => setUsers([...users, emptyUser])}
     />
   );
 };

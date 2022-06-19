@@ -1,8 +1,12 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { MouseEvent, useCallback } from 'react';
+import React, { MouseEvent, useCallback, useContext } from 'react';
 import { CellProps, Column, Row } from 'react-table';
-import { Counselor } from '../../data/counselors';
+import {
+  Counselor,
+  CounselorsContext,
+  emptyCounselor,
+} from '../../data/counselors';
 import XButton from '../buttons/XButton';
 import CounselorDetails from '../details/CounselorDetails';
 import DataTable from './DataTable';
@@ -17,6 +21,8 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
   counselors,
   onDeleteClicked,
 }) => {
+  const { setCounselors } = useContext(CounselorsContext);
+
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
       Filter: TableSearchFilter,
@@ -80,6 +86,7 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
       hiddenColumns={['_id']}
+      addNewItem={() => setCounselors([...counselors, emptyCounselor])}
     />
   );
 };

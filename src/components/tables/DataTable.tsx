@@ -32,6 +32,7 @@ type DataTableProps = {
   defaultColumn: Record<string, unknown>;
   columns: Column[];
   renderRowSubComponent?: (row: Row) => ReactNode;
+  addNewItem?: () => void;
   hiddenColumns?: string[];
 };
 
@@ -40,6 +41,7 @@ const DataTable: React.FC<DataTableProps> = ({
   defaultColumn,
   columns,
   renderRowSubComponent,
+  addNewItem,
   hiddenColumns,
 }) => {
   const {
@@ -82,6 +84,7 @@ const DataTable: React.FC<DataTableProps> = ({
           prepareRow={prepareRow}
           visibleColumns={visibleColumns}
           renderRowSubComponent={renderRowSubComponent}
+          addNewItem={addNewItem}
         />
       </table>
       <div className="pagination">
@@ -201,6 +204,7 @@ type BodyRowsProps = {
   rows: Row[];
   visibleColumns: Column[];
   renderRowSubComponent?: (row: Row) => ReactNode;
+  addNewItem?: () => void;
 };
 
 const BodyRows: React.FC<BodyRowsProps> = ({
@@ -209,9 +213,13 @@ const BodyRows: React.FC<BodyRowsProps> = ({
   rows,
   visibleColumns,
   renderRowSubComponent,
+  addNewItem,
 }) => {
   return (
     <tbody {...getTableBodyProps()}>
+      {addNewItem && (
+        <AddDataRow visibleColumns={visibleColumns} addNewItem={addNewItem} />
+      )}
       {rows.map(row => {
         prepareRow(row);
         const { key } = row.getRowProps();
@@ -269,6 +277,30 @@ const ExpandableBodyRow: React.FC<ExpandableBodyRowProps> = ({
         {renderRowSubComponent(row)}
       </td>
     </tr>
+  );
+};
+
+type AddDataRowProps = {
+  visibleColumns: Column[];
+  addNewItem: () => void;
+};
+
+const AddDataRow: React.FC<AddDataRowProps> = ({
+  visibleColumns,
+  addNewItem,
+}) => {
+  return (
+    <>
+      <tr className={'jovenTr'}>
+        <td
+          className={'jovenTd'}
+          colSpan={visibleColumns.length}
+          onClick={addNewItem}
+        >
+          +
+        </td>
+      </tr>
+    </>
   );
 };
 

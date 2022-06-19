@@ -1,8 +1,8 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { MouseEvent, useCallback } from 'react';
+import React, { MouseEvent, useCallback, useContext } from 'react';
 import { CellProps, Column, Row } from 'react-table';
-import { School } from '../../data/schools';
+import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import XButton from '../buttons/XButton';
 import SchoolDetails from '../details/SchoolDetails';
 import DataTable from './DataTable';
@@ -17,6 +17,8 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
   schools,
   onDeleteClicked,
 }) => {
+  const { setSchools } = useContext(SchoolsContext);
+
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
       Filter: TableSearchFilter,
@@ -76,6 +78,7 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
       hiddenColumns={['_id']}
+      addNewItem={() => setSchools([...schools, emptySchool])}
     />
   );
 };

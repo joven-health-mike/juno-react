@@ -4,7 +4,7 @@ import React, { MouseEvent, useCallback, useContext } from 'react';
 import { CellProps, Column, Row } from 'react-table';
 import { CounselorsContext } from '../../data/counselors';
 import { SchoolsContext } from '../../data/schools';
-import { Student } from '../../data/students';
+import { emptyStudent, Student, StudentsContext } from '../../data/students';
 import XButton from '../buttons/XButton';
 import StudentDetails from '../details/StudentDetails';
 import DataTable from './DataTable';
@@ -21,6 +21,7 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
 }) => {
   const { counselors } = useContext(CounselorsContext);
   const { schools } = useContext(SchoolsContext);
+  const { setStudents } = useContext(StudentsContext);
 
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
@@ -65,7 +66,11 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
                 student => student._id === cell.row.values._id
               )[0];
               return (
-                <>{foundStudent.first_name + ' ' + foundStudent.last_name}</>
+                <>
+                  {foundStudent
+                    ? foundStudent.first_name + ' ' + foundStudent.last_name
+                    : 'Not Found'}
+                </>
               );
             })()}
           </p>
@@ -80,7 +85,7 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
               const foundSchool = schools.filter(
                 school => school._id === cell.row.values.schoolId
               )[0];
-              return <>{foundSchool.name}</>;
+              return <>{foundSchool ? foundSchool.name : 'Not Found'}</>;
             })()}
           </p>
         ),
@@ -94,7 +99,7 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
               const foundCounselor = counselors.filter(
                 counselor => counselor._id === cell.row.values.counselorId
               )[0];
-              return <>{foundCounselor.name}</>;
+              return <>{foundCounselor ? foundCounselor.name : 'Not Found'}</>;
             })()}
           </p>
         ),
@@ -114,6 +119,7 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
       defaultColumn={defaultColumn}
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
+      addNewItem={() => setStudents([...students, emptyStudent])}
     />
   );
 };
