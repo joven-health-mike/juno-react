@@ -1,8 +1,11 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { MouseEvent, useCallback } from 'react';
+import React, { MouseEvent, useCallback, useContext } from 'react';
 import { CellProps, Column, Row } from 'react-table';
 import { Appointment } from '../../data/appointments';
+import { CounselorsContext } from '../../data/counselors';
+import { StudentsContext } from '../../data/students';
+import { formatDateTime } from '../../utils/DateUtils';
 import XButton from '../buttons/XButton';
 import AppointmentDetails from '../details/AppointmentDetails';
 import DataTable from './DataTable';
@@ -17,6 +20,9 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
   appointments,
   onDeleteClicked,
 }) => {
+  const { counselors } = useContext(CounselorsContext);
+  const { students } = useContext(StudentsContext);
+
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
       Filter: TableSearchFilter,
@@ -60,26 +66,48 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
         Header: 'Start',
         accessor: 'start',
         Cell: ({ cell }: CellProps<object>) => (
-          <p>{cell.row.values.start.toISOString()}</p>
+          <p>{formatDateTime(cell.row.values.start, -6)}</p>
         ),
       },
       {
         Header: 'End',
         accessor: 'end',
         Cell: ({ cell }: CellProps<object>) => (
-          <p>{cell.row.values.end.toISOString()}</p>
+          <p>{formatDateTime(cell.row.values.end, -6)}</p>
         ),
       },
       {
-        Header: 'Counselor ID',
+        Header: 'Counselor',
         accessor: 'counselorId',
+        Cell: ({ cell }: CellProps<object>) => (
+          <p>
+            {(() => {
+              const foundCounselor = counselors.filter(
+                counselor => counselor._id === cell.row.values.counselorId
+              )[0];
+              return <>{foundCounselor.name}</>;
+            })()}
+          </p>
+        ),
       },
       {
-        Header: 'Student ID',
+        Header: 'Student',
         accessor: 'studentId',
+        Cell: ({ cell }: CellProps<object>) => (
+          <p>
+            {(() => {
+              const foundStudent = students.filter(
+                student => student._id === cell.row.values.studentId
+              )[0];
+              return (
+                <>{foundStudent.first_name + ' ' + foundStudent.last_name}</>
+              );
+            })()}
+          </p>
+        ),
       },
     ],
-    [onDeleteClicked]
+    [onDeleteClicked, counselors, students]
   );
 
   const renderRowSubComponent = useCallback((row: Row) => {
