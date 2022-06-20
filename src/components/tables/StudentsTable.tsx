@@ -119,7 +119,7 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
       defaultColumn={defaultColumn}
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
-      addNewItem={() => setStudents([...students, emptyStudent])}
+      addNewItem={() => setStudents([emptyStudent, ...students])}
     />
   );
 };

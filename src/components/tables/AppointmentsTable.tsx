@@ -131,7 +131,7 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
       hiddenColumns={['_id']}
-      addNewItem={() => setAppointments([...appointments, emptyAppointment])}
+      addNewItem={() => setAppointments([emptyAppointment, ...appointments])}
     />
   );
 };

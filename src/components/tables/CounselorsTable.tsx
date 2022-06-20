@@ -86,7 +86,7 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
       hiddenColumns={['_id']}
-      addNewItem={() => setCounselors([...counselors, emptyCounselor])}
+      addNewItem={() => setCounselors([emptyCounselor, ...counselors])}
     />
   );
 };

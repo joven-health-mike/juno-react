@@ -83,7 +83,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, onDeleteClicked }) => {
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
       hiddenColumns={['_id']}
-      addNewItem={() => setUsers([...users, emptyUser])}
+      addNewItem={() => setUsers([emptyUser, ...users])}
     />
   );
 };

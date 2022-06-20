@@ -78,7 +78,7 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
       hiddenColumns={['_id']}
-      addNewItem={() => setSchools([...schools, emptySchool])}
+      addNewItem={() => setSchools([emptySchool, ...schools])}
     />
   );
 };

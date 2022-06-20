@@ -218,7 +218,7 @@ const BodyRows: React.FC<BodyRowsProps> = ({
   return (
     <tbody {...getTableBodyProps()}>
       {addNewItem && (
-        <AddDataRow visibleColumns={visibleColumns} addNewItem={addNewItem} />
+        <AddButtonRow visibleColumns={visibleColumns} addNewItem={addNewItem} />
       )}
       {rows.map(row => {
         prepareRow(row);
@@ -280,12 +280,12 @@ const ExpandableBodyRow: React.FC<ExpandableBodyRowProps> = ({
   );
 };
 
-type AddDataRowProps = {
+type AddButtonRowProps = {
   visibleColumns: Column[];
   addNewItem: () => void;
 };
 
-const AddDataRow: React.FC<AddDataRowProps> = ({
+const AddButtonRow: React.FC<AddButtonRowProps> = ({
   visibleColumns,
   addNewItem,
 }) => {
