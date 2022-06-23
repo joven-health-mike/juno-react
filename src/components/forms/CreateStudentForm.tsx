@@ -42,22 +42,13 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
 
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelection(counselor);
+    setStudent({ ...student, counselorId: counselor._id });
   };
 
   const onSchoolChanged = (school: School) => {
     setSchoolSelection(school);
+    setStudent({ ...student, schoolId: school._id });
   };
-
-  // update the student whenever counselor or school selection is changed
-  useEffect(() => {
-    setStudent(prevStudent => {
-      return {
-        ...prevStudent,
-        counselorId: counselorSelection._id,
-        schoolId: schoolSelection._id,
-      };
-    });
-  }, [counselorSelection, schoolSelection]);
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();

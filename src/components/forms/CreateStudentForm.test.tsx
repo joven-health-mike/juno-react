@@ -65,12 +65,6 @@ describe('CreateStudentForm', () => {
 
     //check that the ID is positive
     expect(submitCallback.mock.calls[0][0]._id).toBeGreaterThanOrEqual(0);
-
-    expect(submitCallback.mock.calls[1][1].schoolId).toBeGreaterThanOrEqual(1);
-
-    expect(submitCallback.mock.calls[2][2].counselorId).toBeGreaterThanOrEqual(
-      2
-    );
   });
 
   test('Check if first names match', () => {
