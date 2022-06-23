@@ -5,7 +5,6 @@ import {
   useTable,
   useFilters,
   useGlobalFilter,
-  useSortBy,
   Column,
   HeaderGroup,
   Row,
@@ -69,7 +68,6 @@ const DataTable: React.FC<DataTableProps> = ({
     },
     useFilters,
     useGlobalFilter,
-    useSortBy,
     useExpanded,
     usePagination
   );
@@ -77,7 +75,7 @@ const DataTable: React.FC<DataTableProps> = ({
   return (
     <>
       <table className={'jovenTable'} {...getTableProps()}>
-        <HeaderGroups headerGroups={headerGroups} isSortable={true} />
+        <HeaderGroups headerGroups={headerGroups} />
         <BodyRows
           getTableBodyProps={getTableBodyProps}
           rows={page}
@@ -128,24 +126,14 @@ const DataTable: React.FC<DataTableProps> = ({
 // Component representing the groups of headers for the table
 type HeaderGroupsProps = {
   headerGroups: HeaderGroup[];
-  isSortable: boolean;
 };
 
-const HeaderGroups: React.FC<HeaderGroupsProps> = ({
-  headerGroups,
-  isSortable,
-}) => {
+const HeaderGroups: React.FC<HeaderGroupsProps> = ({ headerGroups }) => {
   return (
     <thead>
       {headerGroups.map(headerGroup => {
         const { key } = headerGroup.getHeaderGroupProps();
-        return (
-          <HeaderRow
-            key={key}
-            headerGroup={headerGroup}
-            isSortable={isSortable}
-          />
-        );
+        return <HeaderRow key={key} headerGroup={headerGroup} />;
       })}
     </thead>
   );
@@ -154,18 +142,15 @@ const HeaderGroups: React.FC<HeaderGroupsProps> = ({
 // Component representing a single group of headers
 type HeaderRowProps = {
   headerGroup: HeaderGroup;
-  isSortable: boolean;
 };
 
-const HeaderRow: React.FC<HeaderRowProps> = ({ headerGroup, isSortable }) => {
+const HeaderRow: React.FC<HeaderRowProps> = ({ headerGroup }) => {
   const { ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps();
   return (
     <tr className={'jovenTr'} {...restHeaderGroupProps}>
       {headerGroup.headers.map(column => {
-        const { key } = column.getHeaderProps(column.getSortByToggleProps());
-        return (
-          <TableHeaderCell key={key} column={column} isSortable={isSortable} />
-        );
+        const { key } = column.getHeaderProps();
+        return <TableHeaderCell key={key} column={column} />;
       })}
     </tr>
   );
@@ -174,24 +159,13 @@ const HeaderRow: React.FC<HeaderRowProps> = ({ headerGroup, isSortable }) => {
 // Component representing a header cell
 type TableHeaderCellProps = {
   column: HeaderGroup;
-  isSortable: boolean;
 };
 
-const TableHeaderCell: React.FC<TableHeaderCellProps> = ({
-  column,
-  isSortable,
-}) => {
-  const { ...restColumn } = column.getHeaderProps(
-    column.getSortByToggleProps()
-  );
+const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ column }) => {
+  const { ...restColumn } = column.getHeaderProps();
   return (
     <th className={'jovenTh'} {...restColumn}>
       {column.render('Header')}
-      {isSortable && column.id !== 'expander' && (
-        <button>
-          {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : '-'}
-        </button>
-      )}
       {column.canFilter && <div>{column.render('Filter')}</div>}
     </th>
   );
