@@ -43,11 +43,34 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
 
   const [isEditingCell, editCell] = useState<Key | null>();
 
-  const getCounselor = (cell: Cell<any, object>) => {
-    const foundCounselor = counselors.filter(
-      counselor => counselor._id === cell.row.values.counselorId
-    )[0];
-    return foundCounselor ? foundCounselor.name : 'Not Found';
+  const getCounselor = useCallback(
+    (cell: Cell<any, object>) => {
+      const foundCounselor = counselors.filter(
+        counselor => counselor._id === cell.row.values.counselorId
+      )[0];
+      return foundCounselor ? foundCounselor.name : 'Not Found';
+    },
+    [counselors]
+  );
+
+  const saveCounselor = () => {
+    console.log('save counselor');
+  };
+
+  const getStudent = useCallback(
+    (cell: Cell<any, object>) => {
+      const foundStudent = students.filter(
+        student => student._id === cell.row.values.studentId
+      )[0];
+      return foundStudent
+        ? foundStudent.first_name + ' ' + foundStudent.last_name
+        : 'Not Found';
+    },
+    [students]
+  );
+
+  const saveStudent = () => {
+    console.log('save student');
   };
 
   const startEditingCell = (cell: Cell<any, object>) => {
@@ -56,14 +79,6 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
 
   const stopEditingCell = () => {
     editCell(null);
-  };
-
-  const saveCell = (cell: Cell<any, object>) => {
-    stopEditingCell();
-  };
-
-  const saveCounselor = () => {
-    console.log('save counselor');
   };
 
   const columns: Column[] = React.useMemo(
@@ -116,7 +131,6 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
         Header: 'Counselor',
         accessor: 'counselorId',
         Cell: ({ cell }: CellProps<object>) => {
-          console.log(cell.getCellProps());
           if (isEditingCell === cell.getCellProps().key) {
             return (
               <p>
@@ -126,14 +140,13 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
                   value="Save Counselor"
                   onClick={() => {
                     saveCounselor();
-                    saveCell(cell);
+                    stopEditingCell();
                   }}
                 />
                 <XButton
                   text="❌"
                   value="Save Counselor"
                   onClick={() => {
-                    saveCounselor();
                     stopEditingCell();
                   }}
                 />
@@ -147,7 +160,6 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
                 text="✏️"
                 value="Edit Counselor"
                 onClick={() => {
-                  saveCounselor();
                   startEditingCell(cell);
                 }}
               />
@@ -158,25 +170,45 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
       {
         Header: 'Student',
         accessor: 'studentId',
-        Cell: ({ cell }: CellProps<object>) => (
-          <p>
-            {(() => {
-              const foundStudent = students.filter(
-                student => student._id === cell.row.values.studentId
-              )[0];
-              return (
-                <>
-                  {foundStudent
-                    ? foundStudent.first_name + ' ' + foundStudent.last_name
-                    : 'Not Found'}
-                </>
-              );
-            })()}
-          </p>
-        ),
+        Cell: ({ cell }: CellProps<object>) => {
+          if (isEditingCell === cell.getCellProps().key) {
+            return (
+              <p>
+                <input value={getStudent(cell)} />
+                <XButton
+                  text="✅"
+                  value="Save Student"
+                  onClick={() => {
+                    saveStudent();
+                    stopEditingCell();
+                  }}
+                />
+                <XButton
+                  text="❌"
+                  value="Cancel Editing Student"
+                  onClick={() => {
+                    stopEditingCell();
+                  }}
+                />
+              </p>
+            );
+          }
+          return (
+            <p>
+              {getStudent(cell)}
+              <XButton
+                text="✏️"
+                value="Edit Student"
+                onClick={() => {
+                  startEditingCell(cell);
+                }}
+              />
+            </p>
+          );
+        },
       },
     ],
-    [onDeleteClicked, counselors, isEditingCell]
+    [onDeleteClicked, isEditingCell, getCounselor, getStudent]
   );
 
   const renderRowSubComponent = useCallback((row: Row) => {
