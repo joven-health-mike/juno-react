@@ -11,6 +11,7 @@ type SelectListProps = {
   labelText: string;
   value: string;
   items: string[];
+  selectedIndex?: number;
   onItemChanged: (item: string) => void;
 };
 
@@ -18,6 +19,7 @@ const SelectList = ({
   labelText,
   value,
   items,
+  selectedIndex = -1,
   onItemChanged,
 }: SelectListProps) => {
   const itemChanged = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -30,7 +32,12 @@ const SelectList = ({
     <select value={value} onChange={itemChanged}>
       <option key={labelText}>{labelText}</option>
       {items.map((item, index) => {
-        return <option key={index}>{item}</option>;
+        return (
+          <option key={index} selected={index === selectedIndex}>
+            {' '}
+            {item}
+          </option>
+        );
       })}
     </select>
   );
@@ -40,11 +47,13 @@ export default SelectList;
 
 type SelectCounselorListProps = {
   value: string;
+  selectedCounselor?: Counselor;
   onCounselorChanged: (counselor: Counselor) => void;
 };
 
 export function SelectCounselorList({
   value,
+  selectedCounselor,
   onCounselorChanged,
 }: SelectCounselorListProps) {
   const { counselors } = useContext(CounselorsContext);
@@ -57,12 +66,22 @@ export function SelectCounselorList({
     onCounselorChanged(counselor ?? emptyCounselor);
   };
 
+  const getSelectedIndex = () => {
+    if (selectedCounselor) {
+      return counselors.findIndex(counselor => {
+        return counselor === selectedCounselor;
+      });
+    }
+    return -1;
+  };
+
   return (
     <>
       <SelectList
         labelText={'Select a Counselor'}
         items={counselorNames}
         value={value}
+        selectedIndex={getSelectedIndex()}
         onItemChanged={handleCounselorChange}
       />
     </>

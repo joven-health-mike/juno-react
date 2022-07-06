@@ -33,6 +33,10 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
+  console.log('CreateAppointmentForm');
+  console.log(defaultAppointment);
+  console.log(defaultAppointment?.counselorId);
+
   const [appointment, setAppointment] = useState<Appointment>(
     defaultAppointment ?? emptyAppointment
   );
