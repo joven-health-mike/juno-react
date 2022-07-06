@@ -1,7 +1,13 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { MouseEvent, useCallback, useContext } from 'react';
-import { CellProps, Column, Row } from 'react-table';
+import React, {
+  Key,
+  MouseEvent,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
+import { CellProps, Column, Row, Cell } from 'react-table';
 import {
   Appointment,
   AppointmentsContext,
@@ -34,6 +40,31 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
     }),
     []
   );
+
+  const [isEditingCell, editCell] = useState<Key | null>();
+
+  const getCounselor = (cell: Cell<any, object>) => {
+    const foundCounselor = counselors.filter(
+      counselor => counselor._id === cell.row.values.counselorId
+    )[0];
+    return foundCounselor ? foundCounselor.name : 'Not Found';
+  };
+
+  const startEditingCell = (cell: Cell<any, object>) => {
+    editCell(cell.getCellProps().key);
+  };
+
+  const stopEditingCell = () => {
+    editCell(null);
+  };
+
+  const saveCell = (cell: Cell<any, object>) => {
+    stopEditingCell();
+  };
+
+  const saveCounselor = () => {
+    console.log('save counselor');
+  };
 
   const columns: Column[] = React.useMemo(
     () => [
@@ -84,16 +115,45 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
       {
         Header: 'Counselor',
         accessor: 'counselorId',
-        Cell: ({ cell }: CellProps<object>) => (
-          <p>
-            {(() => {
-              const foundCounselor = counselors.filter(
-                counselor => counselor._id === cell.row.values.counselorId
-              )[0];
-              return <>{foundCounselor ? foundCounselor.name : 'Not Found'}</>;
-            })()}
-          </p>
-        ),
+        Cell: ({ cell }: CellProps<object>) => {
+          console.log(cell.getCellProps());
+          if (isEditingCell === cell.getCellProps().key) {
+            return (
+              <p>
+                <input value={getCounselor(cell)} />
+                <XButton
+                  text="✅"
+                  value="Save Counselor"
+                  onClick={() => {
+                    saveCounselor();
+                    saveCell(cell);
+                  }}
+                />
+                <XButton
+                  text="❌"
+                  value="Save Counselor"
+                  onClick={() => {
+                    saveCounselor();
+                    stopEditingCell();
+                  }}
+                />
+              </p>
+            );
+          }
+          return (
+            <p>
+              {getCounselor(cell)}
+              <XButton
+                text="✏️"
+                value="Edit Counselor"
+                onClick={() => {
+                  saveCounselor();
+                  startEditingCell(cell);
+                }}
+              />
+            </p>
+          );
+        },
       },
       {
         Header: 'Student',
@@ -116,7 +176,7 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
         ),
       },
     ],
-    [onDeleteClicked, counselors, students]
+    [onDeleteClicked, counselors, isEditingCell]
   );
 
   const renderRowSubComponent = useCallback((row: Row) => {

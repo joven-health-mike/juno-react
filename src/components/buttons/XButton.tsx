@@ -4,12 +4,14 @@ import React from 'react';
 
 type XButtonProps = {
   value: string;
+  text?: string;
   className?: string;
   type?: 'submit' | 'reset' | 'button' | undefined;
   onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
 const XButton: React.FC<XButtonProps> = ({
+  text = 'X',
   value,
   className = 'button-x',
   type = undefined,
@@ -18,7 +20,7 @@ const XButton: React.FC<XButtonProps> = ({
   return (
     <>
       <button className={className} value={value} onClick={onClick} type={type}>
-        X
+        {text}
       </button>
     </>
   );
