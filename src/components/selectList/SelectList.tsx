@@ -9,9 +9,8 @@ import { emptyStudent, Student, StudentsContext } from '../../data/students';
 
 type SelectListProps = {
   labelText: string;
-  value: string;
+  value: number;
   items: string[];
-  selectedIndex?: number;
   onItemChanged: (item: string) => void;
 };
 
@@ -19,7 +18,6 @@ const SelectList = ({
   labelText,
   value,
   items,
-  selectedIndex = -1,
   onItemChanged,
 }: SelectListProps) => {
   const itemChanged = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -30,11 +28,12 @@ const SelectList = ({
 
   return (
     <select value={value} onChange={itemChanged}>
-      <option key={labelText}>{labelText}</option>
+      <option value={-1} key={labelText}>
+        {labelText}
+      </option>
       {items.map((item, index) => {
         return (
-          <option key={index} selected={index === selectedIndex}>
-            {' '}
+          <option value={index} key={index}>
             {item}
           </option>
         );
@@ -46,7 +45,7 @@ const SelectList = ({
 export default SelectList;
 
 type SelectCounselorListProps = {
-  value: string;
+  value: number;
   selectedCounselor?: Counselor;
   onCounselorChanged: (counselor: Counselor) => void;
 };
@@ -66,22 +65,12 @@ export function SelectCounselorList({
     onCounselorChanged(counselor ?? emptyCounselor);
   };
 
-  const getSelectedIndex = () => {
-    if (selectedCounselor) {
-      return counselors.findIndex(counselor => {
-        return counselor === selectedCounselor;
-      });
-    }
-    return -1;
-  };
-
   return (
     <>
       <SelectList
         labelText={'Select a Counselor'}
         items={counselorNames}
         value={value}
-        selectedIndex={getSelectedIndex()}
         onItemChanged={handleCounselorChange}
       />
     </>
@@ -89,7 +78,7 @@ export function SelectCounselorList({
 }
 
 type SelectSchoolListProps = {
-  value: string;
+  value: number;
   onSchoolChanged: (school: School) => void;
 };
 
@@ -118,7 +107,7 @@ export function SelectSchoolList({
 }
 
 type SelectStudentListProps = {
-  value: string;
+  value: number;
   onStudentChanged: (student: Student) => void;
 };
 
