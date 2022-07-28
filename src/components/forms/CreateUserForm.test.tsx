@@ -43,7 +43,7 @@ describe('CreateUserForm', () => {
 
     expect(cancelCallback).toHaveBeenCalled();
   });
-  test('a new counselor should have a positive ID', async () => {
+  test('a new user should have a positive ID', async () => {
     const submitCallback = jest.fn();
     const view = render(
       <CreateUserForm onSubmit={submitCallback} onCancel={jest.fn()} />
