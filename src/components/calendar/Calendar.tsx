@@ -4,6 +4,7 @@ import React from 'react';
 import FullCalendar, { EventClickArg, PluginDef } from '@fullcalendar/react';
 import { Appointment } from '../../data/appointments';
 import { DateClickArg } from '@fullcalendar/interaction';
+// import './calendar.css';
 
 type CalendarProps = {
   view: string;
@@ -43,6 +44,7 @@ const Calendar: React.FC<CalendarProps> = ({
         initialView={view}
         eventClick={(info: EventClickArg) => eventClicked(info)}
         dateClick={(info: DateClickArg) => dateClicked(info)}
+        eventColor={'red'}
       />
     </div>
   );

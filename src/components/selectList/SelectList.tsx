@@ -6,6 +6,7 @@ import {
 } from '../../data/counselors';
 import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import { emptyStudent, Student, StudentsContext } from '../../data/students';
+import { emptyType, Type, TypesContext } from '../../data/appointmentTypes';
 
 type SelectListProps = {
   labelText: string;
@@ -125,6 +126,30 @@ export function SelectStudentList({
       items={studentNames}
       value={value}
       onItemChanged={handleStudentChange}
+    />
+  );
+}
+
+type SelectTypeListProps = {
+  value: string;
+  onTypeChanged: (type: Type) => void;
+};
+
+export function SelectTypeList({ value, onTypeChanged }: SelectTypeListProps) {
+  const { types } = useContext(TypesContext);
+  const typeNames = types.map(type => type.name);
+
+  const handleTypeChange = (typeName: string) => {
+    const type = types.find(type => type.name === typeName);
+    onTypeChanged(type ?? emptyType);
+  };
+
+  return (
+    <SelectList
+      labelText={'Select Appointment Type'}
+      items={typeNames}
+      value={value}
+      onItemChanged={handleTypeChange}
     />
   );
 }

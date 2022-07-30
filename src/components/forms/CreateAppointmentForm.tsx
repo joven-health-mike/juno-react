@@ -21,7 +21,9 @@ import { emptyStudent, Student } from '../../data/students';
 import {
   SelectCounselorList,
   SelectStudentList,
+  SelectTypeList,
 } from '../selectList/SelectList';
+import { Type, emptyType } from '../../data/appointmentTypes';
 
 type CreateAppointmentFormProps = {
   defaultAppointment?: Appointment;
@@ -41,6 +43,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     useState<Student>(emptyStudent);
   const [counselorSelection, setCounselorSelection] =
     useState<Counselor>(emptyCounselor);
+  const [typeSelection, setTypeSelection] = useState<Type>(emptyType);
   const { appointments } =
     useContext<IAppointmentsContext>(AppointmentsContext);
 
@@ -52,6 +55,10 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     setStudentSelection(student);
   };
 
+  const onTypeChanged = (type: Type) => {
+    setTypeSelection(type);
+  };
+
   // update the appointment whenever counselor or student selection is changed
   useEffect(() => {
     setAppointment(prevAppointment => {
@@ -59,9 +66,10 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
         ...prevAppointment,
         studentId: studentSelection._id,
         counselorId: counselorSelection._id,
+        color: typeSelection.color,
       };
     });
-  }, [studentSelection, counselorSelection]);
+  }, [studentSelection, counselorSelection, typeSelection]);
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -129,6 +137,13 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
         <SelectStudentList
           value={studentSelection.first_name + ' ' + studentSelection.last_name}
           onStudentChanged={onStudentChanged}
+        />
+      </label>
+      <label>
+        Type{' '}
+        <SelectTypeList
+          value={typeSelection.name}
+          onTypeChanged={onTypeChanged}
         />
       </label>
 
