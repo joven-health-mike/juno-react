@@ -10,10 +10,12 @@ type StudentDetailsProps = {
 const StudentDetails: React.FC<StudentDetailsProps> = ({ student }) => {
   return (
     <>
-      <h2>{student.first_name + ' ' + student.last_name}</h2>
-      <p>{student._id}</p>
-      <p>{student.schoolId}</p>
-      <p>{student.counselorId}</p>
+      <h2 data-testid={'name'}>
+        {student.first_name + ' ' + student.last_name}
+      </h2>
+      <p data-testid={'id'}>{student._id}</p>
+      <p data-testid={'schoolId'}>{student.schoolId}</p>
+      <p data-testid={'counselorId'}>{student.counselorId}</p>
     </>
   );
 };

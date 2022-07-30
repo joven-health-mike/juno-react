@@ -10,9 +10,9 @@ type SchoolDetailsProps = {
 const SchoolDetails: React.FC<SchoolDetailsProps> = ({ school }) => {
   return (
     <>
-      <h2>{school.name}</h2>
-      <p>{school._id}</p>
-      <p>{school.email}</p>
+      <h2 data-testid={'name'}>{school.name}</h2>
+      <p data-testid={'id'}>{school._id}</p>
+      <p data-testid={'email'}>{school.email}</p>
     </>
   );
 };
