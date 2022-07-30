@@ -11,8 +11,8 @@ const SchoolDetails: React.FC<SchoolDetailsProps> = ({ school }) => {
   return (
     <>
       <h2 data-testid={'name'}>{school.name}</h2>
-      <p data-testid={'id'}>{school._id}</p>
-      <p data-testid={'email'}>{school.email}</p>
+      <p data-testid={'id'}>ID: {school._id}</p>
+      <p data-testid={'email'}>Email: {school.email}</p>
     </>
   );
 };

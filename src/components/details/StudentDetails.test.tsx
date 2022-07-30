@@ -11,9 +11,12 @@ const testStudent = {
   first_name: 'firstName',
   last_name: 'lastName',
   _id: 0,
-  schoolId: 1,
-  counselorId: 2,
+  schoolId: 0,
+  counselorId: 0,
 };
+
+const testSchoolName = 'Aardvark Academy';
+const testCounselorName = 'Jacek McGuinness';
 
 describe('SchoolDetails', () => {
   it('should display name', async () => {
@@ -26,18 +29,18 @@ describe('SchoolDetails', () => {
   it('should display ID as a string', async () => {
     const view = render(<StudentDetails student={testStudent} />);
     const idView = await view.findByTestId('id');
-    expect(idView.innerHTML).toEqual(testStudent._id.toString());
+    expect(idView.innerHTML).toEqual('ID: ' + testStudent._id.toString());
   });
   it('should display the school ID', async () => {
     const view = render(<StudentDetails student={testStudent} />);
     const schoolIdView = await view.findByTestId('schoolId');
-    expect(schoolIdView.innerHTML).toEqual(testStudent.schoolId.toString());
+    expect(schoolIdView.innerHTML).toEqual('School: ' + testSchoolName);
   });
   it('should display the counselor ID', async () => {
     const view = render(<StudentDetails student={testStudent} />);
     const counselorIdView = await view.findByTestId('counselorId');
     expect(counselorIdView.innerHTML).toEqual(
-      testStudent.counselorId.toString()
+      'Counselor: ' + testCounselorName
     );
   });
   it('should display ID as <p>', async () => {

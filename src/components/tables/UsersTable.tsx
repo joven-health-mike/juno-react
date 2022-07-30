@@ -1,9 +1,10 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { MouseEvent } from 'react';
-import { CellProps, Column } from 'react-table';
-import { User } from '../../data/users';
+import React, { MouseEvent, useCallback, useContext } from 'react';
+import { CellProps, Column, Row } from 'react-table';
+import { emptyUser, User, UsersContext } from '../../data/users';
 import XButton from '../buttons/XButton';
+import UserDetails from '../details/UserDetails';
 import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
 
@@ -13,6 +14,8 @@ type UsersTableProps = {
 };
 
 const UsersTable: React.FC<UsersTableProps> = ({ users, onDeleteClicked }) => {
+  const { setUsers } = useContext(UsersContext);
+
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
       Filter: TableSearchFilter,
@@ -23,15 +26,25 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, onDeleteClicked }) => {
   const columns: Column[] = React.useMemo(
     () => [
       {
-        Header: ' ',
-        Cell: ({ cell }: CellProps<object>) => (
-          <XButton
-            value={cell.row.values.name}
-            onClick={(e: MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault();
-              onDeleteClicked((e.target as HTMLInputElement).value);
-            }}
-          />
+        id: 'expander',
+        Header: ({ getToggleAllRowsExpandedProps, isAllRowsExpanded }) => (
+          <button {...getToggleAllRowsExpandedProps()}>
+            {isAllRowsExpanded ? '👇' : '👉'}
+          </button>
+        ),
+        Cell: ({ cell, row }: CellProps<object>) => (
+          <>
+            <XButton
+              value={cell.row.values.name}
+              onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                e.preventDefault();
+                onDeleteClicked((e.target as HTMLInputElement).value);
+              }}
+            />
+            <button {...row.getToggleRowExpandedProps()}>
+              {row.isExpanded ? '👇' : '👉'}
+            </button>
+          </>
         ),
       },
       {
@@ -58,8 +71,20 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, onDeleteClicked }) => {
     [onDeleteClicked]
   );
 
+  const renderRowSubComponent = useCallback((row: Row) => {
+    const rowObject = row.original as User;
+    return <UserDetails user={rowObject} />;
+  }, []);
+
   return (
-    <DataTable data={users} defaultColumn={defaultColumn} columns={columns} />
+    <DataTable
+      data={users}
+      defaultColumn={defaultColumn}
+      columns={columns}
+      renderRowSubComponent={renderRowSubComponent}
+      hiddenColumns={['_id']}
+      addNewItem={() => setUsers([emptyUser, ...users])}
+    />
   );
 };
 

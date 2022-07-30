@@ -95,7 +95,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
         <SelectList
           labelText="Select a Role"
           items={ROLES}
-          value={user.role}
+          value={ROLES.indexOf(user.role)}
           onItemChanged={onRoleChanged}
         />
       </label>

@@ -27,7 +27,7 @@ type CreateStudentFormProps = {
 };
 
 const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
-  defaultStudent,
+  defaultStudent = emptyStudent,
   onSubmit,
   onCancel,
 }) => {
@@ -98,14 +98,14 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       <label>
         Counselor:{' '}
         <SelectCounselorList
-          value={counselorSelection.name}
+          value={defaultStudent.counselorId}
           onCounselorChanged={onCounselorChanged}
         />
       </label>
       <label>
         School:{' '}
         <SelectSchoolList
-          value={schoolSelection.name}
+          value={defaultStudent.schoolId}
           onSchoolChanged={onSchoolChanged}
         />
       </label>

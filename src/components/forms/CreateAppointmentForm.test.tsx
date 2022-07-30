@@ -12,9 +12,12 @@ const fakeAppointment = {
   title: 'Hello World',
   start: new Date(),
   end: new Date(),
-  counselorId: 1,
+  counselorId: 0,
   studentId: 2,
 };
+
+const fakeCounselorName = 'Jacek McGuinness';
+const fakeStudentName = 'Chris Moon';
 
 describe('CreateAppointmentForm', () => {
   it('should submit defaultAppointment if nothing is changed', async () => {
@@ -44,24 +47,5 @@ describe('CreateAppointmentForm', () => {
     fireEvent.click(button);
 
     expect(cancelCallback).toHaveBeenCalled();
-  });
-  test('a new appointment should have a positive ID', async () => {
-    const submitCallback = jest.fn();
-    const view = render(
-      <CreateAppointmentForm onSubmit={submitCallback} onCancel={jest.fn()} />
-    );
-
-    // add a title
-    const inputTitle = (await view.findByTestId(
-      'input-title'
-    )) as HTMLInputElement;
-    inputTitle.value = 'Hello World';
-
-    // click submit button
-    const button = await view.findByTestId('button-submit');
-    fireEvent.click(button);
-
-    // check that the ID is positive
-    expect(submitCallback.mock.calls[0][0]._id).toBeGreaterThanOrEqual(0);
   });
 });

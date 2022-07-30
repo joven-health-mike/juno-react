@@ -24,23 +24,25 @@ describe('UserDetails', () => {
   it('should display ID as a string', async () => {
     const view = render(<UserDetails user={testUser} />);
     const idView = await view.findByTestId('id');
-    expect(idView.innerHTML).toEqual(testUser._id.toString());
+    expect(idView.innerHTML).toEqual('ID: ' + testUser._id.toString());
   });
   it('should display email as a string', async () => {
     const view = render(<UserDetails user={testUser} />);
     const emailView = await view.findByTestId('email');
-    expect(emailView.innerHTML).toEqual(testUser.email.toString());
+    expect(emailView.innerHTML).toEqual('Email: ' + testUser.email.toString());
   });
   it('should display the password as a string', async () => {
     const view = render(<UserDetails user={testUser} />);
     const passwordView = await view.findByTestId('userPassword');
-    expect(passwordView.innerHTML).toEqual(testUser.password.toString());
+    expect(passwordView.innerHTML).toEqual(
+      'Password: ' + testUser.password.toString()
+    );
   });
 
   it('should display the user role', async () => {
     const view = render(<UserDetails user={testUser} />);
     const userRoleView = await view.findByTestId('userRole');
-    expect(userRoleView.innerHTML).toEqual(testUser.role.toString());
+    expect(userRoleView.innerHTML).toEqual('Role: ' + testUser.role.toString());
   });
   it('should display ID as <p>', async () => {
     const view = render(<UserDetails user={testUser} />);

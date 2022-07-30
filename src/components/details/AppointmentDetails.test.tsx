@@ -6,21 +6,25 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import AppointmentDetails from './AppointmentDetails';
+import { formatDateTime } from '../../utils/DateUtils';
 
 const fakeAppointment = {
   _id: 0,
   title: 'Hello World',
   start: new Date(),
   end: new Date(),
-  counselorId: 1,
+  counselorId: 0,
   studentId: 2,
 };
+
+const fakeCounselorName = 'Jacek McGuinness';
+const fakeStudentName = 'Chris Moon';
 
 describe('AppointmentDetails', () => {
   it('should display ID', async () => {
     const view = render(<AppointmentDetails appointment={fakeAppointment} />);
     const idView = await view.findByTestId('id');
-    expect(idView.innerHTML).toEqual(fakeAppointment._id.toString());
+    expect(idView.innerHTML).toEqual('ID: ' + fakeAppointment._id.toString());
   });
   it('should display title', async () => {
     const view = render(<AppointmentDetails appointment={fakeAppointment} />);
@@ -30,26 +34,28 @@ describe('AppointmentDetails', () => {
   it('should display start date as ISO string', async () => {
     const view = render(<AppointmentDetails appointment={fakeAppointment} />);
     const startView = await view.findByTestId('start');
-    expect(startView.innerHTML).toEqual(fakeAppointment.start.toISOString());
+    expect(startView.innerHTML).toEqual(
+      'Start Time: ' + formatDateTime(fakeAppointment.start, -6)
+    );
   });
   it('should display end date as ISO string', async () => {
     const view = render(<AppointmentDetails appointment={fakeAppointment} />);
     const endView = await view.findByTestId('end');
-    expect(endView.innerHTML).toEqual(fakeAppointment.end.toISOString());
+    expect(endView.innerHTML).toEqual(
+      'End Time: ' + formatDateTime(fakeAppointment.end, -6)
+    );
   });
   it('should display counselor ID', async () => {
     const view = render(<AppointmentDetails appointment={fakeAppointment} />);
     const counselorIdView = await view.findByTestId('counselorId');
     expect(counselorIdView.innerHTML).toEqual(
-      fakeAppointment.counselorId.toString()
+      'Counselor: ' + fakeCounselorName
     );
   });
   it('should display student ID', async () => {
     const view = render(<AppointmentDetails appointment={fakeAppointment} />);
     const studentIdView = await view.findByTestId('studentId');
-    expect(studentIdView.innerHTML).toEqual(
-      fakeAppointment.studentId.toString()
-    );
+    expect(studentIdView.innerHTML).toEqual('Student: ' + fakeStudentName);
   });
   it('should display ID as <p>', async () => {
     const view = render(<AppointmentDetails appointment={fakeAppointment} />);

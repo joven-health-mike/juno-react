@@ -28,7 +28,7 @@ type CreateAppointmentFormProps = {
 };
 
 const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
-  defaultAppointment,
+  defaultAppointment = emptyAppointment,
   onSubmit,
   onCancel,
 }) => {
@@ -49,7 +49,10 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
   const onStudentChanged = (student: Student) => {
     setStudentSelection(student);
-    setAppointment({ ...appointment, studentId: student._id });
+    setAppointment({
+      ...appointment,
+      title: student.first_name + ' ' + student.last_name.substring(0, 1),
+    });
   };
 
   const onFormSubmit = (e: FormEvent) => {
@@ -107,14 +110,14 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
       <label>
         Counselor:{' '}
         <SelectCounselorList
-          value={counselorSelection.name}
+          value={counselorSelection}
           onCounselorChanged={onCounselorChanged}
         />
       </label>
       <label>
         Student:{' '}
         <SelectStudentList
-          value={studentSelection.first_name + ' ' + studentSelection.last_name}
+          value={studentSelection}
           onStudentChanged={onStudentChanged}
         />
       </label>

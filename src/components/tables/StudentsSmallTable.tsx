@@ -1,7 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from 'react';
-import { Column } from 'react-table';
+import { CellProps, Column } from 'react-table';
 import { Student } from '../../data/students';
 import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
@@ -23,15 +23,27 @@ const StudentsSmallTable: React.FC<StudentsSmallTableProps> = ({
   const columns: Column[] = React.useMemo(
     () => [
       {
-        Header: 'First Name',
-        accessor: 'first_name',
-      },
-      {
-        Header: 'Last Name',
-        accessor: 'last_name',
+        Header: 'Name',
+        accessor: '_id',
+        Cell: ({ cell }: CellProps<object>) => (
+          <p>
+            {(() => {
+              const foundStudent = students.filter(
+                student => student._id === cell.row.values._id
+              )[0];
+              return (
+                <>
+                  {foundStudent
+                    ? foundStudent.first_name + ' ' + foundStudent.last_name
+                    : 'Not Found'}
+                </>
+              );
+            })()}
+          </p>
+        ),
       },
     ],
-    []
+    [students]
   );
 
   return (

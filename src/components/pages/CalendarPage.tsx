@@ -103,14 +103,14 @@ const CalendarPage: React.FC = () => {
       <label>
         Counselor:{' '}
         <SelectCounselorList
-          value={counselorSelection.name}
+          value={counselorSelection._id}
           onCounselorChanged={handleCounselorChange}
         />
       </label>
       <label>
         School:{' '}
         <SelectSchoolList
-          value={schoolSelection.name}
+          value={schoolSelection._id}
           onSchoolChanged={handleSchoolChange}
         />
       </label>
