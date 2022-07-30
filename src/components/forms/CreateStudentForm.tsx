@@ -5,7 +5,6 @@ import React, {
   FormEvent,
   MouseEvent,
   useContext,
-  useEffect,
   useState,
 } from 'react';
 import { Counselor, emptyCounselor } from '../../data/counselors';
