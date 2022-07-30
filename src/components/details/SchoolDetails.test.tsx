@@ -22,12 +22,14 @@ describe('SchoolDetails', () => {
   it('should display ID as a string', async () => {
     const view = render(<SchoolDetails school={testSchool} />);
     const idView = await view.findByTestId('id');
-    expect(idView.innerHTML).toEqual(testSchool._id.toString());
+    expect(idView.innerHTML).toEqual('ID: ' + testSchool._id.toString());
   });
   it('should display email as a string', async () => {
     const view = render(<SchoolDetails school={testSchool} />);
     const emailView = await view.findByTestId('email');
-    expect(emailView.innerHTML).toEqual(testSchool.email.toString());
+    expect(emailView.innerHTML).toEqual(
+      'Email: ' + testSchool.email.toString()
+    );
   });
   it('should display ID as <p>', async () => {
     const view = render(<SchoolDetails school={testSchool} />);

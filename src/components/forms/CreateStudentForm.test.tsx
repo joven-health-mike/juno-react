@@ -43,29 +43,6 @@ describe('CreateStudentForm', () => {
 
     expect(cancelCallback).toHaveBeenCalled();
   });
-  test('a new student should have a positive ID', async () => {
-    const submitCallback = jest.fn();
-    const view = render(
-      <CreateStudentForm onSubmit={submitCallback} onCancel={jest.fn()} />
-    );
-    //add name
-    const inputFirstName = (await view.findByTestId(
-      'firstName'
-    )) as HTMLInputElement;
-    inputFirstName.value = 'firstName';
-
-    const inputLastName = (await view.findByTestId(
-      'lastName'
-    )) as HTMLInputElement;
-    inputLastName.value = 'lastName';
-
-    //click submit button
-    const button = await view.findByTestId('button-submit');
-    fireEvent.click(button);
-
-    //check that the ID is positive
-    expect(submitCallback.mock.calls[0][0]._id).toBeGreaterThanOrEqual(0);
-  });
 
   test('Check if first names match', () => {
     expect(testStudent.first_name).toBe('firstName');
