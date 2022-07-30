@@ -23,10 +23,12 @@ const StudentDetails: React.FC<StudentDetailsProps> = ({ student }) => {
 
   return (
     <>
-      <h2>{student.first_name + ' ' + student.last_name}</h2>
-      <p>ID: {student._id}</p>
-      <p>School: {schoolName}</p>
-      <p>Counselor: {counselorName}</p>
+      <h2 data-testid={'name'}>
+        {student.first_name + ' ' + student.last_name}
+      </h2>
+      <p data-testid={'id'}>ID: {student._id}</p>
+      <p data-testid={'schoolId'}>School: {schoolName}</p>
+      <p data-testid={'counselorId'}>Counselor: {counselorName}</p>
     </>
   );
 };
