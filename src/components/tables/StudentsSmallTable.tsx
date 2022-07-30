@@ -1,6 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from 'react';
+import { Column } from 'react-table';
 import { Student } from '../../data/students';
 import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
@@ -12,14 +13,14 @@ type StudentsSmallTableProps = {
 const StudentsSmallTable: React.FC<StudentsSmallTableProps> = ({
   students,
 }) => {
-  const defaultColumn = React.useMemo(
+  const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
       Filter: TableSearchFilter,
     }),
     []
   );
 
-  const columns = React.useMemo(
+  const columns: Column[] = React.useMemo(
     () => [
       {
         Header: 'First Name',

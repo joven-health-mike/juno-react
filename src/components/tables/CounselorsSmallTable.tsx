@@ -1,6 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from 'react';
+import { Column } from 'react-table';
 import { Counselor } from '../../data/counselors';
 import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
@@ -12,14 +13,14 @@ type CounselorsSmallTableProps = {
 const CounselorsSmallTable: React.FC<CounselorsSmallTableProps> = ({
   counselors,
 }) => {
-  const defaultColumn = React.useMemo(
+  const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
       Filter: TableSearchFilter,
     }),
     []
   );
 
-  const columns = React.useMemo(
+  const columns: Column[] = React.useMemo(
     () => [
       {
         Header: 'Name',
