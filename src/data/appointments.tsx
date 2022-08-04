@@ -9,6 +9,8 @@ export type Appointment = {
   end: Date;
   counselorId: number;
   studentId: number;
+  type: string;
+  color?: string;
 };
 
 export const emptyAppointment = {
@@ -18,6 +20,7 @@ export const emptyAppointment = {
   end: new Date(),
   counselorId: -1,
   studentId: -1,
+  type: 'none',
 };
 
 export const exampleAppointments = [
@@ -28,6 +31,7 @@ export const exampleAppointments = [
     end: new Date(),
     counselorId: 0,
     studentId: 0,
+    type: 'clinical',
   },
   {
     _id: 1,
@@ -36,6 +40,7 @@ export const exampleAppointments = [
     end: new Date(),
     counselorId: 0,
     studentId: 1,
+    type: 'consultation',
   },
   {
     _id: 2,
@@ -44,6 +49,7 @@ export const exampleAppointments = [
     end: new Date(),
     counselorId: 0,
     studentId: 2,
+    type: 'evaluation',
   },
 ];
 

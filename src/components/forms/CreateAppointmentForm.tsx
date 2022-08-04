@@ -19,6 +19,7 @@ import DateSelector from '../dateSelector/DateSelector';
 import {
   SelectCounselorList,
   SelectStudentList,
+  SelectTypeList,
 } from '../selectList/SelectList';
 
 type CreateAppointmentFormProps = {
@@ -39,6 +40,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     useState<Student>(emptyStudent);
   const [counselorSelection, setCounselorSelection] =
     useState<Counselor>(emptyCounselor);
+  const [typeSelection, setTypeSelection] = useState<string>('');
   const { appointments } =
     useContext<IAppointmentsContext>(AppointmentsContext);
 
@@ -52,6 +54,14 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     setAppointment({
       ...appointment,
       title: student.first_name + ' ' + student.last_name.substring(0, 1),
+    });
+  };
+
+  const onTypeChanged = (type: string) => {
+    setTypeSelection(type);
+    setAppointment({
+      ...appointment,
+      type: type,
     });
   };
 
@@ -120,6 +130,10 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
           value={studentSelection._id}
           onStudentChanged={onStudentChanged}
         />
+      </label>
+      <label>
+        Type{' '}
+        <SelectTypeList value={typeSelection} onTypeChanged={onTypeChanged} />
       </label>
 
       <button type="submit" data-testid={'button-submit'}>

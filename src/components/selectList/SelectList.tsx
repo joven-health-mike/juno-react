@@ -6,6 +6,7 @@ import {
 } from '../../data/counselors';
 import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import { emptyStudent, Student, StudentsContext } from '../../data/students';
+import { appointmentColors } from '../calendar/appointmentTypes';
 
 type SelectListProps = {
   labelText: string;
@@ -133,6 +134,28 @@ export function SelectStudentList({
       items={studentNames}
       value={value}
       onItemChanged={handleStudentChange}
+    />
+  );
+}
+
+type SelectTypeListProps = {
+  value: string;
+  onTypeChanged: (type: string) => void;
+};
+
+export function SelectTypeList({ value, onTypeChanged }: SelectTypeListProps) {
+  const typeNames = Object.keys(appointmentColors);
+
+  const handleTypeChange = (typeName: string) => {
+    onTypeChanged(typeName);
+  };
+
+  return (
+    <SelectList
+      labelText={'Select Appointment Type'}
+      items={typeNames}
+      value={value}
+      onItemChanged={handleTypeChange}
     />
   );
 }
