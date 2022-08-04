@@ -10,7 +10,7 @@ import { appointmentColors } from '../calendar/appointmentTypes';
 
 type SelectListProps = {
   labelText: string;
-  value: string;
+  value: number;
   items: string[];
   onItemChanged: (item: string) => void;
 };
@@ -29,9 +29,15 @@ const SelectList = ({
 
   return (
     <select value={value} onChange={itemChanged}>
-      <option key={labelText}>{labelText}</option>
+      <option value={-1} key={labelText}>
+        {labelText}
+      </option>
       {items.map((item, index) => {
-        return <option key={index}>{item}</option>;
+        return (
+          <option value={index} key={index}>
+            {item}
+          </option>
+        );
       })}
     </select>
   );
@@ -40,12 +46,14 @@ const SelectList = ({
 export default SelectList;
 
 type SelectCounselorListProps = {
-  value: string;
+  value: number;
+  selectedCounselor?: Counselor;
   onCounselorChanged: (counselor: Counselor) => void;
 };
 
 export function SelectCounselorList({
   value,
+  selectedCounselor,
   onCounselorChanged,
 }: SelectCounselorListProps) {
   const { counselors } = useContext(CounselorsContext);
@@ -71,7 +79,7 @@ export function SelectCounselorList({
 }
 
 type SelectSchoolListProps = {
-  value: string;
+  value: number;
   onSchoolChanged: (school: School) => void;
 };
 
@@ -100,7 +108,7 @@ export function SelectSchoolList({
 }
 
 type SelectStudentListProps = {
-  value: string;
+  value: number;
   onStudentChanged: (student: Student) => void;
 };
 

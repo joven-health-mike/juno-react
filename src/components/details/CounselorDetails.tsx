@@ -10,10 +10,10 @@ type CounselorDetailsProps = {
 const CounselorDetails: React.FC<CounselorDetailsProps> = ({ counselor }) => {
   return (
     <>
-      <h2>{counselor.name}</h2>
-      <p>{counselor._id}</p>
-      <p>{counselor.email}</p>
-      <p>{counselor.roomLink}</p>
+      <h2 data-testid={'name'}>{counselor.name}</h2>
+      <p data-testid={'id'}>ID: {counselor._id}</p>
+      <p data-testid={'email'}>Email: {counselor.email}</p>
+      <p data-testid={'roomLink'}>Room Link: {counselor.roomLink}</p>
     </>
   );
 };

@@ -5,7 +5,6 @@ import React, {
   FormEvent,
   MouseEvent,
   useContext,
-  useEffect,
   useState,
 } from 'react';
 import { Counselor, emptyCounselor } from '../../data/counselors';
@@ -28,7 +27,7 @@ type CreateStudentFormProps = {
 };
 
 const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
-  defaultStudent,
+  defaultStudent = emptyStudent,
   onSubmit,
   onCancel,
 }) => {
@@ -42,26 +41,20 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
 
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelection(counselor);
+    setStudent({ ...student, counselorId: counselor._id });
   };
 
   const onSchoolChanged = (school: School) => {
     setSchoolSelection(school);
+    setStudent({ ...student, schoolId: school._id });
   };
-
-  // update the student whenever counselor or school selection is changed
-  useEffect(() => {
-    setStudent(prevStudent => {
-      return {
-        ...prevStudent,
-        counselorId: counselorSelection._id,
-        schoolId: schoolSelection._id,
-      };
-    });
-  }, [counselorSelection, schoolSelection]);
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    onSubmit({ ...student, _id: students.length });
+    const submittedStudent = defaultStudent
+      ? student
+      : { ...student, _id: students.length };
+    onSubmit(submittedStudent);
   };
 
   const onFormCancel = (e: MouseEvent) => {
@@ -77,6 +70,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       <label>
         First Name
         <input
+          data-testid="firstName"
           type="text"
           placeholder="First Name"
           name="first_name"
@@ -90,6 +84,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       <label>
         Last Name
         <input
+          data-testid="lastName"
           type="text"
           placeholder="Last Name"
           name="last_name"
@@ -103,20 +98,22 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       <label>
         Counselor:{' '}
         <SelectCounselorList
-          value={counselorSelection.name}
+          value={counselorSelection._id}
           onCounselorChanged={onCounselorChanged}
         />
       </label>
       <label>
         School:{' '}
         <SelectSchoolList
-          value={schoolSelection.name}
+          value={schoolSelection._id}
           onSchoolChanged={onSchoolChanged}
         />
       </label>
 
-      <button type="submit">Submit</button>
-      <button type="button" onClick={onFormCancel}>
+      <button type="submit" data-testid="button-submit">
+        Submit
+      </button>
+      <button type="button" data-testid="button-cancel" onClick={onFormCancel}>
         Cancel
       </button>
     </form>

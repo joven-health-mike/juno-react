@@ -36,7 +36,8 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    onSubmit({ ...user, _id: users.length });
+    const submittedUser = defaultUser ? user : { ...user, _id: users.length };
+    onSubmit(submittedUser);
   };
 
   const onFormCancel = (e: MouseEvent) => {
@@ -50,6 +51,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
       <label>
         Name
         <input
+          data-testid={'input-name'}
           type="text"
           placeholder="Name"
           name="name"
@@ -63,6 +65,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
       <label>
         Email
         <input
+          data-testid={'input-email'}
           type="email"
           placeholder="Email"
           name="email"
@@ -76,6 +79,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
       <label>
         Password
         <input
+          data-testid={'input-password'}
           type="password"
           placeholder="Password"
           name="password"
@@ -91,13 +95,19 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
         <SelectList
           labelText="Select a Role"
           items={ROLES}
-          value={user.role}
+          value={ROLES.indexOf(user.role)}
           onItemChanged={onRoleChanged}
         />
       </label>
 
-      <button type="submit">Submit</button>
-      <button type="button" onClick={onFormCancel}>
+      <button type="submit" data-testid={'button-submit'}>
+        Submit
+      </button>
+      <button
+        type="button"
+        data-testid={'button-cancel'}
+        onClick={onFormCancel}
+      >
         Cancel
       </button>
     </form>

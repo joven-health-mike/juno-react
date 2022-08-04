@@ -5,11 +5,8 @@ import React, {
   FormEvent,
   MouseEvent,
   useContext,
-  useEffect,
   useState,
 } from 'react';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import {
   Appointment,
   AppointmentsContext,
@@ -18,6 +15,7 @@ import {
 } from '../../data/appointments';
 import { Counselor, emptyCounselor } from '../../data/counselors';
 import { emptyStudent, Student } from '../../data/students';
+import DateSelector from '../dateSelector/DateSelector';
 import {
   SelectCounselorList,
   SelectStudentList,
@@ -31,7 +29,7 @@ type CreateAppointmentFormProps = {
 };
 
 const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
-  defaultAppointment,
+  defaultAppointment = emptyAppointment,
   onSubmit,
   onCancel,
 }) => {
@@ -48,31 +46,31 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelection(counselor);
+    setAppointment({ ...appointment, counselorId: counselor._id });
   };
 
   const onStudentChanged = (student: Student) => {
     setStudentSelection(student);
+    setAppointment({
+      ...appointment,
+      title: student.first_name + ' ' + student.last_name.substring(0, 1),
+    });
   };
 
   const onTypeChanged = (type: string) => {
     setTypeSelection(type);
-  };
-
-  // update the appointment whenever counselor or student selection is changed
-  useEffect(() => {
-    setAppointment(prevAppointment => {
-      return {
-        ...prevAppointment,
-        studentId: studentSelection._id,
-        counselorId: counselorSelection._id,
-        type: typeSelection,
-      };
+    setAppointment({
+      ...appointment,
+      type: type,
     });
-  }, [studentSelection, counselorSelection, typeSelection]);
+  };
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    onSubmit({ ...appointment, _id: appointments.length });
+    const submittedAppointment = defaultAppointment
+      ? appointment
+      : { ...appointment, _id: appointments.length };
+    onSubmit(submittedAppointment);
   };
 
   const onFormCancel = (e: MouseEvent) => {
@@ -88,6 +86,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
       <label>
         Title
         <input
+          data-testid={'input-title'}
           type="text"
           placeholder="Title"
           name="title"
@@ -100,41 +99,35 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
       </label>
       <label>
         Start Time
-        <DatePicker
+        <DateSelector
           selected={new Date(appointment.start)}
           onChange={(date: Date) =>
             setAppointment({ ...appointment, start: date })
           }
-          showTimeSelect
-          timeFormat="h:mm"
-          timeCaption="Start Time"
-          dateFormat="MMMM d, yyyy h:mm aa"
+          label={'Start Time'}
         />
       </label>
       <label>
         End Time
-        <DatePicker
+        <DateSelector
           selected={new Date(appointment.end)}
           onChange={(date: Date) =>
             setAppointment({ ...appointment, end: date })
           }
-          showTimeSelect
-          timeFormat="h:mm"
-          timeCaption="End Time"
-          dateFormat="MMMM d, yyyy h:mm aa"
+          label={'End Time'}
         />
       </label>
       <label>
         Counselor:{' '}
         <SelectCounselorList
-          value={counselorSelection.name}
+          value={counselorSelection._id}
           onCounselorChanged={onCounselorChanged}
         />
       </label>
       <label>
         Student:{' '}
         <SelectStudentList
-          value={studentSelection.first_name + ' ' + studentSelection.last_name}
+          value={studentSelection._id}
           onStudentChanged={onStudentChanged}
         />
       </label>
@@ -143,8 +136,14 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
         <SelectTypeList value={typeSelection} onTypeChanged={onTypeChanged} />
       </label>
 
-      <button type="submit">Submit</button>
-      <button type="button" onClick={onFormCancel}>
+      <button type="submit" data-testid={'button-submit'}>
+        Submit
+      </button>
+      <button
+        type="button"
+        data-testid={'button-cancel'}
+        onClick={onFormCancel}
+      >
         Cancel
       </button>
     </form>

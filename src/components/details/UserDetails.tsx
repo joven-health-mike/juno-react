@@ -10,11 +10,11 @@ type UserDetailsProps = {
 const UserDetails: React.FC<UserDetailsProps> = ({ user }) => {
   return (
     <>
-      <h2>{user.name}</h2>
-      <p>{user._id}</p>
-      <p>{user.email}</p>
-      <p>{user.password}</p>
-      <p>{user.role}</p>
+      <h2 data-testid={'name'}>{user.name}</h2>
+      <p data-testid={'id'}>ID: {user._id}</p>
+      <p data-testid={'email'}>Email: {user.email}</p>
+      <p data-testid={'userPassword'}>Password: {user.password}</p>
+      <p data-testid={'userRole'}>Role: {user.role}</p>
     </>
   );
 };
