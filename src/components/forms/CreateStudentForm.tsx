@@ -98,14 +98,14 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       <label>
         Counselor:{' '}
         <SelectCounselorList
-          value={defaultStudent.counselorId}
+          value={counselorSelection._id}
           onCounselorChanged={onCounselorChanged}
         />
       </label>
       <label>
         School:{' '}
         <SelectSchoolList
-          value={defaultStudent.schoolId}
+          value={schoolSelection._id}
           onSchoolChanged={onSchoolChanged}
         />
       </label>
