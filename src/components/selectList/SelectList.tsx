@@ -6,7 +6,7 @@ import {
 } from '../../data/counselors';
 import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import { emptyStudent, Student, StudentsContext } from '../../data/students';
-import { emptyType, Type, TypesContext } from '../../data/appointmentTypes';
+import { appointmentColors } from '../calendar/appointmentTypes';
 
 type SelectListProps = {
   labelText: string;
@@ -132,16 +132,14 @@ export function SelectStudentList({
 
 type SelectTypeListProps = {
   value: string;
-  onTypeChanged: (type: Type) => void;
+  onTypeChanged: (type: string) => void;
 };
 
 export function SelectTypeList({ value, onTypeChanged }: SelectTypeListProps) {
-  const { types } = useContext(TypesContext);
-  const typeNames = types.map(type => type.name);
+  const typeNames = Object.keys(appointmentColors);
 
   const handleTypeChange = (typeName: string) => {
-    const type = types.find(type => type.name === typeName);
-    onTypeChanged(type ?? emptyType);
+    onTypeChanged(typeName);
   };
 
   return (
