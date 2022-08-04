@@ -18,7 +18,6 @@ import {
 } from '../../data/appointments';
 import { Counselor, emptyCounselor } from '../../data/counselors';
 import { emptyStudent, Student } from '../../data/students';
-import { appointmentColors } from '../calendar/appointmentTypes';
 import {
   SelectCounselorList,
   SelectStudentList,
@@ -66,8 +65,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
         ...prevAppointment,
         studentId: studentSelection._id,
         counselorId: counselorSelection._id,
-        color:
-          appointmentColors[typeSelection as keyof typeof appointmentColors],
+        type: typeSelection,
       };
     });
   }, [studentSelection, counselorSelection, typeSelection]);
