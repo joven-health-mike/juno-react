@@ -6,6 +6,7 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import CreateAppointmentForm from './CreateAppointmentForm';
+import { AppointmentTypes } from '../../data/appointments';
 
 const fakeAppointment = {
   _id: 0,
@@ -14,7 +15,7 @@ const fakeAppointment = {
   end: new Date(),
   counselorId: 0,
   studentId: 2,
-  type: 'evaluaiton',
+  type: AppointmentTypes.None,
 };
 
 const fakeCounselorName = 'Jacek McGuinness';

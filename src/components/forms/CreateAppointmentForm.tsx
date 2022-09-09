@@ -12,6 +12,7 @@ import {
   AppointmentsContext,
   emptyAppointment,
   IAppointmentsContext,
+  AppointmentType,
 } from '../../data/appointments';
 import { Counselor, emptyCounselor } from '../../data/counselors';
 import { ISchoolsContext, SchoolsContext } from '../../data/schools';
@@ -41,7 +42,11 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     useState<Student>(emptyStudent);
   const [counselorSelection, setCounselorSelection] =
     useState<Counselor>(emptyCounselor);
-  const [typeSelection, setTypeSelection] = useState<string>('');
+  const [typeSelection, setTypeSelection] = useState<AppointmentType>({
+    _id: -1,
+    name: 'Unselected',
+    color: 'none',
+  });
   const { appointments } =
     useContext<IAppointmentsContext>(AppointmentsContext);
   const { schools } = useContext<ISchoolsContext>(SchoolsContext);
@@ -70,7 +75,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     });
   };
 
-  const onTypeChanged = (type: string) => {
+  const onTypeChanged = (type: AppointmentType) => {
     setTypeSelection(type);
     setAppointment({
       ...appointment,
@@ -146,7 +151,10 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
       </label>
       <label>
         Type{' '}
-        <SelectTypeList value={typeSelection} onTypeChanged={onTypeChanged} />
+        <SelectTypeList
+          value={typeSelection._id}
+          onTypeChanged={onTypeChanged}
+        />
       </label>
 
       <button type="submit" data-testid={'button-submit'}>
