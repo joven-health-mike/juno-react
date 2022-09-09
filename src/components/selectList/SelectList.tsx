@@ -1,12 +1,16 @@
 import React, { ChangeEvent, useContext } from 'react';
 import {
+  AppointmentType,
+  AppointmentTypes,
+  getAppointmentTypeById,
+} from '../../data/appointments';
+import {
   Counselor,
   CounselorsContext,
   emptyCounselor,
 } from '../../data/counselors';
 import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import { emptyStudent, Student, StudentsContext } from '../../data/students';
-import { appointmentColors } from '../calendar/appointmentTypes';
 
 type SelectListProps = {
   labelText: string;
@@ -59,9 +63,9 @@ export function SelectCounselorList({
   const { counselors } = useContext(CounselorsContext);
   const counselorNames = counselors.map(counselor => counselor.name);
 
-  const handleCounselorChange = (counselorName: string) => {
+  const handleCounselorChange = (counselorId: string) => {
     const counselor = counselors.find(
-      counselor => counselor.name === counselorName
+      counselor => counselor._id === +counselorId
     );
     onCounselorChanged(counselor ?? emptyCounselor);
   };
@@ -90,8 +94,8 @@ export function SelectSchoolList({
   const { schools } = useContext(SchoolsContext);
   const schoolNames = schools.map(school => school.name);
 
-  const handleSchoolChange = (schoolName: string) => {
-    const school = schools.find(school => school.name === schoolName);
+  const handleSchoolChange = (schoolId: string) => {
+    const school = schools.find(school => school._id === +schoolId);
     onSchoolChanged(school ?? emptySchool);
   };
 
@@ -121,10 +125,8 @@ export function SelectStudentList({
     student => student.first_name + ' ' + student.last_name
   );
 
-  const handleStudentChange = (studentName: string) => {
-    const student = students.find(
-      student => student.first_name + ' ' + student.last_name === studentName
-    );
+  const handleStudentChange = (studentId: string) => {
+    const student = students.find(student => student._id === +studentId);
     onStudentChanged(student ?? emptyStudent);
   };
 
@@ -139,15 +141,15 @@ export function SelectStudentList({
 }
 
 type SelectTypeListProps = {
-  value: string;
-  onTypeChanged: (type: string) => void;
+  value: number;
+  onTypeChanged: (type: AppointmentType) => void;
 };
 
 export function SelectTypeList({ value, onTypeChanged }: SelectTypeListProps) {
-  const typeNames = Object.keys(appointmentColors);
+  const typeNames = Object.keys(AppointmentTypes);
 
-  const handleTypeChange = (typeName: string) => {
-    onTypeChanged(typeName);
+  const handleTypeChange = (typeId: string) => {
+    onTypeChanged(getAppointmentTypeById(+typeId));
   };
 
   return (

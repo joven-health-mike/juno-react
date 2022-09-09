@@ -7,14 +7,16 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import AppointmentDetails from './AppointmentDetails';
 import { formatDateTime } from '../../utils/DateUtils';
+import { Appointment, AppointmentTypes } from '../../data/appointments';
 
-const fakeAppointment = {
+const fakeAppointment: Appointment = {
   _id: 0,
   title: 'Hello World',
   start: new Date(),
   end: new Date(),
   counselorId: 0,
   studentId: 2,
+  type: AppointmentTypes.None,
 };
 
 const fakeCounselorName = 'Jacek McGuinness';
