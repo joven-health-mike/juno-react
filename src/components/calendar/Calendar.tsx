@@ -4,7 +4,6 @@ import React from 'react';
 import FullCalendar, { EventClickArg, PluginDef } from '@fullcalendar/react';
 import { Appointment } from '../../data/appointments';
 import { DateClickArg } from '@fullcalendar/interaction';
-import { appointmentColors } from './appointmentTypes';
 
 type CalendarProps = {
   view: string;
@@ -22,8 +21,7 @@ const Calendar: React.FC<CalendarProps> = ({
   onDateClick,
 }: CalendarProps) => {
   appointments.forEach(appointment => {
-    appointment.color =
-      appointmentColors[appointment.type as keyof typeof appointmentColors];
+    appointment.color = appointment.type.color;
   });
 
   const eventClicked = (info: EventClickArg) => {

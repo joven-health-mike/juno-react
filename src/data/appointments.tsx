@@ -9,8 +9,30 @@ export type Appointment = {
   end: Date;
   counselorId: number;
   studentId: number;
-  type: string;
   color?: string;
+  type: AppointmentType;
+};
+
+export const AppointmentTypes = {
+  None: { _id: 0, name: 'None', color: 'lightgray' },
+  Clinical: { _id: 1, name: 'Clinical', color: 'green' },
+  Consultation: { _id: 2, name: 'Consultation', color: 'blue' },
+  Evaluation: { _id: 3, name: 'Evaluation', color: 'red' },
+};
+
+export type AppointmentType = {
+  _id: number;
+  name: string;
+  color: string;
+};
+
+export const getAppointmentTypeById = (id: number): AppointmentType => {
+  for (const k in AppointmentTypes) {
+    if (((AppointmentTypes as any)[k] as AppointmentType)._id === id) {
+      return (AppointmentTypes as any)[k];
+    }
+  }
+  return AppointmentTypes.None;
 };
 
 export const emptyAppointment = {
@@ -20,7 +42,7 @@ export const emptyAppointment = {
   end: new Date(),
   counselorId: -1,
   studentId: -1,
-  type: 'none',
+  type: AppointmentTypes.None,
 };
 
 export const exampleAppointments = [
@@ -31,7 +53,7 @@ export const exampleAppointments = [
     end: new Date(),
     counselorId: 0,
     studentId: 0,
-    type: 'clinical',
+    type: AppointmentTypes.Clinical,
   },
   {
     _id: 1,
@@ -40,7 +62,7 @@ export const exampleAppointments = [
     end: new Date(),
     counselorId: 0,
     studentId: 1,
-    type: 'consultation',
+    type: AppointmentTypes.Consultation,
   },
   {
     _id: 2,
@@ -49,7 +71,7 @@ export const exampleAppointments = [
     end: new Date(),
     counselorId: 0,
     studentId: 2,
-    type: 'evaluation',
+    type: AppointmentTypes.Evaluation,
   },
 ];
 
