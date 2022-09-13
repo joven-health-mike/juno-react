@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { School } from '../data/schools';
 import { HttpServer } from './http-common';
+import { Service } from './service';
 
 class SchoolService implements Service<School> {
   getAll(): Promise<AxiosResponse<School[]>> {
