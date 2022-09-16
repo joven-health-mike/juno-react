@@ -15,6 +15,7 @@ const fakeAppointment = {
   end: new Date(),
   counselorId: 0,
   studentId: 2,
+  type: 'evaluation',
 };
 
 const fakeCounselorName = 'Jacek McGuinness';

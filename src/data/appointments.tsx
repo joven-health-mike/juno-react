@@ -26,7 +26,7 @@ export const emptyAppointment = {
 export const exampleAppointments = [
   {
     _id: 0,
-    title: 'Johnny R',
+    title: 'Johnny R (Aardvark Academy)',
     start: new Date(),
     end: new Date(),
     counselorId: 0,
@@ -35,7 +35,7 @@ export const exampleAppointments = [
   },
   {
     _id: 1,
-    title: 'Jennifer F',
+    title: 'Jennifer F (Aardvark Academy)',
     start: new Date(),
     end: new Date(),
     counselorId: 0,
@@ -44,7 +44,7 @@ export const exampleAppointments = [
   },
   {
     _id: 2,
-    title: 'Chris M',
+    title: 'Chris M (Aardvark Academy)',
     start: new Date(),
     end: new Date(),
     counselorId: 0,
