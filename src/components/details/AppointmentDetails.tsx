@@ -42,7 +42,7 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
       <p data-testid={'studentId'}>Student: {studentName}</p>
       <p data-testid={'schoolId'}>School: {schoolName}</p>
       <p data-testid={'appointmentType'}>
-        Appointment Type: {appointment.type}
+        Appointment Type: {appointment.type.name}
       </p>
     </>
   );
