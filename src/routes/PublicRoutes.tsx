@@ -11,7 +11,7 @@ const PublicRoutes = () => {
 };
 
 const RedirectToLoginPage: React.FC = () => {
-  window.location.href = 'http://localhost:8080/login';
+  window.location.href = process.env.REACT_APP_SERVER_URL + '/login';
   return <></>;
 };
 
