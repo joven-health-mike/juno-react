@@ -3,6 +3,7 @@
 import React, { useContext } from 'react';
 import { Appointment } from '../../data/appointments';
 import { CounselorsContext } from '../../data/counselors';
+import { SchoolsContext } from '../../data/schools';
 import { StudentsContext } from '../../data/students';
 import { formatDateTime } from '../../utils/DateUtils';
 
@@ -15,6 +16,7 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
 }) => {
   const { students } = useContext(StudentsContext);
   const { counselors } = useContext(CounselorsContext);
+  const { schools } = useContext(SchoolsContext);
 
   const foundStudent = students.filter(
     student => student._id === appointment.studentId
@@ -25,16 +27,23 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
     counselor => counselor._id === appointment.counselorId
   )[0].name;
 
+  const schoolName = schools.filter(
+    school => school._id === foundStudent.schoolId
+  )[0].name;
+
   return (
     <>
       <h2 data-testid={'title'}>{appointment.title}</h2>
-      <p data-testid={'id'}>ID: {appointment._id}</p>
       <p data-testid={'start'}>
         Start Time: {formatDateTime(appointment.start, -6)}
       </p>
       <p data-testid={'end'}>End Time: {formatDateTime(appointment.end, -6)}</p>
       <p data-testid={'counselorId'}>Counselor: {counselorName}</p>
       <p data-testid={'studentId'}>Student: {studentName}</p>
+      <p data-testid={'schoolId'}>School: {schoolName}</p>
+      <p data-testid={'appointmentType'}>
+        Appointment Type: {appointment.type.name}
+      </p>
     </>
   );
 };
