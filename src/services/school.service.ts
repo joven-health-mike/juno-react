@@ -5,7 +5,7 @@ import { Service } from './service';
 
 class SchoolService implements Service<School> {
   getAll(): Promise<AxiosResponse<School[]>> {
-    return HttpServer.get<Array<School>>('/schools');
+    return HttpServer.get<School[]>('/schools');
   }
 
   get(id: string): Promise<AxiosResponse<School, any>> {

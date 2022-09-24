@@ -6,7 +6,7 @@ import { Service } from './service';
 // TODO: delegate to a Service implementation configured by environment with api endpoint.
 class AppointmentService implements Service<Appointment> {
   getAll(): Promise<AxiosResponse<Appointment[]>> {
-    return HttpServer.get<Array<Appointment>>('/appointments');
+    return HttpServer.get<Appointment[]>('/appointments');
   }
 
   get(id: string): Promise<AxiosResponse<Appointment, any>> {
