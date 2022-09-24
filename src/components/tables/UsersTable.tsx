@@ -1,20 +1,24 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { MouseEvent, useCallback, useContext } from 'react';
+import { useEffect } from 'react';
 import { CellProps, Column, Row } from 'react-table';
-import { emptyUser, User, UsersContext } from '../../data/users';
+import { User, UsersContext } from '../../data/users';
 import XButton from '../buttons/XButton';
 import UserDetails from '../details/UserDetails';
 import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
 
 type UsersTableProps = {
-  users: User[];
   onDeleteClicked: (userName: string) => void;
 };
 
-const UsersTable: React.FC<UsersTableProps> = ({ users, onDeleteClicked }) => {
-  const { setUsers } = useContext(UsersContext);
+const UsersTable: React.FC<UsersTableProps> = ({ onDeleteClicked }) => {
+  const { users, getUsers } = useContext(UsersContext);
+
+  useEffect(() => {
+    getUsers();
+  }, [getUsers]);
 
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
@@ -83,7 +87,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, onDeleteClicked }) => {
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
       hiddenColumns={['_id']}
-      addNewItem={() => setUsers([emptyUser, ...users])}
+      // addNewItem={() => setUsers([emptyUser, ...users])}
     />
   );
 };

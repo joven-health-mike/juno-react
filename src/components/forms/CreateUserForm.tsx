@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import {
   emptyUser,
-  IUsersContext,
+  UserContextData,
   ROLES,
   User,
   UsersContext,
@@ -28,7 +28,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
   onCancel,
 }) => {
   const [user, setUser] = useState<User>(defaultUser ?? emptyUser);
-  const { users } = useContext<IUsersContext>(UsersContext);
+  const { users } = useContext<UserContextData>(UsersContext);
 
   const onRoleChanged = (role: string) => {
     setUser({ ...user, role: role });

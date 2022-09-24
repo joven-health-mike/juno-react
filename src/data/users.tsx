@@ -1,6 +1,8 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from 'react';
+import React, { Dispatch, FC, ProviderProps, useState } from 'react';
+import { SetStateAction } from 'react';
+import { UserService } from '../services/user.service';
 
 export type User = {
   _id: number;
@@ -35,15 +37,39 @@ export const exampleUsers = [
   },
 ];
 
-export type IUsersContext = {
+export type UserContextData = {
   users: User[];
-  setUsers: (users: User[]) => void;
+  getUsers: () => void;
 };
 
-export const UsersContext = React.createContext<IUsersContext>({
-  users: exampleUsers,
-  setUsers: () => {},
+export const UsersContext = React.createContext<UserContextData>({
+  users: [],
+  getUsers: () => null,
 });
+
+export const UsersProvider: FC<ProviderProps<User[]>> = ({ children }) => {
+  const [users, setUsers] = useState<User[]>([]);
+  const getUsers = async () => {
+    try {
+      const users = await UserService.getAll();
+      setUsers(users.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  //TODO: the rest of relevant crud
+  return (
+    <UsersContext.Provider
+      value={{
+        users,
+        getUsers,
+      }}
+    >
+      {children}
+    </UsersContext.Provider>
+  );
+};
 
 export type Role =
   | 'admin'
