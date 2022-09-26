@@ -1,12 +1,12 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Modal from 'react-modal';
 import { AppointmentsContext, exampleAppointments } from './data/appointments';
 import { CounselorsContext, exampleCounselors } from './data/counselors';
 import { SchoolsContext, exampleSchools } from './data/schools';
 import { exampleStudents, StudentsContext } from './data/students';
-import { UsersContext, exampleUsers } from './data/users';
+import { UsersContext, UsersProvider } from './data/users';
 import AppRouter from './routes/AppRouter';
 
 Modal.setAppElement('#root');
@@ -16,21 +16,20 @@ function App() {
   const [counselors, setCounselors] = useState(exampleCounselors);
   const [schools, setSchools] = useState(exampleSchools);
   const [students, setStudents] = useState(exampleStudents);
-  const [users, setUsers] = useState(exampleUsers);
+  const { users } = useContext(UsersContext);
   const appointmentsContextValue = { appointments, setAppointments };
   const counselorsContextValue = { counselors, setCounselors };
   const schoolsContextValue = { schools, setSchools };
   const studentsContextValue = { students, setStudents };
-  const usersContextValue = { users, setUsers };
 
   return (
     <AppointmentsContext.Provider value={appointmentsContextValue}>
       <CounselorsContext.Provider value={counselorsContextValue}>
         <SchoolsContext.Provider value={schoolsContextValue}>
           <StudentsContext.Provider value={studentsContextValue}>
-            <UsersContext.Provider value={usersContextValue}>
+            <UsersProvider value={users}>
               <AppRouter />
-            </UsersContext.Provider>
+            </UsersProvider>
           </StudentsContext.Provider>
         </SchoolsContext.Provider>
       </CounselorsContext.Provider>

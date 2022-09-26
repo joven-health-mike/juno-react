@@ -15,7 +15,7 @@ const AccountDetailPage: React.FC<AccountDetailPageProps> = ({
 }) => {
   const role = 'admin';
 
-  const { users, setUsers } = useContext(UsersContext);
+  const { users } = useContext(UsersContext);
 
   const onFormSubmit = (user: User) => {
     if (defaultUser) modifyUser(user);
@@ -28,7 +28,7 @@ const AccountDetailPage: React.FC<AccountDetailPageProps> = ({
       if (modifiedUser.name === mappedUser.name) return modifiedUser;
       else return mappedUser;
     });
-    setUsers(newUsers);
+    // setUsers(newUsers);
   };
 
   const onFormCancel = () => {

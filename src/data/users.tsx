@@ -2,6 +2,7 @@
 
 import React, { Dispatch, FC, ProviderProps, useState } from 'react';
 import { SetStateAction } from 'react';
+import { Service } from '../services/service';
 import { UserService } from '../services/user.service';
 
 export type User = {
@@ -40,19 +41,30 @@ export const exampleUsers = [
 export type UserContextData = {
   users: User[];
   getUsers: () => void;
+  addUser: (user: User) => void;
 };
 
 export const UsersContext = React.createContext<UserContextData>({
   users: [],
   getUsers: () => null,
+  addUser: (user: User) => null,
 });
 
 export const UsersProvider: FC<ProviderProps<User[]>> = ({ children }) => {
   const [users, setUsers] = useState<User[]>([]);
+  const service = new UserService();
   const getUsers = async () => {
     try {
-      const users = await UserService.getAll();
+      const users = await service.getAll();
       setUsers(users.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const addUser = async (user: User) => {
+    try {
+      await service.create(user);
     } catch (error) {
       console.error(error);
     }
@@ -64,6 +76,7 @@ export const UsersProvider: FC<ProviderProps<User[]>> = ({ children }) => {
       value={{
         users,
         getUsers,
+        addUser,
       }}
     >
       {children}

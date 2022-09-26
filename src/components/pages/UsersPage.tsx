@@ -1,7 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useContext } from 'react';
-import { User, UsersContext, UsersProvider } from '../../data/users';
+import { User, UsersContext } from '../../data/users';
 import CreateUserForm from '../forms/CreateUserForm';
 import Navbar from '../navbar/Navbar';
 import { getItems } from '../navbar/navBarItems';
@@ -10,10 +10,10 @@ import UsersTable from '../tables/UsersTable';
 const UsersPage = () => {
   const role = 'admin';
 
-  const { users, getUsers } = useContext(UsersContext);
+  const { users, addUser } = useContext(UsersContext);
 
   const onFormSubmit = (user: User) => {
-    // setUsers([...users, user]);
+    addUser(user);
   };
 
   const onUserDeleteClicked = (userName: string) => {
@@ -30,10 +30,8 @@ const UsersPage = () => {
       </nav>
       <h1>Users</h1>
       <>
-        <UsersProvider value={users}>
-          <CreateUserForm onSubmit={onFormSubmit} onCancel={() => {}} />
-          <UsersTable onDeleteClicked={onUserDeleteClicked} />
-        </UsersProvider>
+        <CreateUserForm onSubmit={onFormSubmit} onCancel={() => {}} />
+        <UsersTable onDeleteClicked={onUserDeleteClicked} />
       </>
     </div>
   );

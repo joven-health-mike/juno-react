@@ -18,7 +18,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ onDeleteClicked }) => {
 
   useEffect(() => {
     getUsers();
-  }, [getUsers]);
+  }, [getUsers, users]);
 
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
