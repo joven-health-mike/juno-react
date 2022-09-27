@@ -10,7 +10,11 @@ import UsersTable from '../tables/UsersTable';
 const UsersPage = () => {
   const role = 'admin';
 
-  const { users, addUser } = useContext(UsersContext);
+  const {
+    data: users,
+    add: addUser,
+    delete: deleteUser,
+  } = useContext(UsersContext);
 
   const onFormSubmit = (user: User) => {
     addUser(user);
@@ -18,8 +22,10 @@ const UsersPage = () => {
 
   const onUserDeleteClicked = (userName: string) => {
     if (window.confirm('Delete this user?')) {
-      let newUsers = users.filter(user => user.name !== userName);
-      // setUsers(newUsers);
+      let userToDelete = users.find(user => user.name === userName);
+      if (userToDelete) {
+        deleteUser(userToDelete);
+      }
     }
   };
 

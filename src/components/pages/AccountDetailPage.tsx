@@ -15,7 +15,7 @@ const AccountDetailPage: React.FC<AccountDetailPageProps> = ({
 }) => {
   const role = 'admin';
 
-  const { users } = useContext(UsersContext);
+  const { data: users } = useContext(UsersContext);
 
   const onFormSubmit = (user: User) => {
     if (defaultUser) modifyUser(user);

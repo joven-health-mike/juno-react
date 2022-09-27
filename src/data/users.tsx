@@ -1,8 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { Dispatch, FC, ProviderProps, useState } from 'react';
-import { SetStateAction } from 'react';
-import { Service } from '../services/service';
+import React, { FC, ProviderProps, useState } from 'react';
 import { UserService } from '../services/user.service';
 
 export type User = {
@@ -38,45 +36,80 @@ export const exampleUsers = [
   },
 ];
 
-export type UserContextData = {
-  users: User[];
-  getUsers: () => void;
-  addUser: (user: User) => void;
+/**
+ * these methods don't return data, they set users in the Provider which posts results to listeners
+ * from useContext!
+ */
+export type ContextData<T> = {
+  data: T[];
+  getAll: () => void;
+  get: (id: string) => void;
+  add: (data: T) => void;
+  update: (data: T) => void;
+  delete: (data: T) => void;
 };
 
-export const UsersContext = React.createContext<UserContextData>({
-  users: [],
-  getUsers: () => null,
-  addUser: (user: User) => null,
+export const UsersContext = React.createContext<ContextData<User>>({
+  data: [],
+  getAll: () => null,
+  get: (id: string) => null,
+  add: (user: User) => null,
+  update: (user: User) => null,
+  delete: (user: User) => null,
 });
 
 export const UsersProvider: FC<ProviderProps<User[]>> = ({ children }) => {
   const [users, setUsers] = useState<User[]>([]);
   const service = new UserService();
-  const getUsers = async () => {
-    try {
-      const users = await service.getAll();
-      setUsers(users.data);
-    } catch (error) {
-      console.error(error);
-    }
+
+  const delegate: ContextData<User> = {
+    data: users,
+    getAll: async function (): Promise<void> {
+      try {
+        const { data: users } = await service.getAll();
+        setUsers(users);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    get: async function (id: string): Promise<void> {
+      try {
+        const { data: user } = await service.get(id);
+        // TODO: is this right?
+        setUsers([...users, user]);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    add: async function (data: User): Promise<void> {
+      try {
+        const { data: user } = await service.create(data);
+        // TODO: is it better to pass this data through or use what is returned?
+        setUsers([...users, user]);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    update: async function (data: User): Promise<void> {
+      try {
+        const { data: user } = await service.update(data, `${data._id}`);
+        setUsers([...users, user]);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    delete: async function (data: User): Promise<void> {
+      try {
+        const { data: deletedUser } = await service.delete(`${data._id}`);
+        setUsers(users.filter(_user => _user._id !== deletedUser._id));
+      } catch (error) {}
+    },
   };
 
-  const addUser = async (user: User) => {
-    try {
-      await service.create(user);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  //TODO: the rest of relevant crud
   return (
     <UsersContext.Provider
       value={{
-        users,
-        getUsers,
-        addUser,
+        ...delegate,
       }}
     >
       {children}

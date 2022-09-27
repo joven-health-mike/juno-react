@@ -7,13 +7,7 @@ import React, {
   useContext,
   useState,
 } from 'react';
-import {
-  emptyUser,
-  UserContextData,
-  ROLES,
-  User,
-  UsersContext,
-} from '../../data/users';
+import { emptyUser, ROLES, User, UsersContext } from '../../data/users';
 import SelectList from '../selectList/SelectList';
 
 type CreateUserFormProps = {
@@ -28,7 +22,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
   onCancel,
 }) => {
   const [user, setUser] = useState<User>(defaultUser ?? emptyUser);
-  const { users } = useContext<UserContextData>(UsersContext);
+  const { data: users } = useContext(UsersContext);
 
   const onRoleChanged = (role: string) => {
     setUser({ ...user, role: role });

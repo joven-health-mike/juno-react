@@ -14,7 +14,7 @@ type UsersTableProps = {
 };
 
 const UsersTable: React.FC<UsersTableProps> = ({ onDeleteClicked }) => {
-  const { users, getUsers } = useContext(UsersContext);
+  const { data: users, getAll: getUsers } = useContext(UsersContext);
 
   useEffect(() => {
     getUsers();

@@ -16,7 +16,7 @@ function App() {
   const [counselors, setCounselors] = useState(exampleCounselors);
   const [schools, setSchools] = useState(exampleSchools);
   const [students, setStudents] = useState(exampleStudents);
-  const { users } = useContext(UsersContext);
+  const { data: users } = useContext(UsersContext);
   const appointmentsContextValue = { appointments, setAppointments };
   const counselorsContextValue = { counselors, setCounselors };
   const schoolsContextValue = { schools, setSchools };

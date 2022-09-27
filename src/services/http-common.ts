@@ -9,4 +9,9 @@ export const HttpServer = axios.create({
   headers: {
     'Content-type': 'application/json',
   },
+  transformResponse: [unwrapData],
 });
+
+function unwrapData(data: any, _headers?: any) {
+  return JSON.parse(data).data;
+}
