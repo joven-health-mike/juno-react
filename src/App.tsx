@@ -25,6 +25,7 @@ function App() {
 
   useEffect(() => {
     async function checkAuthentication() {
+      console.log('Checking authentication...');
       try {
         const response = await axios.get(
           'https://localhost/api/1/loggedInUser'
@@ -37,14 +38,17 @@ function App() {
         } else if (response.status === 204) {
           // not logged in - redirect to login page
           setIsAuthenticated(false);
+          setLoggedInUser(emptyUser);
         } else {
           // something unexpected happened...
+          console.log('Unexpected response: ' + response.status);
         }
-        // setIsLoading(false);
+        setIsLoading(false);
       } catch (err) {
         console.log(err);
       }
     }
+    setIsLoading(true);
     checkAuthentication();
   }, []);
 
