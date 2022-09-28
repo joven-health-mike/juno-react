@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { FC, ProviderProps, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { UserService } from '../services/user.service';
 import { ContextData } from './ContextData';
 import { DataProviderProps } from './DataProviderProps';
@@ -87,6 +87,16 @@ export const UsersProvider: FC<DataProviderProps<User[]>> = ({ children }) => {
     </UsersContext.Provider>
   );
 };
+
+export type ILoggedInUserContext = {
+  loggedInUser: User;
+  setLoggedInUser: (user: User) => void;
+};
+
+export const LoggedInUserContext = React.createContext<ILoggedInUserContext>({
+  loggedInUser: emptyUser,
+  setLoggedInUser: () => {},
+});
 
 export type Role =
   | 'admin'
