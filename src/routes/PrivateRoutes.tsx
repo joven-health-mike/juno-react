@@ -25,7 +25,7 @@ const PrivateRoutes = () => {
 };
 
 const RedirectToLogoutPage: React.FC = () => {
-  window.location.href = 'http://localhost:8080/logout';
+  window.location.href = 'https://localhost/api/1/logout';
   return <></>;
 };
 

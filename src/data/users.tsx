@@ -45,6 +45,16 @@ export const UsersContext = React.createContext<IUsersContext>({
   setUsers: () => {},
 });
 
+export type ILoggedInUserContext = {
+  loggedInUser: User;
+  setLoggedInUser: (user: User) => void;
+};
+
+export const LoggedInUserContext = React.createContext<ILoggedInUserContext>({
+  loggedInUser: exampleUsers[0],
+  setLoggedInUser: () => {},
+});
+
 export type Role =
   | 'admin'
   | 'counselor'
