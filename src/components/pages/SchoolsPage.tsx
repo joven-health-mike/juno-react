@@ -37,10 +37,7 @@ const SchoolsPage = () => {
       <h1>Schools</h1>
       <>
         <CreateSchoolForm onSubmit={onFormSubmit} onCancel={() => {}} />
-        <SchoolsTable
-          schools={schools}
-          onDeleteClicked={onSchoolDeleteClicked}
-        />
+        <SchoolsTable onDeleteClicked={onSchoolDeleteClicked} />
       </>
     </div>
   );

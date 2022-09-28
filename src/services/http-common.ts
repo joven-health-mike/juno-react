@@ -1,8 +1,10 @@
 import axios from 'axios';
 
 // TODO: architect configuration for environment
-const localDevHost = 'http://localhost:8080/api/';
+const localDevHost = 'https://localhost/api/';
 const apiVersion = '1';
+
+axios.defaults.withCredentials = true;
 
 export const HttpServer = axios.create({
   baseURL: localDevHost + apiVersion,
