@@ -17,7 +17,7 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
   schools,
   onDeleteClicked,
 }) => {
-  const { setSchools } = useContext(SchoolsContext);
+  const { add: addSchool } = useContext(SchoolsContext);
 
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
@@ -78,7 +78,7 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
       hiddenColumns={['_id']}
-      addNewItem={() => setSchools([emptySchool, ...schools])}
+      addNewItem={() => addSchool(emptySchool)}
     />
   );
 };

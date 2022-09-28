@@ -91,7 +91,7 @@ export function SelectSchoolList({
   value,
   onSchoolChanged,
 }: SelectSchoolListProps) {
-  const { schools } = useContext(SchoolsContext);
+  const { data: schools } = useContext(SchoolsContext);
   const schoolNames = schools.map(school => school.name);
 
   const handleSchoolChange = (schoolId: string) => {

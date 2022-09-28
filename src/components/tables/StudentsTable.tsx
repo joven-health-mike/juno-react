@@ -20,7 +20,7 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
   onDeleteClicked,
 }) => {
   const { counselors } = useContext(CounselorsContext);
-  const { schools } = useContext(SchoolsContext);
+  const { data: schools } = useContext(SchoolsContext);
   const { setStudents } = useContext(StudentsContext);
 
   const defaultColumn: Record<string, unknown> = React.useMemo(

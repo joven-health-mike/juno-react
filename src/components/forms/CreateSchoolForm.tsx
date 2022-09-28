@@ -7,12 +7,7 @@ import React, {
   useContext,
   useState,
 } from 'react';
-import {
-  emptySchool,
-  ISchoolsContext,
-  School,
-  SchoolsContext,
-} from '../../data/schools';
+import { emptySchool, School, SchoolsContext } from '../../data/schools';
 
 type CreateSchoolFormProps = {
   defaultSchool?: School;
@@ -26,7 +21,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
   onCancel,
 }) => {
   const [school, setSchool] = useState<School>(defaultSchool ?? emptySchool);
-  const { schools } = useContext<ISchoolsContext>(SchoolsContext);
+  const { data: schools } = useContext(SchoolsContext);
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();

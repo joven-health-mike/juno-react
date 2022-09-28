@@ -10,7 +10,7 @@ type StudentDetailsProps = {
 };
 
 const StudentDetails: React.FC<StudentDetailsProps> = ({ student }) => {
-  const { schools } = useContext(SchoolsContext);
+  const { data: schools } = useContext(SchoolsContext);
   const { counselors } = useContext(CounselorsContext);
 
   const schoolName = schools.filter(

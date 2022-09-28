@@ -10,16 +10,22 @@ import SchoolsTable from '../tables/SchoolsTable';
 const SchoolsPage = () => {
   const role = 'admin';
 
-  const { schools, setSchools } = useContext(SchoolsContext);
+  const {
+    data: schools,
+    add: addSchool,
+    delete: deleteSchool,
+  } = useContext(SchoolsContext);
 
   const onFormSubmit = (school: School) => {
-    setSchools([...schools, school]);
+    addSchool(school);
   };
 
   const onSchoolDeleteClicked = (schoolName: string) => {
-    if (window.confirm('Delete this school?')) {
-      let newSchools = schools.filter(school => school.name !== schoolName);
-      setSchools(newSchools);
+    if (window.confirm('Delete this user?')) {
+      let schoolToDelete = schools.find(school => school.name === schoolName);
+      if (schoolToDelete) {
+        deleteSchool(schoolToDelete);
+      }
     }
   };
 

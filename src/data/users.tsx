@@ -2,6 +2,8 @@
 
 import React, { FC, ProviderProps, useState } from 'react';
 import { UserService } from '../services/user.service';
+import { ContextData } from './ContextData';
+import { DataProviderProps } from './DataProviderProps';
 
 export type User = {
   _id: number;
@@ -19,36 +21,6 @@ export const emptyUser = {
   role: '',
 };
 
-export const exampleUsers = [
-  {
-    _id: 0,
-    name: 'Mike Burke',
-    email: 'mike@jovenhealth.com',
-    password: 'abcd',
-    role: 'admin',
-  },
-  {
-    _id: 1,
-    name: 'Jacek McGuinness',
-    email: 'jacek-mcguinness@jovenhealth.com',
-    password: 'abcd',
-    role: 'counselor',
-  },
-];
-
-/**
- * these methods don't return data, they set users in the Provider which posts results to listeners
- * from useContext!
- */
-export type ContextData<T> = {
-  data: T[];
-  getAll: () => void;
-  get: (id: string) => void;
-  add: (data: T) => void;
-  update: (data: T) => void;
-  delete: (data: T) => void;
-};
-
 export const UsersContext = React.createContext<ContextData<User>>({
   data: [],
   getAll: () => null,
@@ -58,7 +30,7 @@ export const UsersContext = React.createContext<ContextData<User>>({
   delete: (user: User) => null,
 });
 
-export const UsersProvider: FC<ProviderProps<User[]>> = ({ children }) => {
+export const UsersProvider: FC<DataProviderProps<User[]>> = ({ children }) => {
   const [users, setUsers] = useState<User[]>([]);
   const service = new UserService();
 
@@ -75,7 +47,6 @@ export const UsersProvider: FC<ProviderProps<User[]>> = ({ children }) => {
     get: async function (id: string): Promise<void> {
       try {
         const { data: user } = await service.get(id);
-        // TODO: is this right?
         setUsers([...users, user]);
       } catch (error) {
         console.error(error);
