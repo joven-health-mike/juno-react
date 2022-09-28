@@ -16,7 +16,7 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
 }) => {
   const { students } = useContext(StudentsContext);
   const { counselors } = useContext(CounselorsContext);
-  const { schools } = useContext(SchoolsContext);
+  const { data: schools } = useContext(SchoolsContext);
 
   const foundStudent = students.filter(
     student => student._id === appointment.studentId

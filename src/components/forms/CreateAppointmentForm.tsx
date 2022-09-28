@@ -14,8 +14,9 @@ import {
   IAppointmentsContext,
   AppointmentType,
 } from '../../data/appointments';
+import { ContextData } from '../../data/ContextData';
 import { Counselor, emptyCounselor } from '../../data/counselors';
-import { ISchoolsContext, SchoolsContext } from '../../data/schools';
+import { School, SchoolsContext } from '../../data/schools';
 import { emptyStudent, Student } from '../../data/students';
 import DateSelector from '../dateSelector/DateSelector';
 import {
@@ -49,7 +50,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   });
   const { appointments } =
     useContext<IAppointmentsContext>(AppointmentsContext);
-  const { schools } = useContext<ISchoolsContext>(SchoolsContext);
+  const { data: schools } = useContext<ContextData<School>>(SchoolsContext);
 
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelection(counselor);
