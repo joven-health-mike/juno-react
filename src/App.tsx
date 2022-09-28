@@ -44,9 +44,10 @@ function App() {
           // something unexpected happened...
           console.log('Unexpected response: ' + response.status);
         }
-        setIsLoading(false);
       } catch (err) {
         console.log(err);
+      } finally {
+        setIsLoading(false);
       }
     }
     setIsLoading(true);
