@@ -27,6 +27,7 @@ function App() {
     async function checkAuthentication() {
       console.log('Checking authentication...');
       try {
+        axios.defaults.withCredentials = true;
         const response = await axios.get(
           'https://localhost/api/1/loggedInUser'
         );
