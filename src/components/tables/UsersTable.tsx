@@ -18,7 +18,12 @@ const UsersTable: React.FC<UsersTableProps> = ({ onDeleteClicked }) => {
 
   useEffect(() => {
     getUsers();
-  }, [getUsers, users]);
+    // TODO: heads up here. still figuring this out. i feel like this is a warning that this isn't
+    // the correct architecture. getUsers isn't changing - users is, however, passing this in as a
+    // dependency causes it to loop infinitely. on methods that use ids those strings can be added
+    // here.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
