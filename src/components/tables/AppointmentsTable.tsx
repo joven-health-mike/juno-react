@@ -114,14 +114,14 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
         Header: 'Start',
         accessor: 'start',
         Cell: ({ cell }: CellProps<object>) => (
-          <p>{formatDateTime(cell.row.values.start, -6)}</p>
+          <p>{formatDateTime(new Date(cell.row.values.start), -6)}</p>
         ),
       },
       {
         Header: 'End',
         accessor: 'end',
         Cell: ({ cell }: CellProps<object>) => (
-          <p>{formatDateTime(cell.row.values.end, -6)}</p>
+          <p>{formatDateTime(new Date(cell.row.values.end), -6)}</p>
         ),
       },
       {

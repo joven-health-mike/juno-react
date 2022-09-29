@@ -35,9 +35,11 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
     <>
       <h2 data-testid={'title'}>{appointment.title}</h2>
       <p data-testid={'start'}>
-        Start Time: {formatDateTime(appointment.start, -6)}
+        Start Time: {formatDateTime(new Date(appointment.start), -6)}
       </p>
-      <p data-testid={'end'}>End Time: {formatDateTime(appointment.end, -6)}</p>
+      <p data-testid={'end'}>
+        End Time: {formatDateTime(new Date(appointment.end), -6)}
+      </p>
       <p data-testid={'counselorId'}>Counselor: {counselorName}</p>
       <p data-testid={'studentId'}>Student: {studentName}</p>
       <p data-testid={'schoolId'}>School: {schoolName}</p>
