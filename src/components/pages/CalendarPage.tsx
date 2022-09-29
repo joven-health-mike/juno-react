@@ -13,7 +13,6 @@ import { Counselor, emptyCounselor } from '../../data/counselors';
 import { emptySchool, School } from '../../data/schools';
 import Calendar from '../calendar/Calendar';
 import Navbar from '../navbar/Navbar';
-import { getItems } from '../navbar/navBarItems';
 import {
   SelectCounselorList,
   SelectSchoolList,
@@ -23,8 +22,6 @@ import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import AppointmentDetailsModal from '../modals/AppointmentDetailsModal';
 
 const CalendarPage: React.FC = () => {
-  const role = 'admin';
-
   const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
     useState<boolean>(false);
   const [isAppointmentDetailsModalOpen, setIsAppointmentDetailsModalOpen] =
@@ -97,7 +94,7 @@ const CalendarPage: React.FC = () => {
   return (
     <div className={'mainContainer'}>
       <nav>
-        <Navbar items={getItems(role)} />
+        <Navbar />
       </nav>
       <h1>Calendar</h1>
       <label>

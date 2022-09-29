@@ -4,12 +4,9 @@ import React, { useContext } from 'react';
 import { User, UsersContext } from '../../data/users';
 import CreateUserForm from '../forms/CreateUserForm';
 import Navbar from '../navbar/Navbar';
-import { getItems } from '../navbar/navBarItems';
 import UsersTable from '../tables/UsersTable';
 
 const UsersPage = () => {
-  const role = 'admin';
-
   const {
     data: users,
     add: addUser,
@@ -22,7 +19,9 @@ const UsersPage = () => {
 
   const onUserDeleteClicked = (userName: string) => {
     if (window.confirm('Delete this user?')) {
-      let userToDelete = users.find(user => user.name === userName);
+      let userToDelete = users.find(
+        user => user.firstName + ' ' + user.lastName === userName
+      );
       if (userToDelete) {
         deleteUser(userToDelete);
       }
@@ -32,7 +31,7 @@ const UsersPage = () => {
   return (
     <div className={'mainContainer'}>
       <nav>
-        <Navbar items={getItems(role)} />
+        <Navbar />
       </nav>
       <h1>Users</h1>
       <>

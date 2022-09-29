@@ -4,7 +4,6 @@ import React, { useContext } from 'react';
 import '@fullcalendar/react';
 import listPlugin from '@fullcalendar/list';
 import Navbar from '../navbar/Navbar';
-import { getItems } from '../navbar/navBarItems';
 import Calendar from '../calendar/Calendar';
 import { Appointment, AppointmentsContext } from '../../data/appointments';
 import StudentsSmallTable from '../tables/StudentsSmallTable';
@@ -23,7 +22,7 @@ const HomePage: React.FC = () => {
   return (
     <div className={'mainContainer'}>
       <nav>
-        <Navbar items={getItems('admin')} />
+        <Navbar />
       </nav>
       {isAdmin && <AdminView />}
       {isCounselor && <CounselorView />}

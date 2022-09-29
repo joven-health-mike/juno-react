@@ -6,13 +6,16 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import CreateUserForm from './CreateUserForm';
+import { Role } from '../../data/users';
 
 const testUser = {
-  name: 'name',
-  _id: 0,
+  id: 'abcdefg',
+  firstName: 'firstName',
+  lastName: 'lastName',
   email: 'email@test.com',
-  password: 'password',
-  role: 'userRole',
+  username: 'username',
+  phone: 'phone',
+  role: 'JOVEN_STAFF' as Role,
 };
 
 describe('CreateUserForm', () => {
@@ -72,16 +75,24 @@ describe('CreateUserForm', () => {
     expect(submitCallback.mock.calls[0][0]._id).toBeGreaterThanOrEqual(0);
   });
 
-  test('Check if names match', () => {
-    expect(testUser.name).toBe('name');
+  test('Check if first names match', () => {
+    expect(testUser.firstName).toBe('firstName');
+  });
+
+  test('Check if last names match', () => {
+    expect(testUser.lastName).toBe('lastName');
   });
 
   test('Check if emails match', () => {
     expect(testUser.email).toBe('email@test.com');
   });
 
-  test('Check if passwords match', () => {
-    expect(testUser.password).toBe('password');
+  test('Check if usernames match', () => {
+    expect(testUser.username).toBe('username');
+  });
+
+  test('Check if phones match', () => {
+    expect(testUser.phone).toBe('phone');
   });
 
   test('Check if roles match', () => {

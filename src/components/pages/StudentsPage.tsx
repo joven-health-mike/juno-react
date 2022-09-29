@@ -4,12 +4,9 @@ import React, { useContext } from 'react';
 import { Student, StudentsContext } from '../../data/students';
 import CreateStudentForm from '../forms/CreateStudentForm';
 import Navbar from '../navbar/Navbar';
-import { getItems } from '../navbar/navBarItems';
 import StudentsTable from '../tables/StudentsTable';
 
 const StudentsPage = () => {
-  const role = 'admin';
-
   const { students, setStudents } = useContext(StudentsContext);
 
   const onFormSubmit = (student: Student) => {
@@ -28,7 +25,7 @@ const StudentsPage = () => {
   return (
     <div className={'mainContainer'}>
       <nav>
-        <Navbar items={getItems(role)} />
+        <Navbar />
       </nav>
       <h1>Students</h1>
       <>

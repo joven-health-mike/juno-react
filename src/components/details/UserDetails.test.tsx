@@ -6,37 +6,35 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import UserDetails from './UserDetails';
+import { Role } from '../../data/users';
 
 const testUser = {
-  name: 'name',
-  _id: 0,
+  id: 'abcdefg',
+  firstName: 'firstName',
+  lastName: 'lastName',
   email: 'email@test.com',
-  password: 'userPassword',
-  role: 'userRole',
+  username: 'username',
+  phone: 'phone',
+  role: 'JOVEN_STAFF' as Role,
 };
 
 describe('UserDetails', () => {
   it('should display name', async () => {
     const view = render(<UserDetails user={testUser} />);
     const nameView = await view.findByTestId('name');
-    expect(nameView.innerHTML).toEqual(testUser.name);
+    expect(nameView.innerHTML).toEqual(
+      testUser.firstName + ' ' + testUser.lastName
+    );
   });
   it('should display ID as a string', async () => {
     const view = render(<UserDetails user={testUser} />);
     const idView = await view.findByTestId('id');
-    expect(idView.innerHTML).toEqual('ID: ' + testUser._id.toString());
+    expect(idView.innerHTML).toEqual('ID: ' + testUser.id.toString());
   });
   it('should display email as a string', async () => {
     const view = render(<UserDetails user={testUser} />);
     const emailView = await view.findByTestId('email');
     expect(emailView.innerHTML).toEqual('Email: ' + testUser.email.toString());
-  });
-  it('should display the password as a string', async () => {
-    const view = render(<UserDetails user={testUser} />);
-    const passwordView = await view.findByTestId('userPassword');
-    expect(passwordView.innerHTML).toEqual(
-      'Password: ' + testUser.password.toString()
-    );
   });
 
   it('should display the user role', async () => {

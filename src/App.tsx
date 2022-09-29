@@ -12,6 +12,7 @@ import {
   LoggedInUserContext,
   UsersProvider,
   emptyUser,
+  User,
 } from './data/users';
 import AppRouter from './routes/AppRouter';
 
@@ -19,7 +20,7 @@ Modal.setAppElement('#root');
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loggedInUser, setLoggedInUser] = useState(emptyUser);
+  const [loggedInUser, setLoggedInUser] = useState<User>(emptyUser);
   const loggedInUserContextValue = { loggedInUser, setLoggedInUser };
   const [isLoading, setIsLoading] = useState(true);
 

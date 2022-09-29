@@ -4,7 +4,6 @@ import React from 'react';
 import { Counselor } from '../../data/counselors';
 import CounselorDetails from '../details/CounselorDetails';
 import Navbar from '../navbar/Navbar';
-import { getItems } from '../navbar/navBarItems';
 
 type CounselorDetailPageProps = {
   counselor: Counselor;
@@ -13,12 +12,10 @@ type CounselorDetailPageProps = {
 const CounselorDetailPage: React.FC<CounselorDetailPageProps> = ({
   counselor,
 }) => {
-  const role = 'admin';
-
   return (
     <div className={'mainContainer'}>
       <nav>
-        <Navbar items={getItems(role)} />
+        <Navbar />
       </nav>
       <h1>Counselor Details</h1>
       <CounselorDetails counselor={counselor} />

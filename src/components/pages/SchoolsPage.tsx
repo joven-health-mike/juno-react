@@ -4,12 +4,9 @@ import React, { useContext } from 'react';
 import { School, SchoolsContext } from '../../data/schools';
 import CreateSchoolForm from '../forms/CreateSchoolForm';
 import Navbar from '../navbar/Navbar';
-import { getItems } from '../navbar/navBarItems';
 import SchoolsTable from '../tables/SchoolsTable';
 
 const SchoolsPage = () => {
-  const role = 'admin';
-
   const {
     data: schools,
     add: addSchool,
@@ -32,7 +29,7 @@ const SchoolsPage = () => {
   return (
     <div className={'mainContainer'}>
       <nav>
-        <Navbar items={getItems(role)} />
+        <Navbar />
       </nav>
       <h1>Schools</h1>
       <>

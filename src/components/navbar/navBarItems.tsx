@@ -12,22 +12,38 @@ import { IoMdLogOut, IoMdBusiness, IoMdContacts } from 'react-icons/io';
 import image from '../../assets/Logo-192sq-alphabg.png';
 import { Role } from '../../data/users';
 
+export const ROLES = [
+  'JOVEN_ADMIN',
+  'JOVEN_STAFF',
+  'SCHOOL_ADMIN',
+  'SCHOOL_STAFF',
+  'STUDENT',
+  'GUARDIAN',
+  'COUNSELOR',
+  'SYSADMIN',
+];
+
 export function getItems(role: Role) {
   switch (role) {
-    case 'admin':
+    case 'JOVEN_ADMIN' as Role:
       return allItems;
-    case 'counselor':
+    case 'JOVEN_STAFF' as Role:
       return allItems;
-    case 'facilitator':
+    case 'SCHOOL_ADMIN' as Role:
       return allItems;
-    case 'school':
+    case 'SCHOOL_STAFF' as Role:
       return allItems;
-    case 'student':
+    case 'STUDENT' as Role:
       return allItems;
-    case 'guardian':
+    case 'GUARDIAN' as Role:
+      return allItems;
+    case 'COUNSELOR' as Role:
+      return allItems;
+    case 'SYSADMIN' as Role:
       return allItems;
     default:
-      throw new Error();
+      // throw new Error();
+      return allItems;
   }
 }
 

@@ -61,16 +61,16 @@ const UsersTable: React.FC<UsersTableProps> = ({ onDeleteClicked }) => {
         accessor: '_id',
       },
       {
-        Header: 'Name',
-        accessor: 'name',
+        Header: 'First Name',
+        accessor: 'firstName',
+      },
+      {
+        Header: 'Last Name',
+        accessor: 'lastName',
       },
       {
         Header: 'Email',
         accessor: 'email',
-      },
-      {
-        Header: 'Password',
-        accessor: 'password',
       },
       {
         Header: 'Role',

@@ -9,12 +9,9 @@ import {
 import CreateAppointmentForm from '../forms/CreateAppointmentForm';
 import EditAppointmentModal from '../modals/EditAppointmentModal';
 import Navbar from '../navbar/Navbar';
-import { getItems } from '../navbar/navBarItems';
 import AppointmentsTable from '../tables/AppointmentsTable';
 
 const AppointmentsPage: React.FC = () => {
-  const role = 'admin';
-
   const { appointments, setAppointments } = useContext(AppointmentsContext);
 
   const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
@@ -53,7 +50,7 @@ const AppointmentsPage: React.FC = () => {
   return (
     <div className={'mainContainer'}>
       <nav>
-        <Navbar items={getItems(role)} />
+        <Navbar />
       </nav>
       <h1>Appointments</h1>
       <>

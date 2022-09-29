@@ -4,7 +4,6 @@ import React, { useContext } from 'react';
 import { User, UsersContext } from '../../data/users';
 import CreateUserForm from '../forms/CreateUserForm';
 import Navbar from '../navbar/Navbar';
-import { getItems } from '../navbar/navBarItems';
 
 type AccountDetailPageProps = {
   defaultUser: User;
@@ -13,8 +12,6 @@ type AccountDetailPageProps = {
 const AccountDetailPage: React.FC<AccountDetailPageProps> = ({
   defaultUser,
 }) => {
-  const role = 'admin';
-
   const { data: users } = useContext(UsersContext);
 
   const onFormSubmit = (user: User) => {
@@ -23,12 +20,7 @@ const AccountDetailPage: React.FC<AccountDetailPageProps> = ({
   };
 
   const modifyUser = (modifiedUser: User) => {
-    const newUsers = users.map(mappedUser => {
-      // this should use an ID instead of the name - changes to the name won't save using this code.
-      if (modifiedUser.name === mappedUser.name) return modifiedUser;
-      else return mappedUser;
-    });
-    // setUsers(newUsers);
+    // TODO: modify the user in the database
   };
 
   const onFormCancel = () => {
@@ -39,7 +31,7 @@ const AccountDetailPage: React.FC<AccountDetailPageProps> = ({
   return (
     <div className={'mainContainer'}>
       <nav>
-        <Navbar items={getItems(role)} />
+        <Navbar />
       </nav>
       <h1>Account Details</h1>
       <CreateUserForm

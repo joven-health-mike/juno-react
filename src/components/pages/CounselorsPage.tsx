@@ -4,12 +4,9 @@ import React, { useContext } from 'react';
 import { Counselor, CounselorsContext } from '../../data/counselors';
 import CreateCounselorForm from '../forms/CreateCounselorForm';
 import Navbar from '../navbar/Navbar';
-import { getItems } from '../navbar/navBarItems';
 import CounselorsTable from '../tables/CounselorsTable';
 
 const CounselorsPage: React.FC = () => {
-  const role = 'admin';
-
   const { counselors, setCounselors } = useContext(CounselorsContext);
 
   const onFormSubmit = (counselor: Counselor) => {
@@ -28,7 +25,7 @@ const CounselorsPage: React.FC = () => {
   return (
     <div className={'mainContainer'}>
       <nav>
-        <Navbar items={getItems(role)} />
+        <Navbar />
       </nav>
       <h1>Counselors</h1>
       <>

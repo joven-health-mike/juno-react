@@ -1,15 +1,17 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { IconContext } from 'react-icons';
 import { Link } from 'react-router-dom';
-import { NavItem } from './navBarItems';
+import { LoggedInUserContext } from '../../data/users';
+import { getItems, NavItem } from './navBarItems';
 
-type NavbarProps = {
-  items: NavItem[];
-};
+const Navbar: React.FC = () => {
+  const { loggedInUser } = useContext(LoggedInUserContext);
+  const [items, setItems] = useState<NavItem[]>([]);
 
-const Navbar: React.FC<NavbarProps> = ({ items }) => {
+  useEffect(() => setItems(getItems(loggedInUser.role)), [loggedInUser]);
+
   return (
     <>
       <IconContext.Provider value={{ color: '#fff' }}>

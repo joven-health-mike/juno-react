@@ -6,19 +6,25 @@ import { ContextData } from './ContextData';
 import { DataProviderProps } from './DataProviderProps';
 
 export type User = {
-  _id: number;
-  name: string;
-  email: string;
-  password: string;
-  role: string;
+  id: string;
+  firstName: string;
+  lastName: string;
+  email?: string;
+  username: string;
+  phone?: string;
+  docsUrl?: string;
+  timeZoneOffset?: number;
+  role: Role;
 };
 
 export const emptyUser = {
-  _id: -1,
-  name: '',
+  id: '-1',
+  firstName: '',
+  lastName: '',
   email: '',
-  password: '',
-  role: '',
+  username: '',
+  phone: '',
+  role: 'JOVEN_STAFF' as Role,
 };
 
 export const UsersContext = React.createContext<ContextData<User>>({
@@ -63,7 +69,7 @@ export const UsersProvider: FC<DataProviderProps<User[]>> = ({ children }) => {
     },
     update: async function (data: User): Promise<void> {
       try {
-        const { data: user } = await service.update(data, `${data._id}`);
+        const { data: user } = await service.update(data, `${data.id}`);
         setUsers([...users, user]);
       } catch (error) {
         console.error(error);
@@ -71,8 +77,8 @@ export const UsersProvider: FC<DataProviderProps<User[]>> = ({ children }) => {
     },
     delete: async function (data: User): Promise<void> {
       try {
-        const { data: deletedUser } = await service.delete(`${data._id}`);
-        setUsers(users.filter(_user => _user._id !== deletedUser._id));
+        const { data: deletedUser } = await service.delete(`${data.id}`);
+        setUsers(users.filter(_user => _user.id !== deletedUser.id));
       } catch (error) {}
     },
   };
@@ -95,22 +101,26 @@ export type ILoggedInUserContext = {
 
 export const LoggedInUserContext = React.createContext<ILoggedInUserContext>({
   loggedInUser: emptyUser,
-  setLoggedInUser: () => {},
+  setLoggedInUser: (user: User) => null,
 });
 
 export type Role =
-  | 'admin'
-  | 'counselor'
-  | 'facilitator'
-  | 'school'
-  | 'student'
-  | 'guardian';
+  | 'JOVEN_ADMIN'
+  | 'JOVEN_STAFF'
+  | 'SCHOOL_ADMIN'
+  | 'SCHOOL_STAFF'
+  | 'STUDENT'
+  | 'GUARDIAN'
+  | 'COUNSELOR'
+  | 'SYSADMIN';
 
 export const ROLES = [
-  'admin',
-  'counselor',
-  'facilitator',
-  'school',
-  'student',
-  'guardian',
+  'JOVEN_ADMIN',
+  'JOVEN_STAFF',
+  'SCHOOL_ADMIN',
+  'SCHOOL_STAFF',
+  'STUDENT',
+  'GUARDIAN',
+  'COUNSELOR',
+  'SYSADMIN',
 ];
