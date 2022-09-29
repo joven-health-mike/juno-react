@@ -2,7 +2,7 @@
 
 import React, { MouseEvent, useCallback, useContext, useEffect } from 'react';
 import { CellProps, Column, Row } from 'react-table';
-import { emptySchool, School, SchoolsContext } from '../../data/schools';
+import { School, SchoolsContext } from '../../data/schools';
 import XButton from '../buttons/XButton';
 import SchoolDetails from '../details/SchoolDetails';
 import DataTable from './DataTable';
@@ -23,7 +23,6 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({ onDeleteClicked }) => {
     // here.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const { add: addSchool } = useContext(SchoolsContext);
 
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
@@ -84,7 +83,6 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({ onDeleteClicked }) => {
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
       hiddenColumns={['_id']}
-      addNewItem={() => addSchool(emptySchool)}
     />
   );
 };

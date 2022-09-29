@@ -15,7 +15,11 @@ import AppointmentsTable from '../tables/AppointmentsTable';
 const AppointmentsPage: React.FC = () => {
   const role = 'admin';
 
-  const { appointments, setAppointments } = useContext(AppointmentsContext);
+  const {
+    data: appointments,
+    add: addAppointment,
+    delete: deleteAppointment,
+  } = useContext(AppointmentsContext);
 
   const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
     useState<boolean>(false);
@@ -23,15 +27,17 @@ const AppointmentsPage: React.FC = () => {
     useState<Appointment>(emptyAppointment);
 
   const onFormSubmit = (appointment: Appointment) => {
-    setAppointments([...appointments, appointment]);
+    addAppointment(appointment);
   };
 
   const onAppointmentDeleteClicked = (appointmentTitle: string) => {
     if (window.confirm('Delete this appointment?')) {
-      let newAppointments = appointments.filter(
-        appointment => appointment.title !== appointmentTitle
+      let deletingAppointment = appointments.find(
+        appointment => appointment.title === appointmentTitle
       );
-      setAppointments(newAppointments);
+      if (deletingAppointment) {
+        deleteAppointment(deletingAppointment);
+      }
     }
   };
 
@@ -46,7 +52,7 @@ const AppointmentsPage: React.FC = () => {
   };
 
   const handleAppointmentAdded = (appointment: Appointment) => {
-    setAppointments([...appointments, appointment]);
+    addAppointment(appointment);
     setIsCreateAppointmentModalOpen(false);
   };
 
@@ -59,7 +65,6 @@ const AppointmentsPage: React.FC = () => {
       <>
         <CreateAppointmentForm onSubmit={onFormSubmit} onCancel={() => {}} />
         <AppointmentsTable
-          appointments={appointments}
           onDeleteClicked={onAppointmentDeleteClicked}
           onEditClicked={onAppointmentEditClicked}
         />

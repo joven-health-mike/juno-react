@@ -38,7 +38,8 @@ const CalendarPage: React.FC = () => {
     useState<Appointment>(emptyAppointment);
   const [clickedAppointment, setClickedAppointment] =
     useState<Appointment>(emptyAppointment);
-  const { appointments, setAppointments } = useContext(AppointmentsContext);
+  const { data: appointments, add: addAppointment } =
+    useContext(AppointmentsContext);
   const { students } = useContext(StudentsContext);
 
   const handleAppointmentClick = (appointment: Appointment) => {
@@ -62,7 +63,7 @@ const CalendarPage: React.FC = () => {
   }, [isCreateAppointmentModalOpen, isAppointmentDetailsModalOpen]);
 
   const handleAppointmentAdded = (appointment: Appointment) => {
-    setAppointments([...appointments, appointment]);
+    addAppointment(appointment);
     setIsCreateAppointmentModalOpen(false);
   };
 
