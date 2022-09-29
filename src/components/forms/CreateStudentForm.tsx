@@ -7,8 +7,9 @@ import React, {
   useContext,
   useState,
 } from 'react';
+import { ContextData } from '../../data/ContextData';
 import { Counselor, emptyCounselor } from '../../data/counselors';
-import { emptySchool, School } from '../../data/schools';
+import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import {
   emptyStudent,
   IStudentsContext,
@@ -36,8 +37,19 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
   );
   const [counselorSelection, setCounselorSelection] =
     useState<Counselor>(emptyCounselor);
-  const [schoolSelection, setSchoolSelection] = useState<School>(emptySchool);
   const { students } = useContext<IStudentsContext>(StudentsContext);
+  const { data: schools } = useContext<ContextData<School>>(SchoolsContext);
+  const getDefaultSchoolSelectionIndex = () => {
+    if (defaultStudent.schoolId === '') return -1;
+    const selectedSchool = schools.filter(
+      school => school.id === defaultStudent.schoolId
+    )[0];
+    return schools.indexOf(selectedSchool);
+  };
+  const defaultSchoolSelectionIndex = getDefaultSchoolSelectionIndex();
+  const [schoolSelectionIndex, setSchoolSelectionIndex] = useState(
+    defaultSchoolSelectionIndex
+  );
 
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelection(counselor);
@@ -45,8 +57,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
   };
 
   const onSchoolChanged = (school: School) => {
-    setSchoolSelection(school);
-    setStudent({ ...student, schoolId: school._id });
+    setStudent({ ...student, schoolId: school.id });
   };
 
   const onFormSubmit = (e: FormEvent) => {
@@ -60,7 +71,6 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
   const onFormCancel = (e: MouseEvent) => {
     e.preventDefault();
     setCounselorSelection(emptyCounselor);
-    setSchoolSelection(emptySchool);
     setStudent(emptyStudent);
     onCancel();
   };
@@ -105,7 +115,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       <label>
         School:{' '}
         <SelectSchoolList
-          value={schoolSelection._id}
+          selectedIndex={schoolSelectionIndex}
           onSchoolChanged={onSchoolChanged}
         />
       </label>

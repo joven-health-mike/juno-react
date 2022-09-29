@@ -25,14 +25,13 @@ const SelectList = ({
   items,
   onItemChanged,
 }: SelectListProps) => {
-  const itemChanged = (e: ChangeEvent<HTMLSelectElement>) => {
-    e.preventDefault();
-    const item = e.target.value === labelText ? '' : e.target.value;
-    onItemChanged(item);
+  const itemChanged = (value: string) => {
+    console.log('item changed: ' + value);
+    onItemChanged(value);
   };
 
   return (
-    <select value={value} onChange={itemChanged}>
+    <select value={value} onChange={e => itemChanged(e.target.value)}>
       <option value={-1} key={labelText}>
         {labelText}
       </option>
@@ -83,19 +82,20 @@ export function SelectCounselorList({
 }
 
 type SelectSchoolListProps = {
-  value: number;
+  selectedIndex: number;
   onSchoolChanged: (school: School) => void;
 };
 
 export function SelectSchoolList({
-  value,
+  selectedIndex,
   onSchoolChanged,
 }: SelectSchoolListProps) {
   const { data: schools } = useContext(SchoolsContext);
   const schoolNames = schools.map(school => school.name);
 
-  const handleSchoolChange = (schoolId: string) => {
-    const school = schools.find(school => school._id === +schoolId);
+  const handleSchoolChange = (schoolIndex: string) => {
+    const school = schools[parseInt(schoolIndex)];
+    console.log('selected school: ' + school.name);
     onSchoolChanged(school ?? emptySchool);
   };
 
@@ -104,7 +104,7 @@ export function SelectSchoolList({
       <SelectList
         labelText={'Select a School'}
         items={schoolNames}
-        value={value}
+        value={selectedIndex}
         onItemChanged={handleSchoolChange}
       />
     </>

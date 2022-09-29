@@ -83,7 +83,7 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
           <p>
             {(() => {
               const foundSchool = schools.filter(
-                school => school._id === cell.row.values.schoolId
+                school => school.id === cell.row.values.schoolId
               )[0];
               return <>{foundSchool ? foundSchool.name : 'Not Found'}</>;
             })()}

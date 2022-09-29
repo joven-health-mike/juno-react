@@ -11,7 +11,7 @@ const testStudent = {
   first_name: 'firstName',
   last_name: 'lastName',
   _id: 0,
-  schoolId: 1,
+  schoolId: '1',
   counselorId: 2,
 };
 

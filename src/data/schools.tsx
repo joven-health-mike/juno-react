@@ -6,15 +6,19 @@ import { ContextData } from './ContextData';
 import { DataProviderProps } from './DataProviderProps';
 
 export type School = {
-  _id: number;
+  id: string;
   name: string;
-  email: string;
+  address?: string;
+  state?: string;
+  zip?: string;
+  primaryEmail?: string;
+  primaryPhone?: string;
 };
 
 export const emptySchool = {
-  _id: -1,
+  id: '-1',
   name: '',
-  email: '',
+  primaryEmail: '',
 };
 
 export const SchoolsContext = React.createContext<ContextData<School>>({
@@ -61,7 +65,7 @@ export const SchoolsProvider: FC<DataProviderProps<School[]>> = ({
     },
     update: async function (data: School): Promise<void> {
       try {
-        const { data: school } = await service.update(data, `${data._id}`);
+        const { data: school } = await service.update(data, `${data.id}`);
         setSchools([...schools, school]);
       } catch (error) {
         console.error(error);
@@ -69,10 +73,8 @@ export const SchoolsProvider: FC<DataProviderProps<School[]>> = ({
     },
     delete: async function (data: School): Promise<void> {
       try {
-        const { data: deletedSchool } = await service.delete(`${data._id}`);
-        setSchools(
-          schools.filter(_school => _school._id !== deletedSchool._id)
-        );
+        const { data: deletedSchool } = await service.delete(`${data.id}`);
+        setSchools(schools.filter(_school => _school.id !== deletedSchool.id));
       } catch (error) {}
     },
   };

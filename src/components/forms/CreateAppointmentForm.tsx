@@ -57,7 +57,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
   const onStudentChanged = (student: Student) => {
     const associatedSchool = schools.filter(
-      school => school._id === student.schoolId
+      school => school.id === student.schoolId
     )[0].name;
 
     setStudentSelection(student);

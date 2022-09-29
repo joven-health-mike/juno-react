@@ -57,7 +57,7 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({ onDeleteClicked }) => {
       },
       {
         Header: 'ID',
-        accessor: '_id',
+        accessor: 'id',
       },
       {
         Header: 'Name',
@@ -65,7 +65,11 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({ onDeleteClicked }) => {
       },
       {
         Header: 'Email',
-        accessor: 'email',
+        accessor: 'primaryEmail',
+      },
+      {
+        Header: 'Phone',
+        accessor: 'primaryPhone',
       },
     ],
     [onDeleteClicked]
@@ -82,7 +86,7 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({ onDeleteClicked }) => {
       defaultColumn={defaultColumn}
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
-      hiddenColumns={['_id']}
+      hiddenColumns={['id']}
     />
   );
 };

@@ -29,6 +29,7 @@ const CalendarPage: React.FC = () => {
   const [showCalendar, setShowCalendar] = useState<boolean>(true);
   const [filteredEvents, setFilteredEvents] = useState<Appointment[]>([]);
   const [schoolSelection, setSchoolSelection] = useState<School>(emptySchool);
+  const [selectedSchoolIndex, setSelectedSchoolIndex] = useState(-1);
   const [counselorSelection, setCounselorSelection] =
     useState<Counselor>(emptyCounselor);
   const [initialAppointment, setInitialAppointment] =
@@ -81,7 +82,7 @@ const CalendarPage: React.FC = () => {
         student => student._id === appointment.studentId
       );
       const schoolMatch = student
-        ? schoolSelection._id === -1 || schoolSelection._id === student.schoolId
+        ? schoolSelection.id === '-1' || schoolSelection.id === student.schoolId
         : false;
       return counselorMatch && schoolMatch;
     });
@@ -108,7 +109,7 @@ const CalendarPage: React.FC = () => {
       <label>
         School:{' '}
         <SelectSchoolList
-          value={schoolSelection._id}
+          selectedIndex={selectedSchoolIndex}
           onSchoolChanged={handleSchoolChange}
         />
       </label>

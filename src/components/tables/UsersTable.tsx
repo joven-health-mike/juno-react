@@ -58,7 +58,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ onDeleteClicked }) => {
       },
       {
         Header: 'ID',
-        accessor: '_id',
+        accessor: 'id',
       },
       {
         Header: 'First Name',
@@ -91,7 +91,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ onDeleteClicked }) => {
       defaultColumn={defaultColumn}
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
-      hiddenColumns={['_id']}
+      hiddenColumns={['id']}
     />
   );
 };

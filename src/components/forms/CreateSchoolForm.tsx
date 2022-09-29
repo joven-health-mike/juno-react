@@ -60,11 +60,11 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
             data-testid={'input-email'}
             type="email"
             placeholder="Email"
-            name="email"
-            value={school.email}
+            name="primaryEmail"
+            value={school.primaryEmail}
             required
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setSchool({ ...school, email: e.target.value })
+              setSchool({ ...school, primaryEmail: e.target.value })
             }
           />
         </label>

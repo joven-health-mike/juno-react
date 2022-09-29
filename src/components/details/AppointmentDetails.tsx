@@ -28,7 +28,7 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
   )[0].name;
 
   const schoolName = schools.filter(
-    school => school._id === foundStudent.schoolId
+    school => school.id === foundStudent.schoolId
   )[0].name;
 
   return (

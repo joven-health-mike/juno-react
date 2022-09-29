@@ -9,8 +9,8 @@ import SchoolDetails from './SchoolDetails';
 
 const testSchool = {
   name: 'name',
-  _id: 0,
-  email: 'email@test.com',
+  id: '0',
+  primaryEmail: 'email@test.com',
 };
 
 describe('SchoolDetails', () => {
@@ -22,13 +22,13 @@ describe('SchoolDetails', () => {
   it('should display ID as a string', async () => {
     const view = render(<SchoolDetails school={testSchool} />);
     const idView = await view.findByTestId('id');
-    expect(idView.innerHTML).toEqual('ID: ' + testSchool._id.toString());
+    expect(idView.innerHTML).toEqual('ID: ' + testSchool.id.toString());
   });
   it('should display email as a string', async () => {
     const view = render(<SchoolDetails school={testSchool} />);
     const emailView = await view.findByTestId('email');
     expect(emailView.innerHTML).toEqual(
-      'Email: ' + testSchool.email.toString()
+      'Email: ' + testSchool.primaryEmail.toString()
     );
   });
   it('should display ID as <p>', async () => {

@@ -13,9 +13,8 @@ const StudentDetails: React.FC<StudentDetailsProps> = ({ student }) => {
   const { data: schools } = useContext(SchoolsContext);
   const { counselors } = useContext(CounselorsContext);
 
-  const schoolName = schools.filter(
-    school => school._id === student.schoolId
-  )[0].name;
+  const schoolName = schools.filter(school => school.id === student.schoolId)[0]
+    .name;
 
   const counselorName = counselors.filter(
     counselor => counselor._id === student.counselorId
