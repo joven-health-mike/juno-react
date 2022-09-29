@@ -1,10 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext } from 'react';
+import React from 'react';
 import { Appointment } from '../../data/appointments';
-import { CounselorsContext } from '../../data/counselors';
-import { SchoolsContext } from '../../data/schools';
-import { StudentsContext } from '../../data/students';
 import { formatDateTime } from '../../utils/DateUtils';
 
 type AppointmentDetailsProps = {
@@ -14,23 +11,6 @@ type AppointmentDetailsProps = {
 const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
   appointment,
 }) => {
-  const { students } = useContext(StudentsContext);
-  const { counselors } = useContext(CounselorsContext);
-  const { data: schools } = useContext(SchoolsContext);
-
-  const foundStudent = students.filter(
-    student => student._id === appointment.studentId
-  )[0];
-  const studentName = foundStudent.first_name + ' ' + foundStudent.last_name;
-
-  const counselorName = counselors.filter(
-    counselor => counselor._id === appointment.counselorId
-  )[0].name;
-
-  const schoolName = schools.filter(
-    school => school.id === foundStudent.schoolId
-  )[0].name;
-
   return (
     <>
       <h2 data-testid={'title'}>{appointment.title}</h2>
@@ -40,12 +20,16 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
       <p data-testid={'end'}>
         End Time: {formatDateTime(new Date(appointment.end), -6)}
       </p>
-      <p data-testid={'counselorId'}>Counselor: {counselorName}</p>
-      <p data-testid={'studentId'}>Student: {studentName}</p>
-      <p data-testid={'schoolId'}>School: {schoolName}</p>
-      <p data-testid={'appointmentType'}>
-        Appointment Type: {appointment.type.name}
+      <p data-testid={'counselorId'}>
+        Counselor: {appointment.counselor.user.username}
       </p>
+      <p data-testid={'schoolId'}>School: {appointment.school?.name}</p>
+      <p data-testid={'participants'}>Participants:</p>
+      {appointment.participants.map((user, index) => (
+        <p key={index}>{user.firstName + ' ' + user.lastName}</p>
+      ))}
+      <p data-testid={'appointmentType'}>Type: {appointment.type}</p>
+      <p data-testid={'appointmentStatus'}>Status: {appointment.status}</p>
     </>
   );
 };

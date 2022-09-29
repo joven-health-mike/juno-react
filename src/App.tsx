@@ -4,7 +4,11 @@ import axios from 'axios';
 import React, { useState, useContext, useEffect } from 'react';
 import Modal from 'react-modal';
 import { AppointmentsContext, AppointmentsProvider } from './data/appointments';
-import { CounselorsContext, exampleCounselors } from './data/counselors';
+import {
+  Counselor,
+  CounselorsContext,
+  exampleCounselors,
+} from './data/counselors';
 import { SchoolsContext, SchoolsProvider } from './data/schools';
 import { exampleStudents, StudentsContext } from './data/students';
 import {
@@ -62,7 +66,7 @@ function App() {
   // don't have api for yet.
   const [students, setStudents] = useState(exampleStudents);
   const studentsContextValue = { students, setStudents };
-  const [counselors, setCounselors] = useState(exampleCounselors);
+  const [counselors, setCounselors] = useState<Counselor[]>(exampleCounselors);
   const counselorsContextValue = { counselors, setCounselors };
 
   return (

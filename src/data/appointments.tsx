@@ -3,30 +3,57 @@
 import React, { FC, useState } from 'react';
 import { AppointmentService } from '../services/appointment.service';
 import { ContextData } from './ContextData';
+import { Counselor, emptyCounselor } from './counselors';
 import { DataProviderProps } from './DataProviderProps';
+import { emptySchool, School } from './schools';
+import { User } from './users';
 
 export type Appointment = {
-  _id: number;
+  id: string;
   title: string;
   start: Date;
   end: Date;
-  counselorId: number;
-  studentId: number;
+  school: School;
+  counselor: Counselor;
+  participants: User[];
+  type: string;
+  status: string;
   color?: string;
-  type: AppointmentType;
+};
+
+export const emptyAppointment = {
+  id: '-1',
+  title: '',
+  start: new Date(),
+  end: new Date(),
+  school: emptySchool,
+  counselor: emptyCounselor,
+  participants: [],
+  type: '',
+  status: '',
 };
 
 export const AppointmentTypes = {
-  None: { _id: 0, name: 'None', color: 'lightgray' },
-  Clinical: { _id: 1, name: 'Clinical', color: 'green' },
-  Consultation: { _id: 2, name: 'Consultation', color: 'blue' },
-  Evaluation: { _id: 3, name: 'Evaluation', color: 'red' },
+  None: { _id: 0, name: 'NONE', color: 'lightgray' },
+  Clinical: { _id: 1, name: 'CLINICAL', color: 'green' },
+  Consultation: { _id: 2, name: 'CONSULTATION', color: 'blue' },
+  Evaluation: { _id: 3, name: 'EVALUATION', color: 'red' },
 };
 
 export type AppointmentType = {
   _id: number;
   name: string;
   color: string;
+};
+
+export const getColorForType = (type: string) => {
+  for (const k in AppointmentTypes) {
+    if (((AppointmentTypes as any)[k] as AppointmentType).name === type) {
+      return (AppointmentTypes as any)[k].color;
+    }
+  }
+
+  return AppointmentTypes.None.color;
 };
 
 export const getAppointmentTypeById = (id: number): AppointmentType => {
@@ -36,16 +63,6 @@ export const getAppointmentTypeById = (id: number): AppointmentType => {
     }
   }
   return AppointmentTypes.None;
-};
-
-export const emptyAppointment = {
-  _id: -1,
-  title: '',
-  start: new Date(),
-  end: new Date(),
-  counselorId: -1,
-  studentId: -1,
-  type: AppointmentTypes.None,
 };
 
 export const AppointmentsContext = React.createContext<
@@ -94,7 +111,7 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
     },
     update: async function (data: Appointment): Promise<void> {
       try {
-        const { data: appointment } = await service.update(data, `${data._id}`);
+        const { data: appointment } = await service.update(data, `${data.id}`);
         setAppointments([...appointments, appointment]);
       } catch (error) {
         console.error(error);
@@ -102,12 +119,10 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
     },
     delete: async function (data: Appointment): Promise<void> {
       try {
-        const { data: deletedAppointment } = await service.delete(
-          `${data._id}`
-        );
+        const { data: deletedAppointment } = await service.delete(`${data.id}`);
         setAppointments(
           appointments.filter(
-            _appointment => _appointment._id !== deletedAppointment._id
+            _appointment => _appointment.id !== deletedAppointment.id
           )
         );
       } catch (error) {}

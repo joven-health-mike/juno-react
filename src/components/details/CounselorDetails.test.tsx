@@ -6,12 +6,14 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import CounselorDetails from './CounselorDetails';
+import { emptyUser } from '../../data/users';
 
 const testCounselor = {
   name: 'name',
   _id: 0,
   email: 'email@test.com',
   roomLink: 'https://www.zoomtest.com',
+  user: emptyUser,
 };
 
 describe('CounselorDetails', () => {

@@ -6,12 +6,14 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import CreateCounselorForm from './CreateCounselorForm';
+import { emptyUser } from '../../data/users';
 
 const testCounselor = {
   name: 'name',
   _id: 0,
   email: 'email@test.com',
   roomLink: 'https://www.zoomtest.com',
+  user: emptyUser,
 };
 
 describe('CreateCounselorForm', () => {

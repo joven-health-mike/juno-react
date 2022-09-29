@@ -52,7 +52,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelection(counselor);
-    setAppointment({ ...appointment, counselorId: counselor._id });
+    setAppointment({ ...appointment, counselor: counselor });
   };
 
   const onStudentChanged = (student: Student) => {
@@ -70,7 +70,8 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
         ' (' +
         associatedSchool +
         ')',
-      studentId: student._id,
+      // TODO: set the student as a participant
+      // participants: [...appointment.participants, student as User]
     });
   };
 
@@ -78,7 +79,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     setTypeSelection(type);
     setAppointment({
       ...appointment,
-      type: type,
+      type: type.name,
     });
   };
 

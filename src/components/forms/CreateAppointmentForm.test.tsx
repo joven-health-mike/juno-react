@@ -7,15 +7,19 @@ import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import CreateAppointmentForm from './CreateAppointmentForm';
 import { AppointmentTypes } from '../../data/appointments';
+import { emptySchool } from '../../data/schools';
+import { emptyCounselor } from '../../data/counselors';
 
 const fakeAppointment = {
-  _id: 0,
+  id: '0',
   title: 'Hello World',
   start: new Date(),
   end: new Date(),
-  counselorId: 0,
-  studentId: 2,
-  type: AppointmentTypes.None,
+  school: emptySchool,
+  counselor: emptyCounselor,
+  participants: [],
+  type: AppointmentTypes.None.name,
+  status: 'SCHEDULED',
 };
 
 const fakeCounselorName = 'Jacek McGuinness';

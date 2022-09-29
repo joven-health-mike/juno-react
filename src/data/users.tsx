@@ -24,6 +24,8 @@ export const emptyUser = {
   email: '',
   username: '',
   phone: '',
+  docsUrl: '',
+  timeZoneOffset: 0,
   role: 'JOVEN_STAFF' as Role,
 };
 
