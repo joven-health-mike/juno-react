@@ -3,7 +3,7 @@ import { Appointment } from '../data/appointments';
 import { HttpServer } from './http-common';
 import { Service } from './service';
 
-class AppointmentService implements Service<Appointment> {
+export class AppointmentService implements Service<Appointment> {
   getAll(): Promise<AxiosResponse<Appointment[]>> {
     return HttpServer.get<Appointment[]>('/appointments');
   }

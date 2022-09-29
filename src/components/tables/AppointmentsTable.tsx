@@ -1,12 +1,14 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { MouseEvent, useCallback, useContext, useMemo } from 'react';
+import React, {
+  MouseEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+} from 'react';
 import { CellProps, Column, Row, Cell } from 'react-table';
-import {
-  Appointment,
-  AppointmentsContext,
-  emptyAppointment,
-} from '../../data/appointments';
+import { Appointment, AppointmentsContext } from '../../data/appointments';
 import { CounselorsContext } from '../../data/counselors';
 import { StudentsContext } from '../../data/students';
 import { formatDateTime } from '../../utils/DateUtils';
@@ -16,17 +18,25 @@ import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
 
 type AppointmentsTableProps = {
-  appointments: Appointment[];
   onDeleteClicked: (item: string) => void;
   onEditClicked: (item: string) => void;
 };
 
 const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
-  appointments,
   onDeleteClicked,
   onEditClicked,
 }) => {
-  const { setAppointments } = useContext(AppointmentsContext);
+  const { data: appointments, getAll: getAppointments } =
+    useContext(AppointmentsContext);
+  useEffect(() => {
+    getAppointments();
+    // TODO: heads up here. still figuring this out. i feel like this is a warning that this isn't
+    // the correct architecture. getUsers isn't changing - users is, however, passing this in as a
+    // dependency causes it to loop infinitely. on methods that use ids those strings can be added
+    // here.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const { counselors } = useContext(CounselorsContext);
   const { students } = useContext(StudentsContext);
 
@@ -140,7 +150,6 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
       hiddenColumns={['_id']}
-      addNewItem={() => setAppointments([emptyAppointment, ...appointments])}
     />
   );
 };

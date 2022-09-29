@@ -3,7 +3,7 @@
 import axios from 'axios';
 import React, { useState, useContext, useEffect } from 'react';
 import Modal from 'react-modal';
-import { AppointmentsContext, exampleAppointments } from './data/appointments';
+import { AppointmentsContext, AppointmentsProvider } from './data/appointments';
 import { CounselorsContext, exampleCounselors } from './data/counselors';
 import { SchoolsContext, SchoolsProvider } from './data/schools';
 import { exampleStudents, StudentsContext } from './data/students';
@@ -55,30 +55,31 @@ function App() {
     checkAuthentication();
   }, []);
 
-  const [appointments, setAppointments] = useState(exampleAppointments);
-  const [counselors, setCounselors] = useState(exampleCounselors);
-  const { data: schools } = useContext(SchoolsContext);
-  const [students, setStudents] = useState(exampleStudents);
   const { data: users } = useContext(UsersContext);
-  const appointmentsContextValue = { appointments, setAppointments };
-  const counselorsContextValue = { counselors, setCounselors };
+  const { data: appointments } = useContext(AppointmentsContext);
+  const { data: schools } = useContext(SchoolsContext);
+
+  // don't have api for yet.
+  const [students, setStudents] = useState(exampleStudents);
   const studentsContextValue = { students, setStudents };
+  const [counselors, setCounselors] = useState(exampleCounselors);
+  const counselorsContextValue = { counselors, setCounselors };
 
   return (
-    <AppointmentsContext.Provider value={appointmentsContextValue}>
+    <LoggedInUserContext.Provider value={loggedInUserContextValue}>
       <CounselorsContext.Provider value={counselorsContextValue}>
-        <LoggedInUserContext.Provider value={loggedInUserContextValue}>
+        <StudentsContext.Provider value={studentsContextValue}>
           <SchoolsProvider data={schools}>
-            <StudentsContext.Provider value={studentsContextValue}>
+            <AppointmentsProvider data={appointments}>
               <UsersProvider data={users}>
                 {isLoading && <div>Loading...</div>}
                 {!isLoading && <AppRouter isAuthenticated={isAuthenticated} />}
               </UsersProvider>
-            </StudentsContext.Provider>
+            </AppointmentsProvider>
           </SchoolsProvider>
-        </LoggedInUserContext.Provider>
+        </StudentsContext.Provider>
       </CounselorsContext.Provider>
-    </AppointmentsContext.Provider>
+    </LoggedInUserContext.Provider>
   );
 }
 

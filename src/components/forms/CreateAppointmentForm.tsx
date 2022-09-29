@@ -11,12 +11,10 @@ import {
   Appointment,
   AppointmentsContext,
   emptyAppointment,
-  IAppointmentsContext,
   AppointmentType,
 } from '../../data/appointments';
-import { ContextData } from '../../data/ContextData';
 import { Counselor, emptyCounselor } from '../../data/counselors';
-import { School, SchoolsContext } from '../../data/schools';
+import { SchoolsContext } from '../../data/schools';
 import { emptyStudent, Student } from '../../data/students';
 import DateSelector from '../dateSelector/DateSelector';
 import {
@@ -48,9 +46,9 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     name: 'Unselected',
     color: 'none',
   });
-  const { appointments } =
-    useContext<IAppointmentsContext>(AppointmentsContext);
-  const { data: schools } = useContext<ContextData<School>>(SchoolsContext);
+
+  const { data: appointments } = useContext(AppointmentsContext);
+  const { data: schools } = useContext(SchoolsContext);
 
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelection(counselor);
