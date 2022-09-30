@@ -60,7 +60,14 @@ export const CounselorsProvider: FC<DataProviderProps<Counselor[]>> = ({
       // NOOP
     },
     add: async function (data: Counselor): Promise<void> {
-      // NOOP
+      try {
+        const response = await service.create(data);
+        if (response.status === 200) {
+          setCounselors([...counselors, data]);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     },
     update: async function (data: Counselor): Promise<void> {
       //TODO: how do we update this info on the server?
