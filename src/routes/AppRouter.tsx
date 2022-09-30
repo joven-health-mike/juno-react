@@ -8,9 +8,6 @@ interface IAppRouterParams {
 }
 
 const AppRouter: React.FC<IAppRouterParams> = ({ isAuthenticated }) => {
-  console.log(
-    'User is ' + (isAuthenticated ? '' : ' not ') + 'authenticated...'
-  );
   return isAuthenticated ? <PrivateRoutes /> : <PublicRoutes />;
 };
 

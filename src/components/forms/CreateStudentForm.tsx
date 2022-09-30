@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import { ContextData } from '../../data/ContextData';
 import { Counselor, emptyCounselor } from '../../data/counselors';
-import { emptySchool, School, SchoolsContext } from '../../data/schools';
+import { School, SchoolsContext } from '../../data/schools';
 import {
   emptyStudent,
   IStudentsContext,
@@ -57,6 +57,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
   };
 
   const onSchoolChanged = (school: School) => {
+    setSchoolSelectionIndex(schools.indexOf(school));
     setStudent({ ...student, schoolId: school.id });
   };
 
@@ -71,6 +72,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
   const onFormCancel = (e: MouseEvent) => {
     e.preventDefault();
     setCounselorSelection(emptyCounselor);
+    setSchoolSelectionIndex(-1);
     setStudent(emptyStudent);
     onCancel();
   };

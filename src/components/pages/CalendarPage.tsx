@@ -10,7 +10,7 @@ import {
   emptyAppointment,
 } from '../../data/appointments';
 import { Counselor, emptyCounselor } from '../../data/counselors';
-import { emptySchool, School } from '../../data/schools';
+import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import Calendar from '../calendar/Calendar';
 import Navbar from '../navbar/Navbar';
 import {
@@ -38,6 +38,7 @@ const CalendarPage: React.FC = () => {
     useState<Appointment>(emptyAppointment);
   const { data: appointments, add: addAppointment } =
     useContext(AppointmentsContext);
+  const { data: schools } = useContext(SchoolsContext);
   const { students } = useContext(StudentsContext);
 
   const handleAppointmentClick = (appointment: Appointment) => {
@@ -66,6 +67,7 @@ const CalendarPage: React.FC = () => {
   };
 
   const handleSchoolChange = (selectedSchool: School) => {
+    setSelectedSchoolIndex(schools.indexOf(selectedSchool));
     setSchoolSelection(selectedSchool);
   };
 

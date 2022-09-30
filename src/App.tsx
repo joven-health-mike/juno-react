@@ -19,6 +19,7 @@ import {
   User,
 } from './data/users';
 import AppRouter from './routes/AppRouter';
+import { LoggedInUserService } from './services/loggedInUser.service';
 
 Modal.setAppElement('#root');
 
@@ -28,46 +29,37 @@ function App() {
   const loggedInUserContextValue = { loggedInUser, setLoggedInUser };
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    async function checkAuthentication() {
-      console.log('Checking authentication...');
-      try {
-        axios.defaults.withCredentials = true;
-        const response = await axios.get(
-          'https://localhost/api/1/loggedInUser'
-        );
-        console.log(response.status);
-        if (response.status === 200) {
-          // logged in
-          setIsAuthenticated(true);
-          setLoggedInUser(response.data);
-        } else if (response.status === 204) {
-          // not logged in - redirect to login page
-          setIsAuthenticated(false);
-          setLoggedInUser(emptyUser);
-        } else {
-          // something unexpected happened...
-          console.log('Unexpected response: ' + response.status);
-        }
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    setIsLoading(true);
-    checkAuthentication();
-  }, []);
-
   const { data: users } = useContext(UsersContext);
   const { data: appointments } = useContext(AppointmentsContext);
   const { data: schools } = useContext(SchoolsContext);
 
-  // don't have api for yet.
+  // don't have api for this yet.
   const [students, setStudents] = useState(exampleStudents);
   const studentsContextValue = { students, setStudents };
   const [counselors, setCounselors] = useState<Counselor[]>(exampleCounselors);
   const counselorsContextValue = { counselors, setCounselors };
+
+  useEffect(() => {
+    main();
+  }, []);
+
+  function main() {
+    setIsLoading(true);
+    checkAuthentication();
+  }
+
+  async function checkAuthentication() {
+    try {
+      const service = new LoggedInUserService();
+      const { data: user, status } = await service.getAll();
+      setIsAuthenticated(status === 200);
+      setLoggedInUser(user);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <LoggedInUserContext.Provider value={loggedInUserContextValue}>

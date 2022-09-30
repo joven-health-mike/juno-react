@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext } from 'react';
+import React, { useCallback, useContext, useEffect, useRef } from 'react';
 import '@fullcalendar/react';
 import listPlugin from '@fullcalendar/list';
 import Navbar from '../navbar/Navbar';
@@ -10,26 +10,22 @@ import StudentsSmallTable from '../tables/StudentsSmallTable';
 import { StudentsContext } from '../../data/students';
 import CounselorDetails from '../details/CounselorDetails';
 import { CounselorsContext } from '../../data/counselors';
+import { LoggedInUserContext, Role } from '../../data/users';
 
 const HomePage: React.FC = () => {
-  const isAdmin = true;
-  const isCounselor = false;
-  const isSchoolStaff = false;
-  const isSchoolAdmin = false;
-  const isStudent = false;
-  const isGuardian = false;
+  const { loggedInUser } = useContext(LoggedInUserContext);
 
   return (
     <div className={'mainContainer'}>
       <nav>
         <Navbar />
       </nav>
-      {isAdmin && <AdminView />}
-      {isCounselor && <CounselorView />}
-      {isSchoolStaff && <SchoolStaffView />}
-      {isSchoolAdmin && <SchoolAdminView />}
-      {isStudent && <StudentView />}
-      {isGuardian && <GuardianView />}
+      {loggedInUser.role === ('SYSADMIN' as Role) && <AdminView />}
+      {loggedInUser.role === ('COUNSELOR' as Role) && <CounselorView />}
+      {loggedInUser.role === ('SCHOOL_STAFF' as Role) && <SchoolStaffView />}
+      {loggedInUser.role === ('SCHOOL_ADMIN' as Role) && <SchoolAdminView />}
+      {loggedInUser.role === ('STUDENT' as Role) && <StudentView />}
+      {loggedInUser.role === ('GUARDIAN' as Role) && <GuardianView />}
     </div>
   );
 };

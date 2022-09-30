@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useContext } from 'react';
+import React, { useContext } from 'react';
 import {
   AppointmentType,
   AppointmentTypes,
@@ -95,7 +95,6 @@ export function SelectSchoolList({
 
   const handleSchoolChange = (schoolIndex: string) => {
     const school = schools[parseInt(schoolIndex)];
-    console.log('selected school: ' + school.name);
     onSchoolChanged(school ?? emptySchool);
   };
 
