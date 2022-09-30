@@ -6,7 +6,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import UserDetails from './UserDetails';
-import { Role } from '../../data/users';
+import { Role } from '../../services/user.service';
 
 const testUser = {
   id: 'abcdefg',

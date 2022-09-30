@@ -6,7 +6,7 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import CreateUserForm from './CreateUserForm';
-import { Role } from '../../data/users';
+import { Role } from '../../services/user.service';
 
 const testUser = {
   id: 'abcdefg',

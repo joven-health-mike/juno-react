@@ -78,8 +78,8 @@ const CalendarPage: React.FC = () => {
   useEffect(() => {
     const filteredEvents = appointments.filter(appointment => {
       const counselorMatch =
-        counselorSelection._id === -1 ||
-        counselorSelection._id === appointment.counselor._id;
+        counselorSelection.id === '-1' ||
+        counselorSelection.id === appointment.counselor.id;
       const schoolMatch =
         schoolSelection.id === '-1' ||
         schoolSelection.id === appointment.school.id;
@@ -101,7 +101,7 @@ const CalendarPage: React.FC = () => {
       <label>
         Counselor:{' '}
         <SelectCounselorList
-          value={counselorSelection._id}
+          value={+counselorSelection.id}
           onCounselorChanged={handleCounselorChange}
         />
       </label>

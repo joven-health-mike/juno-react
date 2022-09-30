@@ -59,12 +59,14 @@ export function SelectCounselorList({
   selectedCounselor,
   onCounselorChanged,
 }: SelectCounselorListProps) {
-  const { counselors } = useContext(CounselorsContext);
-  const counselorNames = counselors.map(counselor => counselor.name);
+  const { data: counselors } = useContext(CounselorsContext);
+  const counselorNames = counselors.map(
+    counselor => `${counselor.firstName} ${counselor.lastName}`
+  );
 
   const handleCounselorChange = (counselorId: string) => {
     const counselor = counselors.find(
-      counselor => counselor._id === +counselorId
+      counselor => counselor.id === counselorId
     );
     onCounselorChanged(counselor ?? emptyCounselor);
   };
@@ -125,7 +127,7 @@ export function SelectStudentList({
   );
 
   const handleStudentChange = (studentId: string) => {
-    const student = students.find(student => student._id === +studentId);
+    const student = students.find(student => student._id === studentId);
     onStudentChanged(student ?? emptyStudent);
   };
 

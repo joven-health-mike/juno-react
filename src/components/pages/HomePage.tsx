@@ -10,7 +10,8 @@ import StudentsSmallTable from '../tables/StudentsSmallTable';
 import { StudentsContext } from '../../data/students';
 import CounselorDetails from '../details/CounselorDetails';
 import { CounselorsContext } from '../../data/counselors';
-import { LoggedInUserContext, Role } from '../../data/users';
+import { LoggedInUserContext } from '../../data/users';
+import { Role } from '../../services/user.service';
 
 const HomePage: React.FC = () => {
   const { loggedInUser } = useContext(LoggedInUserContext);
@@ -120,7 +121,7 @@ const SchoolAdminView: React.FC = () => {
 };
 
 const StudentView: React.FC = () => {
-  const { counselors } = useContext(CounselorsContext);
+  const { data: counselors } = useContext(CounselorsContext);
 
   return (
     <>
@@ -137,7 +138,7 @@ const StudentView: React.FC = () => {
 };
 
 const GuardianView: React.FC = () => {
-  const { counselors } = useContext(CounselorsContext);
+  const { data: counselors } = useContext(CounselorsContext);
 
   return (
     <>

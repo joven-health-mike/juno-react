@@ -28,8 +28,11 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
 }) => {
   const { data: appointments, getAll: getAppointments } =
     useContext(AppointmentsContext);
+  const { data: counselors, getAll: getCounselors } =
+    useContext(CounselorsContext);
   useEffect(() => {
     getAppointments();
+    getCounselors();
     // TODO: heads up here. still figuring this out. i feel like this is a warning that this isn't
     // the correct architecture. getUsers isn't changing - users is, however, passing this in as a
     // dependency causes it to loop infinitely. on methods that use ids those strings can be added
@@ -37,7 +40,6 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { counselors } = useContext(CounselorsContext);
   const { students } = useContext(StudentsContext);
 
   const defaultColumn: Record<string, unknown> = React.useMemo(
@@ -50,9 +52,11 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
   const getCounselor = useCallback(
     (cell: Cell<any, object>) => {
       const foundCounselor = counselors.filter(
-        counselor => counselor._id === cell.row.values.counselorId
+        counselor => counselor.id === cell.row.values.counselorId
       )[0];
-      return foundCounselor ? foundCounselor.name : 'Not Found';
+      return foundCounselor
+        ? `${foundCounselor.firstName} ${foundCounselor.lastName}`
+        : 'Not Found';
     },
     [counselors]
   );

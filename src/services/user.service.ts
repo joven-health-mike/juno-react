@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios';
+import { Counselor } from '../data/counselors';
 import { User } from '../data/users';
 import { HttpServer } from './http-common';
 import { Service } from './service';
@@ -23,4 +24,32 @@ export class UserService implements Service<User> {
   delete(id: string): Promise<AxiosResponse<User, any>> {
     return HttpServer.delete<User>(`/users/${id}`);
   }
+
+  // Unique to UserService!
+  getAllByRole(role: Role): Promise<AxiosResponse<RoleUser[]>> {
+    return HttpServer.get<RoleUser[]>(`/users/role/${role}`);
+  }
 }
+
+export type RoleUser = Counselor; // JovenAdmin etc.
+
+export type Role =
+  | 'JOVEN_ADMIN'
+  | 'JOVEN_STAFF'
+  | 'SCHOOL_ADMIN'
+  | 'SCHOOL_STAFF'
+  | 'STUDENT'
+  | 'GUARDIAN'
+  | 'COUNSELOR'
+  | 'SYSADMIN';
+
+export const ROLES = [
+  'JOVEN_ADMIN',
+  'JOVEN_STAFF',
+  'SCHOOL_ADMIN',
+  'SCHOOL_STAFF',
+  'STUDENT',
+  'GUARDIAN',
+  'COUNSELOR',
+  'SYSADMIN',
+];

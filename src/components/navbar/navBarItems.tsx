@@ -10,7 +10,7 @@ import {
 } from 'react-icons/fa';
 import { IoMdLogOut, IoMdBusiness, IoMdContacts } from 'react-icons/io';
 import image from '../../assets/Logo-192sq-alphabg.png';
-import { Role } from '../../data/users';
+import { Role } from '../../services/user.service';
 
 export const ROLES = [
   'JOVEN_ADMIN',

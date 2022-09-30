@@ -7,18 +7,25 @@ import Navbar from '../navbar/Navbar';
 import CounselorsTable from '../tables/CounselorsTable';
 
 const CounselorsPage: React.FC = () => {
-  const { counselors, setCounselors } = useContext(CounselorsContext);
+  const {
+    data: counselors,
+    add: addCounselor,
+    delete: deleteCounselor,
+  } = useContext(CounselorsContext);
 
   const onFormSubmit = (counselor: Counselor) => {
-    setCounselors([...counselors, counselor]);
+    addCounselor(counselor);
   };
 
   const onCounselorDeleteClicked = (counselorName: string) => {
     if (window.confirm('Delete this counselor?')) {
-      let newCounselors = counselors.filter(
-        counselor => counselor.name !== counselorName
+      let counselorToDelete = counselors.find(
+        counselor =>
+          `${counselor.firstName} ${counselor.lastName}` !== counselorName
       );
-      setCounselors(newCounselors);
+      if (counselorToDelete) {
+        deleteCounselor(counselorToDelete);
+      }
     }
   };
 

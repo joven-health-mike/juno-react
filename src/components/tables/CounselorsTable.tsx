@@ -1,12 +1,8 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { MouseEvent, useCallback, useContext } from 'react';
+import React, { MouseEvent, useCallback, useContext, useEffect } from 'react';
 import { CellProps, Column, Row } from 'react-table';
-import {
-  Counselor,
-  CounselorsContext,
-  emptyCounselor,
-} from '../../data/counselors';
+import { Counselor, CounselorsContext } from '../../data/counselors';
 import XButton from '../buttons/XButton';
 import CounselorDetails from '../details/CounselorDetails';
 import DataTable from './DataTable';
@@ -18,10 +14,15 @@ type CounselorsTableProps = {
 };
 
 const CounselorsTable: React.FC<CounselorsTableProps> = ({
-  counselors,
   onDeleteClicked,
 }) => {
-  const { setCounselors } = useContext(CounselorsContext);
+  const { data: counselors, getAll: getCounselors } =
+    useContext(CounselorsContext);
+
+  useEffect(() => {
+    getCounselors();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
@@ -86,7 +87,6 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
       hiddenColumns={['_id']}
-      addNewItem={() => setCounselors([emptyCounselor, ...counselors])}
     />
   );
 };

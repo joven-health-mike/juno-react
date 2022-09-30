@@ -11,7 +11,6 @@ import {
   Counselor,
   CounselorsContext,
   emptyCounselor,
-  ICounselorsContext,
 } from '../../data/counselors';
 
 type CreateCounselorFormProps = {
@@ -28,7 +27,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
   const [counselor, setCounselor] = useState<Counselor>(
     defaultCounselor ?? emptyCounselor
   );
-  const { counselors } = useContext<ICounselorsContext>(CounselorsContext);
+  const { data: counselors } = useContext(CounselorsContext);
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -44,21 +43,40 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
     onCancel();
   };
 
+  const onChangeRoomLink = (e: ChangeEvent<HTMLInputElement>) => {
+    counselor.counselorRef.roomLink = e.target.value;
+    setCounselor(counselor);
+  };
+
   return (
     <>
       <form onSubmit={onFormSubmit}>
         <label>
-          Name
+          First Name
           <input
-            data-testid={'input-name'}
+            data-testid={'input-first-name'}
             type="text"
-            placeholder="Name"
-            name="name"
-            value={counselor.name}
+            placeholder="First Name"
+            name="firstName"
+            value={counselor.firstName}
             required
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setCounselor({ ...counselor, name: e.target.value })
-            }
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setCounselor({ ...counselor, firstName: e.target.value });
+            }}
+          />
+        </label>
+        <label>
+          Last Name
+          <input
+            data-testid={'input-last-name'}
+            type="text"
+            placeholder="Last Name"
+            name="lastName"
+            value={counselor.lastName}
+            required
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setCounselor({ ...counselor, lastName: e.target.value });
+            }}
           />
         </label>
         <label>
@@ -82,11 +100,9 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
             type="text"
             placeholder="Room Link"
             name="roomLink"
-            value={counselor.roomLink}
+            value={counselor.counselorRef.roomLink}
             required
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setCounselor({ ...counselor, roomLink: e.target.value })
-            }
+            onChange={onChangeRoomLink}
           />
         </label>
 

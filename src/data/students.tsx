@@ -3,42 +3,42 @@
 import React from 'react';
 
 export type Student = {
-  _id: number;
+  _id: string;
   first_name: string;
   last_name: string;
   schoolId: string;
-  counselorId: number;
+  counselorId: string;
 };
 
 export const emptyStudent = {
-  _id: -1,
+  _id: '-1',
   first_name: '',
   last_name: '',
   schoolId: '',
-  counselorId: -1,
+  counselorId: '-1',
 };
 
 export const exampleStudents = [
   {
-    _id: 0,
+    _id: '0',
     first_name: 'Johnny',
     last_name: 'Rickets',
     schoolId: '0',
-    counselorId: 0,
+    counselorId: '0',
   },
   {
-    _id: 1,
+    _id: '1',
     first_name: 'Jennifer',
     last_name: 'Frigo',
     schoolId: '0',
-    counselorId: 0,
+    counselorId: '0',
   },
   {
-    _id: 2,
+    _id: '2',
     first_name: 'Chris',
     last_name: 'Moon',
     schoolId: '0',
-    counselorId: 0,
+    counselorId: '0',
   },
 ];
 

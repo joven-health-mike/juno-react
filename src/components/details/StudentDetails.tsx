@@ -11,14 +11,16 @@ type StudentDetailsProps = {
 
 const StudentDetails: React.FC<StudentDetailsProps> = ({ student }) => {
   const { data: schools } = useContext(SchoolsContext);
-  const { counselors } = useContext(CounselorsContext);
+  const { data: counselors } = useContext(CounselorsContext);
 
   const schoolName = schools.filter(school => school.id === student.schoolId)[0]
     .name;
 
-  const counselorName = counselors.filter(
-    counselor => counselor._id === student.counselorId
-  )[0].name;
+  const counselor = counselors.filter(
+    counselor => counselor.id === student.counselorId
+  )[0];
+
+  const counselorName = `${counselor.firstName} ${counselor.lastName}`;
 
   return (
     <>

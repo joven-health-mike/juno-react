@@ -7,7 +7,8 @@ import React, {
   useContext,
   useState,
 } from 'react';
-import { emptyUser, Role, ROLES, User, UsersContext } from '../../data/users';
+import { emptyUser, User, UsersContext } from '../../data/users';
+import { Role, ROLES } from '../../services/user.service';
 import SelectList from '../selectList/SelectList';
 
 type CreateUserFormProps = {

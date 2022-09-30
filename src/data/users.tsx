@@ -1,7 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { FC, useState } from 'react';
-import { UserService } from '../services/user.service';
+import { Role, UserService } from '../services/user.service';
 import { ContextData } from './ContextData';
 import { DataProviderProps } from './DataProviderProps';
 
@@ -105,24 +105,3 @@ export const LoggedInUserContext = React.createContext<ILoggedInUserContext>({
   loggedInUser: emptyUser,
   setLoggedInUser: (user: User) => null,
 });
-
-export type Role =
-  | 'JOVEN_ADMIN'
-  | 'JOVEN_STAFF'
-  | 'SCHOOL_ADMIN'
-  | 'SCHOOL_STAFF'
-  | 'STUDENT'
-  | 'GUARDIAN'
-  | 'COUNSELOR'
-  | 'SYSADMIN';
-
-export const ROLES = [
-  'JOVEN_ADMIN',
-  'JOVEN_STAFF',
-  'SCHOOL_ADMIN',
-  'SCHOOL_STAFF',
-  'STUDENT',
-  'GUARDIAN',
-  'COUNSELOR',
-  'SYSADMIN',
-];

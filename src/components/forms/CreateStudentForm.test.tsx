@@ -10,9 +10,9 @@ import CreateStudentForm from './CreateStudentForm';
 const testStudent = {
   first_name: 'firstName',
   last_name: 'lastName',
-  _id: 0,
+  _id: '0',
   schoolId: '1',
-  counselorId: 2,
+  counselorId: '2',
 };
 
 describe('CreateStudentForm', () => {

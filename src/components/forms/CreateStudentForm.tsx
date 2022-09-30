@@ -53,7 +53,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
 
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelection(counselor);
-    setStudent({ ...student, counselorId: counselor._id });
+    setStudent({ ...student, counselorId: counselor.id });
   };
 
   const onSchoolChanged = (school: School) => {
@@ -65,7 +65,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
     e.preventDefault();
     const submittedStudent = defaultStudent
       ? student
-      : { ...student, _id: students.length };
+      : { ...student, _id: `${students.length}` };
     onSubmit(submittedStudent);
   };
 
@@ -110,7 +110,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       <label>
         Counselor:{' '}
         <SelectCounselorList
-          value={counselorSelection._id}
+          value={+counselorSelection.id}
           onCounselorChanged={onCounselorChanged}
         />
       </label>

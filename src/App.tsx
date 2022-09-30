@@ -3,11 +3,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import Modal from 'react-modal';
 import { AppointmentsContext, AppointmentsProvider } from './data/appointments';
-import {
-  Counselor,
-  CounselorsContext,
-  exampleCounselors,
-} from './data/counselors';
+import { CounselorsContext, CounselorsProvider } from './data/counselors';
 import { SchoolsContext, SchoolsProvider } from './data/schools';
 import { exampleStudents, StudentsContext } from './data/students';
 import {
@@ -29,23 +25,21 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   const { data: users } = useContext(UsersContext);
+  const { data: counselors } = useContext(CounselorsContext);
   const { data: appointments } = useContext(AppointmentsContext);
   const { data: schools } = useContext(SchoolsContext);
 
   // don't have api for this yet.
   const [students, setStudents] = useState(exampleStudents);
   const studentsContextValue = { students, setStudents };
-  const [counselors, setCounselors] = useState<Counselor[]>(exampleCounselors);
-  const counselorsContextValue = { counselors, setCounselors };
 
   useEffect(() => {
+    function main() {
+      setIsLoading(true);
+      checkAuthentication();
+    }
     main();
   }, []);
-
-  function main() {
-    setIsLoading(true);
-    checkAuthentication();
-  }
 
   async function checkAuthentication() {
     try {
@@ -62,18 +56,18 @@ function App() {
 
   return (
     <LoggedInUserContext.Provider value={loggedInUserContextValue}>
-      <CounselorsContext.Provider value={counselorsContextValue}>
-        <StudentsContext.Provider value={studentsContextValue}>
+      <StudentsContext.Provider value={studentsContextValue}>
+        <AppointmentsProvider data={appointments}>
           <SchoolsProvider data={schools}>
-            <AppointmentsProvider data={appointments}>
+            <CounselorsProvider data={counselors}>
               <UsersProvider data={users}>
                 {isLoading && <div>Loading...</div>}
                 {!isLoading && <AppRouter isAuthenticated={isAuthenticated} />}
               </UsersProvider>
-            </AppointmentsProvider>
+            </CounselorsProvider>
           </SchoolsProvider>
-        </StudentsContext.Provider>
-      </CounselorsContext.Provider>
+        </AppointmentsProvider>
+      </StudentsContext.Provider>
     </LoggedInUserContext.Provider>
   );
 }

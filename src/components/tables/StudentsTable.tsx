@@ -19,7 +19,7 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
   students,
   onDeleteClicked,
 }) => {
-  const { counselors } = useContext(CounselorsContext);
+  const { data: counselors } = useContext(CounselorsContext);
   const { data: schools } = useContext(SchoolsContext);
   const { setStudents } = useContext(StudentsContext);
 
@@ -97,9 +97,15 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
           <p>
             {(() => {
               const foundCounselor = counselors.filter(
-                counselor => counselor._id === cell.row.values.counselorId
+                counselor => counselor.id === cell.row.values.counselorId
               )[0];
-              return <>{foundCounselor ? foundCounselor.name : 'Not Found'}</>;
+              return (
+                <>
+                  {foundCounselor
+                    ? `${foundCounselor.firstName} ${foundCounselor.lastName}`
+                    : 'Not Found'}
+                </>
+              );
             })()}
           </p>
         ),
