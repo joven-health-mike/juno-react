@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useCallback, useContext, useEffect, useRef } from 'react';
+import React, { useContext } from 'react';
 import '@fullcalendar/react';
 import listPlugin from '@fullcalendar/list';
 import Navbar from '../navbar/Navbar';

@@ -1,6 +1,5 @@
 // Copyright 2022 Social Fabric, LLC
 
-import axios from 'axios';
 import React, { useState, useContext, useEffect } from 'react';
 import Modal from 'react-modal';
 import { AppointmentsContext, AppointmentsProvider } from './data/appointments';
