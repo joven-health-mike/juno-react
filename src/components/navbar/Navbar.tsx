@@ -3,28 +3,35 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { IconContext } from 'react-icons';
 import { Link } from 'react-router-dom';
+import { pagePermission } from '../../data/permissions';
 import { LoggedInUserContext } from '../../data/users';
-import { getItems, NavItem } from './navBarItems';
+import { AvailableRoute } from '../../routes/AppRouter';
+import { allNavItems, NavItem } from './navBarItems';
 
 const Navbar: React.FC = () => {
   const { loggedInUser } = useContext(LoggedInUserContext);
-  const [items, setItems] = useState<NavItem[]>([]);
+  const role = loggedInUser.role;
 
-  useEffect(() => setItems(getItems(loggedInUser.role)), [loggedInUser]);
+  function isRouteAllowed(route: AvailableRoute): boolean {
+    return pagePermission(role, route);
+  }
 
   return (
     <>
       <IconContext.Provider value={{ color: '#fff' }}>
         <div className={'navMenu'}>
           <ul>
-            {items.map((item: NavItem, index: number) => (
-              <li key={index} className={'navText'}>
-                <Link to={item.path}>
-                  {item.icon}
-                  <span>{item.title}</span>
-                </Link>
-              </li>
-            ))}
+            {allNavItems.map(
+              (item: NavItem, index: number) =>
+                isRouteAllowed(item.path as AvailableRoute) && (
+                  <li key={index} className={'navText'}>
+                    <Link to={item.path}>
+                      {item.icon}
+                      <span>{item.title}</span>
+                    </Link>
+                  </li>
+                )
+            )}
           </ul>
         </div>
       </IconContext.Provider>

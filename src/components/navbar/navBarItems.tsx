@@ -10,42 +10,6 @@ import {
 } from 'react-icons/fa';
 import { IoMdLogOut, IoMdBusiness, IoMdContacts } from 'react-icons/io';
 import image from '../../assets/Logo-192sq-alphabg.png';
-import { Role } from '../../services/user.service';
-
-export const ROLES = [
-  'JOVEN_ADMIN',
-  'JOVEN_STAFF',
-  'SCHOOL_ADMIN',
-  'SCHOOL_STAFF',
-  'STUDENT',
-  'GUARDIAN',
-  'COUNSELOR',
-  'SYSADMIN',
-];
-
-export function getItems(role: Role) {
-  switch (role) {
-    case 'JOVEN_ADMIN' as Role:
-      return allItems;
-    case 'JOVEN_STAFF' as Role:
-      return allItems;
-    case 'SCHOOL_ADMIN' as Role:
-      return allItems;
-    case 'SCHOOL_STAFF' as Role:
-      return allItems;
-    case 'STUDENT' as Role:
-      return allItems;
-    case 'GUARDIAN' as Role:
-      return allItems;
-    case 'COUNSELOR' as Role:
-      return allItems;
-    case 'SYSADMIN' as Role:
-      return allItems;
-    default:
-      // throw new Error();
-      return allItems;
-  }
-}
 
 export type NavItem = {
   title: string;
@@ -53,7 +17,7 @@ export type NavItem = {
   path: string;
 };
 
-const allItems: NavItem[] = [
+export const allNavItems: NavItem[] = [
   {
     title: 'Joven Health',
     icon: <img src={image} alt="logo" />,

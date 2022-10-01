@@ -45,9 +45,11 @@ function App() {
     try {
       const service = new LoggedInUserService();
       const { data: user, status } = await service.getAll();
+      // server returns 200 if logged in and 204 if not
       setIsAuthenticated(status === 200);
       setLoggedInUser(user);
     } catch (err) {
+      // TODO: What happens if the server is down or throws an error?
       console.log(err);
     } finally {
       setIsLoading(false);
