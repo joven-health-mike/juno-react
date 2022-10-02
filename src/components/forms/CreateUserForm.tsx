@@ -26,7 +26,6 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
   const { data: users } = useContext(UsersContext);
 
   const onRoleChanged = (role: Role) => {
-    console.log('role changed to: ' + role);
     setUser({ ...user, role: role });
   };
 
@@ -108,7 +107,6 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
           placeholder="Phone"
           name="phone"
           value={user.phone}
-          required
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             setUser({ ...user, phone: e.target.value });
           }}
@@ -122,7 +120,6 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
           placeholder="Docs URL"
           name="docsUrl"
           value={user.docsUrl}
-          required
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             setUser({ ...user, docsUrl: e.target.value });
           }}

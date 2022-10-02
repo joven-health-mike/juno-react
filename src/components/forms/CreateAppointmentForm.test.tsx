@@ -8,7 +8,7 @@ import { fireEvent, render } from '@testing-library/react';
 import CreateAppointmentForm from './CreateAppointmentForm';
 import { AppointmentTypes } from '../../data/appointments';
 import { emptySchool } from '../../data/schools';
-import { emptyCounselor } from '../../data/counselors';
+import { emptyCounselorRef } from '../../data/counselors';
 
 const fakeAppointment = {
   id: '0',
@@ -16,7 +16,7 @@ const fakeAppointment = {
   start: new Date(),
   end: new Date(),
   school: emptySchool,
-  counselor: emptyCounselor,
+  counselor: emptyCounselorRef,
   participants: [],
   type: AppointmentTypes.None.name,
   status: 'SCHEDULED',

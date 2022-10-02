@@ -3,7 +3,7 @@
 import React, { FC, useState } from 'react';
 import { AppointmentService } from '../services/appointment.service';
 import { ContextData } from './ContextData';
-import { Counselor, emptyCounselor } from './counselors';
+import { CounselorRef, emptyCounselorRef } from './counselors';
 import { DataProviderProps } from './DataProviderProps';
 import { emptySchool, School } from './schools';
 import { User } from './users';
@@ -14,7 +14,7 @@ export type Appointment = {
   start: Date;
   end: Date;
   school: School;
-  counselor: Counselor;
+  counselor: CounselorRef;
   participants: User[];
   type: string;
   status: string;
@@ -27,7 +27,7 @@ export const emptyAppointment = {
   start: new Date(),
   end: new Date(),
   school: emptySchool,
-  counselor: emptyCounselor,
+  counselor: emptyCounselorRef,
   participants: [],
   type: '',
   status: '',

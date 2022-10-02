@@ -12,7 +12,7 @@ const pagePermissions = {
   '/counselors': allRoles,
   '/schools': allRoles,
   '/students': allRoles,
-  '/users': ['SYSADMIN'],
+  '/users': ['SYSADMIN', 'COUNSELOR'],
   '/logout': allRoles,
 };
 
@@ -20,6 +20,5 @@ export function pagePermission(role: Role, route: AvailableRoute) {
   const allowedRoles = pagePermissions[route];
   const result =
     typeof allowedRoles[allowedRoles.indexOf(role)] !== 'undefined';
-  console.log('pagePermission ' + route + ', ' + role + ': ' + result);
   return result;
 }

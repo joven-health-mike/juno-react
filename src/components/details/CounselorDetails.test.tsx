@@ -6,7 +6,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import CounselorDetails from './CounselorDetails';
-import { emptyUser } from '../../data/users';
 import { Role } from '../../services/user.service';
 
 const testCounselor = {
@@ -20,7 +19,7 @@ const testCounselor = {
   timeZoneOffset: 0,
   role: 'JOVEN_STAFF' as Role,
   counselorRef: {
-    _id: '-1',
+    id: '-1',
     userId: '0',
     roomLink: 'https://www.zoomtest.com',
   },

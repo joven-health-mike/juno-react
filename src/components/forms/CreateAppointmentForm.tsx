@@ -52,7 +52,13 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelection(counselor);
-    setAppointment({ ...appointment, counselor: counselor });
+    const counselorRef = {
+      id: '-1',
+      userId: counselor.id,
+      roomLink: counselor.counselorRef.roomLink,
+      user: counselor,
+    };
+    setAppointment({ ...appointment, counselor: counselorRef });
   };
 
   const onStudentChanged = (student: Student) => {

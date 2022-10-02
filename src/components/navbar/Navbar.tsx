@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { IconContext } from 'react-icons';
 import { Link } from 'react-router-dom';
 import { pagePermission } from '../../data/permissions';

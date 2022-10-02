@@ -15,6 +15,7 @@ const PrivateRoutes = () => {
   }
 
   return (
+    // allow available routes based on user permissions
     <Routes>
       {AvailableRoutes.map((route, index) => {
         return (

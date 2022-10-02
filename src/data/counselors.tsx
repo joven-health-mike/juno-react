@@ -6,12 +6,13 @@ import { ContextData } from './ContextData';
 import { DataProviderProps } from './DataProviderProps';
 import { User } from './users';
 
-export type Counselor = User & {
-  counselorRef: {
-    _id: string;
-    userId: string;
-    roomLink: string;
-  };
+export type Counselor = User & { counselorRef: CounselorRef };
+
+export type CounselorRef = {
+  id: string;
+  userId: string;
+  roomLink: string;
+  user?: User;
 };
 
 export const emptyCounselor: Counselor = {
@@ -25,9 +26,26 @@ export const emptyCounselor: Counselor = {
   timeZoneOffset: 0,
   role: 'JOVEN_STAFF' as Role,
   counselorRef: {
-    _id: '-1',
+    id: '-1',
     userId: '-1',
     roomLink: '',
+  },
+};
+
+export const emptyCounselorRef: CounselorRef = {
+  id: '-1',
+  userId: '-1',
+  roomLink: '',
+  user: {
+    id: '-1',
+    firstName: '',
+    lastName: '',
+    email: '',
+    username: '',
+    phone: '',
+    docsUrl: '',
+    timeZoneOffset: 0,
+    role: 'JOVEN_STAFF' as Role,
   },
 };
 

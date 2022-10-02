@@ -21,7 +21,7 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
         End Time: {formatDateTime(new Date(appointment.end), -6)}
       </p>
       <p data-testid={'counselorId'}>
-        Counselor: {appointment.counselor.username}
+        Counselor: {appointment.counselor.user?.username}
       </p>
       <p data-testid={'schoolId'}>School: {appointment.school?.name}</p>
       <p data-testid={'participants'}>Participants:</p>

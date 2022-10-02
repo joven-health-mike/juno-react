@@ -21,7 +21,7 @@ const testCounselor: Counselor = {
   timeZoneOffset: 0,
   role: 'JOVEN_STAFF' as Role,
   counselorRef: {
-    _id: '0',
+    id: '0',
     userId: '-1',
     roomLink: 'https://www.zoomtest.com',
   },

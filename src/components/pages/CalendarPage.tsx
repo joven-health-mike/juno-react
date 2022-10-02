@@ -79,7 +79,7 @@ const CalendarPage: React.FC = () => {
     const filteredEvents = appointments.filter(appointment => {
       const counselorMatch =
         counselorSelection.id === '-1' ||
-        counselorSelection.id === appointment.counselor.id;
+        counselorSelection.id === appointment.counselor.user?.id;
       const schoolMatch =
         schoolSelection.id === '-1' ||
         schoolSelection.id === appointment.school.id;
