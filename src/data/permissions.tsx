@@ -12,7 +12,7 @@ const pagePermissions = {
   '/counselors': allRoles,
   '/schools': allRoles,
   '/students': allRoles,
-  '/users': ['SYSADMIN', 'COUNSELOR'],
+  '/users': ['SYSADMIN', 'JOVEN_ADMIN'],
   '/logout': allRoles,
 };
 
