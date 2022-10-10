@@ -7,9 +7,15 @@ import {
   AppointmentType,
 } from '../../data/appointments';
 import { Counselor, CounselorsContext } from '../../data/counselors';
-import { UsersContext } from '../../data/users';
+import { emptySchool, SchoolsContext } from '../../data/schools';
+import { Student, StudentsContext } from '../../data/students';
+import { User } from '../../data/users';
 import DateSelector from '../dateSelector/DateSelector';
-import { SelectCounselorList, SelectTypeList } from '../selectList/SelectList';
+import {
+  SelectCounselorList,
+  SelectTypeList,
+  SelectUserList,
+} from '../selectList/SelectList';
 
 type CreateAppointmentFormProps = {
   defaultAppointment?: Appointment;
@@ -25,6 +31,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   const [appointment, setAppointment] = useState<Appointment>(
     defaultAppointment ?? emptyAppointment
   );
+  const [participants, setParticipants] = useState<User[]>([]);
   const [counselorSelectionIndex, setCounselorSelectionIndex] =
     useState<number>(-1);
   const [typeSelection, setTypeSelection] = useState<AppointmentType>({
@@ -34,11 +41,12 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   });
 
   const { data: counselors } = useContext(CounselorsContext);
-  const { data: users } = useContext(UsersContext);
+  const { data: schools } = useContext(SchoolsContext);
+  const { students } = useContext(StudentsContext);
 
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelectionIndex(counselors.indexOf(counselor));
-    setAppointment({ ...appointment, counselorId: counselor.id });
+    setAppointment({ ...appointment, counselorId: counselor.counselorRef.id });
   };
 
   const onTypeChanged = (type: AppointmentType) => {
@@ -49,23 +57,46 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     });
   };
 
+  const onParticipantsSelected = (participants: User[]) => {
+    setParticipants(participants);
+  };
+
+  const getAssociatedSchool = (student: Student) => {
+    return schools.find(school => {
+      console.log(
+        `comparing school.id ${school.id} to student's schoolId ${student.schoolId}`
+      );
+      return school.id === student.schoolId;
+    });
+  };
+
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
+    const studentSelection = students.find(student => {
+      return participants.map(user => user.id).includes(student._id);
+    });
+    console.log(`student selection: ${studentSelection?.first_name}`);
+    const schoolSelection = studentSelection
+      ? getAssociatedSchool(studentSelection)
+      : emptySchool;
+    console.log(`school selection: ${schoolSelection?.name}`);
+
+    const apptTitle = studentSelection
+      ? `${studentSelection.first_name} ${studentSelection.last_name.substring(
+          0,
+          1
+        )} (${schoolSelection?.name})`
+      : 'Appointment';
+    const schoolId = schoolSelection?.id;
+
     const submittedAppointment = defaultAppointment
       ? appointment
       : {
           ...appointment,
           id: '-1',
-          title: 'Appointment',
-          schoolId: '0',
-          // title:
-          //   studentSelection.first_name +
-          //   ' ' +
-          //   studentSelection.last_name.substring(0, 1) +
-          //   ' (' +
-          //   getAssociatedSchool(studentSelection).name +
-          //   ')',
-          participants: [users[0]],
+          title: apptTitle,
+          schoolId: schoolId,
+          participants: participants,
           status: 'SCHEDULED',
         };
     onSubmit(submittedAppointment);
@@ -114,6 +145,10 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
           onTypeChanged={onTypeChanged}
         />
       </label>
+      <label>
+        Participants:{' '}
+        <SelectParticipants onParticipantsSelected={onParticipantsSelected} />
+      </label>
 
       <button type="submit" data-testid={'button-submit'}>
         Submit
@@ -130,3 +165,17 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 };
 
 export default CreateAppointmentForm;
+
+export type SelectParticipantsProps = {
+  onParticipantsSelected(users: User[]): void;
+};
+
+export const SelectParticipants: React.FC<SelectParticipantsProps> = ({
+  onParticipantsSelected,
+}) => {
+  return (
+    <>
+      <SelectUserList onUsersChanged={onParticipantsSelected} />
+    </>
+  );
+};

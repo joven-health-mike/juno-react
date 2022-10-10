@@ -7,6 +7,7 @@ import {
 import { Counselor, CounselorsContext } from '../../data/counselors';
 import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import { emptyStudent, Student, StudentsContext } from '../../data/students';
+import { emptyUser, User, UsersContext } from '../../data/users';
 
 type SelectListProps = {
   labelText: string;
@@ -42,6 +43,40 @@ const SelectList = ({
 };
 
 export default SelectList;
+
+type SelectMultipleListProps = {
+  labelText: string;
+  items: string[];
+  onItemsSelected: (items: string[]) => void;
+};
+
+export const SelectMultipleList = ({
+  labelText,
+  items,
+  onItemsSelected,
+}: SelectMultipleListProps) => {
+  const itemsChanged = (e: any) => {
+    const selectedItems: string[] = [...e.target.options]
+      .filter(o => o.selected)
+      .map(o => o.value);
+    onItemsSelected(selectedItems);
+  };
+
+  return (
+    <select multiple onChange={itemsChanged}>
+      <option value={-1} key={labelText}>
+        {labelText}
+      </option>
+      {items.map((item, index) => {
+        return (
+          <option value={index} key={index}>
+            {item}
+          </option>
+        );
+      })}
+    </select>
+  );
+};
 
 type SelectCounselorListProps = {
   value: number;
@@ -150,6 +185,35 @@ export function SelectStudentList({
       items={studentNames}
       value={value}
       onItemChanged={handleStudentChange}
+    />
+  );
+}
+
+type SelectUserListProps = {
+  onUsersChanged: (users: User[]) => void;
+};
+
+export function SelectUserList({ onUsersChanged }: SelectUserListProps) {
+  const { data: users } = useContext(UsersContext);
+  const userNames = users.map(user => `${user.firstName} ${user.lastName}`);
+
+  const onItemsSelected = (selectedItems: string[]) => {
+    console.log('handleUserChange: ' + JSON.stringify(selectedItems));
+    const selectedUsers = selectedItems.map(indexStr => {
+      const userName = userNames[parseInt(indexStr)];
+      const foundUser = users.find(
+        user => `${user.firstName} ${user.lastName}` === userName
+      );
+      return foundUser || emptyUser;
+    });
+    onUsersChanged(selectedUsers);
+  };
+
+  return (
+    <SelectMultipleList
+      labelText={'Select Users'}
+      items={userNames}
+      onItemsSelected={onItemsSelected}
     />
   );
 }
