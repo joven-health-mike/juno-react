@@ -79,10 +79,8 @@ export const CounselorsProvider: FC<DataProviderProps<Counselor[]>> = ({
     },
     add: async function (data: Counselor): Promise<void> {
       try {
-        const response = await service.create(data);
-        if (response.status === 200) {
-          setCounselors([...counselors, data]);
-        }
+        const { data: user } = await service.create(data);
+        setCounselors([...counselors, user as Counselor]);
       } catch (error) {
         console.error(error);
       }
