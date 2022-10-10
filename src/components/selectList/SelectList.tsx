@@ -95,7 +95,6 @@ export function SelectCounselorList({
   );
 
   const handleCounselorChange = (counselorIndex: string) => {
-    console.log('handleCounselorChange: ' + counselorIndex);
     selectedCounselor = counselors.find(
       counselor =>
         counselorNames
@@ -103,7 +102,6 @@ export function SelectCounselorList({
           .toString() === counselorIndex
     );
     if (selectedCounselor) {
-      console.log('found counselor: ' + selectedCounselor.username);
       value = counselorNames.indexOf(
         `${selectedCounselor.firstName} ${selectedCounselor.lastName}`
       );
@@ -198,7 +196,6 @@ export function SelectUserList({ onUsersChanged }: SelectUserListProps) {
   const userNames = users.map(user => `${user.firstName} ${user.lastName}`);
 
   const onItemsSelected = (selectedItems: string[]) => {
-    console.log('handleUserChange: ' + JSON.stringify(selectedItems));
     const selectedUsers = selectedItems.map(indexStr => {
       const userName = userNames[parseInt(indexStr)];
       const foundUser = users.find(

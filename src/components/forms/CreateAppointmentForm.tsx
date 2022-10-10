@@ -63,9 +63,6 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
   const getAssociatedSchool = (student: Student) => {
     return schools.find(school => {
-      console.log(
-        `comparing school.id ${school.id} to student's schoolId ${student.schoolId}`
-      );
       return school.id === student.schoolId;
     });
   };
@@ -75,11 +72,9 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     const studentSelection = students.find(student => {
       return participants.map(user => user.id).includes(student._id);
     });
-    console.log(`student selection: ${studentSelection?.first_name}`);
     const schoolSelection = studentSelection
       ? getAssociatedSchool(studentSelection)
       : emptySchool;
-    console.log(`school selection: ${schoolSelection?.name}`);
 
     const apptTitle = studentSelection
       ? `${studentSelection.first_name} ${studentSelection.last_name.substring(

@@ -35,7 +35,7 @@ const AppointmentView: React.FC = () => {
   const { data: appointments } = useContext(AppointmentsContext);
 
   const onEventClick = (event: Appointment) => {
-    // display AppointmentDetailPage with this event
+    // TODO: display AppointmentDetailPage with this event
     console.log('eventClicked:', event);
   };
 
