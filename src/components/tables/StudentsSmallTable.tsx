@@ -28,9 +28,9 @@ const StudentsSmallTable: React.FC<StudentsSmallTableProps> = ({
         Cell: ({ cell }: CellProps<object>) => (
           <p>
             {(() => {
-              const foundStudent = students.filter(
+              const foundStudent = students.find(
                 student => student._id === cell.row.values._id
-              )[0];
+              );
               return (
                 <>
                   {foundStudent

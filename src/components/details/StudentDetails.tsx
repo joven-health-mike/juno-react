@@ -13,14 +13,16 @@ const StudentDetails: React.FC<StudentDetailsProps> = ({ student }) => {
   const { data: schools } = useContext(SchoolsContext);
   const { data: counselors } = useContext(CounselorsContext);
 
-  const schoolName = schools.filter(school => school.id === student.schoolId)[0]
-    .name;
+  const schoolName =
+    schools.find(school => school.id === student.schoolId)?.name || 'NOT FOUND';
 
-  const counselor = counselors.filter(
+  const counselor = counselors.find(
     counselor => counselor.id === student.counselorId
-  )[0];
+  );
 
-  const counselorName = `${counselor.firstName} ${counselor.lastName}`;
+  const counselorName = counselor
+    ? `${counselor.firstName} ${counselor.lastName}`
+    : 'NOT FOUND';
 
   return (
     <>

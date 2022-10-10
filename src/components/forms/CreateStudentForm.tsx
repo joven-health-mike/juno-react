@@ -8,7 +8,7 @@ import React, {
   useState,
 } from 'react';
 import { ContextData } from '../../data/ContextData';
-import { Counselor, emptyCounselor } from '../../data/counselors';
+import { Counselor, CounselorsContext } from '../../data/counselors';
 import { School, SchoolsContext } from '../../data/schools';
 import {
   emptyStudent,
@@ -35,16 +35,17 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
   const [student, setStudent] = useState<Student>(
     defaultStudent ?? emptyStudent
   );
-  const [counselorSelection, setCounselorSelection] =
-    useState<Counselor>(emptyCounselor);
+  const [counselorSelectionIndex, setCounselorSelectionIndex] =
+    useState<number>(-1);
   const { students } = useContext<IStudentsContext>(StudentsContext);
   const { data: schools } = useContext<ContextData<School>>(SchoolsContext);
+  const { data: counselors } =
+    useContext<ContextData<Counselor>>(CounselorsContext);
   const getDefaultSchoolSelectionIndex = () => {
-    if (defaultStudent.schoolId === '') return -1;
-    const selectedSchool = schools.filter(
+    const selectedSchool = schools.find(
       school => school.id === defaultStudent.schoolId
-    )[0];
-    return schools.indexOf(selectedSchool);
+    );
+    return selectedSchool ? schools.indexOf(selectedSchool) : -1;
   };
   const defaultSchoolSelectionIndex = getDefaultSchoolSelectionIndex();
   const [schoolSelectionIndex, setSchoolSelectionIndex] = useState(
@@ -52,7 +53,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
   );
 
   const onCounselorChanged = (counselor: Counselor) => {
-    setCounselorSelection(counselor);
+    setCounselorSelectionIndex(counselors.indexOf(counselor));
     setStudent({ ...student, counselorId: counselor.id });
   };
 
@@ -71,7 +72,6 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
 
   const onFormCancel = (e: MouseEvent) => {
     e.preventDefault();
-    setCounselorSelection(emptyCounselor);
     setSchoolSelectionIndex(-1);
     setStudent(emptyStudent);
     onCancel();
@@ -110,7 +110,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       <label>
         Counselor:{' '}
         <SelectCounselorList
-          value={+counselorSelection.id}
+          value={counselorSelectionIndex}
           onCounselorChanged={onCounselorChanged}
         />
       </label>

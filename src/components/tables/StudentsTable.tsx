@@ -62,9 +62,9 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
         Cell: ({ cell }: CellProps<object>) => (
           <p>
             {(() => {
-              const foundStudent = students.filter(
+              const foundStudent = students.find(
                 student => student._id === cell.row.values._id
-              )[0];
+              );
               return (
                 <>
                   {foundStudent
@@ -82,9 +82,9 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
         Cell: ({ cell }: CellProps<object>) => (
           <p>
             {(() => {
-              const foundSchool = schools.filter(
+              const foundSchool = schools.find(
                 school => school.id === cell.row.values.schoolId
-              )[0];
+              );
               return <>{foundSchool ? foundSchool.name : 'Not Found'}</>;
             })()}
           </p>
@@ -96,9 +96,9 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
         Cell: ({ cell }: CellProps<object>) => (
           <p>
             {(() => {
-              const foundCounselor = counselors.filter(
+              const foundCounselor = counselors.find(
                 counselor => counselor.id === cell.row.values.counselorId
-              )[0];
+              );
               return (
                 <>
                   {foundCounselor

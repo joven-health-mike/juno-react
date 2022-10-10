@@ -4,11 +4,7 @@ import {
   AppointmentTypes,
   getAppointmentTypeById,
 } from '../../data/appointments';
-import {
-  Counselor,
-  CounselorsContext,
-  emptyCounselor,
-} from '../../data/counselors';
+import { Counselor, CounselorsContext } from '../../data/counselors';
 import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import { emptyStudent, Student, StudentsContext } from '../../data/students';
 
@@ -26,7 +22,6 @@ const SelectList = ({
   onItemChanged,
 }: SelectListProps) => {
   const itemChanged = (value: string) => {
-    console.log('item changed: ' + value);
     onItemChanged(value);
   };
 
@@ -64,11 +59,21 @@ export function SelectCounselorList({
     counselor => `${counselor.firstName} ${counselor.lastName}`
   );
 
-  const handleCounselorChange = (counselorId: string) => {
-    const counselor = counselors.find(
-      counselor => counselor.id === counselorId
+  const handleCounselorChange = (counselorIndex: string) => {
+    console.log('handleCounselorChange: ' + counselorIndex);
+    selectedCounselor = counselors.find(
+      counselor =>
+        counselorNames
+          .indexOf(`${counselor.firstName} ${counselor.lastName}`)
+          .toString() === counselorIndex
     );
-    onCounselorChanged(counselor ?? emptyCounselor);
+    if (selectedCounselor) {
+      console.log('found counselor: ' + selectedCounselor.username);
+      value = counselorNames.indexOf(
+        `${selectedCounselor.firstName} ${selectedCounselor.lastName}`
+      );
+      onCounselorChanged(selectedCounselor);
+    }
   };
 
   return (
@@ -76,7 +81,13 @@ export function SelectCounselorList({
       <SelectList
         labelText={'Select a Counselor'}
         items={counselorNames}
-        value={value}
+        value={
+          selectedCounselor
+            ? counselorNames.indexOf(
+                `${selectedCounselor.firstName} ${selectedCounselor.lastName}`
+              )
+            : -1
+        }
         onItemChanged={handleCounselorChange}
       />
     </>
@@ -127,7 +138,9 @@ export function SelectStudentList({
   );
 
   const handleStudentChange = (studentId: string) => {
-    const student = students.find(student => student._id === studentId);
+    const student = students.find(
+      student => student._id.toString() === studentId
+    );
     onStudentChanged(student ?? emptyStudent);
   };
 

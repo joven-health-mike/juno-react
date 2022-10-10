@@ -48,27 +48,30 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
 
   const getCounselor = useCallback((cell: Cell<any, object>) => {
     const counselorRef = cell.row.values.counselor as CounselorRef;
-    return counselorRef
-      ? `${counselorRef.user?.firstName} ${counselorRef.user?.lastName}`
-      : 'Not Found';
+    if (counselorRef && counselorRef.user) {
+      return `${counselorRef.user?.firstName} ${counselorRef.user?.lastName}`;
+    }
+    return 'NOT FOUND';
   }, []);
 
   const getParticipants = useCallback((cell: Cell<any, object>) => {
     let result = 'NOT FOUND';
     const participants = cell.row.values.participants as User[];
-    if (participants.length > 0) {
-      result = '';
-      participants.forEach(user => {
-        result =
-          result +
-          user.firstName +
-          ' ' +
-          user.lastName +
-          ' (' +
-          user.role +
-          ') , ';
-      });
-      result = result.substring(0, result.length - 2);
+    if (participants) {
+      if (participants.length > 0) {
+        result = '';
+        participants.forEach(user => {
+          result =
+            result +
+            user.firstName +
+            ' ' +
+            user.lastName +
+            ' (' +
+            user.role +
+            ') , ';
+        });
+        result = result.substring(0, result.length - 2);
+      }
     }
 
     return result;
