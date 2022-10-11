@@ -39,7 +39,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
 
   const getDefaultSchoolSelectionIndex = () => {
     const selectedSchool = schools.find(
-      school => school.id === defaultStudent.studentRef.schoolId
+      school => school.id === defaultStudent.studentRef.assignedSchoolId
     );
     return selectedSchool ? schools.indexOf(selectedSchool) : -1;
   };

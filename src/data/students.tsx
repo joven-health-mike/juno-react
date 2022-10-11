@@ -8,11 +8,14 @@ import { User } from './users';
 
 export type Student = User & { studentRef: StudentRef };
 
-// TODO: this doesn't match spec yet
+export type StudentStatus = 'ACTIVE' | 'DISCHARGED';
+
 export type StudentRef = {
-  _id: string;
-  schoolId: string;
-  counselorId: string;
+  id: string;
+  userId: string;
+  assignedSchoolId: string;
+  assignedCounselorId: string;
+  status: StudentStatus;
 };
 
 export const emptyStudent: Student = {
@@ -26,9 +29,11 @@ export const emptyStudent: Student = {
   timeZoneOffset: 0,
   role: 'STUDENT' as Role,
   studentRef: {
-    _id: '-1',
-    schoolId: '-1',
-    counselorId: '-1',
+    id: '-1',
+    userId: '-1',
+    assignedSchoolId: '-1',
+    assignedCounselorId: '-1',
+    status: 'ACTIVE',
   },
 };
 
@@ -62,10 +67,8 @@ export const StudentsProvider: FC<DataProviderProps<Student[]>> = ({
     },
     add: async function (data: Student): Promise<void> {
       try {
-        const response = await service.create(data);
-        if (response.status === 200) {
-          setStudents([...students, data]);
-        }
+        const { data: user } = await service.create(data);
+        setStudents([...students, user as Student]);
       } catch (error) {
         console.error(error);
       }

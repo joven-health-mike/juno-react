@@ -63,7 +63,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
   const getAssociatedSchool = (student: Student) => {
     return schools.find(school => {
-      return school.id === student.studentRef.schoolId;
+      return school.id === student.studentRef.assignedSchoolId;
     });
   };
 

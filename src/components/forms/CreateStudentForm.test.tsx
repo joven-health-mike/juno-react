@@ -20,9 +20,11 @@ const testStudent: Student = {
   timeZoneOffset: 0,
   role: 'JOVEN_STAFF' as Role,
   studentRef: {
-    _id: '1',
-    schoolId: '1',
-    counselorId: '2',
+    id: '1',
+    userId: '1',
+    assignedSchoolId: '1',
+    assignedCounselorId: '2',
+    status: 'ACTIVE',
   },
 };
 

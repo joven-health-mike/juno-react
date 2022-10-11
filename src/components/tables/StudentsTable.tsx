@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { MouseEvent, useCallback, useContext } from 'react';
+import React, { MouseEvent, useCallback, useContext, useEffect } from 'react';
 import { CellProps, Column, Row } from 'react-table';
 import { CounselorsContext } from '../../data/counselors';
 import { SchoolsContext } from '../../data/schools';
@@ -15,9 +15,17 @@ type StudentsTableProps = {
 };
 
 const StudentsTable: React.FC<StudentsTableProps> = ({ onDeleteClicked }) => {
-  const { data: counselors } = useContext(CounselorsContext);
-  const { data: schools } = useContext(SchoolsContext);
-  const { data: students } = useContext(StudentsContext);
+  const { data: counselors, getAll: getCounselors } =
+    useContext(CounselorsContext);
+  const { data: schools, getAll: getSchools } = useContext(SchoolsContext);
+  const { data: students, getAll: getStudents } = useContext(StudentsContext);
+
+  useEffect(() => {
+    getCounselors();
+    getSchools();
+    getStudents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
@@ -54,17 +62,17 @@ const StudentsTable: React.FC<StudentsTableProps> = ({ onDeleteClicked }) => {
       },
       {
         Header: 'Name',
-        accessor: '_id',
+        accessor: 'id',
         Cell: ({ cell }: CellProps<object>) => (
           <p>
             {(() => {
               const foundStudent = students.find(
-                student => student.id === cell.row.values._id
+                student => student.id === cell.row.values.id
               );
               return (
                 <>
                   {foundStudent
-                    ? foundStudent.firstName + ' ' + foundStudent.lastName
+                    ? `${foundStudent.firstName} ${foundStudent.lastName}`
                     : 'Not Found'}
                 </>
               );
@@ -74,12 +82,14 @@ const StudentsTable: React.FC<StudentsTableProps> = ({ onDeleteClicked }) => {
       },
       {
         Header: 'School',
-        accessor: 'schoolId',
+        accessor: 'assignedSchoolId',
         Cell: ({ cell }: CellProps<object>) => (
           <p>
             {(() => {
               const foundSchool = schools.find(
-                school => school.id === cell.row.values.schoolId
+                school =>
+                  school.id ===
+                  (cell.row.original as Student).studentRef.assignedSchoolId
               );
               return <>{foundSchool ? foundSchool.name : 'Not Found'}</>;
             })()}
@@ -88,12 +98,14 @@ const StudentsTable: React.FC<StudentsTableProps> = ({ onDeleteClicked }) => {
       },
       {
         Header: 'Counselor',
-        accessor: 'counselorId',
+        accessor: 'assignedCounselorId',
         Cell: ({ cell }: CellProps<object>) => (
           <p>
             {(() => {
               const foundCounselor = counselors.find(
-                counselor => counselor.id === cell.row.values.counselorId
+                counselor =>
+                  counselor.counselorRef.id ===
+                  (cell.row.original as Student).studentRef.assignedCounselorId
               );
               return (
                 <>
