@@ -9,7 +9,6 @@ import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
 
 type CounselorsTableProps = {
-  counselors: Counselor[];
   onDeleteClicked: (counselorName: string) => void;
 };
 

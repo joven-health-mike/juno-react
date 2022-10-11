@@ -29,12 +29,12 @@ const StudentsSmallTable: React.FC<StudentsSmallTableProps> = ({
           <p>
             {(() => {
               const foundStudent = students.find(
-                student => student._id === cell.row.values._id
+                student => student.id === cell.row.values._id
               );
               return (
                 <>
                   {foundStudent
-                    ? foundStudent.first_name + ' ' + foundStudent.last_name
+                    ? foundStudent.firstName + ' ' + foundStudent.lastName
                     : 'Not Found'}
                 </>
               );

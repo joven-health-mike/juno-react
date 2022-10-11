@@ -4,24 +4,20 @@ import React, { MouseEvent, useCallback, useContext } from 'react';
 import { CellProps, Column, Row } from 'react-table';
 import { CounselorsContext } from '../../data/counselors';
 import { SchoolsContext } from '../../data/schools';
-import { emptyStudent, Student, StudentsContext } from '../../data/students';
+import { Student, StudentsContext } from '../../data/students';
 import XButton from '../buttons/XButton';
 import StudentDetails from '../details/StudentDetails';
 import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
 
 type StudentsTableProps = {
-  students: Student[];
   onDeleteClicked: (appointmentName: string) => void;
 };
 
-const StudentsTable: React.FC<StudentsTableProps> = ({
-  students,
-  onDeleteClicked,
-}) => {
+const StudentsTable: React.FC<StudentsTableProps> = ({ onDeleteClicked }) => {
   const { data: counselors } = useContext(CounselorsContext);
   const { data: schools } = useContext(SchoolsContext);
-  const { setStudents } = useContext(StudentsContext);
+  const { data: students } = useContext(StudentsContext);
 
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
@@ -63,12 +59,12 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
           <p>
             {(() => {
               const foundStudent = students.find(
-                student => student._id === cell.row.values._id
+                student => student.id === cell.row.values._id
               );
               return (
                 <>
                   {foundStudent
-                    ? foundStudent.first_name + ' ' + foundStudent.last_name
+                    ? foundStudent.firstName + ' ' + foundStudent.lastName
                     : 'Not Found'}
                 </>
               );
@@ -125,7 +121,6 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
       defaultColumn={defaultColumn}
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
-      addNewItem={() => setStudents([emptyStudent, ...students])}
     />
   );
 };

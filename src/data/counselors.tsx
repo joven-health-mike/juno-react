@@ -69,7 +69,7 @@ export const CounselorsProvider: FC<DataProviderProps<Counselor[]>> = ({
     getAll: async function (): Promise<void> {
       try {
         const { data: counselors } = await service.getAllByRole('COUNSELOR');
-        setCounselors(counselors);
+        setCounselors(counselors as Counselor[]);
       } catch (error) {
         console.error(error);
       }

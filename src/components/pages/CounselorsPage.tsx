@@ -21,7 +21,7 @@ const CounselorsPage: React.FC = () => {
     if (window.confirm('Delete this counselor?')) {
       let counselorToDelete = counselors.find(
         counselor =>
-          `${counselor.firstName} ${counselor.lastName}` !== counselorName
+          `${counselor.firstName} ${counselor.lastName}` === counselorName
       );
       if (counselorToDelete) {
         deleteCounselor(counselorToDelete);
@@ -37,10 +37,7 @@ const CounselorsPage: React.FC = () => {
       <h1>Counselors</h1>
       <>
         <CreateCounselorForm onSubmit={onFormSubmit} onCancel={() => {}} />
-        <CounselorsTable
-          counselors={counselors}
-          onDeleteClicked={onCounselorDeleteClicked}
-        />
+        <CounselorsTable onDeleteClicked={onCounselorDeleteClicked} />
       </>
     </div>
   );

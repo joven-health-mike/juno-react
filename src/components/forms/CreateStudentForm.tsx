@@ -10,12 +10,7 @@ import React, {
 import { ContextData } from '../../data/ContextData';
 import { Counselor, CounselorsContext } from '../../data/counselors';
 import { School, SchoolsContext } from '../../data/schools';
-import {
-  emptyStudent,
-  IStudentsContext,
-  Student,
-  StudentsContext,
-} from '../../data/students';
+import { emptyStudent, Student, StudentsContext } from '../../data/students';
 import {
   SelectCounselorList,
   SelectSchoolList,
@@ -37,13 +32,14 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
   );
   const [counselorSelectionIndex, setCounselorSelectionIndex] =
     useState<number>(-1);
-  const { students } = useContext<IStudentsContext>(StudentsContext);
+  const { data: students } = useContext<ContextData<Student>>(StudentsContext);
   const { data: schools } = useContext<ContextData<School>>(SchoolsContext);
   const { data: counselors } =
     useContext<ContextData<Counselor>>(CounselorsContext);
+
   const getDefaultSchoolSelectionIndex = () => {
     const selectedSchool = schools.find(
-      school => school.id === defaultStudent.schoolId
+      school => school.id === defaultStudent.studentRef.schoolId
     );
     return selectedSchool ? schools.indexOf(selectedSchool) : -1;
   };
@@ -54,12 +50,14 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
 
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelectionIndex(counselors.indexOf(counselor));
-    setStudent({ ...student, counselorId: counselor.id });
+    // TODO: use update method on users.
+    // setStudent({ ...student.counselorRef, counselorId: counselor.id });
   };
 
   const onSchoolChanged = (school: School) => {
     setSchoolSelectionIndex(schools.indexOf(school));
-    setStudent({ ...student, schoolId: school.id });
+    // TODO: use update method on users
+    // setStudent({ ...student, schoolId: school.id });
   };
 
   const onFormSubmit = (e: FormEvent) => {
@@ -86,10 +84,10 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
           type="text"
           placeholder="First Name"
           name="first_name"
-          value={student.first_name}
+          value={student.firstName}
           required
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setStudent({ ...student, first_name: e.target.value })
+            setStudent({ ...student, firstName: e.target.value })
           }
         />
       </label>
@@ -100,10 +98,10 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
           type="text"
           placeholder="Last Name"
           name="last_name"
-          value={student.last_name}
+          value={student.lastName}
           required
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setStudent({ ...student, last_name: e.target.value })
+            setStudent({ ...student, lastName: e.target.value })
           }
         />
       </label>

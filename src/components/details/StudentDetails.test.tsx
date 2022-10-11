@@ -6,13 +6,24 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import StudentDetails from './StudentDetails';
+import { Role } from '../../services/user.service';
+import { Student } from '../../data/students';
 
-const testStudent = {
-  first_name: 'firstName',
-  last_name: 'lastName',
-  _id: '0',
-  schoolId: '0',
-  counselorId: '0',
+const testStudent: Student = {
+  firstName: 'firstName',
+  lastName: 'lastName',
+  id: '0',
+  email: '',
+  username: '',
+  phone: '',
+  docsUrl: '',
+  timeZoneOffset: 0,
+  role: 'STUDENT' as Role,
+  studentRef: {
+    _id: '1',
+    schoolId: '1',
+    counselorId: '2',
+  },
 };
 
 const testSchoolName = 'Aardvark Academy';
@@ -23,13 +34,13 @@ describe('SchoolDetails', () => {
     const view = render(<StudentDetails student={testStudent} />);
     const nameView = await view.findByTestId('name');
     expect(nameView.innerHTML).toEqual(
-      testStudent.first_name + ' ' + testStudent.last_name
+      testStudent.firstName + ' ' + testStudent.lastName
     );
   });
   it('should display ID as a string', async () => {
     const view = render(<StudentDetails student={testStudent} />);
     const idView = await view.findByTestId('id');
-    expect(idView.innerHTML).toEqual('ID: ' + testStudent._id.toString());
+    expect(idView.innerHTML).toEqual('ID: ' + testStudent.id.toString());
   });
   it('should display the school ID', async () => {
     const view = render(<StudentDetails student={testStudent} />);

@@ -42,7 +42,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
   const { data: counselors } = useContext(CounselorsContext);
   const { data: schools } = useContext(SchoolsContext);
-  const { students } = useContext(StudentsContext);
+  const { data: students } = useContext(StudentsContext);
 
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelectionIndex(counselors.indexOf(counselor));
@@ -63,21 +63,21 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
   const getAssociatedSchool = (student: Student) => {
     return schools.find(school => {
-      return school.id === student.schoolId;
+      return school.id === student.studentRef.schoolId;
     });
   };
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
     const studentSelection = students.find(student => {
-      return participants.map(user => user.id).includes(student._id);
+      return participants.map(user => user.id).includes(student.id);
     });
     const schoolSelection = studentSelection
       ? getAssociatedSchool(studentSelection)
       : emptySchool;
 
     const apptTitle = studentSelection
-      ? `${studentSelection.first_name} ${studentSelection.last_name.substring(
+      ? `${studentSelection.firstName} ${studentSelection.lastName.substring(
           0,
           1
         )} (${schoolSelection?.name})`

@@ -14,10 +14,11 @@ const StudentDetails: React.FC<StudentDetailsProps> = ({ student }) => {
   const { data: counselors } = useContext(CounselorsContext);
 
   const schoolName =
-    schools.find(school => school.id === student.schoolId)?.name || 'NOT FOUND';
+    schools.find(school => school.id === student.studentRef.schoolId)?.name ||
+    'NOT FOUND';
 
   const counselor = counselors.find(
-    counselor => counselor.id === student.counselorId
+    counselor => counselor.id === student.studentRef.counselorId
   );
 
   const counselorName = counselor
@@ -26,10 +27,8 @@ const StudentDetails: React.FC<StudentDetailsProps> = ({ student }) => {
 
   return (
     <>
-      <h2 data-testid={'name'}>
-        {student.first_name + ' ' + student.last_name}
-      </h2>
-      <p data-testid={'id'}>ID: {student._id}</p>
+      <h2 data-testid={'name'}>{student.firstName + ' ' + student.lastName}</h2>
+      <p data-testid={'id'}>ID: {student.id}</p>
       <p data-testid={'schoolId'}>School: {schoolName}</p>
       <p data-testid={'counselorId'}>Counselor: {counselorName}</p>
     </>

@@ -45,7 +45,7 @@ const CalendarPage: React.FC = () => {
     useContext(AppointmentsContext);
   const { data: schools } = useContext(SchoolsContext);
   const { data: counselors } = useContext(CounselorsContext);
-  const { students } = useContext(StudentsContext);
+  const { data: students } = useContext(StudentsContext);
 
   const handleAppointmentClick = (appointment: Appointment) => {
     setClickedAppointment(appointment);

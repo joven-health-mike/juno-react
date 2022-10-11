@@ -1,53 +1,106 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from 'react';
+import React, { FC, useState } from 'react';
+import { Role, UserService } from '../services/user.service';
+import { ContextData } from './ContextData';
+import { DataProviderProps } from './DataProviderProps';
+import { User } from './users';
 
-export type Student = {
+export type Student = User & { studentRef: StudentRef };
+
+// TODO: this doesn't match spec yet
+export type StudentRef = {
   _id: string;
-  first_name: string;
-  last_name: string;
   schoolId: string;
   counselorId: string;
 };
 
-export const emptyStudent = {
-  _id: '-1',
-  first_name: '',
-  last_name: '',
-  schoolId: '-1',
-  counselorId: '-1',
+export const emptyStudent: Student = {
+  id: '-1',
+  firstName: '',
+  lastName: '',
+  email: '',
+  username: '',
+  phone: '',
+  docsUrl: '',
+  timeZoneOffset: 0,
+  role: 'STUDENT' as Role,
+  studentRef: {
+    _id: '-1',
+    schoolId: '-1',
+    counselorId: '-1',
+  },
 };
 
-export const exampleStudents = [
-  {
-    _id: '24d59901-6dd8-4865-b871-292863e83d6f',
-    first_name: 'Krista',
-    last_name: 'Firmin',
-    schoolId: '6265a973-0f32-421e-b378-9d7caefb1e6a',
-    counselorId: 'cb5239fe-6d3a-41b7-b192-b0d6fa5e6aa3',
-  },
-  {
-    _id: '722f30bf-c589-4e09-9b61-4c3c9e08b957',
-    first_name: 'Bolat',
-    last_name: 'Fairbairn',
-    schoolId: 'a7e56e1c-f1c2-4bf9-a3fd-9fdef3fb87df',
-    counselorId: 'd6d029d7-34e2-44ad-8fee-fc3e91c374ed',
-  },
-  {
-    _id: '135a7e88-4fbf-49d2-b332-66dde1965a7f',
-    first_name: 'Nemanja',
-    last_name: 'Disney',
-    schoolId: 'af96c257-8ee5-4902-b4cc-ddb086f81570',
-    counselorId: '8e21b012-0662-48f7-8777-f9baa59d8ba3',
-  },
-];
-
-export type IStudentsContext = {
-  students: Student[];
-  setStudents: (students: Student[]) => void;
-};
-
-export const StudentsContext = React.createContext<IStudentsContext>({
-  students: exampleStudents,
-  setStudents: () => {},
+export const StudentsContext = React.createContext<ContextData<Student>>({
+  data: [],
+  getAll: () => null,
+  get: (id: string) => null,
+  add: (student: Student) => null,
+  update: (student: Student) => null,
+  delete: (student: Student) => null,
 });
+
+export const StudentsProvider: FC<DataProviderProps<Student[]>> = ({
+  children,
+}) => {
+  const [students, setStudents] = useState<Student[]>([]);
+  const service = new UserService();
+
+  const delegate: ContextData<Student> = {
+    data: students,
+    getAll: async function (): Promise<void> {
+      try {
+        const { data: students } = await service.getAllByRole('STUDENT');
+        setStudents(students as Student[]);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    get: async function (id: string): Promise<void> {
+      // Noop
+    },
+    add: async function (data: Student): Promise<void> {
+      try {
+        const response = await service.create(data);
+        if (response.status === 200) {
+          setStudents([...students, data]);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    update: async function (data: Student): Promise<void> {
+      //TODO: how do we update this info on the server?
+      let updatedStudent = students.find(student => student.id === data.id);
+      let filteredStudents = students.filter(
+        student => student.id === updatedStudent?.id
+      );
+      setStudents([...filteredStudents, data]);
+      /* try {
+        const { data: student } = await service.update(data, `${data.id}`);
+        setStudents([...students, student]);
+      } catch (error) {
+        console.error(error);
+      } */
+    },
+    delete: async function (data: Student): Promise<void> {
+      try {
+        const { data: deletedStudent } = await service.delete(`${data.id}`);
+        setStudents(
+          students.filter(_student => _student.id !== deletedStudent.id)
+        );
+      } catch (error) {}
+    },
+  };
+
+  return (
+    <StudentsContext.Provider
+      value={{
+        ...delegate,
+      }}
+    >
+      {children}
+    </StudentsContext.Provider>
+  );
+};

@@ -165,14 +165,14 @@ export function SelectStudentList({
   value,
   onStudentChanged,
 }: SelectStudentListProps) {
-  const { students } = useContext(StudentsContext);
+  const { data: students } = useContext(StudentsContext);
   const studentNames = students.map(
-    student => student.first_name + ' ' + student.last_name
+    student => student.firstName + ' ' + student.lastName
   );
 
   const handleStudentChange = (studentId: string) => {
     const student = students.find(
-      student => student._id.toString() === studentId
+      student => student.id.toString() === studentId
     );
     onStudentChanged(student ?? emptyStudent);
   };

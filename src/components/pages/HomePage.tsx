@@ -53,7 +53,7 @@ const AppointmentView: React.FC = () => {
 };
 
 const AdminView: React.FC = () => {
-  const { students } = useContext(StudentsContext);
+  const { data: students } = useContext(StudentsContext);
 
   return (
     <>
@@ -70,7 +70,7 @@ const AdminView: React.FC = () => {
 };
 
 const CounselorView: React.FC = () => {
-  const { students } = useContext(StudentsContext);
+  const { data: students } = useContext(StudentsContext);
 
   return (
     <>
@@ -87,7 +87,7 @@ const CounselorView: React.FC = () => {
 };
 
 const SchoolStaffView: React.FC = () => {
-  const { students } = useContext(StudentsContext);
+  const { data: students } = useContext(StudentsContext);
 
   return (
     <>
@@ -104,7 +104,7 @@ const SchoolStaffView: React.FC = () => {
 };
 
 const SchoolAdminView: React.FC = () => {
-  const { students } = useContext(StudentsContext);
+  const { data: students } = useContext(StudentsContext);
 
   return (
     <>
