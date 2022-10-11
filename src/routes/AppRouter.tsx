@@ -20,7 +20,8 @@ const AppRouter: React.FC<IAppRouterParams> = ({ isAuthenticated }) => {
 };
 
 const RedirectToLogoutPage: React.FC = () => {
-  window.location.href = 'https://localhost/api/1/logout';
+  window.location.href =
+    process.env.REACT_APP_SERVER_BASE_URL + '/api/1/logout';
   return <></>;
 };
 
