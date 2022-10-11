@@ -1,20 +1,29 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { MouseEvent, useCallback, useContext } from 'react';
+import { useEffect } from 'react';
 import { CellProps, Column, Row } from 'react-table';
-import { emptyUser, User, UsersContext } from '../../data/users';
+import { User, UsersContext } from '../../data/users';
 import XButton from '../buttons/XButton';
 import UserDetails from '../details/UserDetails';
 import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
 
 type UsersTableProps = {
-  users: User[];
   onDeleteClicked: (userName: string) => void;
 };
 
-const UsersTable: React.FC<UsersTableProps> = ({ users, onDeleteClicked }) => {
-  const { setUsers } = useContext(UsersContext);
+const UsersTable: React.FC<UsersTableProps> = ({ onDeleteClicked }) => {
+  const { data: users, getAll: getUsers } = useContext(UsersContext);
+
+  useEffect(() => {
+    getUsers();
+    // TODO: heads up here. still figuring this out. i feel like this is a warning that this isn't
+    // the correct architecture. getUsers isn't changing - users is, however, passing this in as a
+    // dependency causes it to loop infinitely. on methods that use ids those strings can be added
+    // here.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
@@ -49,19 +58,19 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, onDeleteClicked }) => {
       },
       {
         Header: 'ID',
-        accessor: '_id',
+        accessor: 'id',
       },
       {
-        Header: 'Name',
-        accessor: 'name',
+        Header: 'First Name',
+        accessor: 'firstName',
+      },
+      {
+        Header: 'Last Name',
+        accessor: 'lastName',
       },
       {
         Header: 'Email',
         accessor: 'email',
-      },
-      {
-        Header: 'Password',
-        accessor: 'password',
       },
       {
         Header: 'Role',
@@ -82,8 +91,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, onDeleteClicked }) => {
       defaultColumn={defaultColumn}
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
-      hiddenColumns={['_id']}
-      addNewItem={() => setUsers([emptyUser, ...users])}
+      hiddenColumns={['id']}
     />
   );
 };

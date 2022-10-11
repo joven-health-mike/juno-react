@@ -18,7 +18,6 @@ const EditAppointmentModal: React.FC<EditAppointmentModalProps> = ({
   onAppointmentAdded,
   initialAppointment,
 }) => {
-  console.log(initialAppointment);
   return (
     <Modal
       isOpen={isOpen}

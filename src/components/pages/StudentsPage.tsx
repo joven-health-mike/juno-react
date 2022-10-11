@@ -4,39 +4,40 @@ import React, { useContext } from 'react';
 import { Student, StudentsContext } from '../../data/students';
 import CreateStudentForm from '../forms/CreateStudentForm';
 import Navbar from '../navbar/Navbar';
-import { getItems } from '../navbar/navBarItems';
 import StudentsTable from '../tables/StudentsTable';
 
 const StudentsPage = () => {
-  const role = 'admin';
-
-  const { students, setStudents } = useContext(StudentsContext);
+  const {
+    data: students,
+    add: addStudent,
+    delete: deleteStudent,
+  } = useContext(StudentsContext);
 
   const onFormSubmit = (student: Student) => {
-    setStudents([...students, student]);
+    // setStudents([...students, student]);
+    addStudent(student);
   };
 
   const onDeleteStudentClicked = (studentName: string) => {
     if (window.confirm('Delete this student?')) {
-      let newStudents = students.filter(
-        student => student.first_name + ' ' + student.last_name !== studentName
+      let studentToDelete = students.find(
+        student => `${student.firstName} ${student.lastName}` === studentName
       );
-      setStudents(newStudents);
+      if (studentToDelete) {
+        deleteStudent(studentToDelete);
+      }
     }
   };
 
   return (
     <div className={'mainContainer'}>
       <nav>
-        <Navbar items={getItems(role)} />
+        <Navbar />
       </nav>
       <h1>Students</h1>
       <>
         <CreateStudentForm onSubmit={onFormSubmit} onCancel={() => {}} />
-        <StudentsTable
-          students={students}
-          onDeleteClicked={onDeleteStudentClicked}
-        />
+        <StudentsTable onDeleteClicked={onDeleteStudentClicked} />
       </>
     </div>
   );

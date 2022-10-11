@@ -10,26 +10,6 @@ import {
 } from 'react-icons/fa';
 import { IoMdLogOut, IoMdBusiness, IoMdContacts } from 'react-icons/io';
 import image from '../../assets/Logo-192sq-alphabg.png';
-import { Role } from '../../data/users';
-
-export function getItems(role: Role) {
-  switch (role) {
-    case 'admin':
-      return allItems;
-    case 'counselor':
-      return allItems;
-    case 'facilitator':
-      return allItems;
-    case 'school':
-      return allItems;
-    case 'student':
-      return allItems;
-    case 'guardian':
-      return allItems;
-    default:
-      throw new Error();
-  }
-}
 
 export type NavItem = {
   title: string;
@@ -37,7 +17,7 @@ export type NavItem = {
   path: string;
 };
 
-const allItems: NavItem[] = [
+export const allNavItems: NavItem[] = [
   {
     title: 'Joven Health',
     icon: <img src={image} alt="logo" />,

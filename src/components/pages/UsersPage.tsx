@@ -4,34 +4,39 @@ import React, { useContext } from 'react';
 import { User, UsersContext } from '../../data/users';
 import CreateUserForm from '../forms/CreateUserForm';
 import Navbar from '../navbar/Navbar';
-import { getItems } from '../navbar/navBarItems';
 import UsersTable from '../tables/UsersTable';
 
 const UsersPage = () => {
-  const role = 'admin';
-
-  const { users, setUsers } = useContext(UsersContext);
+  const {
+    data: users,
+    add: addUser,
+    delete: deleteUser,
+  } = useContext(UsersContext);
 
   const onFormSubmit = (user: User) => {
-    setUsers([...users, user]);
+    addUser(user);
   };
 
   const onUserDeleteClicked = (userName: string) => {
     if (window.confirm('Delete this user?')) {
-      let newUsers = users.filter(user => user.name !== userName);
-      setUsers(newUsers);
+      let userToDelete = users.find(
+        user => user.firstName + ' ' + user.lastName === userName
+      );
+      if (userToDelete) {
+        deleteUser(userToDelete);
+      }
     }
   };
 
   return (
     <div className={'mainContainer'}>
       <nav>
-        <Navbar items={getItems(role)} />
+        <Navbar />
       </nav>
       <h1>Users</h1>
       <>
         <CreateUserForm onSubmit={onFormSubmit} onCancel={() => {}} />
-        <UsersTable users={users} onDeleteClicked={onUserDeleteClicked} />
+        <UsersTable onDeleteClicked={onUserDeleteClicked} />
       </>
     </div>
   );

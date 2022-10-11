@@ -1,86 +1,143 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from 'react';
+import React, { FC, useState } from 'react';
+import { AppointmentService } from '../services/appointment.service';
+import { ContextData } from './ContextData';
+import { CounselorRef } from './counselors';
+import { DataProviderProps } from './DataProviderProps';
+import { School } from './schools';
+import { User } from './users';
 
 export type Appointment = {
-  _id: number;
+  id: string;
   title: string;
   start: Date;
   end: Date;
-  counselorId: number;
-  studentId: number;
+  school?: School;
+  schoolId?: string;
+  counselor?: CounselorRef;
+  counselorId?: string;
+  participants: User[];
+  type: string;
+  status: string;
   color?: string;
-  type: AppointmentType;
+};
+
+export const emptyAppointment = {
+  id: '-1',
+  title: '',
+  start: new Date(),
+  end: new Date(),
+  participants: [],
+  type: '',
+  status: '',
 };
 
 export const AppointmentTypes = {
-  None: { _id: 0, name: 'None', color: 'lightgray' },
-  Clinical: { _id: 1, name: 'Clinical', color: 'green' },
-  Consultation: { _id: 2, name: 'Consultation', color: 'blue' },
-  Evaluation: { _id: 3, name: 'Evaluation', color: 'red' },
+  None: { id: 0, name: 'NONE', color: 'lightgray' },
+  Clinical: { id: 1, name: 'CLINICAL', color: 'green' },
+  Consultation: { id: 2, name: 'CONSULTATION', color: 'blue' },
+  Evaluation: { id: 3, name: 'EVALUATION', color: 'red' },
 };
 
 export type AppointmentType = {
-  _id: number;
+  id: number;
   name: string;
   color: string;
 };
 
+export const getColorForType = (type: string) => {
+  for (const k in AppointmentTypes) {
+    if (((AppointmentTypes as any)[k] as AppointmentType).name === type) {
+      return (AppointmentTypes as any)[k].color;
+    }
+  }
+
+  return AppointmentTypes.None.color;
+};
+
 export const getAppointmentTypeById = (id: number): AppointmentType => {
   for (const k in AppointmentTypes) {
-    if (((AppointmentTypes as any)[k] as AppointmentType)._id === id) {
+    if (((AppointmentTypes as any)[k] as AppointmentType).id === id) {
       return (AppointmentTypes as any)[k];
     }
   }
   return AppointmentTypes.None;
 };
 
-export const emptyAppointment = {
-  _id: -1,
-  title: '',
-  start: new Date(),
-  end: new Date(),
-  counselorId: -1,
-  studentId: -1,
-  type: AppointmentTypes.None,
-};
-
-export const exampleAppointments = [
-  {
-    _id: 0,
-    title: 'Johnny R (Aardvark Academy)',
-    start: new Date(),
-    end: new Date(),
-    counselorId: 0,
-    studentId: 0,
-    type: AppointmentTypes.Clinical,
-  },
-  {
-    _id: 1,
-    title: 'Jennifer F (Aardvark Academy)',
-    start: new Date(),
-    end: new Date(),
-    counselorId: 0,
-    studentId: 1,
-    type: AppointmentTypes.Consultation,
-  },
-  {
-    _id: 2,
-    title: 'Chris M (Aardvark Academy)',
-    start: new Date(),
-    end: new Date(),
-    counselorId: 0,
-    studentId: 2,
-    type: AppointmentTypes.Evaluation,
-  },
-];
-
-export type IAppointmentsContext = {
-  appointments: Appointment[];
-  setAppointments: (appointments: Appointment[]) => void;
-};
-
-export const AppointmentsContext = React.createContext<IAppointmentsContext>({
-  appointments: exampleAppointments,
-  setAppointments: () => {},
+export const AppointmentsContext = React.createContext<
+  ContextData<Appointment>
+>({
+  data: [],
+  getAll: () => null,
+  get: (id: string) => null,
+  add: (appointment: Appointment) => null,
+  update: (appointment: Appointment) => null,
+  delete: (appointment: Appointment) => null,
 });
+
+export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
+  children,
+}) => {
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const service = new AppointmentService();
+
+  const delegate: ContextData<Appointment> = {
+    data: appointments,
+    getAll: async function (): Promise<void> {
+      try {
+        const { data: appointments } = await service.getAll();
+        setAppointments(appointments);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    get: async function (id: string): Promise<void> {
+      try {
+        const { data: appointment } = await service.get(id);
+        setAppointments([...appointments, appointment]);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    add: async function (data: Appointment): Promise<void> {
+      try {
+        const { data: appointment } = await service.create(data);
+        appointment.participants = data.participants;
+        appointment.counselor = data.counselor;
+        appointment.school = data.school;
+        setAppointments([...appointments, appointment]);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    update: async function (data: Appointment): Promise<void> {
+      try {
+        const { data: appointment } = await service.update(data, `${data.id}`);
+        setAppointments([...appointments, appointment]);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    delete: async function (data: Appointment): Promise<void> {
+      try {
+        const { data: deletedAppointment } = await service.delete(`${data.id}`);
+        setAppointments(
+          appointments.filter(
+            _appointment => _appointment.id !== deletedAppointment.id
+          )
+        );
+      } catch (error) {}
+    },
+  };
+
+  return (
+    <AppointmentsContext.Provider
+      value={{
+        ...delegate,
+      }}
+    >
+      {children}
+    </AppointmentsContext.Provider>
+  );
+};

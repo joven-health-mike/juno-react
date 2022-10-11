@@ -4,39 +4,40 @@ import React, { useContext } from 'react';
 import { Counselor, CounselorsContext } from '../../data/counselors';
 import CreateCounselorForm from '../forms/CreateCounselorForm';
 import Navbar from '../navbar/Navbar';
-import { getItems } from '../navbar/navBarItems';
 import CounselorsTable from '../tables/CounselorsTable';
 
 const CounselorsPage: React.FC = () => {
-  const role = 'admin';
-
-  const { counselors, setCounselors } = useContext(CounselorsContext);
+  const {
+    data: counselors,
+    add: addCounselor,
+    delete: deleteCounselor,
+  } = useContext(CounselorsContext);
 
   const onFormSubmit = (counselor: Counselor) => {
-    setCounselors([...counselors, counselor]);
+    addCounselor(counselor);
   };
 
   const onCounselorDeleteClicked = (counselorName: string) => {
     if (window.confirm('Delete this counselor?')) {
-      let newCounselors = counselors.filter(
-        counselor => counselor.name !== counselorName
+      let counselorToDelete = counselors.find(
+        counselor =>
+          `${counselor.firstName} ${counselor.lastName}` === counselorName
       );
-      setCounselors(newCounselors);
+      if (counselorToDelete) {
+        deleteCounselor(counselorToDelete);
+      }
     }
   };
 
   return (
     <div className={'mainContainer'}>
       <nav>
-        <Navbar items={getItems(role)} />
+        <Navbar />
       </nav>
       <h1>Counselors</h1>
       <>
         <CreateCounselorForm onSubmit={onFormSubmit} onCancel={() => {}} />
-        <CounselorsTable
-          counselors={counselors}
-          onDeleteClicked={onCounselorDeleteClicked}
-        />
+        <CounselorsTable onDeleteClicked={onCounselorDeleteClicked} />
       </>
     </div>
   );

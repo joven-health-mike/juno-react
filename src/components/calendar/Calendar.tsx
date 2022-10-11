@@ -2,7 +2,7 @@
 
 import React from 'react';
 import FullCalendar, { EventClickArg, PluginDef } from '@fullcalendar/react';
-import { Appointment } from '../../data/appointments';
+import { Appointment, getColorForType } from '../../data/appointments';
 import { DateClickArg } from '@fullcalendar/interaction';
 
 type CalendarProps = {
@@ -21,17 +21,17 @@ const Calendar: React.FC<CalendarProps> = ({
   onDateClick,
 }: CalendarProps) => {
   appointments.forEach(appointment => {
-    appointment.color = appointment.type.color;
+    appointment.color = getColorForType(appointment.type);
   });
 
   const eventClicked = (info: EventClickArg) => {
     info.jsEvent.preventDefault();
     // this should use the ID instead of the title
     let eventTitle = info.event._def.title;
-    const theEvent = appointments.filter(appointment => {
-      return appointment.title === eventTitle;
-    })[0];
-    onEventClick(theEvent);
+    const theEvent = appointments.find(
+      appointment => appointment.title === eventTitle
+    );
+    if (theEvent) onEventClick(theEvent);
   };
 
   const dateClicked = (info: DateClickArg) => {

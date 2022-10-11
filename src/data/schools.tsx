@@ -1,33 +1,90 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from 'react';
+import React, { FC, useState } from 'react';
+import { SchoolService } from '../services/school.service';
+import { ContextData } from './ContextData';
+import { DataProviderProps } from './DataProviderProps';
 
 export type School = {
-  _id: number;
+  id: string;
   name: string;
-  email: string;
+  address?: string;
+  state?: string;
+  zip?: string;
+  primaryEmail?: string;
+  primaryPhone?: string;
 };
 
 export const emptySchool = {
-  _id: -1,
+  id: '-1',
   name: '',
-  email: '',
+  primaryEmail: '',
 };
 
-export const exampleSchools = [
-  {
-    _id: 0,
-    name: 'Aardvark Academy',
-    email: 'aardvark-academy@jovenhealth.com',
-  },
-];
-
-export type ISchoolsContext = {
-  schools: School[];
-  setSchools: (schools: School[]) => void;
-};
-
-export const SchoolsContext = React.createContext<ISchoolsContext>({
-  schools: exampleSchools,
-  setSchools: () => {},
+export const SchoolsContext = React.createContext<ContextData<School>>({
+  data: [],
+  getAll: () => null,
+  get: (id: string) => null,
+  add: (school: School) => null,
+  update: (school: School) => null,
+  delete: (school: School) => null,
 });
+
+export const SchoolsProvider: FC<DataProviderProps<School[]>> = ({
+  children,
+}) => {
+  const [schools, setSchools] = useState<School[]>([]);
+  const service = new SchoolService();
+
+  const delegate: ContextData<School> = {
+    data: schools,
+    getAll: async function (): Promise<void> {
+      try {
+        const { data: schools } = await service.getAll();
+        setSchools(schools);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    get: async function (id: string): Promise<void> {
+      try {
+        const { data: school } = await service.get(id);
+        setSchools([...schools, school]);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    add: async function (data: School): Promise<void> {
+      try {
+        const { data: school } = await service.create(data);
+        setSchools([...schools, school]);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    update: async function (data: School): Promise<void> {
+      try {
+        const { data: school } = await service.update(data, `${data.id}`);
+        setSchools([...schools, school]);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    delete: async function (data: School): Promise<void> {
+      try {
+        const { data: deletedSchool } = await service.delete(`${data.id}`);
+        setSchools(schools.filter(_school => _school.id !== deletedSchool.id));
+      } catch (error) {}
+    },
+  };
+
+  return (
+    <SchoolsContext.Provider
+      value={{
+        ...delegate,
+      }}
+    >
+      {children}
+    </SchoolsContext.Provider>
+  );
+};

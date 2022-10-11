@@ -1,18 +1,8 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, {
-  ChangeEvent,
-  FormEvent,
-  MouseEvent,
-  useContext,
-  useState,
-} from 'react';
-import {
-  Counselor,
-  CounselorsContext,
-  emptyCounselor,
-  ICounselorsContext,
-} from '../../data/counselors';
+import React, { ChangeEvent, FormEvent, MouseEvent, useState } from 'react';
+import { Counselor, emptyCounselor } from '../../data/counselors';
+import { Role } from '../../services/user.service';
 
 type CreateCounselorFormProps = {
   defaultCounselor?: Counselor;
@@ -28,13 +18,13 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
   const [counselor, setCounselor] = useState<Counselor>(
     defaultCounselor ?? emptyCounselor
   );
-  const { counselors } = useContext<ICounselorsContext>(CounselorsContext);
+  const [roomLink, setRoomLink] = useState<string>('');
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const submittedCounselor = defaultCounselor
-      ? counselor
-      : { ...counselor, _id: counselors.length };
+    const submittedCounselor = defaultCounselor ? counselor : { ...counselor };
+    submittedCounselor.role = 'COUNSELOR' as Role;
+    submittedCounselor.counselorRef.roomLink = roomLink;
     onSubmit(submittedCounselor);
   };
 
@@ -48,17 +38,31 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
     <>
       <form onSubmit={onFormSubmit}>
         <label>
-          Name
+          First Name
           <input
-            data-testid={'input-name'}
+            data-testid={'input-first-name'}
             type="text"
-            placeholder="Name"
-            name="name"
-            value={counselor.name}
+            placeholder="First Name"
+            name="firstName"
+            value={counselor.firstName}
             required
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setCounselor({ ...counselor, name: e.target.value })
-            }
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setCounselor({ ...counselor, firstName: e.target.value });
+            }}
+          />
+        </label>
+        <label>
+          Last Name
+          <input
+            data-testid={'input-last-name'}
+            type="text"
+            placeholder="Last Name"
+            name="lastName"
+            value={counselor.lastName}
+            required
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setCounselor({ ...counselor, lastName: e.target.value });
+            }}
           />
         </label>
         <label>
@@ -76,17 +80,78 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
           />
         </label>
         <label>
+          Username
+          <input
+            data-testid={'input-username'}
+            type="text"
+            placeholder="Userame"
+            name="username"
+            value={counselor.username}
+            required
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setCounselor({ ...counselor, username: e.target.value });
+            }}
+          />
+        </label>
+        <label>
+          Phone
+          <input
+            data-testid={'input-phone'}
+            type="phone"
+            placeholder="Phone"
+            name="phone"
+            value={counselor.phone}
+            required
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setCounselor({ ...counselor, phone: e.target.value });
+            }}
+          />
+        </label>
+        <label>
+          Docs URL
+          <input
+            data-testid={'input-docsUrl'}
+            type="URL"
+            placeholder="Docs URL"
+            name="docsUrl"
+            value={counselor.docsUrl}
+            required
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setCounselor({ ...counselor, docsUrl: e.target.value });
+            }}
+          />
+        </label>
+        <label>
+          Time Zone Offset
+          <input
+            data-testid={'input-timeZoneOffset'}
+            type="number"
+            min="-12"
+            max="14"
+            placeholder="Time Zone Offset"
+            name="timeZoneOffset"
+            value={counselor.timeZoneOffset}
+            required
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setCounselor({
+                ...counselor,
+                timeZoneOffset: parseInt(e.target.value),
+              });
+            }}
+          />
+        </label>
+        <label>
           Room Link
           <input
             data-testid={'input-roomLink'}
-            type="text"
+            type="URL"
             placeholder="Room Link"
             name="roomLink"
-            value={counselor.roomLink}
+            value={roomLink}
             required
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setCounselor({ ...counselor, roomLink: e.target.value })
-            }
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setRoomLink(e.target.value);
+            }}
           />
         </label>
 

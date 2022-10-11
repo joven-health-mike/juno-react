@@ -6,24 +6,35 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import CounselorDetails from './CounselorDetails';
+import { Role } from '../../services/user.service';
 
 const testCounselor = {
-  name: 'name',
-  _id: 0,
+  id: '0',
+  firstName: 'firstName',
+  lastName: 'lastName',
   email: 'email@test.com',
-  roomLink: 'https://www.zoomtest.com',
+  username: '',
+  phone: '',
+  docsUrl: '',
+  timeZoneOffset: 0,
+  role: 'JOVEN_STAFF' as Role,
+  counselorRef: {
+    id: '-1',
+    userId: '0',
+    roomLink: 'https://www.zoomtest.com',
+  },
 };
 
 describe('CounselorDetails', () => {
   it('should display name', async () => {
     const view = render(<CounselorDetails counselor={testCounselor} />);
     const nameView = await view.findByTestId('name');
-    expect(nameView.innerHTML).toEqual(testCounselor.name);
+    expect(nameView.innerHTML).toEqual(testCounselor.firstName);
   });
   it('should display ID as a string', async () => {
     const view = render(<CounselorDetails counselor={testCounselor} />);
     const idView = await view.findByTestId('id');
-    expect(idView.innerHTML).toEqual('ID: ' + testCounselor._id.toString());
+    expect(idView.innerHTML).toEqual('ID: ' + testCounselor.id.toString());
   });
   it('should display email as a string', async () => {
     const view = render(<CounselorDetails counselor={testCounselor} />);
@@ -36,7 +47,7 @@ describe('CounselorDetails', () => {
     const view = render(<CounselorDetails counselor={testCounselor} />);
     const roomLinkView = await view.findByTestId('roomLink');
     expect(roomLinkView.innerHTML).toEqual(
-      'Room Link: ' + testCounselor.roomLink.toString()
+      'Room Link: ' + testCounselor.counselorRef.roomLink.toString()
     );
   });
   it('should display ID as <p>', async () => {

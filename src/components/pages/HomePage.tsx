@@ -4,42 +4,38 @@ import React, { useContext } from 'react';
 import '@fullcalendar/react';
 import listPlugin from '@fullcalendar/list';
 import Navbar from '../navbar/Navbar';
-import { getItems } from '../navbar/navBarItems';
 import Calendar from '../calendar/Calendar';
 import { Appointment, AppointmentsContext } from '../../data/appointments';
 import StudentsSmallTable from '../tables/StudentsSmallTable';
 import { StudentsContext } from '../../data/students';
 import CounselorDetails from '../details/CounselorDetails';
 import { CounselorsContext } from '../../data/counselors';
+import { LoggedInUserContext } from '../../data/users';
+import { Role } from '../../services/user.service';
 
 const HomePage: React.FC = () => {
-  const isAdmin = true;
-  const isCounselor = false;
-  const isSchoolStaff = false;
-  const isSchoolAdmin = false;
-  const isStudent = false;
-  const isGuardian = false;
+  const { loggedInUser } = useContext(LoggedInUserContext);
 
   return (
     <div className={'mainContainer'}>
       <nav>
-        <Navbar items={getItems('admin')} />
+        <Navbar />
       </nav>
-      {isAdmin && <AdminView />}
-      {isCounselor && <CounselorView />}
-      {isSchoolStaff && <SchoolStaffView />}
-      {isSchoolAdmin && <SchoolAdminView />}
-      {isStudent && <StudentView />}
-      {isGuardian && <GuardianView />}
+      {loggedInUser.role === ('SYSADMIN' as Role) && <AdminView />}
+      {loggedInUser.role === ('COUNSELOR' as Role) && <CounselorView />}
+      {loggedInUser.role === ('SCHOOL_STAFF' as Role) && <SchoolStaffView />}
+      {loggedInUser.role === ('SCHOOL_ADMIN' as Role) && <SchoolAdminView />}
+      {loggedInUser.role === ('STUDENT' as Role) && <StudentView />}
+      {loggedInUser.role === ('GUARDIAN' as Role) && <GuardianView />}
     </div>
   );
 };
 
 const AppointmentView: React.FC = () => {
-  const { appointments } = useContext(AppointmentsContext);
+  const { data: appointments } = useContext(AppointmentsContext);
 
   const onEventClick = (event: Appointment) => {
-    // display AppointmentDetailPage with this event
+    // TODO: display AppointmentDetailPage with this event
     console.log('eventClicked:', event);
   };
 
@@ -57,7 +53,7 @@ const AppointmentView: React.FC = () => {
 };
 
 const AdminView: React.FC = () => {
-  const { students } = useContext(StudentsContext);
+  const { data: students } = useContext(StudentsContext);
 
   return (
     <>
@@ -74,7 +70,7 @@ const AdminView: React.FC = () => {
 };
 
 const CounselorView: React.FC = () => {
-  const { students } = useContext(StudentsContext);
+  const { data: students } = useContext(StudentsContext);
 
   return (
     <>
@@ -91,7 +87,7 @@ const CounselorView: React.FC = () => {
 };
 
 const SchoolStaffView: React.FC = () => {
-  const { students } = useContext(StudentsContext);
+  const { data: students } = useContext(StudentsContext);
 
   return (
     <>
@@ -108,7 +104,7 @@ const SchoolStaffView: React.FC = () => {
 };
 
 const SchoolAdminView: React.FC = () => {
-  const { students } = useContext(StudentsContext);
+  const { data: students } = useContext(StudentsContext);
 
   return (
     <>
@@ -125,7 +121,7 @@ const SchoolAdminView: React.FC = () => {
 };
 
 const StudentView: React.FC = () => {
-  const { counselors } = useContext(CounselorsContext);
+  const { data: counselors } = useContext(CounselorsContext);
 
   return (
     <>
@@ -142,7 +138,7 @@ const StudentView: React.FC = () => {
 };
 
 const GuardianView: React.FC = () => {
-  const { counselors } = useContext(CounselorsContext);
+  const { data: counselors } = useContext(CounselorsContext);
 
   return (
     <>

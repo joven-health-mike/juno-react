@@ -7,13 +7,8 @@ import React, {
   useContext,
   useState,
 } from 'react';
-import {
-  emptyUser,
-  IUsersContext,
-  ROLES,
-  User,
-  UsersContext,
-} from '../../data/users';
+import { emptyUser, User, UsersContext } from '../../data/users';
+import { Role, ROLES } from '../../services/user.service';
 import SelectList from '../selectList/SelectList';
 
 type CreateUserFormProps = {
@@ -28,9 +23,9 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
   onCancel,
 }) => {
   const [user, setUser] = useState<User>(defaultUser ?? emptyUser);
-  const { users } = useContext<IUsersContext>(UsersContext);
+  const { data: users } = useContext(UsersContext);
 
-  const onRoleChanged = (role: string) => {
+  const onRoleChanged = (role: Role) => {
     setUser({ ...user, role: role });
   };
 
@@ -49,17 +44,31 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
   return (
     <form onSubmit={onFormSubmit}>
       <label>
-        Name
+        First Name
         <input
-          data-testid={'input-name'}
+          data-testid={'input-first-name'}
           type="text"
-          placeholder="Name"
-          name="name"
-          value={user.name}
+          placeholder="First Name"
+          name="firstName"
+          value={user.firstName}
           required
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setUser({ ...user, name: e.target.value })
-          }
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setUser({ ...user, firstName: e.target.value });
+          }}
+        />
+      </label>
+      <label>
+        Last Name
+        <input
+          data-testid={'input-last-name'}
+          type="text"
+          placeholder="Last Name"
+          name="lastName"
+          value={user.lastName}
+          required
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setUser({ ...user, lastName: e.target.value });
+          }}
         />
       </label>
       <label>
@@ -77,17 +86,57 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
         />
       </label>
       <label>
-        Password
+        Username
         <input
-          data-testid={'input-password'}
-          type="password"
-          placeholder="Password"
-          name="password"
-          value={user.password}
+          data-testid={'input-username'}
+          type="text"
+          placeholder="Userame"
+          name="username"
+          value={user.username}
           required
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setUser({ ...user, password: e.target.value })
-          }
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setUser({ ...user, username: e.target.value });
+          }}
+        />
+      </label>
+      <label>
+        Phone
+        <input
+          data-testid={'input-phone'}
+          type="phone"
+          placeholder="Phone"
+          name="phone"
+          value={user.phone}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setUser({ ...user, phone: e.target.value });
+          }}
+        />
+      </label>
+      <label>
+        Docs URL
+        <input
+          data-testid={'input-docsUrl'}
+          type="URL"
+          placeholder="Docs URL"
+          name="docsUrl"
+          value={user.docsUrl}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setUser({ ...user, docsUrl: e.target.value });
+          }}
+        />
+      </label>
+      <label>
+        Time Zone Offset
+        <input
+          data-testid={'input-timeZoneOffset'}
+          type="number"
+          placeholder="Time Zone Offset"
+          name="timeZoneOffset"
+          value={user.timeZoneOffset}
+          required
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setUser({ ...user, timeZoneOffset: parseInt(e.target.value) });
+          }}
         />
       </label>
       <label>
@@ -96,7 +145,9 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
           labelText="Select a Role"
           items={ROLES}
           value={ROLES.indexOf(user.role)}
-          onItemChanged={onRoleChanged}
+          onItemChanged={item => {
+            return onRoleChanged(ROLES[parseInt(item)] as Role);
+          }}
         />
       </label>
 

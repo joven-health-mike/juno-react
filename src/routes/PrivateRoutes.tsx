@@ -1,32 +1,32 @@
-import React from 'react';
+// Copyright 2022 Social Fabric, LLC
+
+import React, { useContext } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import HomePage from '../components/pages/HomePage';
-import AppointmentsPage from '../components/pages/AppointmentsPage';
-import CalendarPage from '../components/pages/CalendarPage';
-import CounselorsPage from '../components/pages/CounselorsPage';
-import SchoolsPage from '../components/pages/SchoolsPage';
-import StudentsPage from '../components/pages/StudentsPage';
-import UsersPage from '../components/pages/UsersPage';
+import { LoggedInUserContext } from '../data/users';
+import { pagePermission } from '../data/permissions';
+import { AvailableRoute, AvailableRoutes } from './AppRouter';
 
 const PrivateRoutes = () => {
+  const { loggedInUser } = useContext(LoggedInUserContext);
+  const role = loggedInUser.role;
+
+  function isRouteAllowed(route: AvailableRoute): boolean {
+    return pagePermission(role, route);
+  }
+
   return (
+    // allow available routes based on user permissions
     <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/appointments" element={<AppointmentsPage />} />
-      <Route path="/calendar" element={<CalendarPage />} />
-      <Route path="/counselors" element={<CounselorsPage />} />
-      <Route path="/schools" element={<SchoolsPage />} />
-      <Route path="/students" element={<StudentsPage />} />
-      <Route path="/users" element={<UsersPage />} />
-      <Route path="/logout" element={<RedirectToLogoutPage />} />
+      {AvailableRoutes.map((route, index) => {
+        return (
+          isRouteAllowed(route.url as AvailableRoute) && (
+            <Route key={index} path={route.url} element={route.element} />
+          )
+        );
+      })}
       <Route path="*" element={<h1>404 - Not Found</h1>} />
     </Routes>
   );
-};
-
-const RedirectToLogoutPage: React.FC = () => {
-  window.location.href = 'https://localhost/api/1/logout';
-  return <></>;
 };
 
 export default PrivateRoutes;

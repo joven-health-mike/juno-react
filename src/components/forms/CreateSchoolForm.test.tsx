@@ -8,9 +8,9 @@ import { fireEvent, render } from '@testing-library/react';
 import CreateSchoolForm from './CreateSchoolForm';
 
 const testSchool = {
+  id: '0',
   name: 'name',
-  _id: 0,
-  email: 'email@test.com',
+  primaryEmail: 'email@test.com',
 };
 
 describe('CreateSchoolForm', () => {
@@ -70,6 +70,6 @@ describe('CreateSchoolForm', () => {
   });
 
   test('Check if emails match', () => {
-    expect(testSchool.email).toBe('email@test.com');
+    expect(testSchool.primaryEmail).toBe('email@test.com');
   });
 });

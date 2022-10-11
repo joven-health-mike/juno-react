@@ -6,12 +6,25 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import CreateCounselorForm from './CreateCounselorForm';
+import { emptyUser } from '../../data/users';
+import { Role } from '../../services/user.service';
+import { Counselor } from '../../data/counselors';
 
-const testCounselor = {
-  name: 'name',
-  _id: 0,
-  email: 'email@test.com',
-  roomLink: 'https://www.zoomtest.com',
+const testCounselor: Counselor = {
+  id: '-1',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  email: '',
+  username: '',
+  phone: '',
+  docsUrl: '',
+  timeZoneOffset: 0,
+  role: 'JOVEN_STAFF' as Role,
+  counselorRef: {
+    id: '0',
+    userId: '-1',
+    roomLink: 'https://www.zoomtest.com',
+  },
 };
 
 describe('CreateCounselorForm', () => {
@@ -72,7 +85,8 @@ describe('CreateCounselorForm', () => {
   });
 
   test('Check if names match', () => {
-    expect(testCounselor.name).toBe('name');
+    expect(testCounselor.firstName).toBe('firstName');
+    expect(testCounselor.lastName).toBe('lastName');
   });
 
   test('Check if emails match', () => {
@@ -80,6 +94,8 @@ describe('CreateCounselorForm', () => {
   });
 
   test('Check if room links match', () => {
-    expect(testCounselor.roomLink).toBe('https://www.zoomtest.com');
+    expect(testCounselor.counselorRef.roomLink).toBe(
+      'https://www.zoomtest.com'
+    );
   });
 });

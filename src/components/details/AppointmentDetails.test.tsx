@@ -8,15 +8,19 @@ import { render } from '@testing-library/react';
 import AppointmentDetails from './AppointmentDetails';
 import { formatDateTime } from '../../utils/DateUtils';
 import { Appointment, AppointmentTypes } from '../../data/appointments';
+import { emptyCounselorRef } from '../../data/counselors';
+import { emptySchool } from '../../data/schools';
 
 const fakeAppointment: Appointment = {
-  _id: 0,
+  id: '0',
   title: 'Hello World',
   start: new Date(),
   end: new Date(),
-  counselorId: 0,
-  studentId: 2,
-  type: AppointmentTypes.None,
+  counselor: emptyCounselorRef,
+  school: emptySchool,
+  participants: [],
+  type: AppointmentTypes.None.name,
+  status: 'SCHEDULED',
 };
 
 const fakeCounselorName = 'Jacek McGuinness';
@@ -26,7 +30,7 @@ describe('AppointmentDetails', () => {
   it('should display ID', async () => {
     const view = render(<AppointmentDetails appointment={fakeAppointment} />);
     const idView = await view.findByTestId('id');
-    expect(idView.innerHTML).toEqual('ID: ' + fakeAppointment._id.toString());
+    expect(idView.innerHTML).toEqual('ID: ' + fakeAppointment.id.toString());
   });
   it('should display title', async () => {
     const view = render(<AppointmentDetails appointment={fakeAppointment} />);
