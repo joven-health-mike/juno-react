@@ -10,9 +10,11 @@ import CounselorsPage from '../components/pages/CounselorsPage';
 import SchoolsPage from '../components/pages/SchoolsPage';
 import StudentsPage from '../components/pages/StudentsPage';
 import UsersPage from '../components/pages/UsersPage';
+import AccountDetailPage from '../components/pages/AccountDetailPage';
 
 export type AvailableRoute =
   | '/'
+  | '/account'
   | '/appointments'
   | '/calendar'
   | '/counselors'
@@ -37,6 +39,7 @@ const RedirectToLogoutPage: React.FC = () => {
 
 export const AvailableRoutes = [
   { url: '/', element: <HomePage /> },
+  { url: '/account', element: <AccountDetailPage /> },
   { url: '/appointments', element: <AppointmentsPage /> },
   { url: '/calendar', element: <CalendarPage /> },
   { url: '/counselors', element: <CounselorsPage /> },

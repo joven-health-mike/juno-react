@@ -7,6 +7,7 @@ const allRoles = ROLES;
 
 const pagePermissions = {
   '/': allRoles,
+  '/account': allRoles,
   '/appointments': allRoles,
   '/calendar': allRoles,
   '/counselors': allRoles,
