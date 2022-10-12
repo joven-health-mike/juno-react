@@ -4,7 +4,11 @@ import {
   AppointmentTypes,
   getAppointmentTypeById,
 } from '../../data/appointments';
-import { Counselor, CounselorsContext } from '../../data/counselors';
+import {
+  Counselor,
+  CounselorsContext,
+  emptyCounselor,
+} from '../../data/counselors';
 import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import { emptyStudent, Student, StudentsContext } from '../../data/students';
 import { emptyUser, User, UsersContext } from '../../data/users';
@@ -79,14 +83,12 @@ export const SelectMultipleList = ({
 };
 
 type SelectCounselorListProps = {
-  value: number;
-  selectedCounselor?: Counselor;
+  selectedIndex: number;
   onCounselorChanged: (counselor: Counselor) => void;
 };
 
 export function SelectCounselorList({
-  value,
-  selectedCounselor,
+  selectedIndex,
   onCounselorChanged,
 }: SelectCounselorListProps) {
   const { data: counselors } = useContext(CounselorsContext);
@@ -95,18 +97,8 @@ export function SelectCounselorList({
   );
 
   const handleCounselorChange = (counselorIndex: string) => {
-    selectedCounselor = counselors.find(
-      counselor =>
-        counselorNames
-          .indexOf(`${counselor.firstName} ${counselor.lastName}`)
-          .toString() === counselorIndex
-    );
-    if (selectedCounselor) {
-      value = counselorNames.indexOf(
-        `${selectedCounselor.firstName} ${selectedCounselor.lastName}`
-      );
-      onCounselorChanged(selectedCounselor);
-    }
+    const counselor = counselors[parseInt(counselorIndex)];
+    onCounselorChanged(counselor ?? emptyCounselor);
   };
 
   return (
@@ -114,13 +106,7 @@ export function SelectCounselorList({
       <SelectList
         labelText={'Select a Counselor'}
         items={counselorNames}
-        value={
-          selectedCounselor
-            ? counselorNames.indexOf(
-                `${selectedCounselor.firstName} ${selectedCounselor.lastName}`
-              )
-            : -1
-        }
+        value={selectedIndex}
         onItemChanged={handleCounselorChange}
       />
     </>

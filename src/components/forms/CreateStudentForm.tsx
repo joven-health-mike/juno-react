@@ -107,7 +107,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       <label>
         Counselor:{' '}
         <SelectCounselorList
-          value={counselorSelectionIndex}
+          selectedIndex={counselorSelectionIndex}
           onCounselorChanged={onCounselorChanged}
         />
       </label>

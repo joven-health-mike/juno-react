@@ -129,7 +129,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
       <label>
         Counselor:{' '}
         <SelectCounselorList
-          value={counselorSelectionIndex}
+          selectedIndex={counselorSelectionIndex}
           onCounselorChanged={onCounselorChanged}
         />
       </label>
