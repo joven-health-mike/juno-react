@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { MouseEvent, useCallback, useContext, useEffect } from 'react';
+import React, { MouseEvent, useCallback, useContext } from 'react';
 import { CellProps, Column, Row } from 'react-table';
 import { CounselorsContext } from '../../data/counselors';
 import { SchoolsContext } from '../../data/schools';
@@ -15,17 +15,9 @@ type StudentsTableProps = {
 };
 
 const StudentsTable: React.FC<StudentsTableProps> = ({ onDeleteClicked }) => {
-  const { data: counselors, getAll: getCounselors } =
-    useContext(CounselorsContext);
-  const { data: schools, getAll: getSchools } = useContext(SchoolsContext);
-  const { data: students, getAll: getStudents } = useContext(StudentsContext);
-
-  useEffect(() => {
-    getCounselors();
-    getSchools();
-    getStudents();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { data: counselors } = useContext(CounselorsContext);
+  const { data: schools } = useContext(SchoolsContext);
+  const { data: students } = useContext(StudentsContext);
 
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
@@ -46,9 +38,7 @@ const StudentsTable: React.FC<StudentsTableProps> = ({ onDeleteClicked }) => {
         Cell: ({ cell, row }: CellProps<object>) => (
           <>
             <XButton
-              value={
-                cell.row.values.first_name + ' ' + cell.row.values.last_name
-              }
+              value={`${cell.row.values.first_name} ${cell.row.values.last_name}`}
               onClick={(e: MouseEvent<HTMLButtonElement>) => {
                 e.preventDefault();
                 onDeleteClicked((e.target as HTMLInputElement).value);

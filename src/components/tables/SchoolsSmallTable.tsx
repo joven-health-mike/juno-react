@@ -26,7 +26,7 @@ const SchoolsSmallTable: React.FC<SchoolsSmallTableProps> = ({ schools }) => {
       },
       {
         Header: 'Email',
-        accessor: 'email',
+        accessor: 'primaryEmail',
       },
     ],
     []

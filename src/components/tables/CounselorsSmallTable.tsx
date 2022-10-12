@@ -23,12 +23,16 @@ const CounselorsSmallTable: React.FC<CounselorsSmallTableProps> = ({
   const columns: Column[] = React.useMemo(
     () => [
       {
-        Header: 'Name',
-        accessor: 'name',
+        Header: 'First Name',
+        accessor: 'firstName',
+      },
+      {
+        Header: 'Last Name',
+        accessor: 'lastName',
       },
       {
         Header: 'Email',
-        accessor: 'email',
+        accessor: 'primaryEmail',
       },
     ],
     []
