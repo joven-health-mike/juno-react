@@ -22,9 +22,11 @@ const HomePage: React.FC = () => {
         <Navbar />
       </nav>
       {loggedInUser.role === ('SYSADMIN' as Role) && <AdminView />}
-      {loggedInUser.role === ('COUNSELOR' as Role) && <CounselorView />}
-      {loggedInUser.role === ('SCHOOL_STAFF' as Role) && <SchoolStaffView />}
+      {loggedInUser.role === ('JOVEN_ADMIN' as Role) && <AdminView />}
+      {loggedInUser.role === ('JOVEN_STAFF' as Role) && <AdminView />}
       {loggedInUser.role === ('SCHOOL_ADMIN' as Role) && <SchoolAdminView />}
+      {loggedInUser.role === ('SCHOOL_STAFF' as Role) && <SchoolStaffView />}
+      {loggedInUser.role === ('COUNSELOR' as Role) && <CounselorView />}
       {loggedInUser.role === ('STUDENT' as Role) && <StudentView />}
       {loggedInUser.role === ('GUARDIAN' as Role) && <GuardianView />}
     </div>

@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext } from 'react';
+import React from 'react';
 import { Appointment } from '../../data/appointments';
 import AppointmentDetails from '../details/AppointmentDetails';
 import Navbar from '../navbar/Navbar';
