@@ -11,6 +11,16 @@ import SchoolsPage from '../components/pages/SchoolsPage';
 import StudentsPage from '../components/pages/StudentsPage';
 import UsersPage from '../components/pages/UsersPage';
 
+export type AvailableRoute =
+  | '/'
+  | '/appointments'
+  | '/calendar'
+  | '/counselors'
+  | '/schools'
+  | '/students'
+  | '/users'
+  | '/logout';
+
 interface IAppRouterParams {
   isAuthenticated: boolean;
 }
@@ -24,16 +34,6 @@ const RedirectToLogoutPage: React.FC = () => {
     process.env.REACT_APP_SERVER_BASE_URL + '/api/1/logout';
   return <></>;
 };
-
-export type AvailableRoute =
-  | '/'
-  | '/appointments'
-  | '/calendar'
-  | '/counselors'
-  | '/schools'
-  | '/students'
-  | '/users'
-  | '/logout';
 
 export const AvailableRoutes = [
   { url: '/', element: <HomePage /> },
