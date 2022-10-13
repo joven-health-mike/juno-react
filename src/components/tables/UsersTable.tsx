@@ -1,7 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { MouseEvent, useCallback, useContext } from 'react';
-import { useEffect } from 'react';
 import { CellProps, Column, Row } from 'react-table';
 import { User, UsersContext } from '../../data/users';
 import XButton from '../buttons/XButton';
@@ -14,16 +13,7 @@ type UsersTableProps = {
 };
 
 const UsersTable: React.FC<UsersTableProps> = ({ onDeleteClicked }) => {
-  const { data: users, getAll: getUsers } = useContext(UsersContext);
-
-  useEffect(() => {
-    getUsers();
-    // TODO: heads up here. still figuring this out. i feel like this is a warning that this isn't
-    // the correct architecture. getUsers isn't changing - users is, however, passing this in as a
-    // dependency causes it to loop infinitely. on methods that use ids those strings can be added
-    // here.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { data: users } = useContext(UsersContext);
 
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({

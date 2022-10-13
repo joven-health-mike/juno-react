@@ -10,7 +10,7 @@ import React, {
 import { ContextData } from '../../data/ContextData';
 import { Counselor, CounselorsContext } from '../../data/counselors';
 import { School, SchoolsContext } from '../../data/schools';
-import { emptyStudent, Student, StudentsContext } from '../../data/students';
+import { emptyStudent, Student } from '../../data/students';
 import {
   SelectCounselorList,
   SelectSchoolList,
@@ -32,7 +32,6 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
   );
   const [counselorSelectionIndex, setCounselorSelectionIndex] =
     useState<number>(-1);
-  const { data: students } = useContext<ContextData<Student>>(StudentsContext);
   const { data: schools } = useContext<ContextData<School>>(SchoolsContext);
   const { data: counselors } =
     useContext<ContextData<Counselor>>(CounselorsContext);
@@ -64,7 +63,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
     e.preventDefault();
     const submittedStudent = defaultStudent
       ? student
-      : { ...student, _id: `${students.length}` };
+      : { ...student, id: `-1` };
     onSubmit(submittedStudent);
   };
 
@@ -108,7 +107,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       <label>
         Counselor:{' '}
         <SelectCounselorList
-          value={counselorSelectionIndex}
+          selectedIndex={counselorSelectionIndex}
           onCounselorChanged={onCounselorChanged}
         />
       </label>

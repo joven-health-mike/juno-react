@@ -1,14 +1,33 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { LoggedInUserContext } from '../data/users';
-import { pagePermission } from '../data/permissions';
+import { LoggedInUserContext, UsersContext } from '../data/users';
+import { pagePermission } from '../auth/permissions';
 import { AvailableRoute, AvailableRoutes } from './AppRouter';
+import { CounselorsContext } from '../data/counselors';
+import { AppointmentsContext } from '../data/appointments';
+import { SchoolsContext } from '../data/schools';
+import { StudentsContext } from '../data/students';
 
 const PrivateRoutes = () => {
   const { loggedInUser } = useContext(LoggedInUserContext);
   const role = loggedInUser.role;
+
+  const { getAll: getUsers } = useContext(UsersContext);
+  const { getAll: getCounselors } = useContext(CounselorsContext);
+  const { getAll: getAppointments } = useContext(AppointmentsContext);
+  const { getAll: getSchools } = useContext(SchoolsContext);
+  const { getAll: getStudents } = useContext(StudentsContext);
+
+  useEffect(() => {
+    getAppointments();
+    getCounselors();
+    getSchools();
+    getStudents();
+    getUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function isRouteAllowed(route: AvailableRoute): boolean {
     return pagePermission(role, route);
