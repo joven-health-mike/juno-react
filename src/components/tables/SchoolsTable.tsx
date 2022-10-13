@@ -44,6 +44,7 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
             <>
               <XButton
                 text="❌"
+                title="Delete School"
                 value={school.id}
                 onClick={(e: MouseEvent<HTMLButtonElement>) => {
                   e.preventDefault();
@@ -52,6 +53,7 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
               />
               <XButton
                 text="✏️"
+                title="Edit School"
                 value={school.id}
                 onClick={(e: MouseEvent<HTMLButtonElement>) => {
                   e.preventDefault();
@@ -60,6 +62,7 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
               />
               <XButton
                 text="📧"
+                title="Email School"
                 value={school.id}
                 onClick={(e: MouseEvent<HTMLButtonElement>) => {
                   e.preventDefault();

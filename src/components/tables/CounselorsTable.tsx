@@ -43,6 +43,7 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
             <>
               <XButton
                 text="❌"
+                title="Delete Counselor"
                 value={counselor.id}
                 onClick={(e: MouseEvent<HTMLButtonElement>) => {
                   e.preventDefault();
@@ -51,6 +52,7 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
               />
               <XButton
                 text="✏️"
+                title="Edit Counselor"
                 value={counselor.id}
                 onClick={(e: MouseEvent<HTMLButtonElement>) => {
                   e.preventDefault();
@@ -59,6 +61,7 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
               />
               <XButton
                 text="🖥️"
+                title="Join Video"
                 value={counselor.id}
                 onClick={(e: MouseEvent<HTMLButtonElement>) => {
                   e.preventDefault();

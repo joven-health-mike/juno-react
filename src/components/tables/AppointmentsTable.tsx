@@ -12,8 +12,8 @@ import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
 
 type AppointmentsTableProps = {
-  onDeleteClicked: (item: string) => void;
-  onEditClicked: (item: string) => void;
+  onDeleteClicked: (appointment: Appointment) => void;
+  onEditClicked: (appointment: Appointment) => void;
 };
 
 const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
@@ -69,29 +69,35 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
             {isAllRowsExpanded ? '👇' : '👉'}
           </button>
         ),
-        Cell: ({ cell, row }: CellProps<object>) => (
-          <>
-            <XButton
-              text="❌"
-              value={cell.row.values.title}
-              onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-                onDeleteClicked((e.target as HTMLInputElement).value);
-              }}
-            />
-            <XButton
-              text="✏️"
-              value={cell.row.values.title}
-              onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-                onEditClicked((e.target as HTMLInputElement).value);
-              }}
-            />
-            <button {...row.getToggleRowExpandedProps()}>
-              {row.isExpanded ? '👇' : '👉'}
-            </button>
-          </>
-        ),
+        Cell: ({ cell, row }: CellProps<object>) => {
+          const appointment = cell.row.original as Appointment;
+
+          return (
+            <>
+              <XButton
+                text="❌"
+                title="Delete Appointment"
+                value={appointment.id}
+                onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault();
+                  onDeleteClicked(appointment);
+                }}
+              />
+              <XButton
+                text="✏️"
+                title="Edit Appointment"
+                value={appointment.id}
+                onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault();
+                  onEditClicked(appointment);
+                }}
+              />
+              <button {...row.getToggleRowExpandedProps()}>
+                {row.isExpanded ? '👇' : '👉'}
+              </button>
+            </>
+          );
+        },
       },
       {
         Header: 'ID',

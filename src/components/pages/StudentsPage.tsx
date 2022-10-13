@@ -24,6 +24,10 @@ const StudentsPage = () => {
     // TODO: Add abilitty to edit student
   };
 
+  const onAppointmentStudentClicked = (studentToSchedule: Student) => {
+    // TODO: Add abilitty to schedule student
+  };
+
   return (
     <div className={'mainContainer'}>
       <nav>
@@ -35,6 +39,7 @@ const StudentsPage = () => {
         <StudentsTable
           onDeleteClicked={onDeleteStudentClicked}
           onEditClicked={onEditStudentClicked}
+          onAppointmentClicked={onAppointmentStudentClicked}
         />
       </>
     </div>

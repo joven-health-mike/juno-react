@@ -12,11 +12,8 @@ import Navbar from '../navbar/Navbar';
 import AppointmentsTable from '../tables/AppointmentsTable';
 
 const AppointmentsPage: React.FC = () => {
-  const {
-    data: appointments,
-    add: addAppointment,
-    delete: deleteAppointment,
-  } = useContext(AppointmentsContext);
+  const { add: addAppointment, delete: deleteAppointment } =
+    useContext(AppointmentsContext);
 
   const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
     useState<boolean>(false);
@@ -27,25 +24,15 @@ const AppointmentsPage: React.FC = () => {
     addAppointment(appointment);
   };
 
-  const onAppointmentDeleteClicked = (appointmentTitle: string) => {
+  const onAppointmentDeleteClicked = (appointmentToDelete: Appointment) => {
     if (window.confirm('Delete this appointment?')) {
-      let deletingAppointment = appointments.find(
-        appointment => appointment.title === appointmentTitle
-      );
-      if (deletingAppointment) {
-        deleteAppointment(deletingAppointment);
-      }
+      deleteAppointment(appointmentToDelete);
     }
   };
 
-  const onAppointmentEditClicked = (appointmentTitle: string) => {
-    let editingAppointment = appointments.find(
-      appointment => appointment.title === appointmentTitle
-    );
-    if (editingAppointment) {
-      setInitialAppointment(editingAppointment);
-      setIsCreateAppointmentModalOpen(!isCreateAppointmentModalOpen);
-    }
+  const onAppointmentEditClicked = (appointmentToEdit: Appointment) => {
+    setInitialAppointment(appointmentToEdit);
+    setIsCreateAppointmentModalOpen(!isCreateAppointmentModalOpen);
   };
 
   const handleAppointmentAdded = (appointment: Appointment) => {

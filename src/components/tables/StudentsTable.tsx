@@ -13,11 +13,13 @@ import TableSearchFilter from './TableSearchFilter';
 type StudentsTableProps = {
   onDeleteClicked: (student: Student) => void;
   onEditClicked: (student: Student) => void;
+  onAppointmentClicked: (student: Student) => void;
 };
 
 const StudentsTable: React.FC<StudentsTableProps> = ({
   onDeleteClicked,
   onEditClicked,
+  onAppointmentClicked,
 }) => {
   const { data: counselors } = useContext(CounselorsContext);
   const { data: schools } = useContext(SchoolsContext);
@@ -46,6 +48,7 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
             <>
               <XButton
                 text="❌"
+                title="Delete Student"
                 value={student.id}
                 onClick={(e: MouseEvent<HTMLButtonElement>) => {
                   e.preventDefault();
@@ -54,10 +57,20 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
               />
               <XButton
                 text="✏️"
+                title="Edit Student"
                 value={student.id}
                 onClick={(e: MouseEvent<HTMLButtonElement>) => {
                   e.preventDefault();
                   onEditClicked(student);
+                }}
+              />
+              <XButton
+                text="📅"
+                title="Schedule Appointment"
+                value={student.id}
+                onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault();
+                  onAppointmentClicked(student);
                 }}
               />
               <button {...row.getToggleRowExpandedProps()}>
@@ -124,7 +137,7 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
         ),
       },
     ],
-    [counselors, onDeleteClicked, onEditClicked, schools]
+    [counselors, onAppointmentClicked, onDeleteClicked, onEditClicked, schools]
   );
 
   const renderRowSubComponent = useCallback((row: Row) => {

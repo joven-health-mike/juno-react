@@ -7,25 +7,24 @@ import Navbar from '../navbar/Navbar';
 import UsersTable from '../tables/UsersTable';
 
 const UsersPage = () => {
-  const {
-    data: users,
-    add: addUser,
-    delete: deleteUser,
-  } = useContext(UsersContext);
+  const { add: addUser, delete: deleteUser } = useContext(UsersContext);
 
   const onFormSubmit = (user: User) => {
     addUser(user);
   };
 
-  const onUserDeleteClicked = (userName: string) => {
+  const onUserDeleteClicked = (userToDelete: User) => {
     if (window.confirm('Delete this user?')) {
-      let userToDelete = users.find(
-        user => user.firstName + ' ' + user.lastName === userName
-      );
-      if (userToDelete) {
-        deleteUser(userToDelete);
-      }
+      deleteUser(userToDelete);
     }
+  };
+
+  const onUserEditClicked = (userToEdit: User) => {
+    // TODO: Add ability to edit
+  };
+
+  const onUserEmailClicked = (userToEdit: User) => {
+    window.location.href = `mailto:${userToEdit.email}`;
   };
 
   return (
@@ -36,7 +35,11 @@ const UsersPage = () => {
       <h1>Users</h1>
       <>
         <CreateUserForm onSubmit={onFormSubmit} onCancel={() => {}} />
-        <UsersTable onDeleteClicked={onUserDeleteClicked} />
+        <UsersTable
+          onDeleteClicked={onUserDeleteClicked}
+          onEditClicked={onUserEditClicked}
+          onEmailClicked={onUserEmailClicked}
+        />
       </>
     </div>
   );
