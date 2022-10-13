@@ -7,23 +7,24 @@ import Navbar from '../navbar/Navbar';
 import SchoolsTable from '../tables/SchoolsTable';
 
 const SchoolsPage = () => {
-  const {
-    data: schools,
-    add: addSchool,
-    delete: deleteSchool,
-  } = useContext(SchoolsContext);
+  const { add: addSchool, delete: deleteSchool } = useContext(SchoolsContext);
 
-  const onFormSubmit = (school: School) => {
-    addSchool(school);
+  const onFormSubmit = (schoolToAdd: School) => {
+    addSchool(schoolToAdd);
   };
 
-  const onSchoolDeleteClicked = (schoolName: string) => {
+  const onSchoolDeleteClicked = (schoolToDelete: School) => {
     if (window.confirm('Delete this user?')) {
-      let schoolToDelete = schools.find(school => school.name === schoolName);
-      if (schoolToDelete) {
-        deleteSchool(schoolToDelete);
-      }
+      deleteSchool(schoolToDelete);
     }
+  };
+
+  const onSchoolEditClicked = (schoolToEdit: School) => {
+    /// TODO: Hook up edit school
+  };
+
+  const onSchoolEmailClicked = (schoolToEmail: School) => {
+    window.location.href = 'mailto:' + schoolToEmail.primaryEmail;
   };
 
   return (
@@ -34,7 +35,11 @@ const SchoolsPage = () => {
       <h1>Schools</h1>
       <>
         <CreateSchoolForm onSubmit={onFormSubmit} onCancel={() => {}} />
-        <SchoolsTable onDeleteClicked={onSchoolDeleteClicked} />
+        <SchoolsTable
+          onDeleteClicked={onSchoolDeleteClicked}
+          onEditClicked={onSchoolEditClicked}
+          onEmailClicked={onSchoolEmailClicked}
+        />
       </>
     </div>
   );

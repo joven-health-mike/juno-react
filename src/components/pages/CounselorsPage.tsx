@@ -7,26 +7,25 @@ import Navbar from '../navbar/Navbar';
 import CounselorsTable from '../tables/CounselorsTable';
 
 const CounselorsPage: React.FC = () => {
-  const {
-    data: counselors,
-    add: addCounselor,
-    delete: deleteCounselor,
-  } = useContext(CounselorsContext);
+  const { add: addCounselor, delete: deleteCounselor } =
+    useContext(CounselorsContext);
 
   const onFormSubmit = (counselor: Counselor) => {
     addCounselor(counselor);
   };
 
-  const onCounselorDeleteClicked = (counselorName: string) => {
+  const onCounselorDeleteClicked = (counselorToDelete: Counselor) => {
     if (window.confirm('Delete this counselor?')) {
-      let counselorToDelete = counselors.find(
-        counselor =>
-          `${counselor.firstName} ${counselor.lastName}` === counselorName
-      );
-      if (counselorToDelete) {
-        deleteCounselor(counselorToDelete);
-      }
+      deleteCounselor(counselorToDelete);
     }
+  };
+
+  const onCounselorEditClicked = (counselorToEdit: Counselor) => {
+    // TODO: Edit counselor counselorToEdit
+  };
+
+  const onCounselorRoomLinkClicked = (counselorToOpenRoomLink: Counselor) => {
+    window.location.href = counselorToOpenRoomLink.counselorRef.roomLink;
   };
 
   return (
@@ -37,7 +36,11 @@ const CounselorsPage: React.FC = () => {
       <h1>Counselors</h1>
       <>
         <CreateCounselorForm onSubmit={onFormSubmit} onCancel={() => {}} />
-        <CounselorsTable onDeleteClicked={onCounselorDeleteClicked} />
+        <CounselorsTable
+          onDeleteClicked={onCounselorDeleteClicked}
+          onEditClicked={onCounselorEditClicked}
+          onRoomLinkClicked={onCounselorRoomLinkClicked}
+        />
       </>
     </div>
   );

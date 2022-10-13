@@ -9,11 +9,15 @@ import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
 
 type CounselorsTableProps = {
-  onDeleteClicked: (counselorName: string) => void;
+  onDeleteClicked: (counselor: Counselor) => void;
+  onEditClicked: (counselor: Counselor) => void;
+  onRoomLinkClicked: (counselor: Counselor) => void;
 };
 
 const CounselorsTable: React.FC<CounselorsTableProps> = ({
   onDeleteClicked,
+  onEditClicked,
+  onRoomLinkClicked,
 }) => {
   const { data: counselors } = useContext(CounselorsContext);
 
@@ -33,20 +37,40 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
             {isAllRowsExpanded ? '👇' : '👉'}
           </button>
         ),
-        Cell: ({ cell, row }: CellProps<object>) => (
-          <>
-            <XButton
-              value={cell.row.values.name}
-              onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-                onDeleteClicked((e.target as HTMLInputElement).value);
-              }}
-            />
-            <button {...row.getToggleRowExpandedProps()}>
-              {row.isExpanded ? '👇' : '👉'}
-            </button>
-          </>
-        ),
+        Cell: ({ cell, row }: CellProps<object>) => {
+          const counselor = cell.row.original as Counselor;
+          return (
+            <>
+              <XButton
+                text="❌"
+                value={counselor.id}
+                onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault();
+                  onDeleteClicked(counselor);
+                }}
+              />
+              <XButton
+                text="✏️"
+                value={counselor.id}
+                onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault();
+                  onEditClicked(counselor);
+                }}
+              />
+              <XButton
+                text="🖥️"
+                value={counselor.id}
+                onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault();
+                  onRoomLinkClicked(counselor);
+                }}
+              />
+              <button {...row.getToggleRowExpandedProps()}>
+                {row.isExpanded ? '👇' : '👉'}
+              </button>
+            </>
+          );
+        },
       },
       {
         Header: 'ID',
@@ -64,12 +88,8 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
         Header: 'Email',
         accessor: 'email',
       },
-      {
-        Header: 'Room Link',
-        accessor: 'counselorRef.roomLink',
-      },
     ],
-    [onDeleteClicked]
+    [onDeleteClicked, onEditClicked, onRoomLinkClicked]
   );
 
   const renderRowSubComponent = useCallback((row: Row) => {

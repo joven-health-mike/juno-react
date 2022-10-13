@@ -7,26 +7,21 @@ import Navbar from '../navbar/Navbar';
 import StudentsTable from '../tables/StudentsTable';
 
 const StudentsPage = () => {
-  const {
-    data: students,
-    add: addStudent,
-    delete: deleteStudent,
-  } = useContext(StudentsContext);
+  const { add: addStudent, delete: deleteStudent } =
+    useContext(StudentsContext);
 
   const onFormSubmit = (student: Student) => {
-    // setStudents([...students, student]);
     addStudent(student);
   };
 
-  const onDeleteStudentClicked = (studentName: string) => {
+  const onDeleteStudentClicked = (studentToDelete: Student) => {
     if (window.confirm('Delete this student?')) {
-      let studentToDelete = students.find(
-        student => `${student.firstName} ${student.lastName}` === studentName
-      );
-      if (studentToDelete) {
-        deleteStudent(studentToDelete);
-      }
+      deleteStudent(studentToDelete);
     }
+  };
+
+  const onEditStudentClicked = (studentToEdit: Student) => {
+    // TODO: Add abilitty to edit student
   };
 
   return (
@@ -37,7 +32,10 @@ const StudentsPage = () => {
       <h1>Students</h1>
       <>
         <CreateStudentForm onSubmit={onFormSubmit} onCancel={() => {}} />
-        <StudentsTable onDeleteClicked={onDeleteStudentClicked} />
+        <StudentsTable
+          onDeleteClicked={onDeleteStudentClicked}
+          onEditClicked={onEditStudentClicked}
+        />
       </>
     </div>
   );

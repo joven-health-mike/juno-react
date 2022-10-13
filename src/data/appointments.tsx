@@ -29,8 +29,8 @@ export const emptyAppointment = {
   start: new Date(),
   end: new Date(),
   participants: [],
-  type: '',
-  status: '',
+  type: 'CLINICAL',
+  status: 'SCHEDULED',
 };
 
 export const AppointmentTypes = {
