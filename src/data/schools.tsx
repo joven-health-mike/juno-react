@@ -65,8 +65,16 @@ export const SchoolsProvider: FC<DataProviderProps<School[]>> = ({
     },
     update: async function (data: School): Promise<void> {
       try {
-        const { data: school } = await service.update(data, `${data.id}`);
-        setSchools([...schools, school]);
+        const { data: updatedSchool } = await service.update(
+          data,
+          `${data.id}`
+        );
+        // remove the old school from the schools list
+        const newSchools = schools.filter(
+          school => school.id !== updatedSchool.id
+        );
+        // and add the updated one
+        setSchools([...newSchools, updatedSchool]);
       } catch (error) {
         console.error(error);
       }
