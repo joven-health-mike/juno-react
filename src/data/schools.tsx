@@ -57,7 +57,6 @@ export const SchoolsProvider: FC<DataProviderProps<School[]>> = ({
     add: async function (data: School): Promise<void> {
       try {
         const { data: school } = await service.create(data);
-        // TODO: is it better to pass this data through or use what is returned?
         setSchools([...schools, school]);
       } catch (error) {
         console.error(error);

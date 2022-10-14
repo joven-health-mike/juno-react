@@ -1,26 +1,20 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, {
-  ChangeEvent,
-  FormEvent,
-  MouseEvent,
-  useContext,
-  useState,
-} from 'react';
+import React, { FormEvent, MouseEvent, useContext, useState } from 'react';
 import {
   Appointment,
-  AppointmentsContext,
   emptyAppointment,
   AppointmentType,
 } from '../../data/appointments';
-import { Counselor, emptyCounselor } from '../../data/counselors';
-import { SchoolsContext } from '../../data/schools';
-import { emptyStudent, Student } from '../../data/students';
+import { Counselor, CounselorsContext } from '../../data/counselors';
+import { emptySchool, SchoolsContext } from '../../data/schools';
+import { Student, StudentsContext } from '../../data/students';
+import { User } from '../../data/users';
 import DateSelector from '../dateSelector/DateSelector';
 import {
   SelectCounselorList,
-  SelectStudentList,
   SelectTypeList,
+  SelectUserList,
 } from '../selectList/SelectList';
 
 type CreateAppointmentFormProps = {
@@ -30,55 +24,29 @@ type CreateAppointmentFormProps = {
 };
 
 const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
-  defaultAppointment = emptyAppointment,
+  defaultAppointment,
   onSubmit,
   onCancel,
 }) => {
   const [appointment, setAppointment] = useState<Appointment>(
     defaultAppointment ?? emptyAppointment
   );
-  const [studentSelection, setStudentSelection] =
-    useState<Student>(emptyStudent);
-  const [counselorSelection, setCounselorSelection] =
-    useState<Counselor>(emptyCounselor);
+  const [participants, setParticipants] = useState<User[]>([]);
+  const [counselorSelectionIndex, setCounselorSelectionIndex] =
+    useState<number>(-1);
   const [typeSelection, setTypeSelection] = useState<AppointmentType>({
-    _id: -1,
+    id: -1,
     name: 'Unselected',
     color: 'none',
   });
 
-  const { data: appointments } = useContext(AppointmentsContext);
+  const { data: counselors } = useContext(CounselorsContext);
   const { data: schools } = useContext(SchoolsContext);
+  const { data: students } = useContext(StudentsContext);
 
   const onCounselorChanged = (counselor: Counselor) => {
-    setCounselorSelection(counselor);
-    const counselorRef = {
-      id: '-1',
-      userId: counselor.id,
-      roomLink: counselor.counselorRef.roomLink,
-      user: counselor,
-    };
-    setAppointment({ ...appointment, counselor: counselorRef });
-  };
-
-  const onStudentChanged = (student: Student) => {
-    const associatedSchool = schools.filter(
-      school => school.id === student.schoolId
-    )[0].name;
-
-    setStudentSelection(student);
-    setAppointment({
-      ...appointment,
-      title:
-        student.first_name +
-        ' ' +
-        student.last_name.substring(0, 1) +
-        ' (' +
-        associatedSchool +
-        ')',
-      // TODO: set the student as a participant
-      // participants: [...appointment.participants, student as User]
-    });
+    setCounselorSelectionIndex(counselors.indexOf(counselor));
+    setAppointment({ ...appointment, counselorId: counselor.counselorRef.id });
   };
 
   const onTypeChanged = (type: AppointmentType) => {
@@ -89,38 +57,55 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     });
   };
 
+  const onParticipantsSelected = (participants: User[]) => {
+    setParticipants(participants);
+  };
+
+  const getAssociatedSchool = (student: Student) => {
+    return schools.find(school => {
+      return school.id === student.studentRef.assignedSchoolId;
+    });
+  };
+
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
+    const studentSelection = students.find(student => {
+      return participants.map(user => user.id).includes(student.id);
+    });
+    const schoolSelection = studentSelection
+      ? getAssociatedSchool(studentSelection)
+      : emptySchool;
+
+    const apptTitle = studentSelection
+      ? `${studentSelection.firstName} ${studentSelection.lastName.substring(
+          0,
+          1
+        )} (${schoolSelection?.name})`
+      : 'Appointment';
+    const schoolId = schoolSelection?.id;
+
     const submittedAppointment = defaultAppointment
       ? appointment
-      : { ...appointment, _id: appointments.length };
+      : {
+          ...appointment,
+          id: '-1',
+          title: apptTitle,
+          schoolId: schoolId,
+          participants: participants,
+          status: 'SCHEDULED',
+        };
     onSubmit(submittedAppointment);
   };
 
   const onFormCancel = (e: MouseEvent) => {
     e.preventDefault();
-    setStudentSelection(emptyStudent);
-    setCounselorSelection(emptyCounselor);
+    setCounselorSelectionIndex(-1);
     setAppointment(emptyAppointment);
     onCancel();
   };
 
   return (
     <form onSubmit={onFormSubmit}>
-      <label>
-        Title
-        <input
-          data-testid={'input-title'}
-          type="text"
-          placeholder="Title"
-          name="title"
-          value={appointment.title}
-          required
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setAppointment({ ...appointment, title: e.target.value })
-          }
-        />
-      </label>
       <label>
         Start Time
         <DateSelector
@@ -144,23 +129,20 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
       <label>
         Counselor:{' '}
         <SelectCounselorList
-          value={+counselorSelection.id}
+          selectedIndex={counselorSelectionIndex}
           onCounselorChanged={onCounselorChanged}
-        />
-      </label>
-      <label>
-        Student:{' '}
-        <SelectStudentList
-          value={+studentSelection._id}
-          onStudentChanged={onStudentChanged}
         />
       </label>
       <label>
         Type{' '}
         <SelectTypeList
-          value={typeSelection._id}
+          value={typeSelection.id}
           onTypeChanged={onTypeChanged}
         />
+      </label>
+      <label>
+        Participants:{' '}
+        <SelectParticipants onParticipantsSelected={onParticipantsSelected} />
       </label>
 
       <button type="submit" data-testid={'button-submit'}>
@@ -178,3 +160,17 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 };
 
 export default CreateAppointmentForm;
+
+export type SelectParticipantsProps = {
+  onParticipantsSelected(users: User[]): void;
+};
+
+export const SelectParticipants: React.FC<SelectParticipantsProps> = ({
+  onParticipantsSelected,
+}) => {
+  return (
+    <>
+      <SelectUserList onUsersChanged={onParticipantsSelected} />
+    </>
+  );
+};

@@ -5,7 +5,7 @@ import Modal from 'react-modal';
 import { AppointmentsContext, AppointmentsProvider } from './data/appointments';
 import { CounselorsContext, CounselorsProvider } from './data/counselors';
 import { SchoolsContext, SchoolsProvider } from './data/schools';
-import { exampleStudents, StudentsContext } from './data/students';
+import { StudentsContext, StudentsProvider } from './data/students';
 import {
   UsersContext,
   LoggedInUserContext,
@@ -28,10 +28,7 @@ function App() {
   const { data: counselors } = useContext(CounselorsContext);
   const { data: appointments } = useContext(AppointmentsContext);
   const { data: schools } = useContext(SchoolsContext);
-
-  // don't have api for this yet.
-  const [students, setStudents] = useState(exampleStudents);
-  const studentsContextValue = { students, setStudents };
+  const { data: students } = useContext(StudentsContext);
 
   useEffect(() => {
     function main() {
@@ -39,6 +36,7 @@ function App() {
       checkAuthentication();
     }
     main();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function checkAuthentication() {
@@ -58,7 +56,7 @@ function App() {
 
   return (
     <LoggedInUserContext.Provider value={loggedInUserContextValue}>
-      <StudentsContext.Provider value={studentsContextValue}>
+      <StudentsProvider data={students}>
         <AppointmentsProvider data={appointments}>
           <SchoolsProvider data={schools}>
             <CounselorsProvider data={counselors}>
@@ -69,7 +67,7 @@ function App() {
             </CounselorsProvider>
           </SchoolsProvider>
         </AppointmentsProvider>
-      </StudentsContext.Provider>
+      </StudentsProvider>
     </LoggedInUserContext.Provider>
   );
 }

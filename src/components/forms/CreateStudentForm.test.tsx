@@ -6,13 +6,26 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import CreateStudentForm from './CreateStudentForm';
+import { Student } from '../../data/students';
+import { Role } from '../../services/user.service';
 
-const testStudent = {
-  first_name: 'firstName',
-  last_name: 'lastName',
-  _id: '0',
-  schoolId: '1',
-  counselorId: '2',
+const testStudent: Student = {
+  firstName: 'firstName',
+  lastName: 'lastName',
+  id: '0',
+  email: '',
+  username: '',
+  phone: '',
+  docsUrl: '',
+  timeZoneOffset: 0,
+  role: 'JOVEN_STAFF' as Role,
+  studentRef: {
+    id: '1',
+    userId: '1',
+    assignedSchoolId: '1',
+    assignedCounselorId: '2',
+    status: 'ACTIVE',
+  },
 };
 
 describe('CreateStudentForm', () => {
@@ -45,10 +58,10 @@ describe('CreateStudentForm', () => {
   });
 
   test('Check if first names match', () => {
-    expect(testStudent.first_name).toBe('firstName');
+    expect(testStudent.firstName).toBe('firstName');
   });
 
   test('Check if last names match', () => {
-    expect(testStudent.last_name).toBe('lastName');
+    expect(testStudent.lastName).toBe('lastName');
   });
 });

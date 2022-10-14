@@ -4,24 +4,20 @@ import React, { MouseEvent, useCallback, useContext } from 'react';
 import { CellProps, Column, Row } from 'react-table';
 import { CounselorsContext } from '../../data/counselors';
 import { SchoolsContext } from '../../data/schools';
-import { emptyStudent, Student, StudentsContext } from '../../data/students';
+import { Student, StudentsContext } from '../../data/students';
 import XButton from '../buttons/XButton';
 import StudentDetails from '../details/StudentDetails';
 import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
 
 type StudentsTableProps = {
-  students: Student[];
   onDeleteClicked: (appointmentName: string) => void;
 };
 
-const StudentsTable: React.FC<StudentsTableProps> = ({
-  students,
-  onDeleteClicked,
-}) => {
+const StudentsTable: React.FC<StudentsTableProps> = ({ onDeleteClicked }) => {
   const { data: counselors } = useContext(CounselorsContext);
   const { data: schools } = useContext(SchoolsContext);
-  const { setStudents } = useContext(StudentsContext);
+  const { data: students } = useContext(StudentsContext);
 
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
@@ -42,9 +38,7 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
         Cell: ({ cell, row }: CellProps<object>) => (
           <>
             <XButton
-              value={
-                cell.row.values.first_name + ' ' + cell.row.values.last_name
-              }
+              value={`${cell.row.values.first_name} ${cell.row.values.last_name}`}
               onClick={(e: MouseEvent<HTMLButtonElement>) => {
                 e.preventDefault();
                 onDeleteClicked((e.target as HTMLInputElement).value);
@@ -58,17 +52,17 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
       },
       {
         Header: 'Name',
-        accessor: '_id',
+        accessor: 'id',
         Cell: ({ cell }: CellProps<object>) => (
           <p>
             {(() => {
-              const foundStudent = students.filter(
-                student => student._id === cell.row.values._id
-              )[0];
+              const foundStudent = students.find(
+                student => student.id === cell.row.values.id
+              );
               return (
                 <>
                   {foundStudent
-                    ? foundStudent.first_name + ' ' + foundStudent.last_name
+                    ? `${foundStudent.firstName} ${foundStudent.lastName}`
                     : 'Not Found'}
                 </>
               );
@@ -78,13 +72,15 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
       },
       {
         Header: 'School',
-        accessor: 'schoolId',
+        accessor: 'assignedSchoolId',
         Cell: ({ cell }: CellProps<object>) => (
           <p>
             {(() => {
-              const foundSchool = schools.filter(
-                school => school.id === cell.row.values.schoolId
-              )[0];
+              const foundSchool = schools.find(
+                school =>
+                  school.id ===
+                  (cell.row.original as Student).studentRef.assignedSchoolId
+              );
               return <>{foundSchool ? foundSchool.name : 'Not Found'}</>;
             })()}
           </p>
@@ -92,13 +88,15 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
       },
       {
         Header: 'Counselor',
-        accessor: 'counselorId',
+        accessor: 'assignedCounselorId',
         Cell: ({ cell }: CellProps<object>) => (
           <p>
             {(() => {
-              const foundCounselor = counselors.filter(
-                counselor => counselor.id === cell.row.values.counselorId
-              )[0];
+              const foundCounselor = counselors.find(
+                counselor =>
+                  counselor.counselorRef.id ===
+                  (cell.row.original as Student).studentRef.assignedCounselorId
+              );
               return (
                 <>
                   {foundCounselor
@@ -125,7 +123,6 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
       defaultColumn={defaultColumn}
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
-      addNewItem={() => setStudents([emptyStudent, ...students])}
     />
   );
 };

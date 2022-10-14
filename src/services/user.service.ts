@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { Counselor } from '../data/counselors';
+import { Student } from '../data/students';
 import { User } from '../data/users';
 import { HttpServer } from './http-common';
 import { Service } from './service';
@@ -31,7 +32,7 @@ export class UserService implements Service<User> {
   }
 }
 
-export type RoleUser = Counselor; // JovenAdmin etc.
+export type RoleUser = Counselor | Student; // JovenAdmin etc.
 
 export type Role =
   | 'JOVEN_ADMIN'

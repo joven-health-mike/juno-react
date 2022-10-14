@@ -1,25 +1,31 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Student, StudentsContext } from '../../data/students';
+import CreateStudentForm from '../forms/CreateStudentForm';
 import Navbar from '../navbar/Navbar';
 import StudentsTable from '../tables/StudentsTable';
 
 const StudentsPage = () => {
-  const [isCreateStudentModalOpen, setIsCreateStudentModalOpen] =
-    useState<boolean>(false);
-  const { students, setStudents } = useContext(StudentsContext);
+  const {
+    data: students,
+    add: addStudent,
+    delete: deleteStudent,
+  } = useContext(StudentsContext);
 
   const onFormSubmit = (student: Student) => {
-    setStudents([...students, student]);
+    // setStudents([...students, student]);
+    addStudent(student);
   };
 
   const onDeleteStudentClicked = (studentName: string) => {
     if (window.confirm('Delete this student?')) {
-      let newStudents = students.filter(
-        student => student.first_name + ' ' + student.last_name !== studentName
+      let studentToDelete = students.find(
+        student => `${student.firstName} ${student.lastName}` === studentName
       );
-      setStudents(newStudents);
+      if (studentToDelete) {
+        deleteStudent(studentToDelete);
+      }
     }
   };
 
@@ -30,13 +36,8 @@ const StudentsPage = () => {
       </nav>
       <h1>Students</h1>
       <>
-        <button onClick={() => setIsCreateStudentModalOpen(true)}>
-          Add User
-        </button>
-        <StudentsTable
-          students={students}
-          onDeleteClicked={onDeleteStudentClicked}
-        />
+        <CreateStudentForm onSubmit={onFormSubmit} onCancel={() => {}} />
+        <StudentsTable onDeleteClicked={onDeleteStudentClicked} />
       </>
     </div>
   );

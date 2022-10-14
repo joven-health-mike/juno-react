@@ -1,14 +1,12 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Counselor, CounselorsContext } from '../../data/counselors';
-import CreateCounselorModal from '../modals/CreateCounselorModal';
+import CreateCounselorForm from '../forms/CreateCounselorForm';
 import Navbar from '../navbar/Navbar';
 import CounselorsTable from '../tables/CounselorsTable';
 
 const CounselorsPage: React.FC = () => {
-  const [isCreateCounselorModalOpen, setIsCreateCounselorModalOpen] =
-    useState<boolean>(false);
   const {
     data: counselors,
     add: addCounselor,
@@ -23,7 +21,7 @@ const CounselorsPage: React.FC = () => {
     if (window.confirm('Delete this counselor?')) {
       let counselorToDelete = counselors.find(
         counselor =>
-          `${counselor.firstName} ${counselor.lastName}` !== counselorName
+          `${counselor.firstName} ${counselor.lastName}` === counselorName
       );
       if (counselorToDelete) {
         deleteCounselor(counselorToDelete);
@@ -38,13 +36,8 @@ const CounselorsPage: React.FC = () => {
       </nav>
       <h1>Counselors</h1>
       <>
-        <button onClick={() => setIsCreateCounselorModalOpen(true)}>
-          Add Counselor
-        </button>
-        <CounselorsTable
-          counselors={counselors}
-          onDeleteClicked={onCounselorDeleteClicked}
-        />
+        <CreateCounselorForm onSubmit={onFormSubmit} onCancel={() => {}} />
+        <CounselorsTable onDeleteClicked={onCounselorDeleteClicked} />
       </>
     </div>
   );

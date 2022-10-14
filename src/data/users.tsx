@@ -3,6 +3,7 @@
 import React, { FC, useState } from 'react';
 import { Role, UserService } from '../services/user.service';
 import { ContextData } from './ContextData';
+import { CounselorRef } from './counselors';
 import { DataProviderProps } from './DataProviderProps';
 
 export type User = {
@@ -15,6 +16,7 @@ export type User = {
   docsUrl?: string;
   timeZoneOffset?: number;
   role: Role;
+  counselorRef?: CounselorRef;
 };
 
 export const emptyUser = {
@@ -63,7 +65,6 @@ export const UsersProvider: FC<DataProviderProps<User[]>> = ({ children }) => {
     add: async function (data: User): Promise<void> {
       try {
         const { data: user } = await service.create(data);
-        // TODO: is it better to pass this data through or use what is returned?
         setUsers([...users, user]);
       } catch (error) {
         console.error(error);

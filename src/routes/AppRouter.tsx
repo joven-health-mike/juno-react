@@ -10,6 +10,18 @@ import CounselorsPage from '../components/pages/CounselorsPage';
 import SchoolsPage from '../components/pages/SchoolsPage';
 import StudentsPage from '../components/pages/StudentsPage';
 import UsersPage from '../components/pages/UsersPage';
+import AccountDetailPage from '../components/pages/AccountDetailPage';
+
+export type AvailableRoute =
+  | '/'
+  | '/account'
+  | '/appointments'
+  | '/calendar'
+  | '/counselors'
+  | '/schools'
+  | '/students'
+  | '/users'
+  | '/logout';
 
 interface IAppRouterParams {
   isAuthenticated: boolean;
@@ -20,22 +32,14 @@ const AppRouter: React.FC<IAppRouterParams> = ({ isAuthenticated }) => {
 };
 
 const RedirectToLogoutPage: React.FC = () => {
-  window.location.href = 'https://localhost/api/1/logout';
+  window.location.href =
+    process.env.REACT_APP_SERVER_BASE_URL + '/api/1/logout';
   return <></>;
 };
 
-export type AvailableRoute =
-  | '/'
-  | '/appointments'
-  | '/calendar'
-  | '/counselors'
-  | '/schools'
-  | '/students'
-  | '/users'
-  | '/logout';
-
 export const AvailableRoutes = [
   { url: '/', element: <HomePage /> },
+  { url: '/account', element: <AccountDetailPage /> },
   { url: '/appointments', element: <AppointmentsPage /> },
   { url: '/calendar', element: <CalendarPage /> },
   { url: '/counselors', element: <CounselorsPage /> },

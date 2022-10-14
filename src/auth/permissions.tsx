@@ -7,18 +7,16 @@ const allRoles = ROLES;
 
 const pagePermissions = {
   '/': allRoles,
+  '/account': allRoles,
   '/appointments': allRoles,
   '/calendar': allRoles,
   '/counselors': allRoles,
   '/schools': allRoles,
   '/students': allRoles,
-  '/users': ['SYSADMIN', 'COUNSELOR'],
+  '/users': ['SYSADMIN', 'JOVEN_ADMIN'],
   '/logout': allRoles,
 };
 
 export function pagePermission(role: Role, route: AvailableRoute) {
-  const allowedRoles = pagePermissions[route];
-  const result =
-    typeof allowedRoles[allowedRoles.indexOf(role)] !== 'undefined';
-  return result;
+  return pagePermissions[route].includes(role);
 }

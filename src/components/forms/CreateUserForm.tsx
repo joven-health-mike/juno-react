@@ -1,13 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, {
-  ChangeEvent,
-  FormEvent,
-  MouseEvent,
-  useContext,
-  useState,
-} from 'react';
-import { emptyUser, User, UsersContext } from '../../data/users';
+import React, { ChangeEvent, FormEvent, MouseEvent, useState } from 'react';
+import { emptyUser, User } from '../../data/users';
 import { Role, ROLES } from '../../services/user.service';
 import SelectList from '../selectList/SelectList';
 
@@ -23,7 +17,6 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
   onCancel,
 }) => {
   const [user, setUser] = useState<User>(defaultUser ?? emptyUser);
-  const { data: users } = useContext(UsersContext);
 
   const onRoleChanged = (role: Role) => {
     setUser({ ...user, role: role });
@@ -31,7 +24,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const submittedUser = defaultUser ? user : { ...user, _id: users.length };
+    const submittedUser = defaultUser ? user : { ...user, id: `-1` };
     onSubmit(submittedUser);
   };
 

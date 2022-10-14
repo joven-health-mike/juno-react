@@ -24,17 +24,17 @@ const StudentsSmallTable: React.FC<StudentsSmallTableProps> = ({
     () => [
       {
         Header: 'Name',
-        accessor: '_id',
+        accessor: 'id',
         Cell: ({ cell }: CellProps<object>) => (
           <p>
             {(() => {
-              const foundStudent = students.filter(
-                student => student._id === cell.row.values._id
-              )[0];
+              const foundStudent = students.find(
+                student => student.id === (cell.row.original as Student).id
+              );
               return (
                 <>
                   {foundStudent
-                    ? foundStudent.first_name + ' ' + foundStudent.last_name
+                    ? `${foundStudent.firstName} ${foundStudent.lastName}`
                     : 'Not Found'}
                 </>
               );

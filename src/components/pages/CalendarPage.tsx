@@ -9,7 +9,11 @@ import {
   AppointmentsContext,
   emptyAppointment,
 } from '../../data/appointments';
-import { Counselor, emptyCounselor } from '../../data/counselors';
+import {
+  Counselor,
+  CounselorsContext,
+  emptyCounselor,
+} from '../../data/counselors';
 import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import Calendar from '../calendar/Calendar';
 import Navbar from '../navbar/Navbar';
@@ -32,6 +36,7 @@ const CalendarPage: React.FC = () => {
   const [selectedSchoolIndex, setSelectedSchoolIndex] = useState(-1);
   const [counselorSelection, setCounselorSelection] =
     useState<Counselor>(emptyCounselor);
+  const [selectedCounselorIndex, setSelectedCounselorIndex] = useState(-1);
   const [initialAppointment, setInitialAppointment] =
     useState<Appointment>(emptyAppointment);
   const [clickedAppointment, setClickedAppointment] =
@@ -39,7 +44,8 @@ const CalendarPage: React.FC = () => {
   const { data: appointments, add: addAppointment } =
     useContext(AppointmentsContext);
   const { data: schools } = useContext(SchoolsContext);
-  const { students } = useContext(StudentsContext);
+  const { data: counselors } = useContext(CounselorsContext);
+  const { data: students } = useContext(StudentsContext);
 
   const handleAppointmentClick = (appointment: Appointment) => {
     setClickedAppointment(appointment);
@@ -72,6 +78,7 @@ const CalendarPage: React.FC = () => {
   };
 
   const handleCounselorChange = (selectedCounselor: Counselor) => {
+    setSelectedCounselorIndex(counselors.indexOf(selectedCounselor));
     setCounselorSelection(selectedCounselor);
   };
 
@@ -79,10 +86,11 @@ const CalendarPage: React.FC = () => {
     const filteredEvents = appointments.filter(appointment => {
       const counselorMatch =
         counselorSelection.id === '-1' ||
-        counselorSelection.id === appointment.counselor.user?.id;
+        counselorSelection.counselorRef.id === appointment.counselorId ||
+        counselorSelection.counselorRef.id === appointment.counselor?.id;
       const schoolMatch =
         schoolSelection.id === '-1' ||
-        schoolSelection.id === appointment.school.id;
+        schoolSelection.id === appointment.schoolId;
       return counselorMatch && schoolMatch;
     });
     setFilteredEvents(filteredEvents);
@@ -101,7 +109,7 @@ const CalendarPage: React.FC = () => {
       <label>
         Counselor:{' '}
         <SelectCounselorList
-          value={+counselorSelection.id}
+          selectedIndex={selectedCounselorIndex}
           onCounselorChanged={handleCounselorChange}
         />
       </label>

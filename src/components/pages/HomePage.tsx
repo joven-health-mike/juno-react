@@ -22,9 +22,11 @@ const HomePage: React.FC = () => {
         <Navbar />
       </nav>
       {loggedInUser.role === ('SYSADMIN' as Role) && <AdminView />}
-      {loggedInUser.role === ('COUNSELOR' as Role) && <CounselorView />}
-      {loggedInUser.role === ('SCHOOL_STAFF' as Role) && <SchoolStaffView />}
+      {loggedInUser.role === ('JOVEN_ADMIN' as Role) && <AdminView />}
+      {loggedInUser.role === ('JOVEN_STAFF' as Role) && <AdminView />}
       {loggedInUser.role === ('SCHOOL_ADMIN' as Role) && <SchoolAdminView />}
+      {loggedInUser.role === ('SCHOOL_STAFF' as Role) && <SchoolStaffView />}
+      {loggedInUser.role === ('COUNSELOR' as Role) && <CounselorView />}
       {loggedInUser.role === ('STUDENT' as Role) && <StudentView />}
       {loggedInUser.role === ('GUARDIAN' as Role) && <GuardianView />}
     </div>
@@ -35,7 +37,7 @@ const AppointmentView: React.FC = () => {
   const { data: appointments } = useContext(AppointmentsContext);
 
   const onEventClick = (event: Appointment) => {
-    // display AppointmentDetailPage with this event
+    // TODO: display AppointmentDetailPage with this event
     console.log('eventClicked:', event);
   };
 
@@ -53,7 +55,7 @@ const AppointmentView: React.FC = () => {
 };
 
 const AdminView: React.FC = () => {
-  const { students } = useContext(StudentsContext);
+  const { data: students } = useContext(StudentsContext);
 
   return (
     <>
@@ -70,7 +72,7 @@ const AdminView: React.FC = () => {
 };
 
 const CounselorView: React.FC = () => {
-  const { students } = useContext(StudentsContext);
+  const { data: students } = useContext(StudentsContext);
 
   return (
     <>
@@ -87,7 +89,7 @@ const CounselorView: React.FC = () => {
 };
 
 const SchoolStaffView: React.FC = () => {
-  const { students } = useContext(StudentsContext);
+  const { data: students } = useContext(StudentsContext);
 
   return (
     <>
@@ -104,7 +106,7 @@ const SchoolStaffView: React.FC = () => {
 };
 
 const SchoolAdminView: React.FC = () => {
-  const { students } = useContext(StudentsContext);
+  const { data: students } = useContext(StudentsContext);
 
   return (
     <>

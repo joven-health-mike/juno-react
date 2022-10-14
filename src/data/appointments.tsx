@@ -3,9 +3,9 @@
 import React, { FC, useState } from 'react';
 import { AppointmentService } from '../services/appointment.service';
 import { ContextData } from './ContextData';
-import { CounselorRef, emptyCounselorRef } from './counselors';
+import { CounselorRef } from './counselors';
 import { DataProviderProps } from './DataProviderProps';
-import { emptySchool, School } from './schools';
+import { School } from './schools';
 import { User } from './users';
 
 export type Appointment = {
@@ -13,8 +13,10 @@ export type Appointment = {
   title: string;
   start: Date;
   end: Date;
-  school: School;
-  counselor: CounselorRef;
+  school?: School;
+  schoolId?: string;
+  counselor?: CounselorRef;
+  counselorId?: string;
   participants: User[];
   type: string;
   status: string;
@@ -26,22 +28,20 @@ export const emptyAppointment = {
   title: '',
   start: new Date(),
   end: new Date(),
-  school: emptySchool,
-  counselor: emptyCounselorRef,
   participants: [],
   type: '',
   status: '',
 };
 
 export const AppointmentTypes = {
-  None: { _id: 0, name: 'NONE', color: 'lightgray' },
-  Clinical: { _id: 1, name: 'CLINICAL', color: 'green' },
-  Consultation: { _id: 2, name: 'CONSULTATION', color: 'blue' },
-  Evaluation: { _id: 3, name: 'EVALUATION', color: 'red' },
+  None: { id: 0, name: 'NONE', color: 'lightgray' },
+  Clinical: { id: 1, name: 'CLINICAL', color: 'green' },
+  Consultation: { id: 2, name: 'CONSULTATION', color: 'blue' },
+  Evaluation: { id: 3, name: 'EVALUATION', color: 'red' },
 };
 
 export type AppointmentType = {
-  _id: number;
+  id: number;
   name: string;
   color: string;
 };
@@ -58,7 +58,7 @@ export const getColorForType = (type: string) => {
 
 export const getAppointmentTypeById = (id: number): AppointmentType => {
   for (const k in AppointmentTypes) {
-    if (((AppointmentTypes as any)[k] as AppointmentType)._id === id) {
+    if (((AppointmentTypes as any)[k] as AppointmentType).id === id) {
       return (AppointmentTypes as any)[k];
     }
   }
@@ -103,7 +103,9 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
     add: async function (data: Appointment): Promise<void> {
       try {
         const { data: appointment } = await service.create(data);
-        // TODO: is it better to pass this data through or use what is returned?
+        appointment.participants = data.participants;
+        appointment.counselor = data.counselor;
+        appointment.school = data.school;
         setAppointments([...appointments, appointment]);
       } catch (error) {
         console.error(error);

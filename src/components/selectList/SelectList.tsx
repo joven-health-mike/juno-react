@@ -11,6 +11,7 @@ import {
 } from '../../data/counselors';
 import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import { emptyStudent, Student, StudentsContext } from '../../data/students';
+import { emptyUser, User, UsersContext } from '../../data/users';
 
 type SelectListProps = {
   labelText: string;
@@ -26,7 +27,6 @@ const SelectList = ({
   onItemChanged,
 }: SelectListProps) => {
   const itemChanged = (value: string) => {
-    console.log('item changed: ' + value);
     onItemChanged(value);
   };
 
@@ -48,15 +48,47 @@ const SelectList = ({
 
 export default SelectList;
 
+type SelectMultipleListProps = {
+  labelText: string;
+  items: string[];
+  onItemsSelected: (items: string[]) => void;
+};
+
+export const SelectMultipleList = ({
+  labelText,
+  items,
+  onItemsSelected,
+}: SelectMultipleListProps) => {
+  const itemsChanged = (e: any) => {
+    const selectedItems: string[] = [...e.target.options]
+      .filter(o => o.selected)
+      .map(o => o.value);
+    onItemsSelected(selectedItems);
+  };
+
+  return (
+    <select multiple onChange={itemsChanged}>
+      <option value={-1} key={labelText}>
+        {labelText}
+      </option>
+      {items.map((item, index) => {
+        return (
+          <option value={index} key={index}>
+            {item}
+          </option>
+        );
+      })}
+    </select>
+  );
+};
+
 type SelectCounselorListProps = {
-  value: number;
-  selectedCounselor?: Counselor;
+  selectedIndex: number;
   onCounselorChanged: (counselor: Counselor) => void;
 };
 
 export function SelectCounselorList({
-  value,
-  selectedCounselor,
+  selectedIndex,
   onCounselorChanged,
 }: SelectCounselorListProps) {
   const { data: counselors } = useContext(CounselorsContext);
@@ -64,10 +96,8 @@ export function SelectCounselorList({
     counselor => `${counselor.firstName} ${counselor.lastName}`
   );
 
-  const handleCounselorChange = (counselorId: string) => {
-    const counselor = counselors.find(
-      counselor => counselor.id === counselorId
-    );
+  const handleCounselorChange = (counselorIndex: string) => {
+    const counselor = counselors[parseInt(counselorIndex)];
     onCounselorChanged(counselor ?? emptyCounselor);
   };
 
@@ -76,7 +106,7 @@ export function SelectCounselorList({
       <SelectList
         labelText={'Select a Counselor'}
         items={counselorNames}
-        value={value}
+        value={selectedIndex}
         onItemChanged={handleCounselorChange}
       />
     </>
@@ -121,13 +151,15 @@ export function SelectStudentList({
   value,
   onStudentChanged,
 }: SelectStudentListProps) {
-  const { students } = useContext(StudentsContext);
+  const { data: students } = useContext(StudentsContext);
   const studentNames = students.map(
-    student => student.first_name + ' ' + student.last_name
+    student => student.firstName + ' ' + student.lastName
   );
 
   const handleStudentChange = (studentId: string) => {
-    const student = students.find(student => student._id === studentId);
+    const student = students.find(
+      student => student.id.toString() === studentId
+    );
     onStudentChanged(student ?? emptyStudent);
   };
 
@@ -137,6 +169,34 @@ export function SelectStudentList({
       items={studentNames}
       value={value}
       onItemChanged={handleStudentChange}
+    />
+  );
+}
+
+type SelectUserListProps = {
+  onUsersChanged: (users: User[]) => void;
+};
+
+export function SelectUserList({ onUsersChanged }: SelectUserListProps) {
+  const { data: users } = useContext(UsersContext);
+  const userNames = users.map(user => `${user.firstName} ${user.lastName}`);
+
+  const onItemsSelected = (selectedItems: string[]) => {
+    const selectedUsers = selectedItems.map(indexStr => {
+      const userName = userNames[parseInt(indexStr)];
+      const foundUser = users.find(
+        user => `${user.firstName} ${user.lastName}` === userName
+      );
+      return foundUser || emptyUser;
+    });
+    onUsersChanged(selectedUsers);
+  };
+
+  return (
+    <SelectMultipleList
+      labelText={'Select Users'}
+      items={userNames}
+      onItemsSelected={onItemsSelected}
     />
   );
 }

@@ -62,7 +62,7 @@ describe('CreateSchoolForm', () => {
     fireEvent.click(button);
 
     //check that the ID is positive
-    expect(submitCallback.mock.calls[0][0]._id).toBeGreaterThanOrEqual(0);
+    expect(submitCallback.mock.calls[0][0].id).toBeGreaterThanOrEqual(0);
   });
 
   test('Check if names match', () => {
