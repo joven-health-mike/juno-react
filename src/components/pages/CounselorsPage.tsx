@@ -10,7 +10,7 @@ const CounselorsPage: React.FC = () => {
   const {
     add: addCounselor,
     delete: deleteCounselor,
-    update: updateCounselor,
+    // update: updateCounselor,
   } = useContext(CounselorsContext);
 
   const onFormSubmit = (counselor: Counselor) => {
@@ -24,7 +24,8 @@ const CounselorsPage: React.FC = () => {
   };
 
   const onCounselorEditClicked = (counselorToEdit: Counselor) => {
-    updateCounselor(counselorToEdit);
+    // TODO: only do this once the edit modal is hooked up
+    // updateCounselor(counselorToEdit);
   };
 
   const onCounselorRoomLinkClicked = (counselorToOpenRoomLink: Counselor) => {
