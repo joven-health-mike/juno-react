@@ -1,8 +1,8 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { User, UsersContext } from '../../data/users';
-import CreateUserForm from '../forms/CreateUserForm';
+import CreateUserModal from '../modals/CreateUserModal';
 import Navbar from '../navbar/Navbar';
 import UsersTable from '../tables/UsersTable';
 
@@ -12,6 +12,8 @@ const UsersPage = () => {
     add: addUser,
     delete: deleteUser,
   } = useContext(UsersContext);
+  const [isCreateUserModalOpen, setIsCreateUserModalOpen] =
+    useState<boolean>(false);
 
   const onFormSubmit = (user: User) => {
     addUser(user);
@@ -35,7 +37,14 @@ const UsersPage = () => {
       </nav>
       <h1>Users</h1>
       <>
-        <CreateUserForm onSubmit={onFormSubmit} onCancel={() => {}} />
+        <button type="button" onClick={() => setIsCreateUserModalOpen(true)}>
+          Add User
+        </button>
+        <CreateUserModal
+          isOpen={isCreateUserModalOpen}
+          onUserAdded={onFormSubmit}
+          onClose={() => setIsCreateUserModalOpen(false)}
+        />
         <UsersTable onDeleteClicked={onUserDeleteClicked} />
       </>
     </div>
