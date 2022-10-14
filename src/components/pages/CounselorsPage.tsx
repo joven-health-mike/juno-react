@@ -1,8 +1,8 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Counselor, CounselorsContext } from '../../data/counselors';
-import CreateCounselorForm from '../forms/CreateCounselorForm';
+import CreateCounselorModal from '../modals/CreateCounselorModal';
 import Navbar from '../navbar/Navbar';
 import CounselorsTable from '../tables/CounselorsTable';
 
@@ -12,6 +12,8 @@ const CounselorsPage: React.FC = () => {
     add: addCounselor,
     delete: deleteCounselor,
   } = useContext(CounselorsContext);
+  const [isCreateCounselorModalOpen, setIsCreateCounselorModalOpen] =
+    useState<boolean>(false);
 
   const onFormSubmit = (counselor: Counselor) => {
     addCounselor(counselor);
@@ -36,7 +38,17 @@ const CounselorsPage: React.FC = () => {
       </nav>
       <h1>Counselors</h1>
       <>
-        <CreateCounselorForm onSubmit={onFormSubmit} onCancel={() => {}} />
+        <button
+          type="button"
+          onClick={() => setIsCreateCounselorModalOpen(true)}
+        >
+          Add Counselor
+        </button>
+        <CreateCounselorModal
+          isOpen={isCreateCounselorModalOpen}
+          onCounselorAdded={onFormSubmit}
+          onClose={() => setIsCreateCounselorModalOpen(false)}
+        />
         <CounselorsTable onDeleteClicked={onCounselorDeleteClicked} />
       </>
     </div>
