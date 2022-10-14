@@ -51,19 +51,21 @@ export default SelectList;
 type SelectMultipleListProps = {
   labelText: string;
   items: string[];
+  selectedItems: string[];
   onItemsSelected: (items: string[]) => void;
 };
 
 export const SelectMultipleList = ({
   labelText,
   items,
+  selectedItems,
   onItemsSelected,
 }: SelectMultipleListProps) => {
   const itemsChanged = (e: any) => {
-    const selectedItems: string[] = [...e.target.options]
+    const newItemsSelected: string[] = [...e.target.options]
       .filter(o => o.selected)
       .map(o => o.value);
-    onItemsSelected(selectedItems);
+    onItemsSelected(newItemsSelected);
   };
 
   return (
@@ -72,8 +74,9 @@ export const SelectMultipleList = ({
         {labelText}
       </option>
       {items.map((item, index) => {
+        const selected = selectedItems.includes(item);
         return (
-          <option value={index} key={index}>
+          <option value={index} key={index} selected={selected}>
             {item}
           </option>
         );
@@ -172,14 +175,19 @@ export function SelectStudentList({
 }
 
 type SelectUserListProps = {
+  selectedUsers: User[];
   onUsersChanged: (users: User[]) => void;
 };
 
-export function SelectUserList({ onUsersChanged }: SelectUserListProps) {
+export function SelectUserList({
+  selectedUsers,
+  onUsersChanged,
+}: SelectUserListProps) {
   const { data: users } = useContext(UsersContext);
   const userNameFormat = (user: User) =>
     `${user.firstName} ${user.lastName} (${user.role})`;
   const userNames = users.map(user => userNameFormat(user));
+  const selectedUserNames = selectedUsers.map(user => userNameFormat(user));
 
   const onItemsSelected = (selectedItems: string[]) => {
     const selectedUsers = selectedItems.map(indexStr => {
@@ -192,6 +200,7 @@ export function SelectUserList({ onUsersChanged }: SelectUserListProps) {
 
   return (
     <SelectMultipleList
+      selectedItems={selectedUserNames}
       labelText={'Select Users'}
       items={userNames}
       onItemsSelected={onItemsSelected}

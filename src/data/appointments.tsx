@@ -34,11 +34,13 @@ export const emptyAppointment = {
 };
 
 export const AppointmentTypes = {
-  None: { id: 0, name: 'NONE', color: 'lightgray' },
   Clinical: { id: 1, name: 'CLINICAL', color: 'green' },
   Consultation: { id: 2, name: 'CONSULTATION', color: 'blue' },
   Evaluation: { id: 3, name: 'EVALUATION', color: 'red' },
 };
+
+const defaultAppointmentColor = 'lightgray';
+const defaultAppointmentType = AppointmentTypes.Clinical;
 
 export type AppointmentType = {
   id: number;
@@ -53,7 +55,7 @@ export const getColorForType = (type: string) => {
     }
   }
 
-  return AppointmentTypes.None.color;
+  return defaultAppointmentColor;
 };
 
 export const getAppointmentTypeById = (id: number): AppointmentType => {
@@ -62,7 +64,7 @@ export const getAppointmentTypeById = (id: number): AppointmentType => {
       return (AppointmentTypes as any)[k];
     }
   }
-  return AppointmentTypes.None;
+  return defaultAppointmentType;
 };
 
 export const AppointmentsContext = React.createContext<

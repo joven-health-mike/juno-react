@@ -1,10 +1,17 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { FormEvent, MouseEvent, useContext, useState } from 'react';
+import React, {
+  FormEvent,
+  MouseEvent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import {
   Appointment,
   emptyAppointment,
   AppointmentType,
+  AppointmentTypes,
 } from '../../data/appointments';
 import { Counselor, CounselorsContext } from '../../data/counselors';
 import { emptySchool, SchoolsContext } from '../../data/schools';
@@ -34,15 +41,44 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   const [participants, setParticipants] = useState<User[]>([]);
   const [counselorSelectionIndex, setCounselorSelectionIndex] =
     useState<number>(-1);
-  const [typeSelection, setTypeSelection] = useState<AppointmentType>({
-    id: -1,
-    name: 'Unselected',
-    color: 'none',
-  });
+  const [typeSelectionIndex, setTypeSelectionIndex] = useState<number>(-1);
 
   const { data: counselors } = useContext(CounselorsContext);
   const { data: schools } = useContext(SchoolsContext);
   const { data: students } = useContext(StudentsContext);
+
+  useEffect(() => {
+    if (defaultAppointment) {
+      if (defaultAppointment.counselorId || defaultAppointment.counselor) {
+        const counselorIds = counselors.map(
+          counselor => counselor.counselorRef.id
+        );
+        const targetCounselorId =
+          defaultAppointment.counselorId ||
+          defaultAppointment.counselor?.id ||
+          "APPOINTMENT DIDN'T HAVE COUNSELORID OR COUNSELOR.ID";
+        const initialCounselorSelectionIndex =
+          counselorIds.indexOf(targetCounselorId);
+        setCounselorSelectionIndex(initialCounselorSelectionIndex);
+      }
+      if (defaultAppointment.type) {
+        setTypeSelectionIndexFromName(defaultAppointment.type);
+      }
+      if (defaultAppointment.participants.length > 0) {
+        setParticipants(defaultAppointment.participants);
+      }
+    }
+  }, [counselors, defaultAppointment]);
+
+  const setTypeSelectionIndexFromName = (appointmentTypeName: string) => {
+    let i = 0;
+    for (const [, value] of Object.entries(AppointmentTypes)) {
+      if (value.name.toLowerCase() === appointmentTypeName.toLowerCase()) {
+        setTypeSelectionIndex(i);
+      }
+      i++;
+    }
+  };
 
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelectionIndex(counselors.indexOf(counselor));
@@ -50,7 +86,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   };
 
   const onTypeChanged = (type: AppointmentType) => {
-    setTypeSelection(type);
+    setTypeSelectionIndexFromName(type.name);
     setAppointment({
       ...appointment,
       type: type.name,
@@ -134,13 +170,16 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
       <label>
         Type{' '}
         <SelectTypeList
-          value={typeSelection.id}
+          value={typeSelectionIndex}
           onTypeChanged={onTypeChanged}
         />
       </label>
       <label>
         Participants:{' '}
-        <SelectParticipants onParticipantsSelected={onParticipantsSelected} />
+        <SelectParticipants
+          selectedParticipants={participants}
+          onParticipantsSelected={onParticipantsSelected}
+        />
       </label>
 
       <button type="submit" data-testid={'button-submit'}>
@@ -160,15 +199,20 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 export default CreateAppointmentForm;
 
 export type SelectParticipantsProps = {
+  selectedParticipants: User[];
   onParticipantsSelected(users: User[]): void;
 };
 
 export const SelectParticipants: React.FC<SelectParticipantsProps> = ({
+  selectedParticipants,
   onParticipantsSelected,
 }) => {
   return (
     <>
-      <SelectUserList onUsersChanged={onParticipantsSelected} />
+      <SelectUserList
+        selectedUsers={selectedParticipants}
+        onUsersChanged={onParticipantsSelected}
+      />
     </>
   );
 };
