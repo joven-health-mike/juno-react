@@ -75,11 +75,19 @@ export const SelectMultipleList = ({
       </option>
       {items.map((item, index) => {
         const selected = selectedItems.includes(item);
-        return (
-          <option value={index} key={index} selected={selected}>
-            {item}
-          </option>
-        );
+        if (selected) {
+          return (
+            <option value={index} key={index} selected>
+              {item}
+            </option>
+          );
+        } else {
+          return (
+            <option value={index} key={index}>
+              {item}
+            </option>
+          );
+        }
       })}
     </select>
   );
