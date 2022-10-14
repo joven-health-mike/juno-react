@@ -1,12 +1,14 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Counselor, CounselorsContext } from '../../data/counselors';
-import CreateCounselorForm from '../forms/CreateCounselorForm';
+import CreateCounselorModal from '../modals/CreateCounselorModal';
 import Navbar from '../navbar/Navbar';
 import CounselorsTable from '../tables/CounselorsTable';
 
 const CounselorsPage: React.FC = () => {
+  const [isCreateCounselorModalOpen, setIsCreateCounselorModalOpen] =
+    useState<boolean>(false);
   const {
     data: counselors,
     add: addCounselor,
@@ -36,7 +38,9 @@ const CounselorsPage: React.FC = () => {
       </nav>
       <h1>Counselors</h1>
       <>
-        <CreateCounselorForm onSubmit={onFormSubmit} onCancel={() => {}} />
+        <button onClick={() => setIsCreateCounselorModalOpen(true)}>
+          Add Counselor
+        </button>
         <CounselorsTable
           counselors={counselors}
           onDeleteClicked={onCounselorDeleteClicked}

@@ -1,12 +1,14 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { School, SchoolsContext } from '../../data/schools';
 import CreateSchoolForm from '../forms/CreateSchoolForm';
 import Navbar from '../navbar/Navbar';
 import SchoolsTable from '../tables/SchoolsTable';
 
 const SchoolsPage = () => {
+  const [isCreateSchoolModalOpen, setIsCreateSchoolModalOpen] =
+    useState<boolean>(false);
   const {
     data: schools,
     add: addSchool,
@@ -33,7 +35,9 @@ const SchoolsPage = () => {
       </nav>
       <h1>Schools</h1>
       <>
-        <CreateSchoolForm onSubmit={onFormSubmit} onCancel={() => {}} />
+        <button onClick={() => setIsCreateSchoolModalOpen(true)}>
+          Add School
+        </button>
         <SchoolsTable onDeleteClicked={onSchoolDeleteClicked} />
       </>
     </div>
