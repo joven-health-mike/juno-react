@@ -7,8 +7,11 @@ import Navbar from '../navbar/Navbar';
 import StudentsTable from '../tables/StudentsTable';
 
 const StudentsPage = () => {
-  const { add: addStudent, delete: deleteStudent } =
-    useContext(StudentsContext);
+  const {
+    add: addStudent,
+    delete: deleteStudent,
+    update: updateStudent,
+  } = useContext(StudentsContext);
 
   const onFormSubmit = (student: Student) => {
     addStudent(student);
@@ -21,7 +24,7 @@ const StudentsPage = () => {
   };
 
   const onEditStudentClicked = (studentToEdit: Student) => {
-    // TODO: Add abilitty to edit student
+    updateStudent(studentToEdit);
   };
 
   const onAppointmentStudentClicked = (studentToSchedule: Student) => {

@@ -49,14 +49,16 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
 
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelectionIndex(counselors.indexOf(counselor));
-    // TODO: use update method on users.
-    // setStudent({ ...student.counselorRef, counselorId: counselor.id });
+    const newStudent = { ...student };
+    newStudent.studentRef.assignedCounselorId = counselor.counselorRef.id;
+    setStudent(newStudent);
   };
 
   const onSchoolChanged = (school: School) => {
     setSchoolSelectionIndex(schools.indexOf(school));
-    // TODO: use update method on users
-    // setStudent({ ...student, schoolId: school.id });
+    const newStudent = { ...student };
+    newStudent.studentRef.assignedSchoolId = school.id;
+    setStudent(newStudent);
   };
 
   const onFormSubmit = (e: FormEvent) => {

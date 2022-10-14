@@ -7,7 +7,11 @@ import Navbar from '../navbar/Navbar';
 import SchoolsTable from '../tables/SchoolsTable';
 
 const SchoolsPage = () => {
-  const { add: addSchool, delete: deleteSchool } = useContext(SchoolsContext);
+  const {
+    add: addSchool,
+    delete: deleteSchool,
+    update: updateSchool,
+  } = useContext(SchoolsContext);
 
   const onFormSubmit = (schoolToAdd: School) => {
     addSchool(schoolToAdd);
@@ -20,7 +24,7 @@ const SchoolsPage = () => {
   };
 
   const onSchoolEditClicked = (schoolToEdit: School) => {
-    /// TODO: Hook up edit school
+    updateSchool(schoolToEdit);
   };
 
   const onSchoolEmailClicked = (schoolToEmail: School) => {

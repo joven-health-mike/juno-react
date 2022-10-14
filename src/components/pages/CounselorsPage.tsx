@@ -7,8 +7,11 @@ import Navbar from '../navbar/Navbar';
 import CounselorsTable from '../tables/CounselorsTable';
 
 const CounselorsPage: React.FC = () => {
-  const { add: addCounselor, delete: deleteCounselor } =
-    useContext(CounselorsContext);
+  const {
+    add: addCounselor,
+    delete: deleteCounselor,
+    update: updateCounselor,
+  } = useContext(CounselorsContext);
 
   const onFormSubmit = (counselor: Counselor) => {
     addCounselor(counselor);
@@ -21,7 +24,7 @@ const CounselorsPage: React.FC = () => {
   };
 
   const onCounselorEditClicked = (counselorToEdit: Counselor) => {
-    // TODO: Edit counselor counselorToEdit
+    updateCounselor(counselorToEdit);
   };
 
   const onCounselorRoomLinkClicked = (counselorToOpenRoomLink: Counselor) => {

@@ -7,7 +7,11 @@ import Navbar from '../navbar/Navbar';
 import UsersTable from '../tables/UsersTable';
 
 const UsersPage = () => {
-  const { add: addUser, delete: deleteUser } = useContext(UsersContext);
+  const {
+    add: addUser,
+    delete: deleteUser,
+    update: updateUser,
+  } = useContext(UsersContext);
 
   const onFormSubmit = (user: User) => {
     addUser(user);
@@ -20,7 +24,7 @@ const UsersPage = () => {
   };
 
   const onUserEditClicked = (userToEdit: User) => {
-    // TODO: Add ability to edit
+    updateUser(userToEdit);
   };
 
   const onUserEmailClicked = (userToEdit: User) => {
