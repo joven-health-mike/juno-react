@@ -73,7 +73,11 @@ export const UsersProvider: FC<DataProviderProps<User[]>> = ({ children }) => {
     update: async function (data: User): Promise<void> {
       try {
         const { data: user } = await service.update(data, `${data.id}`);
-        setUsers([...users, user]);
+        // remove the old user from the list
+        const newUsers = [...users].filter(user => user.id !== data.id);
+        // and add the new one
+        newUsers.push(user);
+        setUsers(newUsers);
       } catch (error) {
         console.error(error);
       }
