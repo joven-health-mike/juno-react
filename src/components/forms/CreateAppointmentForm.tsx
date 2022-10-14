@@ -62,7 +62,6 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   };
 
   const getAssociatedSchool = (student: Student) => {
-    console.log(`getAssociatedSchool: ${JSON.stringify(student)}`);
     return schools.find(school => {
       return school.id === student.studentRef.assignedSchoolId;
     });
