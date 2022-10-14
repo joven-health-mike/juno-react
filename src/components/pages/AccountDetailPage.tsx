@@ -9,6 +9,7 @@ type AccountDetailPageProps = {};
 
 const AccountDetailPage: React.FC<AccountDetailPageProps> = () => {
   const { loggedInUser } = useContext(LoggedInUserContext);
+  const envMessage = process.env.REACT_APP_HELLO_WORLD;
 
   return (
     <div className={'mainContainer'}>
@@ -17,6 +18,7 @@ const AccountDetailPage: React.FC<AccountDetailPageProps> = () => {
       </nav>
       <h1>Account Details</h1>
       <UserDetails user={loggedInUser} />
+      <h2>{envMessage}</h2>
     </div>
   );
 };
