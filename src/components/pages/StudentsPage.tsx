@@ -1,8 +1,8 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Student, StudentsContext } from '../../data/students';
-import CreateStudentForm from '../forms/CreateStudentForm';
+import CreateStudentModal from '../modals/CreateStudentModal';
 import Navbar from '../navbar/Navbar';
 import StudentsTable from '../tables/StudentsTable';
 
@@ -12,6 +12,8 @@ const StudentsPage = () => {
     add: addStudent,
     delete: deleteStudent,
   } = useContext(StudentsContext);
+  const [isCreateStudentModalOpen, setIsCreateStudentModalOpen] =
+    useState<boolean>(false);
 
   const onFormSubmit = (student: Student) => {
     // setStudents([...students, student]);
@@ -36,7 +38,14 @@ const StudentsPage = () => {
       </nav>
       <h1>Students</h1>
       <>
-        <CreateStudentForm onSubmit={onFormSubmit} onCancel={() => {}} />
+        <button type="button" onClick={() => setIsCreateStudentModalOpen(true)}>
+          Add Student
+        </button>
+        <CreateStudentModal
+          isOpen={isCreateStudentModalOpen}
+          onStudentAdded={onFormSubmit}
+          onClose={() => setIsCreateStudentModalOpen(false)}
+        />
         <StudentsTable onDeleteClicked={onDeleteStudentClicked} />
       </>
     </div>
