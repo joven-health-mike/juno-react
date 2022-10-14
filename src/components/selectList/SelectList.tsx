@@ -153,13 +153,11 @@ export function SelectStudentList({
 }: SelectStudentListProps) {
   const { data: students } = useContext(StudentsContext);
   const studentNames = students.map(
-    student => student.firstName + ' ' + student.lastName
+    student => `${student.firstName} ${student.lastName}`
   );
 
   const handleStudentChange = (studentId: string) => {
-    const student = students.find(
-      student => student.id.toString() === studentId
-    );
+    const student = students.find(student => student.id === studentId);
     onStudentChanged(student ?? emptyStudent);
   };
 
@@ -179,14 +177,14 @@ type SelectUserListProps = {
 
 export function SelectUserList({ onUsersChanged }: SelectUserListProps) {
   const { data: users } = useContext(UsersContext);
-  const userNames = users.map(user => `${user.firstName} ${user.lastName}`);
+  const userNameFormat = (user: User) =>
+    `${user.firstName} ${user.lastName} (${user.role})`;
+  const userNames = users.map(user => userNameFormat(user));
 
   const onItemsSelected = (selectedItems: string[]) => {
     const selectedUsers = selectedItems.map(indexStr => {
       const userName = userNames[parseInt(indexStr)];
-      const foundUser = users.find(
-        user => `${user.firstName} ${user.lastName}` === userName
-      );
+      const foundUser = users.find(user => userNameFormat(user) === userName);
       return foundUser || emptyUser;
     });
     onUsersChanged(selectedUsers);

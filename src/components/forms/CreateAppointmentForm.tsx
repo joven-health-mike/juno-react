@@ -62,6 +62,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   };
 
   const getAssociatedSchool = (student: Student) => {
+    console.log(`getAssociatedSchool: ${JSON.stringify(student)}`);
     return schools.find(school => {
       return school.id === student.studentRef.assignedSchoolId;
     });
@@ -82,18 +83,16 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
           1
         )} (${schoolSelection?.name})`
       : 'Appointment';
-    const schoolId = schoolSelection?.id;
+    const schoolId = schoolSelection?.id || '-1';
 
-    const submittedAppointment = defaultAppointment
-      ? appointment
-      : {
-          ...appointment,
-          id: '-1',
-          title: apptTitle,
-          schoolId: schoolId,
-          participants: participants,
-          status: 'SCHEDULED',
-        };
+    let submittedAppointment = { ...appointment };
+    if (!defaultAppointment) {
+      submittedAppointment.id = '-1';
+    }
+    submittedAppointment.title = apptTitle;
+    submittedAppointment.schoolId = schoolId;
+    submittedAppointment.participants = participants;
+    submittedAppointment.status = 'SCHEDULED';
     onSubmit(submittedAppointment);
   };
 
