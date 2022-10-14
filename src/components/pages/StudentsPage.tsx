@@ -15,7 +15,7 @@ const StudentsPage = () => {
   } = useContext(StudentsContext);
 
   const onFormSubmit = (student: Student) => {
-    updateStudent(student);
+    addStudent(student);
   };
 
   const onDeleteStudentClicked = (studentToDelete: Student) => {
