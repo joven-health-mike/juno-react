@@ -97,7 +97,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
           <input
             data-testid={'input-username'}
             type="text"
-            placeholder="Userame"
+            placeholder="Username"
             name="username"
             value={counselor.username}
             required

@@ -83,7 +83,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
         <input
           data-testid={'input-username'}
           type="text"
-          placeholder="Userame"
+          placeholder="Username"
           name="username"
           value={user.username}
           required

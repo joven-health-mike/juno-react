@@ -8,13 +8,14 @@ import StudentsTable from '../tables/StudentsTable';
 
 const StudentsPage = () => {
   const {
+    data: students,
     add: addStudent,
     delete: deleteStudent,
     update: updateStudent,
   } = useContext(StudentsContext);
 
   const onFormSubmit = (student: Student) => {
-    addStudent(student);
+    updateStudent(student);
   };
 
   const onDeleteStudentClicked = (studentToDelete: Student) => {
@@ -28,7 +29,7 @@ const StudentsPage = () => {
   };
 
   const onAppointmentStudentClicked = (studentToSchedule: Student) => {
-    // TODO: Add abilitty to schedule student
+    // TODO: Add ability to schedule student
   };
 
   return (
@@ -38,7 +39,11 @@ const StudentsPage = () => {
       </nav>
       <h1>Students</h1>
       <>
-        <CreateStudentForm onSubmit={onFormSubmit} onCancel={() => {}} />
+        <CreateStudentForm
+          onSubmit={onFormSubmit}
+          onCancel={() => {}}
+          defaultStudent={students[0]}
+        />
         <StudentsTable
           onDeleteClicked={onDeleteStudentClicked}
           onEditClicked={onEditStudentClicked}

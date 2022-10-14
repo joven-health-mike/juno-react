@@ -74,18 +74,18 @@ export const StudentsProvider: FC<DataProviderProps<Student[]>> = ({
       }
     },
     update: async function (data: Student): Promise<void> {
-      //TODO: how do we update this info on the server?
-      let updatedStudent = students.find(student => student.id === data.id);
-      let filteredStudents = students.filter(
-        student => student.id === updatedStudent?.id
-      );
-      setStudents([...filteredStudents, data]);
-      /* try {
+      try {
         const { data: student } = await service.update(data, `${data.id}`);
-        setStudents([...students, student]);
+        // remove the old student from the list
+        const newStudents = [...students].filter(
+          filterStudent => filterStudent.id !== data.id
+        );
+        // and add the new one
+        newStudents.push(student as Student);
+        setStudents(newStudents);
       } catch (error) {
         console.error(error);
-      } */
+      }
     },
     delete: async function (data: Student): Promise<void> {
       try {
