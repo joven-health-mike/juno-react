@@ -30,7 +30,7 @@ const CreateStudentModal: React.FC<CreateStudentModalProps> = ({
         className={'modal'}
         overlayClassName={'overlay'}
       >
-        <h1>Create Counselor</h1>
+        <h1>Create Student</h1>
         <CreateStudentForm onSubmit={onFormSubmit} onCancel={onFormCancel} />
       </Modal>
     </div>
