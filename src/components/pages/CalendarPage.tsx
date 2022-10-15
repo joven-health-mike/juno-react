@@ -24,6 +24,7 @@ import {
 import { StudentsContext } from '../../data/students';
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import AppointmentDetailsModal from '../modals/AppointmentDetailsModal';
+import { LoggedInUserContext } from '../../data/users';
 
 const CalendarPage: React.FC = () => {
   const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
@@ -43,8 +44,9 @@ const CalendarPage: React.FC = () => {
     useState<Appointment>(emptyAppointment);
   const { data: appointments, add: addAppointment } =
     useContext(AppointmentsContext);
-  const { data: schools } = useContext(SchoolsContext);
   const { data: counselors } = useContext(CounselorsContext);
+  const { loggedInUser } = useContext(LoggedInUserContext);
+  const { data: schools } = useContext(SchoolsContext);
   const { data: students } = useContext(StudentsContext);
 
   const handleAppointmentClick = (appointment: Appointment) => {
@@ -106,20 +108,26 @@ const CalendarPage: React.FC = () => {
         <Navbar />
       </nav>
       <h1>Calendar</h1>
-      <label>
-        Counselor:{' '}
-        <SelectCounselorList
-          selectedIndex={selectedCounselorIndex}
-          onCounselorChanged={handleCounselorChange}
-        />
-      </label>
-      <label>
-        School:{' '}
-        <SelectSchoolList
-          selectedIndex={selectedSchoolIndex}
-          onSchoolChanged={handleSchoolChange}
-        />
-      </label>
+      {loggedInUser.role !== 'COUNSELOR' && counselors.length > 1 && (
+        <label>
+          Counselor:{' '}
+          <SelectCounselorList
+            selectedIndex={selectedCounselorIndex}
+            onCounselorChanged={handleCounselorChange}
+          />
+        </label>
+      )}
+      {loggedInUser.role !== 'SCHOOL_ADMIN' &&
+        loggedInUser.role !== 'SCHOOL_STAFF' &&
+        schools.length > 1 && (
+          <label>
+            School:{' '}
+            <SelectSchoolList
+              selectedIndex={selectedSchoolIndex}
+              onSchoolChanged={handleSchoolChange}
+            />
+          </label>
+        )}
       {showCalendar && (
         <Calendar
           view="dayGridMonth"

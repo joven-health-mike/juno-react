@@ -1,17 +1,22 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import '@fullcalendar/react';
 import listPlugin from '@fullcalendar/list';
 import Navbar from '../navbar/Navbar';
 import Calendar from '../calendar/Calendar';
-import { Appointment, AppointmentsContext } from '../../data/appointments';
+import {
+  Appointment,
+  AppointmentsContext,
+  emptyAppointment,
+} from '../../data/appointments';
 import StudentsSmallTable from '../tables/StudentsSmallTable';
-import { StudentsContext } from '../../data/students';
+import { Student, StudentsContext } from '../../data/students';
 import CounselorDetails from '../details/CounselorDetails';
 import { CounselorsContext } from '../../data/counselors';
 import { LoggedInUserContext } from '../../data/users';
 import { Role } from '../../services/user.service';
+import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 
 const HomePage: React.FC = () => {
   const { loggedInUser } = useContext(LoggedInUserContext);
@@ -54,9 +59,48 @@ const AppointmentView: React.FC = () => {
   );
 };
 
-const AdminView: React.FC = () => {
-  const { data: students } = useContext(StudentsContext);
+const StudentsTableView: React.FC = () => {
+  const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
+    useState<boolean>(false);
+  const [initialAppointment, setInitialAppointment] =
+    useState<Appointment>(emptyAppointment);
+  const { add: addAppointment } = useContext(AppointmentsContext);
+  const { delete: deleteStudent } = useContext(StudentsContext);
 
+  const handleAppointmentClick = (studentToSchedule: Student) => {
+    const appointment = { ...initialAppointment };
+    appointment.participants = [studentToSchedule];
+    appointment.counselorId = studentToSchedule.studentRef.assignedCounselorId;
+    setInitialAppointment(appointment);
+    setIsCreateAppointmentModalOpen(true);
+  };
+
+  const handleDeleteClick = (studentToDelete: Student) => {
+    deleteStudent(studentToDelete);
+  };
+
+  const handleAppointmentAdded = (appointmentToAdd: Appointment) => {
+    addAppointment(appointmentToAdd);
+    setIsCreateAppointmentModalOpen(false);
+  };
+
+  return (
+    <>
+      <StudentsSmallTable
+        onAppointmentClicked={handleAppointmentClick}
+        onDeleteClicked={handleDeleteClick}
+      />
+      <CreateAppointmentModal
+        isOpen={isCreateAppointmentModalOpen}
+        onClose={() => setIsCreateAppointmentModalOpen(false)}
+        initialAppointment={initialAppointment}
+        onAppointmentAdded={handleAppointmentAdded}
+      />
+    </>
+  );
+};
+
+const AdminView: React.FC = () => {
   return (
     <>
       <div className="leftSide">
@@ -65,15 +109,13 @@ const AdminView: React.FC = () => {
       </div>
       <div className="rightSide">
         <h1>All Students</h1>
-        <StudentsSmallTable students={students} />
+        <StudentsTableView />
       </div>
     </>
   );
 };
 
 const CounselorView: React.FC = () => {
-  const { data: students } = useContext(StudentsContext);
-
   return (
     <>
       <div className="leftSide">
@@ -82,15 +124,13 @@ const CounselorView: React.FC = () => {
       </div>
       <div className="rightSide">
         <h1>My Caseload</h1>
-        <StudentsSmallTable students={students} />
+        <StudentsTableView />
       </div>
     </>
   );
 };
 
 const SchoolStaffView: React.FC = () => {
-  const { data: students } = useContext(StudentsContext);
-
   return (
     <>
       <div className="leftSide">
@@ -99,15 +139,13 @@ const SchoolStaffView: React.FC = () => {
       </div>
       <div className="rightSide">
         <h1>My Students</h1>
-        <StudentsSmallTable students={students} />
+        <StudentsTableView />
       </div>
     </>
   );
 };
 
 const SchoolAdminView: React.FC = () => {
-  const { data: students } = useContext(StudentsContext);
-
   return (
     <>
       <div className="leftSide">
@@ -116,7 +154,7 @@ const SchoolAdminView: React.FC = () => {
       </div>
       <div className="rightSide">
         <h1>My Students</h1>
-        <StudentsSmallTable students={students} />
+        <StudentsTableView />
       </div>
     </>
   );

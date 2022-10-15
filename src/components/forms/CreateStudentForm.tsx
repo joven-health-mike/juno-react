@@ -5,6 +5,7 @@ import React, {
   FormEvent,
   MouseEvent,
   useContext,
+  useEffect,
   useState,
 } from 'react';
 import { ContextData } from '../../data/ContextData';
@@ -32,31 +33,47 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
   );
   const [counselorSelectionIndex, setCounselorSelectionIndex] =
     useState<number>(-1);
+  const [schoolSelectionIndex, setSchoolSelectionIndex] = useState<number>(-1);
   const { data: schools } = useContext<ContextData<School>>(SchoolsContext);
   const { data: counselors } =
     useContext<ContextData<Counselor>>(CounselorsContext);
 
-  const getDefaultSchoolSelectionIndex = () => {
-    const selectedSchool = schools.find(
-      school => school.id === defaultStudent.studentRef.assignedSchoolId
-    );
-    return selectedSchool ? schools.indexOf(selectedSchool) : -1;
-  };
-  const defaultSchoolSelectionIndex = getDefaultSchoolSelectionIndex();
-  const [schoolSelectionIndex, setSchoolSelectionIndex] = useState(
-    defaultSchoolSelectionIndex
-  );
+  useEffect(() => {
+    if (defaultStudent) {
+      setStudent(defaultStudent);
+      const selectedSchool = schools.find(
+        school => school.id === defaultStudent.studentRef.assignedSchoolId
+      );
+      const defaultSchoolSelectionIndex = selectedSchool
+        ? schools.indexOf(selectedSchool)
+        : -1;
+      setSchoolSelectionIndex(defaultSchoolSelectionIndex);
+      const selectedCounselor = counselors.find(
+        counselor =>
+          counselor.counselorRef.id ===
+          defaultStudent.studentRef.assignedCounselorId
+      );
+      const defaultCounselorSelectionIndex = selectedCounselor
+        ? counselors
+            .map(counselor => counselor.id)
+            .indexOf(selectedCounselor.id)
+        : -1;
+      setCounselorSelectionIndex(defaultCounselorSelectionIndex);
+    }
+  }, [counselors, defaultStudent, schools]);
 
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelectionIndex(counselors.indexOf(counselor));
-    // TODO: use update method on users.
-    // setStudent({ ...student.counselorRef, counselorId: counselor.id });
+    const newStudent = { ...student };
+    newStudent.studentRef.assignedCounselorId = counselor.counselorRef.id;
+    setStudent(newStudent);
   };
 
   const onSchoolChanged = (school: School) => {
     setSchoolSelectionIndex(schools.indexOf(school));
-    // TODO: use update method on users
-    // setStudent({ ...student, schoolId: school.id });
+    const newStudent = { ...student };
+    newStudent.studentRef.assignedSchoolId = school.id;
+    setStudent(newStudent);
   };
 
   const onFormSubmit = (e: FormEvent) => {
@@ -79,29 +96,104 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       <label>
         First Name
         <input
-          data-testid="firstName"
+          data-testid={'input-first-name'}
           type="text"
           placeholder="First Name"
-          name="first_name"
+          name="firstName"
           value={student.firstName}
           required
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setStudent({ ...student, firstName: e.target.value })
-          }
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setStudent({ ...student, firstName: e.target.value });
+          }}
         />
       </label>
       <label>
         Last Name
         <input
-          data-testid="lastName"
+          data-testid={'input-last-name'}
           type="text"
           placeholder="Last Name"
-          name="last_name"
+          name="lastName"
           value={student.lastName}
           required
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setStudent({ ...student, lastName: e.target.value });
+          }}
+        />
+      </label>
+      <label>
+        Email
+        <input
+          data-testid={'input-email'}
+          type="email"
+          placeholder="Email"
+          name="email"
+          value={student.email}
+          required
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setStudent({ ...student, lastName: e.target.value })
+            setStudent({ ...student, email: e.target.value })
           }
+        />
+      </label>
+      <label>
+        Username
+        <input
+          data-testid={'input-username'}
+          type="text"
+          placeholder="Username"
+          name="username"
+          value={student.username}
+          required
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setStudent({ ...student, username: e.target.value });
+          }}
+        />
+      </label>
+      <label>
+        Phone
+        <input
+          data-testid={'input-phone'}
+          type="phone"
+          placeholder="Phone"
+          name="phone"
+          value={student.phone}
+          required
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setStudent({ ...student, phone: e.target.value });
+          }}
+        />
+      </label>
+      <label>
+        Docs URL
+        <input
+          data-testid={'input-docsUrl'}
+          type="URL"
+          placeholder="Docs URL"
+          name="docsUrl"
+          value={student.docsUrl}
+          required
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setStudent({ ...student, docsUrl: e.target.value });
+          }}
+        />
+      </label>
+      <label>
+        Time Zone Offset
+        <input
+          data-testid={'input-timeZoneOffset'}
+          type="number"
+          min="-12"
+          max="14"
+          placeholder="Time Zone Offset"
+          name="timeZoneOffset"
+          value={student.timeZoneOffset}
+          required
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setStudent({
+              ...student,
+              timeZoneOffset: parseInt(e.target.value),
+            });
+          }}
         />
       </label>
       <label>

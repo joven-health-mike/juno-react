@@ -1,6 +1,12 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { ChangeEvent, FormEvent, MouseEvent, useState } from 'react';
+import React, {
+  ChangeEvent,
+  FormEvent,
+  MouseEvent,
+  useEffect,
+  useState,
+} from 'react';
 import { emptySchool, School } from '../../data/schools';
 
 type CreateSchoolFormProps = {
@@ -15,6 +21,12 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
   onCancel,
 }) => {
   const [school, setSchool] = useState<School>(defaultSchool ?? emptySchool);
+
+  useEffect(() => {
+    if (defaultSchool) {
+      setSchool(defaultSchool);
+    }
+  }, [defaultSchool]);
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -56,6 +68,20 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
             required
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setSchool({ ...school, address: e.target.value })
+            }
+          />
+        </label>
+        <label>
+          City
+          <input
+            data-testid={'input-city'}
+            type="text"
+            placeholder="City"
+            name="city"
+            value={school.city}
+            required
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setSchool({ ...school, city: e.target.value })
             }
           />
         </label>

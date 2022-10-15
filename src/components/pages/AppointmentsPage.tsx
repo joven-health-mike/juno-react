@@ -13,7 +13,6 @@ import AppointmentsTable from '../tables/AppointmentsTable';
 
 const AppointmentsPage: React.FC = () => {
   const {
-    data: appointments,
     add: addAppointment,
     delete: deleteAppointment,
     update: updateAppointment,
@@ -36,25 +35,15 @@ const AppointmentsPage: React.FC = () => {
     setIsEditAppointmentModalOpen(false);
   };
 
-  const onAppointmentDeleteClicked = (appointmentTitle: string) => {
+  const onAppointmentDeleteClicked = (appointmentToDelete: Appointment) => {
     if (window.confirm('Delete this appointment?')) {
-      let deletingAppointment = appointments.find(
-        appointment => appointment.title === appointmentTitle
-      );
-      if (deletingAppointment) {
-        deleteAppointment(deletingAppointment);
-      }
+      deleteAppointment(appointmentToDelete);
     }
   };
 
-  const onAppointmentEditClicked = (appointmentTitle: string) => {
-    let editingAppointment = appointments.find(
-      appointment => appointment.title === appointmentTitle
-    );
-    if (editingAppointment) {
-      setInitialAppointment(editingAppointment);
-      setIsEditAppointmentModalOpen(!isEditAppointmentModalOpen);
-    }
+  const onAppointmentEditClicked = (appointmentToEdit: Appointment) => {
+    setInitialAppointment(appointmentToEdit);
+    setIsEditAppointmentModalOpen(!isEditAppointmentModalOpen);
   };
 
   return (

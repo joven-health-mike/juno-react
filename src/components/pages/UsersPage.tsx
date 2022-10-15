@@ -8,9 +8,9 @@ import UsersTable from '../tables/UsersTable';
 
 const UsersPage = () => {
   const {
-    data: users,
     add: addUser,
     delete: deleteUser,
+    update: updateUser,
   } = useContext(UsersContext);
   const [isCreateUserModalOpen, setIsCreateUserModalOpen] =
     useState<boolean>(false);
@@ -19,15 +19,18 @@ const UsersPage = () => {
     addUser(user);
   };
 
-  const onUserDeleteClicked = (userName: string) => {
+  const onUserDeleteClicked = (userToDelete: User) => {
     if (window.confirm('Delete this user?')) {
-      let userToDelete = users.find(
-        user => user.firstName + ' ' + user.lastName === userName
-      );
-      if (userToDelete) {
-        deleteUser(userToDelete);
-      }
+      deleteUser(userToDelete);
     }
+  };
+
+  const onUserEditClicked = (userToEdit: User) => {
+    updateUser(userToEdit);
+  };
+
+  const onUserEmailClicked = (userToEdit: User) => {
+    window.location.href = `mailto:${userToEdit.email}`;
   };
 
   return (
@@ -45,7 +48,11 @@ const UsersPage = () => {
           onUserAdded={onFormSubmit}
           onClose={() => setIsCreateUserModalOpen(false)}
         />
-        <UsersTable onDeleteClicked={onUserDeleteClicked} />
+        <UsersTable
+          onDeleteClicked={onUserDeleteClicked}
+          onEditClicked={onUserEditClicked}
+          onEmailClicked={onUserEmailClicked}
+        />
       </>
     </div>
   );

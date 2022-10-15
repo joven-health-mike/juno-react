@@ -8,27 +8,29 @@ import StudentsTable from '../tables/StudentsTable';
 
 const StudentsPage = () => {
   const {
-    data: students,
     add: addStudent,
     delete: deleteStudent,
+    update: updateStudent,
   } = useContext(StudentsContext);
   const [isCreateStudentModalOpen, setIsCreateStudentModalOpen] =
     useState<boolean>(false);
 
   const onFormSubmit = (student: Student) => {
-    // setStudents([...students, student]);
     addStudent(student);
   };
 
-  const onDeleteStudentClicked = (studentName: string) => {
+  const onDeleteStudentClicked = (studentToDelete: Student) => {
     if (window.confirm('Delete this student?')) {
-      let studentToDelete = students.find(
-        student => `${student.firstName} ${student.lastName}` === studentName
-      );
-      if (studentToDelete) {
-        deleteStudent(studentToDelete);
-      }
+      deleteStudent(studentToDelete);
     }
+  };
+
+  const onEditStudentClicked = (studentToEdit: Student) => {
+    updateStudent(studentToEdit);
+  };
+
+  const onAppointmentStudentClicked = (studentToSchedule: Student) => {
+    // TODO: Add ability to schedule student
   };
 
   return (
@@ -46,7 +48,11 @@ const StudentsPage = () => {
           onStudentAdded={onFormSubmit}
           onClose={() => setIsCreateStudentModalOpen(false)}
         />
-        <StudentsTable onDeleteClicked={onDeleteStudentClicked} />
+        <StudentsTable
+          onDeleteClicked={onDeleteStudentClicked}
+          onEditClicked={onEditStudentClicked}
+          onAppointmentClicked={onAppointmentStudentClicked}
+        />
       </>
     </div>
   );

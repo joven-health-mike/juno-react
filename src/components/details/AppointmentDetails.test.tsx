@@ -7,7 +7,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import AppointmentDetails from './AppointmentDetails';
 import { formatDateTime } from '../../utils/DateUtils';
-import { Appointment, AppointmentTypes } from '../../data/appointments';
+import { Appointment } from '../../data/appointments';
 import { emptyCounselorRef } from '../../data/counselors';
 import { emptySchool } from '../../data/schools';
 
@@ -19,7 +19,7 @@ const fakeAppointment: Appointment = {
   counselor: emptyCounselorRef,
   school: emptySchool,
   participants: [],
-  type: AppointmentTypes.None.name,
+  type: 'CLINICAL',
   status: 'SCHEDULED',
 };
 

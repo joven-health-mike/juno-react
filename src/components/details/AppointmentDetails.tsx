@@ -14,19 +14,21 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
   return (
     <>
       <h2 data-testid={'title'}>{appointment.title}</h2>
-      <p data-testid={'start'}>
-        Start Time: {formatDateTime(new Date(appointment.start), -6)}
-      </p>
-      <p data-testid={'end'}>
-        End Time: {formatDateTime(new Date(appointment.end), -6)}
+      <p data-testid={'time'}>
+        Time:{' '}
+        {`${formatDateTime(new Date(appointment.start), -6)} - ${formatDateTime(
+          new Date(appointment.end),
+          -6
+        )}`}
       </p>
       <p data-testid={'counselorId'}>
-        Counselor: {appointment.counselor?.user?.username}
+        Counselor:{' '}
+        {`${appointment.counselor?.user?.firstName} ${appointment.counselor?.user?.lastName}`}
       </p>
       <p data-testid={'schoolId'}>School: {appointment.school?.name}</p>
       <p data-testid={'participants'}>Participants:</p>
       {appointment.participants.map((user, index) => (
-        <p key={index}>{user.firstName + ' ' + user.lastName}</p>
+        <p key={index}>{`${user.firstName} ${user.lastName} (${user.role})`}</p>
       ))}
       <p data-testid={'appointmentType'}>Type: {appointment.type}</p>
       <p data-testid={'appointmentStatus'}>Status: {appointment.status}</p>

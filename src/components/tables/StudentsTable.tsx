@@ -11,10 +11,16 @@ import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
 
 type StudentsTableProps = {
-  onDeleteClicked: (appointmentName: string) => void;
+  onDeleteClicked: (student: Student) => void;
+  onEditClicked: (student: Student) => void;
+  onAppointmentClicked: (student: Student) => void;
 };
 
-const StudentsTable: React.FC<StudentsTableProps> = ({ onDeleteClicked }) => {
+const StudentsTable: React.FC<StudentsTableProps> = ({
+  onDeleteClicked,
+  onEditClicked,
+  onAppointmentClicked,
+}) => {
   const { data: counselors } = useContext(CounselorsContext);
   const { data: schools } = useContext(SchoolsContext);
   const { data: students } = useContext(StudentsContext);
@@ -35,20 +41,44 @@ const StudentsTable: React.FC<StudentsTableProps> = ({ onDeleteClicked }) => {
             {isAllRowsExpanded ? '👇' : '👉'}
           </button>
         ),
-        Cell: ({ cell, row }: CellProps<object>) => (
-          <>
-            <XButton
-              value={`${cell.row.values.first_name} ${cell.row.values.last_name}`}
-              onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-                onDeleteClicked((e.target as HTMLInputElement).value);
-              }}
-            />
-            <button {...row.getToggleRowExpandedProps()}>
-              {row.isExpanded ? '👇' : '👉'}
-            </button>
-          </>
-        ),
+        Cell: ({ cell, row }: CellProps<object>) => {
+          const student = cell.row.original as Student;
+
+          return (
+            <>
+              <XButton
+                text="❌"
+                title="Delete Student"
+                value={student.id}
+                onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault();
+                  onDeleteClicked(student);
+                }}
+              />
+              <XButton
+                text="✏️"
+                title="Edit Student"
+                value={student.id}
+                onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault();
+                  onEditClicked(student);
+                }}
+              />
+              <XButton
+                text="📅"
+                title="Schedule Appointment"
+                value={student.id}
+                onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault();
+                  onAppointmentClicked(student);
+                }}
+              />
+              <button {...row.getToggleRowExpandedProps()}>
+                {row.isExpanded ? '👇' : '👉'}
+              </button>
+            </>
+          );
+        },
       },
       {
         Header: 'Name',
@@ -56,13 +86,11 @@ const StudentsTable: React.FC<StudentsTableProps> = ({ onDeleteClicked }) => {
         Cell: ({ cell }: CellProps<object>) => (
           <p>
             {(() => {
-              const foundStudent = students.find(
-                student => student.id === cell.row.values.id
-              );
+              const student = cell.row.original as Student;
               return (
                 <>
-                  {foundStudent
-                    ? `${foundStudent.firstName} ${foundStudent.lastName}`
+                  {student
+                    ? `${student.firstName} ${student.lastName}`
                     : 'Not Found'}
                 </>
               );
@@ -76,10 +104,9 @@ const StudentsTable: React.FC<StudentsTableProps> = ({ onDeleteClicked }) => {
         Cell: ({ cell }: CellProps<object>) => (
           <p>
             {(() => {
+              const student = cell.row.original as Student;
               const foundSchool = schools.find(
-                school =>
-                  school.id ===
-                  (cell.row.original as Student).studentRef.assignedSchoolId
+                school => school.id === student.studentRef.assignedSchoolId
               );
               return <>{foundSchool ? foundSchool.name : 'Not Found'}</>;
             })()}
@@ -92,10 +119,11 @@ const StudentsTable: React.FC<StudentsTableProps> = ({ onDeleteClicked }) => {
         Cell: ({ cell }: CellProps<object>) => (
           <p>
             {(() => {
+              const student = cell.row.original as Student;
               const foundCounselor = counselors.find(
                 counselor =>
                   counselor.counselorRef.id ===
-                  (cell.row.original as Student).studentRef.assignedCounselorId
+                  student.studentRef.assignedCounselorId
               );
               return (
                 <>
@@ -109,7 +137,7 @@ const StudentsTable: React.FC<StudentsTableProps> = ({ onDeleteClicked }) => {
         ),
       },
     ],
-    [onDeleteClicked, counselors, schools, students]
+    [counselors, onAppointmentClicked, onDeleteClicked, onEditClicked, schools]
   );
 
   const renderRowSubComponent = useCallback((row: Row) => {

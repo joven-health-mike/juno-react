@@ -86,20 +86,17 @@ export const CounselorsProvider: FC<DataProviderProps<Counselor[]>> = ({
       }
     },
     update: async function (data: Counselor): Promise<void> {
-      //TODO: how do we update this info on the server?
-      let updatedCounselor = counselors.find(
-        counselor => counselor.id === data.id
-      );
-      let filteredCounselors = counselors.filter(
-        counselor => counselor.id === updatedCounselor?.id
-      );
-      setCounselors([...filteredCounselors, data]);
-      /* try {
+      try {
         const { data: counselor } = await service.update(data, `${data.id}`);
-        setCounselors([...counselors, counselor]);
+        // remove the old counselor from the list
+        const newCounselors = [...counselors].filter(
+          counselor => counselor.id !== counselor.counselorRef.id
+        );
+        // and add the new counselor returned from the server
+        setCounselors([...newCounselors, counselor as Counselor]);
       } catch (error) {
         console.error(error);
-      } */
+      }
     },
     delete: async function (data: Counselor): Promise<void> {
       try {

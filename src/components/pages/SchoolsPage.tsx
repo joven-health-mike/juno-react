@@ -8,24 +8,29 @@ import SchoolsTable from '../tables/SchoolsTable';
 
 const SchoolsPage = () => {
   const {
-    data: schools,
     add: addSchool,
     delete: deleteSchool,
+    update: updateSchool,
   } = useContext(SchoolsContext);
   const [isCreateSchoolModalOpen, setIsCreateSchoolModalOpen] =
     useState<boolean>(false);
 
-  const onFormSubmit = (school: School) => {
-    addSchool(school);
+  const onFormSubmit = (schoolToAdd: School) => {
+    addSchool(schoolToAdd);
   };
 
-  const onSchoolDeleteClicked = (schoolName: string) => {
+  const onSchoolDeleteClicked = (schoolToDelete: School) => {
     if (window.confirm('Delete this user?')) {
-      let schoolToDelete = schools.find(school => school.name === schoolName);
-      if (schoolToDelete) {
-        deleteSchool(schoolToDelete);
-      }
+      deleteSchool(schoolToDelete);
     }
+  };
+
+  const onSchoolEditClicked = (schoolToEdit: School) => {
+    updateSchool(schoolToEdit);
+  };
+
+  const onSchoolEmailClicked = (schoolToEmail: School) => {
+    window.location.href = 'mailto:' + schoolToEmail.primaryEmail;
   };
 
   return (
@@ -43,7 +48,11 @@ const SchoolsPage = () => {
           onSchoolAdded={onFormSubmit}
           onClose={() => setIsCreateSchoolModalOpen(false)}
         />
-        <SchoolsTable onDeleteClicked={onSchoolDeleteClicked} />
+        <SchoolsTable
+          onDeleteClicked={onSchoolDeleteClicked}
+          onEditClicked={onSchoolEditClicked}
+          onEmailClicked={onSchoolEmailClicked}
+        />
       </>
     </div>
   );
