@@ -6,7 +6,6 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import CreateAppointmentForm from './CreateAppointmentForm';
-import { AppointmentTypes } from '../../data/appointments';
 import { emptySchool } from '../../data/schools';
 import { emptyCounselorRef } from '../../data/counselors';
 
@@ -18,12 +17,9 @@ const fakeAppointment = {
   school: emptySchool,
   counselor: emptyCounselorRef,
   participants: [],
-  type: AppointmentTypes.None.name,
+  type: 'CLINICAL',
   status: 'SCHEDULED',
 };
-
-const fakeCounselorName = 'Jacek McGuinness';
-const fakeStudentName = 'Chris Moon';
 
 describe('CreateAppointmentForm', () => {
   it('should submit defaultAppointment if nothing is changed', async () => {

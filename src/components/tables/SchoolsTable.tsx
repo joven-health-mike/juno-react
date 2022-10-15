@@ -9,10 +9,16 @@ import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
 
 type SchoolsTableProps = {
-  onDeleteClicked: (schoolName: string) => void;
+  onDeleteClicked: (school: School) => void;
+  onEditClicked: (school: School) => void;
+  onEmailClicked: (school: School) => void;
 };
 
-const SchoolsTable: React.FC<SchoolsTableProps> = ({ onDeleteClicked }) => {
+const SchoolsTable: React.FC<SchoolsTableProps> = ({
+  onDeleteClicked,
+  onEditClicked,
+  onEmailClicked,
+}) => {
   const { data: schools } = useContext(SchoolsContext);
 
   const defaultColumn: Record<string, unknown> = React.useMemo(
@@ -31,20 +37,44 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({ onDeleteClicked }) => {
             {isAllRowsExpanded ? '👇' : '👉'}
           </button>
         ),
-        Cell: ({ cell, row }: CellProps<object>) => (
-          <>
-            <XButton
-              value={cell.row.values.name}
-              onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-                onDeleteClicked((e.target as HTMLInputElement).value);
-              }}
-            />
-            <button {...row.getToggleRowExpandedProps()}>
-              {row.isExpanded ? '👇' : '👉'}
-            </button>
-          </>
-        ),
+        Cell: ({ cell, row }: CellProps<object>) => {
+          const school = cell.row.original as School;
+
+          return (
+            <>
+              <XButton
+                text="❌"
+                title="Delete School"
+                value={school.id}
+                onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault();
+                  onDeleteClicked(school);
+                }}
+              />
+              <XButton
+                text="✏️"
+                title="Edit School"
+                value={school.id}
+                onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault();
+                  onEditClicked(school);
+                }}
+              />
+              <XButton
+                text="📧"
+                title="Email School"
+                value={school.id}
+                onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault();
+                  onEmailClicked(school);
+                }}
+              />
+              <button {...row.getToggleRowExpandedProps()}>
+                {row.isExpanded ? '👇' : '👉'}
+              </button>
+            </>
+          );
+        },
       },
       {
         Header: 'ID',
@@ -63,7 +93,7 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({ onDeleteClicked }) => {
         accessor: 'primaryPhone',
       },
     ],
-    [onDeleteClicked]
+    [onDeleteClicked, onEditClicked, onEmailClicked]
   );
 
   const renderRowSubComponent = useCallback((row: Row) => {

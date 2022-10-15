@@ -1,18 +1,23 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from 'react';
+import React, { MouseEvent, useContext } from 'react';
 import { CellProps, Column } from 'react-table';
-import { Student } from '../../data/students';
+import { Student, StudentsContext } from '../../data/students';
+import XButton from '../buttons/XButton';
 import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
 
 type StudentsSmallTableProps = {
-  students: Student[];
+  onDeleteClicked: (student: Student) => void;
+  onAppointmentClicked: (student: Student) => void;
 };
 
 const StudentsSmallTable: React.FC<StudentsSmallTableProps> = ({
-  students,
+  onDeleteClicked,
+  onAppointmentClicked,
 }) => {
+  const { data: students } = useContext(StudentsContext);
+
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
       Filter: TableSearchFilter,
@@ -22,6 +27,35 @@ const StudentsSmallTable: React.FC<StudentsSmallTableProps> = ({
 
   const columns: Column[] = React.useMemo(
     () => [
+      {
+        id: 'buttons',
+        Cell: ({ cell, row }: CellProps<object>) => {
+          const student = cell.row.original as Student;
+
+          return (
+            <>
+              <XButton
+                text="❌"
+                title="Delete Student"
+                value={student.id}
+                onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault();
+                  onDeleteClicked(student);
+                }}
+              />
+              <XButton
+                text="📅"
+                title="Schedule Appointment"
+                value={student.id}
+                onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault();
+                  onAppointmentClicked(student);
+                }}
+              />
+            </>
+          );
+        },
+      },
       {
         Header: 'Name',
         accessor: 'id',
@@ -43,7 +77,7 @@ const StudentsSmallTable: React.FC<StudentsSmallTableProps> = ({
         ),
       },
     ],
-    [students]
+    [onAppointmentClicked, onDeleteClicked, students]
   );
 
   return (

@@ -4,16 +4,17 @@ import { AvailableRoute } from '../routes/AppRouter';
 import { Role, ROLES } from '../services/user.service';
 
 const allRoles = ROLES;
+const adminsOnly = ['SYSADMIN', 'JOVEN_ADMIN'];
 
 const pagePermissions = {
   '/': allRoles,
   '/account': allRoles,
-  '/appointments': allRoles,
+  '/appointments': adminsOnly,
   '/calendar': allRoles,
   '/counselors': allRoles,
   '/schools': allRoles,
   '/students': allRoles,
-  '/users': ['SYSADMIN', 'JOVEN_ADMIN'],
+  '/users': adminsOnly,
   '/logout': allRoles,
 };
 

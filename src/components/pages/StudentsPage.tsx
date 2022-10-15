@@ -11,22 +11,25 @@ const StudentsPage = () => {
     data: students,
     add: addStudent,
     delete: deleteStudent,
+    update: updateStudent,
   } = useContext(StudentsContext);
 
   const onFormSubmit = (student: Student) => {
-    // setStudents([...students, student]);
     addStudent(student);
   };
 
-  const onDeleteStudentClicked = (studentName: string) => {
+  const onDeleteStudentClicked = (studentToDelete: Student) => {
     if (window.confirm('Delete this student?')) {
-      let studentToDelete = students.find(
-        student => `${student.firstName} ${student.lastName}` === studentName
-      );
-      if (studentToDelete) {
-        deleteStudent(studentToDelete);
-      }
+      deleteStudent(studentToDelete);
     }
+  };
+
+  const onEditStudentClicked = (studentToEdit: Student) => {
+    updateStudent(studentToEdit);
+  };
+
+  const onAppointmentStudentClicked = (studentToSchedule: Student) => {
+    // TODO: Add ability to schedule student
   };
 
   return (
@@ -36,8 +39,16 @@ const StudentsPage = () => {
       </nav>
       <h1>Students</h1>
       <>
-        <CreateStudentForm onSubmit={onFormSubmit} onCancel={() => {}} />
-        <StudentsTable onDeleteClicked={onDeleteStudentClicked} />
+        <CreateStudentForm
+          onSubmit={onFormSubmit}
+          onCancel={() => {}}
+          defaultStudent={students[0]}
+        />
+        <StudentsTable
+          onDeleteClicked={onDeleteStudentClicked}
+          onEditClicked={onEditStudentClicked}
+          onAppointmentClicked={onAppointmentStudentClicked}
+        />
       </>
     </div>
   );

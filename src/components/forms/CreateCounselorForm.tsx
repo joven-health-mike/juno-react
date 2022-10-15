@@ -1,6 +1,12 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { ChangeEvent, FormEvent, MouseEvent, useState } from 'react';
+import React, {
+  ChangeEvent,
+  FormEvent,
+  MouseEvent,
+  useEffect,
+  useState,
+} from 'react';
 import { Counselor, emptyCounselor } from '../../data/counselors';
 import { Role } from '../../services/user.service';
 
@@ -19,6 +25,13 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
     defaultCounselor ?? emptyCounselor
   );
   const [roomLink, setRoomLink] = useState<string>('');
+
+  useEffect(() => {
+    if (defaultCounselor) {
+      setCounselor(defaultCounselor);
+      setRoomLink(defaultCounselor.counselorRef.roomLink);
+    }
+  }, [defaultCounselor]);
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -84,7 +97,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
           <input
             data-testid={'input-username'}
             type="text"
-            placeholder="Userame"
+            placeholder="Username"
             name="username"
             value={counselor.username}
             required
