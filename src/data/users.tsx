@@ -5,6 +5,7 @@ import { Role, UserService } from '../services/user.service';
 import { ContextData } from './ContextData';
 import { CounselorRef } from './counselors';
 import { DataProviderProps } from './DataProviderProps';
+import { StudentRef } from './students';
 
 export type User = {
   id: string;
@@ -17,6 +18,21 @@ export type User = {
   timeZoneOffset?: number;
   role: Role;
   counselorRef?: CounselorRef;
+  schoolAdminRef?: SchoolAdminRef;
+  schoolStaffRef?: SchoolStaffRef;
+  studentRef?: StudentRef;
+};
+
+export type SchoolAdminRef = {
+  id: string;
+  userId: string;
+  assignedSchoolId: string;
+};
+
+export type SchoolStaffRef = {
+  id: string;
+  userId: string;
+  assignedSchoolId: string;
 };
 
 export const emptyUser = {
