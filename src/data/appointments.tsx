@@ -34,9 +34,9 @@ export const emptyAppointment = {
 };
 
 export const AppointmentTypes = {
-  Clinical: { id: 1, name: 'CLINICAL', color: 'green' },
-  Consultation: { id: 2, name: 'CONSULTATION', color: 'blue' },
-  Evaluation: { id: 3, name: 'EVALUATION', color: 'red' },
+  Clinical: { id: 0, name: 'CLINICAL', color: 'green' },
+  Consultation: { id: 1, name: 'CONSULTATION', color: 'blue' },
+  Evaluation: { id: 2, name: 'EVALUATION', color: 'red' },
 };
 
 const defaultAppointmentColor = 'lightgray';
