@@ -8,7 +8,6 @@ import UsersTable from '../tables/UsersTable';
 
 const UsersPage = () => {
   const {
-    data: users,
     add: addUser,
     delete: deleteUser,
     update: updateUser,
