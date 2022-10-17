@@ -97,6 +97,10 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     setParticipants(participants);
   };
 
+  const handleIsRecurringChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAppointment({ ...appointment, isRecurring: e.target.checked });
+  };
+
   const getAssociatedSchool = (student: Student) => {
     return schools.find(school => {
       return school.id === student.studentRef.assignedSchoolId;
@@ -179,6 +183,14 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
         <SelectParticipants
           selectedParticipants={participants}
           onParticipantsSelected={onParticipantsSelected}
+        />
+      </label>
+      <label>
+        Is Recurring:{' '}
+        <input
+          type="checkbox"
+          checked={appointment.isRecurring}
+          onChange={handleIsRecurringChange}
         />
       </label>
 

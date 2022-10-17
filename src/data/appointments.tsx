@@ -13,6 +13,7 @@ export type Appointment = {
   title: string;
   start: Date;
   end: Date;
+  isRecurring?: boolean;
   school?: School;
   schoolId?: string;
   counselor?: CounselorRef;
@@ -28,6 +29,9 @@ export const emptyAppointment = {
   title: '',
   start: new Date(),
   end: new Date(),
+  isRecurring: false,
+  schoolId: '',
+  counselorId: '',
   participants: [],
   type: 'CLINICAL',
   status: 'SCHEDULED',
@@ -82,25 +86,47 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
   children,
 }) => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [syntheticAppointments, setSyntheticAppointments] = useState<
+    Appointment[]
+  >([]);
   const service = new AppointmentService();
 
+  const addDays = (date: Date, numDays: number) => {
+    const dateVal = new Date(date.valueOf());
+    dateVal.setDate(dateVal.getDate() + numDays);
+    return dateVal;
+  };
+
+  const processRecurringAppointments = (appointments: Appointment[]) => {
+    const result = [...appointments];
+    for (const appointment of appointments) {
+      if (appointment.isRecurring) {
+        for (let i = 0; i < 6; i++) {
+          const newAppointment = { ...appointment };
+          newAppointment.start = addDays(newAppointment.start, (i + 1) * 7);
+          newAppointment.end = addDays(newAppointment.end, (i + 1) * 7);
+          result.push(newAppointment);
+        }
+      }
+    }
+
+    return result;
+  };
+
   const delegate: ContextData<Appointment> = {
-    data: appointments,
+    data: syntheticAppointments,
     getAll: async function (): Promise<void> {
       try {
         const { data: appointments } = await service.getAll();
         setAppointments(appointments);
+        const allAppointments = processRecurringAppointments(appointments);
+        setSyntheticAppointments(allAppointments);
       } catch (error) {
         console.error(error);
       }
     },
     get: async function (id: string): Promise<void> {
-      try {
-        const { data: appointment } = await service.get(id);
-        setAppointments([...appointments, appointment]);
-      } catch (error) {
-        console.error(error);
-      }
+      // do nothing (unused)
     },
     add: async function (data: Appointment): Promise<void> {
       try {
@@ -108,7 +134,10 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
         appointment.participants = data.participants;
         appointment.counselor = data.counselor;
         appointment.school = data.school;
-        setAppointments([...appointments, appointment]);
+        const newAppointments = [...appointments, appointment];
+        setAppointments(newAppointments);
+        const allAppointments = processRecurringAppointments(newAppointments);
+        setSyntheticAppointments(allAppointments);
       } catch (error) {
         console.error(error);
       }
@@ -116,7 +145,16 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
     update: async function (data: Appointment): Promise<void> {
       try {
         const { data: appointment } = await service.update(data, `${data.id}`);
-        setAppointments([...appointments, appointment]);
+        appointment.participants = data.participants;
+        appointment.counselor = data.counselor;
+        appointment.school = data.school;
+        const newAppointments = [...appointments].filter(
+          appointment => appointment.id !== data.id
+        );
+        newAppointments.push(appointment);
+        setAppointments(newAppointments);
+        const allAppointments = processRecurringAppointments(newAppointments);
+        setSyntheticAppointments(allAppointments);
       } catch (error) {
         console.error(error);
       }
@@ -126,7 +164,7 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
         const { data: deletedAppointment } = await service.delete(`${data.id}`);
         setAppointments(
           appointments.filter(
-            _appointment => _appointment.id !== deletedAppointment.id
+            appointment => appointment.id !== deletedAppointment.id
           )
         );
       } catch (error) {}
