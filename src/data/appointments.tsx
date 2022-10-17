@@ -28,7 +28,9 @@ export const emptyAppointment = {
   title: '',
   start: new Date(),
   end: new Date(),
-  participants: [],
+  schoolId: '',
+  counselorId: '',
+  participants: [] as User[],
   type: 'CLINICAL',
   status: 'SCHEDULED',
 };

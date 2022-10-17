@@ -94,7 +94,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
   return (
     <form onSubmit={onFormSubmit}>
       <label>
-        First Name
+        First Name:
         <input
           data-testid={'input-first-name'}
           type="text"
@@ -108,7 +108,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
         />
       </label>
       <label>
-        Last Name
+        Last Name:
         <input
           data-testid={'input-last-name'}
           type="text"
@@ -122,7 +122,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
         />
       </label>
       <label>
-        Email
+        Email:
         <input
           data-testid={'input-email'}
           type="email"
@@ -136,7 +136,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
         />
       </label>
       <label>
-        Username
+        Username:
         <input
           data-testid={'input-username'}
           type="text"
@@ -150,7 +150,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
         />
       </label>
       <label>
-        Phone
+        Phone:
         <input
           data-testid={'input-phone'}
           type="phone"
@@ -164,7 +164,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
         />
       </label>
       <label>
-        Docs URL
+        Docs URL:
         <input
           data-testid={'input-docsUrl'}
           type="URL"
@@ -178,7 +178,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
         />
       </label>
       <label>
-        Time Zone Offset
+        Time Zone Offset:
         <input
           data-testid={'input-timeZoneOffset'}
           type="number"

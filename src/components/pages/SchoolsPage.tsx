@@ -1,8 +1,9 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext } from 'react';
-import { School, SchoolsContext } from '../../data/schools';
-import CreateSchoolForm from '../forms/CreateSchoolForm';
+import React, { useContext, useState } from 'react';
+import { emptySchool, School, SchoolsContext } from '../../data/schools';
+import CreateSchoolModal from '../modals/CreateSchoolModal';
+import EditSchoolModal from '../modals/EditSchoolModal';
 import Navbar from '../navbar/Navbar';
 import SchoolsTable from '../tables/SchoolsTable';
 
@@ -12,9 +13,18 @@ const SchoolsPage = () => {
     delete: deleteSchool,
     update: updateSchool,
   } = useContext(SchoolsContext);
+  const [isCreateSchoolModalOpen, setIsCreateSchoolModalOpen] =
+    useState<boolean>(false);
+  const [isEditSchoolModalOpen, setIsEditSchoolModalOpen] =
+    useState<boolean>(false);
+  const [modalSchool, setModalSchool] = useState<School>(emptySchool);
 
-  const onFormSubmit = (schoolToAdd: School) => {
+  const handleSchoolAdded = (schoolToAdd: School) => {
     addSchool(schoolToAdd);
+  };
+
+  const handleSchoolEdited = (schoolToAdd: School) => {
+    updateSchool(schoolToAdd);
   };
 
   const onSchoolDeleteClicked = (schoolToDelete: School) => {
@@ -24,7 +34,8 @@ const SchoolsPage = () => {
   };
 
   const onSchoolEditClicked = (schoolToEdit: School) => {
-    updateSchool(schoolToEdit);
+    setModalSchool(schoolToEdit);
+    setIsEditSchoolModalOpen(true);
   };
 
   const onSchoolEmailClicked = (schoolToEmail: School) => {
@@ -38,7 +49,20 @@ const SchoolsPage = () => {
       </nav>
       <h1>Schools</h1>
       <>
-        <CreateSchoolForm onSubmit={onFormSubmit} onCancel={() => {}} />
+        <button type="button" onClick={() => setIsCreateSchoolModalOpen(true)}>
+          Add School
+        </button>
+        <CreateSchoolModal
+          isOpen={isCreateSchoolModalOpen}
+          onSchoolAdded={handleSchoolAdded}
+          onClose={() => setIsCreateSchoolModalOpen(false)}
+        />
+        <EditSchoolModal
+          isOpen={isEditSchoolModalOpen}
+          onSchoolEdited={handleSchoolEdited}
+          onClose={() => setIsEditSchoolModalOpen(false)}
+          initialSchool={modalSchool}
+        />
         <SchoolsTable
           onDeleteClicked={onSchoolDeleteClicked}
           onEditClicked={onSchoolEditClicked}

@@ -53,6 +53,7 @@ th {
 
 button {
   background-color: #385aa8 !important;
+  color: whitesmoke;
 }
 
 button:hover {
@@ -160,10 +161,12 @@ img {
 
 .modal {
   position: absolute;
-  height: auto;
-  width: auto;
-  top: 25%;
-  left: 25%;
+  /* height: auto;
+  width: auto; */
+  float: left;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   background-color: #f6f740;
   border: 2px solid darkslateblue;
   border-radius: 25px;
@@ -177,6 +180,36 @@ img {
   left: 0;
   right: 0;
   bottom: 0;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+form {
+  text-align: left;
+}
+
+input {
+  display: block;
+  padding: 1px;
+  width: 15em !important;
+  margin: auto;
+  margin-bottom: 20px;
+}
+
+select {
+  display: block;
+  padding: 1px;
+  width: 15em !important;
+  margin: auto;
+  margin-bottom: 20px;
+  align-self: flex-start;
+}
+
+label {
+  display: block;
+  margin: auto;
+  padding-bottom: 2px;
+  margin-top: 1px;
+  margin-bottom: 1px;
 }
 
 @charset "UTF-8";

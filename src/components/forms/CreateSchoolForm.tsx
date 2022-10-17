@@ -44,7 +44,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
     <>
       <form onSubmit={onFormSubmit}>
         <label>
-          Name
+          Name:
           <input
             data-testid={'input-name'}
             type="text"
@@ -58,7 +58,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
           />
         </label>
         <label>
-          Address
+          Address:
           <input
             data-testid={'input-address'}
             type="text"
@@ -72,7 +72,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
           />
         </label>
         <label>
-          City
+          City:
           <input
             data-testid={'input-city'}
             type="text"
@@ -86,7 +86,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
           />
         </label>
         <label>
-          State
+          State:
           <input
             data-testid={'input-state'}
             type="text"
@@ -100,7 +100,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
           />
         </label>
         <label>
-          Zip Code
+          Zip Code:
           <input
             data-testid={'input-zip'}
             type="text"
@@ -114,7 +114,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
           />
         </label>
         <label>
-          Email
+          Email:
           <input
             data-testid={'input-email'}
             type="email"
