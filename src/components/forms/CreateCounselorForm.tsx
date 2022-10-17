@@ -51,7 +51,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
     <>
       <form onSubmit={onFormSubmit}>
         <label>
-          First Name
+          First Name:
           <input
             data-testid={'input-first-name'}
             type="text"
@@ -65,7 +65,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
           />
         </label>
         <label>
-          Last Name
+          Last Name:
           <input
             data-testid={'input-last-name'}
             type="text"
@@ -79,7 +79,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
           />
         </label>
         <label>
-          Email
+          Email:
           <input
             data-testid={'input-email'}
             type="email"
@@ -93,7 +93,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
           />
         </label>
         <label>
-          Username
+          Username:
           <input
             data-testid={'input-username'}
             type="text"
@@ -107,7 +107,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
           />
         </label>
         <label>
-          Phone
+          Phone:
           <input
             data-testid={'input-phone'}
             type="phone"
@@ -121,7 +121,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
           />
         </label>
         <label>
-          Docs URL
+          Docs URL:
           <input
             data-testid={'input-docsUrl'}
             type="URL"
@@ -135,7 +135,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
           />
         </label>
         <label>
-          Time Zone Offset
+          Time Zone Offset:
           <input
             data-testid={'input-timeZoneOffset'}
             type="number"
@@ -154,7 +154,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
           />
         </label>
         <label>
-          Room Link
+          Room Link:
           <input
             data-testid={'input-roomLink'}
             type="URL"

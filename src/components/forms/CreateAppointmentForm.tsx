@@ -141,7 +141,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   return (
     <form onSubmit={onFormSubmit}>
       <label>
-        Start Time
+        Start Time:
         <DateSelector
           selected={new Date(appointment.start)}
           onChange={(date: Date) =>
@@ -151,7 +151,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
         />
       </label>
       <label>
-        End Time
+        End Time:
         <DateSelector
           selected={new Date(appointment.end)}
           onChange={(date: Date) =>
@@ -168,7 +168,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
         />
       </label>
       <label>
-        Type{' '}
+        Type:{' '}
         <SelectTypeList
           value={typeSelectionIndex}
           onTypeChanged={onTypeChanged}
