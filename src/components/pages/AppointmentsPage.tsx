@@ -6,22 +6,33 @@ import {
   AppointmentsContext,
   emptyAppointment,
 } from '../../data/appointments';
-import CreateAppointmentForm from '../forms/CreateAppointmentForm';
+import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import EditAppointmentModal from '../modals/EditAppointmentModal';
 import Navbar from '../navbar/Navbar';
 import AppointmentsTable from '../tables/AppointmentsTable';
 
 const AppointmentsPage: React.FC = () => {
-  const { add: addAppointment, delete: deleteAppointment } =
-    useContext(AppointmentsContext);
+  const {
+    add: addAppointment,
+    delete: deleteAppointment,
+    update: updateAppointment,
+  } = useContext(AppointmentsContext);
 
   const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
+    useState<boolean>(false);
+  const [isEditAppointmentModalOpen, setIsEditAppointmentModalOpen] =
     useState<boolean>(false);
   const [initialAppointment, setInitialAppointment] =
     useState<Appointment>(emptyAppointment);
 
-  const onFormSubmit = (appointment: Appointment) => {
+  const onCreateAppointmentSubmit = (appointment: Appointment) => {
     addAppointment(appointment);
+    setIsCreateAppointmentModalOpen(false);
+  };
+
+  const onEditAppointmentSubmit = (appointment: Appointment) => {
+    updateAppointment(appointment);
+    setIsEditAppointmentModalOpen(false);
   };
 
   const onAppointmentDeleteClicked = (appointmentToDelete: Appointment) => {
@@ -32,12 +43,7 @@ const AppointmentsPage: React.FC = () => {
 
   const onAppointmentEditClicked = (appointmentToEdit: Appointment) => {
     setInitialAppointment(appointmentToEdit);
-    setIsCreateAppointmentModalOpen(!isCreateAppointmentModalOpen);
-  };
-
-  const handleAppointmentAdded = (appointment: Appointment) => {
-    addAppointment(appointment);
-    setIsCreateAppointmentModalOpen(false);
+    setIsEditAppointmentModalOpen(!isEditAppointmentModalOpen);
   };
 
   return (
@@ -47,15 +53,26 @@ const AppointmentsPage: React.FC = () => {
       </nav>
       <h1>Appointments</h1>
       <>
-        <CreateAppointmentForm onSubmit={onFormSubmit} onCancel={() => {}} />
+        <button
+          type="button"
+          onClick={() => setIsCreateAppointmentModalOpen(true)}
+        >
+          Add Appointment
+        </button>
         <AppointmentsTable
           onDeleteClicked={onAppointmentDeleteClicked}
           onEditClicked={onAppointmentEditClicked}
         />
-        <EditAppointmentModal
+        <CreateAppointmentModal
           isOpen={isCreateAppointmentModalOpen}
           onClose={() => setIsCreateAppointmentModalOpen(false)}
-          onAppointmentAdded={handleAppointmentAdded}
+          onAppointmentAdded={onCreateAppointmentSubmit}
+          initialAppointment={emptyAppointment}
+        />
+        <EditAppointmentModal
+          isOpen={isEditAppointmentModalOpen}
+          onClose={() => setIsEditAppointmentModalOpen(false)}
+          onAppointmentAdded={onEditAppointmentSubmit}
           initialAppointment={initialAppointment}
         />
       </>

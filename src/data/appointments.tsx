@@ -32,7 +32,7 @@ export const emptyAppointment = {
   isRecurring: false,
   schoolId: '',
   counselorId: '',
-  participants: [],
+  participants: [] as User[],
   type: 'CLINICAL',
   status: 'SCHEDULED',
 };
