@@ -14,6 +14,7 @@ export type Appointment = {
   start: Date;
   end: Date;
   isRecurring?: boolean;
+  recurranceInfo?: RecurranceInfo;
   school?: School;
   schoolId?: string;
   counselor?: CounselorRef;
@@ -21,7 +22,21 @@ export type Appointment = {
   participants: User[];
   type: string;
   status: string;
+  location: string;
   color?: string;
+};
+
+export type RecurranceInfo = {
+  id: string;
+  numOccurrences: number;
+  repeatForInfo: RepeatForInfo;
+  repeatForInfoId: string;
+};
+
+export type RepeatForInfo = {
+  id: string;
+  numRepeats: number;
+  frequency: string;
 };
 
 export const emptyAppointment = {
@@ -35,6 +50,7 @@ export const emptyAppointment = {
   participants: [] as User[],
   type: 'CLINICAL',
   status: 'SCHEDULED',
+  location: 'UNKNOWN',
 };
 
 export const AppointmentTypes = {
@@ -86,41 +102,14 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
   children,
 }) => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [syntheticAppointments, setSyntheticAppointments] = useState<
-    Appointment[]
-  >([]);
   const service = new AppointmentService();
 
-  const addDays = (date: Date, numDays: number) => {
-    const dateVal = new Date(date.valueOf());
-    dateVal.setDate(dateVal.getDate() + numDays);
-    return dateVal;
-  };
-
-  const processRecurringAppointments = (appointments: Appointment[]) => {
-    const result = [...appointments];
-    for (const appointment of appointments) {
-      if (appointment.isRecurring) {
-        for (let i = 0; i < 6; i++) {
-          const newAppointment = { ...appointment };
-          newAppointment.start = addDays(newAppointment.start, (i + 1) * 7);
-          newAppointment.end = addDays(newAppointment.end, (i + 1) * 7);
-          result.push(newAppointment);
-        }
-      }
-    }
-
-    return result;
-  };
-
   const delegate: ContextData<Appointment> = {
-    data: syntheticAppointments,
+    data: appointments,
     getAll: async function (): Promise<void> {
       try {
         const { data: appointments } = await service.getAll();
         setAppointments(appointments);
-        const allAppointments = processRecurringAppointments(appointments);
-        setSyntheticAppointments(allAppointments);
       } catch (error) {
         console.error(error);
       }
@@ -134,10 +123,7 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
         appointment.participants = data.participants;
         appointment.counselor = data.counselor;
         appointment.school = data.school;
-        const newAppointments = [...appointments, appointment];
-        setAppointments(newAppointments);
-        const allAppointments = processRecurringAppointments(newAppointments);
-        setSyntheticAppointments(allAppointments);
+        setAppointments([...appointments, appointment]);
       } catch (error) {
         console.error(error);
       }
@@ -153,8 +139,6 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
         );
         newAppointments.push(appointment);
         setAppointments(newAppointments);
-        const allAppointments = processRecurringAppointments(newAppointments);
-        setSyntheticAppointments(allAppointments);
       } catch (error) {
         console.error(error);
       }

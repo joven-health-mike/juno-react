@@ -17,11 +17,13 @@ const fakeAppointment: Appointment = {
   start: new Date(),
   end: new Date(),
   isRecurring: false,
+  recurranceInfo: undefined,
   counselor: emptyCounselorRef,
   school: emptySchool,
   participants: [],
   type: 'CLINICAL',
   status: 'SCHEDULED',
+  location: 'UNKNOWN',
 };
 
 const fakeCounselorName = 'Jacek McGuinness';
