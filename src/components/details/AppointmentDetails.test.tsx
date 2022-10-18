@@ -17,7 +17,6 @@ const fakeAppointment: Appointment = {
   start: new Date(),
   end: new Date(),
   isRecurring: false,
-  recurranceInfo: undefined,
   counselor: emptyCounselorRef,
   school: emptySchool,
   participants: [],

@@ -14,7 +14,9 @@ export type Appointment = {
   start: Date;
   end: Date;
   isRecurring?: boolean;
-  recurranceInfo?: RecurranceInfo;
+  numOccurrences?: number;
+  numRepeats?: number;
+  frequency?: string;
   school?: School;
   schoolId?: string;
   counselor?: CounselorRef;
@@ -24,19 +26,6 @@ export type Appointment = {
   status: string;
   location: string;
   color?: string;
-};
-
-export type RecurranceInfo = {
-  id: string;
-  numOccurrences: number;
-  repeatForInfo: RepeatForInfo;
-  repeatForInfoId: string;
-};
-
-export type RepeatForInfo = {
-  id: string;
-  numRepeats: number;
-  frequency: string;
 };
 
 export const emptyAppointment = {

@@ -1,6 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, {
+  ChangeEvent,
   FormEvent,
   MouseEvent,
   useContext,
@@ -17,8 +18,12 @@ import { Counselor, CounselorsContext } from '../../data/counselors';
 import { emptySchool, SchoolsContext } from '../../data/schools';
 import { Student, StudentsContext } from '../../data/students';
 import { User } from '../../data/users';
-import DateSelector from '../dateSelector/DateSelector';
 import {
+  RepeatForFrequency,
+  REPEAT_FOR_FREQUENCIES,
+} from '../../services/appointment.service';
+import DateSelector from '../dateSelector/DateSelector';
+import SelectList, {
   SelectCounselorList,
   SelectTypeList,
   SelectUserList,
@@ -91,6 +96,12 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
       ...appointment,
       type: type.name,
     });
+  };
+
+  const onRepeatForFrequencyChanged = (
+    repeatForFrequency: RepeatForFrequency
+  ) => {
+    setAppointment({ ...appointment, frequency: repeatForFrequency });
   };
 
   const onParticipantsSelected = (participants: User[]) => {
@@ -193,6 +204,63 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
           onChange={handleIsRecurringChange}
         />
       </label>
+      {appointment.isRecurring && (
+        <>
+          <label>
+            Num Occurrences:{' '}
+            <input
+              data-testid={'input-numOccurrences'}
+              type="number"
+              min={2}
+              max={99}
+              placeholder="Num Occurrences"
+              name="numOccurrences"
+              value={appointment.numOccurrences}
+              required
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setAppointment({
+                  ...appointment,
+                  numOccurrences: parseInt(e.target.value),
+                });
+              }}
+            />
+          </label>
+          <label>
+            Repeat For Num:{' '}
+            <input
+              data-testid={'input-repeatForNum'}
+              type="number"
+              min={1}
+              max={99}
+              placeholder="Repeat For Num"
+              name="repeatForNum"
+              value={appointment.numRepeats}
+              required
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setAppointment({
+                  ...appointment,
+                  numRepeats: parseInt(e.target.value),
+                });
+              }}
+            />
+          </label>
+          <label>
+            Repeat For Frequency:{' '}
+            <SelectList
+              labelText="Select a Frequency"
+              items={REPEAT_FOR_FREQUENCIES}
+              value={REPEAT_FOR_FREQUENCIES.indexOf(
+                appointment.frequency || ''
+              )}
+              onItemChanged={item => {
+                return onRepeatForFrequencyChanged(
+                  REPEAT_FOR_FREQUENCIES[parseInt(item)] as RepeatForFrequency
+                );
+              }}
+            />
+          </label>
+        </>
+      )}
 
       <button type="submit" data-testid={'button-submit'}>
         Submit
