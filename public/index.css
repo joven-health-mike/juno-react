@@ -172,6 +172,7 @@ img {
   border-radius: 25px;
   padding: 50px 150px;
   box-shadow: 5px 5px 10px 5px #385aa8;
+  overflow-y: auto;
 }
 
 .overlay {
