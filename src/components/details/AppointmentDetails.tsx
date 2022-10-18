@@ -32,6 +32,7 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
       ))}
       <p data-testid={'appointmentType'}>Type: {appointment.type}</p>
       <p data-testid={'appointmentStatus'}>Status: {appointment.status}</p>
+      <p data-testid={'isRecurring'}>Recurring: {appointment.isRecurring}</p>
     </>
   );
 };

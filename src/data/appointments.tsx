@@ -13,6 +13,10 @@ export type Appointment = {
   title: string;
   start: Date;
   end: Date;
+  isRecurring?: boolean;
+  numOccurrences?: number;
+  numRepeats?: number;
+  frequency?: string;
   school?: School;
   schoolId?: string;
   counselor?: CounselorRef;
@@ -20,6 +24,7 @@ export type Appointment = {
   participants: User[];
   type: string;
   status: string;
+  location: string;
   color?: string;
 };
 
@@ -28,11 +33,13 @@ export const emptyAppointment = {
   title: '',
   start: new Date(),
   end: new Date(),
+  isRecurring: false,
   schoolId: '',
   counselorId: '',
   participants: [] as User[],
   type: 'CLINICAL',
   status: 'SCHEDULED',
+  location: 'UNKNOWN',
 };
 
 export const AppointmentTypes = {
@@ -97,12 +104,7 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
       }
     },
     get: async function (id: string): Promise<void> {
-      try {
-        const { data: appointment } = await service.get(id);
-        setAppointments([...appointments, appointment]);
-      } catch (error) {
-        console.error(error);
-      }
+      // do nothing (unused)
     },
     add: async function (data: Appointment): Promise<void> {
       try {
@@ -118,7 +120,14 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
     update: async function (data: Appointment): Promise<void> {
       try {
         const { data: appointment } = await service.update(data, `${data.id}`);
-        setAppointments([...appointments, appointment]);
+        appointment.participants = data.participants;
+        appointment.counselor = data.counselor;
+        appointment.school = data.school;
+        const newAppointments = [...appointments].filter(
+          appointment => appointment.id !== data.id
+        );
+        newAppointments.push(appointment);
+        setAppointments(newAppointments);
       } catch (error) {
         console.error(error);
       }
@@ -128,7 +137,7 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
         const { data: deletedAppointment } = await service.delete(`${data.id}`);
         setAppointments(
           appointments.filter(
-            _appointment => _appointment.id !== deletedAppointment.id
+            appointment => appointment.id !== deletedAppointment.id
           )
         );
       } catch (error) {}

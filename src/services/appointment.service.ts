@@ -27,3 +27,7 @@ export class AppointmentService implements Service<Appointment> {
     return HttpServer.delete<Appointment>(`/appointments/${id}`);
   }
 }
+
+export type RepeatForFrequency = 'DAYS' | 'WEEKS' | 'MONTHS' | 'YEARS';
+
+export const REPEAT_FOR_FREQUENCIES = ['DAYS', 'WEEKS', 'MONTHS', 'YEARS'];
