@@ -15,9 +15,15 @@ import {
   AppointmentTypes,
 } from '../../data/appointments';
 import { Counselor, CounselorsContext } from '../../data/counselors';
-import { emptySchool, SchoolsContext } from '../../data/schools';
+import { School, SchoolsContext, emptySchool } from '../../data/schools';
 import { Student, StudentsContext } from '../../data/students';
-import { User } from '../../data/users';
+import {
+  SchoolAdminRef,
+  SchoolStaffRef,
+  User,
+  UsersContext,
+  emptyUser,
+} from '../../data/users';
 import {
   RepeatForFrequency,
   REPEAT_FOR_FREQUENCIES,
@@ -51,6 +57,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   const { data: counselors } = useContext(CounselorsContext);
   const { data: schools } = useContext(SchoolsContext);
   const { data: students } = useContext(StudentsContext);
+  const { data: users } = useContext(UsersContext);
 
   useEffect(() => {
     if (defaultAppointment) {
@@ -112,28 +119,72 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     setAppointment({ ...appointment, isRecurring: e.target.checked });
   };
 
-  const getAssociatedSchool = (student: Student) => {
+  const getAssociatedSchoolFromStudent = (student: Student) => {
     return schools.find(school => {
       return school.id === student.studentRef.assignedSchoolId;
     });
   };
 
+  const getAssociatedSchoolFromSchoolAdmin = (
+    schoolAdminRef: SchoolAdminRef
+  ) => {
+    return schools.find(school => {
+      return school.id === schoolAdminRef.assignedSchoolId;
+    });
+  };
+
+  const getAssociatedSchoolFromSchoolStaff = (
+    schoolStaffRef: SchoolStaffRef
+  ) => {
+    return schools.find(school => {
+      return school.id === schoolStaffRef.assignedSchoolId;
+    });
+  };
+
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const studentSelection = students.find(student => {
-      return participants.map(user => user.id).includes(student.id);
-    });
-    const schoolSelection = studentSelection
-      ? getAssociatedSchool(studentSelection)
-      : emptySchool;
+    const mappedParticipants = participants.map(user => user.id);
+    const studentSelection = students.find(student =>
+      mappedParticipants.includes(student.id)
+    );
+    const schoolAdminSelection = users.find(
+      user =>
+        user.role === 'SCHOOL_ADMIN' && mappedParticipants.includes(user.id)
+    );
+    const schoolStaffSelection = users.find(
+      user =>
+        user.role === 'SCHOOL_STAFF' && mappedParticipants.includes(user.id)
+    );
+    let schoolSelection: School | undefined;
+    if (studentSelection) {
+      schoolSelection = getAssociatedSchoolFromStudent(studentSelection);
+    } else if (schoolAdminSelection) {
+      if (schoolAdminSelection.schoolAdminRef) {
+        schoolSelection = getAssociatedSchoolFromSchoolAdmin(
+          schoolAdminSelection.schoolAdminRef
+        );
+      }
+    } else if (schoolStaffSelection) {
+      if (schoolStaffSelection.schoolStaffRef) {
+        schoolSelection = getAssociatedSchoolFromSchoolStaff(
+          schoolStaffSelection.schoolStaffRef
+        );
+      }
+    }
 
-    const apptTitle = studentSelection
-      ? `${studentSelection.firstName} ${studentSelection.lastName.substring(
-          0,
-          1
-        )} (${schoolSelection?.name})`
-      : 'Appointment';
-    const schoolId = schoolSelection?.id || '-1';
+    schoolSelection = schoolSelection || emptySchool;
+
+    const user =
+      studentSelection ||
+      schoolAdminSelection ||
+      schoolStaffSelection ||
+      emptyUser;
+
+    const apptTitle = `${user.firstName} ${user.lastName.substring(0, 1)} (${
+      schoolSelection?.name
+    })`;
+    const schoolId =
+      schoolSelection?.id === '-1' ? undefined : schoolSelection?.id;
 
     let submittedAppointment = { ...appointment };
     if (!defaultAppointment) {

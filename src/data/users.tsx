@@ -47,6 +47,18 @@ export const emptyUser = {
   role: 'JOVEN_STAFF' as Role,
 };
 
+export const emptySchoolAdminRef = {
+  id: '-1',
+  userId: '-1',
+  assignedSchoolId: '-1',
+};
+
+export const emptySchoolStaffRef = {
+  id: '-1',
+  userId: '-1',
+  assignedSchoolId: '-1',
+};
+
 export const UsersContext = React.createContext<ContextData<User>>({
   data: [],
   getAll: () => null,
