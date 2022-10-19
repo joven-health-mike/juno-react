@@ -25,6 +25,7 @@ import { StudentsContext } from '../../data/students';
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import AppointmentDetailsModal from '../modals/AppointmentDetailsModal';
 import { LoggedInUserContext } from '../../data/users';
+import { createPermission } from '../../auth/permissions';
 
 const CalendarPage: React.FC = () => {
   const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
@@ -42,6 +43,9 @@ const CalendarPage: React.FC = () => {
     useState<Appointment>(emptyAppointment);
   const [clickedAppointment, setClickedAppointment] =
     useState<Appointment>(emptyAppointment);
+  const [isCreateAppointmentAllowed, setIsCreateAppointmentAllowed] =
+    useState<boolean>(false);
+
   const { data: appointments, add: addAppointment } =
     useContext(AppointmentsContext);
   const { data: counselors } = useContext(CounselorsContext);
@@ -55,13 +59,21 @@ const CalendarPage: React.FC = () => {
   };
 
   const handleDateClick = (date: string) => {
-    setInitialAppointment({
-      ...initialAppointment,
-      start: new Date(date + 'T08:00'),
-      end: new Date(date + 'T08:30'),
-    });
-    setIsCreateAppointmentModalOpen(true);
+    if (isCreateAppointmentAllowed) {
+      setInitialAppointment({
+        ...initialAppointment,
+        start: new Date(date + 'T08:00'),
+        end: new Date(date + 'T08:30'),
+      });
+      setIsCreateAppointmentModalOpen(true);
+    }
   };
+
+  useEffect(() => {
+    setIsCreateAppointmentAllowed(
+      createPermission(loggedInUser.role, 'appointment')
+    );
+  }, [loggedInUser.role]);
 
   useEffect(() => {
     setShowCalendar(
@@ -70,7 +82,9 @@ const CalendarPage: React.FC = () => {
   }, [isCreateAppointmentModalOpen, isAppointmentDetailsModalOpen]);
 
   const handleAppointmentAdded = (appointment: Appointment) => {
-    addAppointment(appointment);
+    if (isCreateAppointmentAllowed) {
+      addAppointment(appointment);
+    }
     setIsCreateAppointmentModalOpen(false);
   };
 

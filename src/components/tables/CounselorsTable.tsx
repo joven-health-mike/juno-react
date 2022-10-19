@@ -1,8 +1,16 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { MouseEvent, useCallback, useContext } from 'react';
+import React, {
+  MouseEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { CellProps, Column, Row } from 'react-table';
+import { deletePermission, updatePermission } from '../../auth/permissions';
 import { Counselor, CounselorsContext } from '../../data/counselors';
+import { LoggedInUserContext } from '../../data/users';
 import XButton from '../buttons/XButton';
 import CounselorDetails from '../details/CounselorDetails';
 import DataTable from './DataTable';
@@ -24,6 +32,20 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
   onOpenFileClicked,
 }) => {
   const { data: counselors } = useContext(CounselorsContext);
+  const { loggedInUser } = useContext(LoggedInUserContext);
+  const [isDeleteCounselorAllowed, setIsDeleteCounselorAllowed] =
+    useState<boolean>(false);
+  const [isUpdateCounselorAllowed, setIsUpdateCounselorAllowed] =
+    useState<boolean>(false);
+
+  useEffect(() => {
+    setIsDeleteCounselorAllowed(
+      deletePermission(loggedInUser.role, 'counselor')
+    );
+    setIsUpdateCounselorAllowed(
+      updatePermission(loggedInUser.role, 'counselor')
+    );
+  }, [loggedInUser.role]);
 
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
@@ -45,24 +67,28 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
           const counselor = cell.row.original as Counselor;
           return (
             <>
-              <XButton
-                text="❌"
-                title={`Delete ${counselor.firstName}`}
-                value={counselor.id}
-                onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                  e.preventDefault();
-                  onDeleteClicked(counselor);
-                }}
-              />
-              <XButton
-                text="✏️"
-                title={`Edit ${counselor.firstName}`}
-                value={counselor.id}
-                onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                  e.preventDefault();
-                  onEditClicked(counselor);
-                }}
-              />
+              {isDeleteCounselorAllowed && (
+                <XButton
+                  text="❌"
+                  title={`Delete ${counselor.firstName}`}
+                  value={counselor.id}
+                  onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                    e.preventDefault();
+                    onDeleteClicked(counselor);
+                  }}
+                />
+              )}
+              {isUpdateCounselorAllowed && (
+                <XButton
+                  text="✏️"
+                  title={`Edit ${counselor.firstName}`}
+                  value={counselor.id}
+                  onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                    e.preventDefault();
+                    onEditClicked(counselor);
+                  }}
+                />
+              )}
               <XButton
                 text="📧"
                 title={`Email ${counselor.firstName}`}
@@ -111,6 +137,8 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
       },
     ],
     [
+      isDeleteCounselorAllowed,
+      isUpdateCounselorAllowed,
       onDeleteClicked,
       onEditClicked,
       onEmailClicked,

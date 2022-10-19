@@ -1,8 +1,16 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { MouseEvent, useCallback, useContext } from 'react';
+import React, {
+  MouseEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { CellProps, Column, Row } from 'react-table';
+import { deletePermission, updatePermission } from '../../auth/permissions';
 import { School, SchoolsContext } from '../../data/schools';
+import { LoggedInUserContext } from '../../data/users';
 import XButton from '../buttons/XButton';
 import SchoolDetails from '../details/SchoolDetails';
 import DataTable from './DataTable';
@@ -20,6 +28,17 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
   onEmailClicked,
 }) => {
   const { data: schools } = useContext(SchoolsContext);
+  const { loggedInUser } = useContext(LoggedInUserContext);
+
+  const [isDeleteSchoolAllowed, setIsDeleteSchoolAllowed] =
+    useState<boolean>(false);
+  const [isUpdateSchoolAllowed, setIsUpdateSchoolAllowed] =
+    useState<boolean>(false);
+
+  useEffect(() => {
+    setIsDeleteSchoolAllowed(deletePermission(loggedInUser.role, 'school'));
+    setIsUpdateSchoolAllowed(updatePermission(loggedInUser.role, 'school'));
+  }, [loggedInUser.role]);
 
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
@@ -42,27 +61,31 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
 
           return (
             <>
-              <XButton
-                text="❌"
-                title="Delete School"
-                value={school.id}
-                onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                  e.preventDefault();
-                  onDeleteClicked(school);
-                }}
-              />
-              <XButton
-                text="✏️"
-                title="Edit School"
-                value={school.id}
-                onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                  e.preventDefault();
-                  onEditClicked(school);
-                }}
-              />
+              {isDeleteSchoolAllowed && (
+                <XButton
+                  text="❌"
+                  title={`Delete ${school.name}`}
+                  value={school.id}
+                  onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                    e.preventDefault();
+                    onDeleteClicked(school);
+                  }}
+                />
+              )}
+              {isUpdateSchoolAllowed && (
+                <XButton
+                  text="✏️"
+                  title={`Edit ${school.name}`}
+                  value={school.id}
+                  onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                    e.preventDefault();
+                    onEditClicked(school);
+                  }}
+                />
+              )}
               <XButton
                 text="📧"
-                title="Email School"
+                title={`Email ${school.name}`}
                 value={school.id}
                 onClick={(e: MouseEvent<HTMLButtonElement>) => {
                   e.preventDefault();

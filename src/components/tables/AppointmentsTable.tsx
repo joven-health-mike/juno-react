@@ -9,6 +9,7 @@ import React, {
   useState,
 } from 'react';
 import { CellProps, Column, Row, Cell } from 'react-table';
+import { deletePermission, updatePermission } from '../../auth/permissions';
 import { Appointment, AppointmentsContext } from '../../data/appointments';
 import { CounselorRef } from '../../data/counselors';
 import { LoggedInUserContext, User } from '../../data/users';
@@ -32,6 +33,10 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
   const { data: appointments } = useContext(AppointmentsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
   const [hiddenColumns, setHiddenColumns] = useState<string[]>([]);
+  const [isDeleteAppointmentAllowed, setIsDeleteAppointmentAllowed] =
+    useState<boolean>(false);
+  const [isUpdateAppointmentAllowed, setIsUpdateAppointmentAllowed] =
+    useState<boolean>(false);
 
   useEffect(() => {
     const hiddenColumns = ['id'];
@@ -41,6 +46,15 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
     setHiddenColumns(hiddenColumns);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    setIsDeleteAppointmentAllowed(
+      deletePermission(loggedInUser.role, 'appointment')
+    );
+    setIsUpdateAppointmentAllowed(
+      updatePermission(loggedInUser.role, 'appointment')
+    );
+  }, [loggedInUser.role]);
 
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
@@ -87,24 +101,28 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
 
           return (
             <>
-              <XButton
-                text="❌"
-                title="Delete Appointment"
-                value={appointment.id}
-                onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                  e.preventDefault();
-                  onDeleteClicked(appointment);
-                }}
-              />
-              <XButton
-                text="✏️"
-                title="Edit Appointment"
-                value={appointment.id}
-                onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                  e.preventDefault();
-                  onEditClicked(appointment);
-                }}
-              />
+              {isDeleteAppointmentAllowed && (
+                <XButton
+                  text="❌"
+                  title="Delete Appointment"
+                  value={appointment.id}
+                  onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                    e.preventDefault();
+                    onDeleteClicked(appointment);
+                  }}
+                />
+              )}
+              {isUpdateAppointmentAllowed && (
+                <XButton
+                  text="✏️"
+                  title="Edit Appointment"
+                  value={appointment.id}
+                  onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                    e.preventDefault();
+                    onEditClicked(appointment);
+                  }}
+                />
+              )}
               <XButton
                 text="📧"
                 title={`Email Participants`}
@@ -161,6 +179,8 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
       },
     ],
     [
+      isDeleteAppointmentAllowed,
+      isUpdateAppointmentAllowed,
       onDeleteClicked,
       onEditClicked,
       onEmailClicked,
