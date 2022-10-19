@@ -9,7 +9,7 @@ const adminsOnly = ['SYSADMIN', 'JOVEN_ADMIN'];
 const pagePermissions = {
   '/': allRoles,
   '/account': allRoles,
-  '/appointments': adminsOnly,
+  '/appointments': allRoles,
   '/calendar': allRoles,
   '/counselors': allRoles,
   '/schools': allRoles,

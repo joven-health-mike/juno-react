@@ -44,8 +44,16 @@ const CounselorsPage: React.FC = () => {
     setIsEditCounselorModalOpen(true);
   };
 
+  const onCounselorEmailClicked = (counselorToEmail: Counselor) => {
+    window.open(`mailto:${counselorToEmail.email}`);
+  };
+
   const onCounselorRoomLinkClicked = (counselorToOpenRoomLink: Counselor) => {
-    window.location.href = counselorToOpenRoomLink.counselorRef.roomLink;
+    window.open(counselorToOpenRoomLink.counselorRef.roomLink);
+  };
+
+  const onCounselorFileOpenClicked = (counselorToOpenFile: Counselor) => {
+    window.open(counselorToOpenFile.docsUrl);
   };
 
   return (
@@ -75,7 +83,9 @@ const CounselorsPage: React.FC = () => {
         <CounselorsTable
           onDeleteClicked={onCounselorDeleteClicked}
           onEditClicked={onCounselorEditClicked}
+          onEmailClicked={onCounselorEmailClicked}
           onRoomLinkClicked={onCounselorRoomLinkClicked}
+          onOpenFileClicked={onCounselorFileOpenClicked}
         />
       </>
     </div>

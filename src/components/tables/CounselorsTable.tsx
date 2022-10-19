@@ -11,13 +11,17 @@ import TableSearchFilter from './TableSearchFilter';
 type CounselorsTableProps = {
   onDeleteClicked: (counselor: Counselor) => void;
   onEditClicked: (counselor: Counselor) => void;
+  onEmailClicked: (counselor: Counselor) => void;
   onRoomLinkClicked: (counselor: Counselor) => void;
+  onOpenFileClicked: (counselor: Counselor) => void;
 };
 
 const CounselorsTable: React.FC<CounselorsTableProps> = ({
   onDeleteClicked,
   onEditClicked,
+  onEmailClicked,
   onRoomLinkClicked,
+  onOpenFileClicked,
 }) => {
   const { data: counselors } = useContext(CounselorsContext);
 
@@ -43,7 +47,7 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
             <>
               <XButton
                 text="❌"
-                title="Delete Counselor"
+                title={`Delete ${counselor.firstName}`}
                 value={counselor.id}
                 onClick={(e: MouseEvent<HTMLButtonElement>) => {
                   e.preventDefault();
@@ -52,7 +56,7 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
               />
               <XButton
                 text="✏️"
-                title="Edit Counselor"
+                title={`Edit ${counselor.firstName}`}
                 value={counselor.id}
                 onClick={(e: MouseEvent<HTMLButtonElement>) => {
                   e.preventDefault();
@@ -60,12 +64,30 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
                 }}
               />
               <XButton
+                text="📧"
+                title={`Email ${counselor.firstName}`}
+                value={counselor.id}
+                onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault();
+                  onEmailClicked(counselor);
+                }}
+              />
+              <XButton
                 text="🖥️"
-                title="Join Video"
+                title={`Join ${counselor.firstName}'s Waiting Room`}
                 value={counselor.id}
                 onClick={(e: MouseEvent<HTMLButtonElement>) => {
                   e.preventDefault();
                   onRoomLinkClicked(counselor);
+                }}
+              />
+              <XButton
+                text="📁"
+                title={`Open ${counselor.firstName}'s File`}
+                value={counselor.id}
+                onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault();
+                  onOpenFileClicked(counselor);
                 }}
               />
               <button {...row.getToggleRowExpandedProps()}>
@@ -87,12 +109,14 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
         Header: 'Last Name',
         accessor: 'lastName',
       },
-      {
-        Header: 'Email',
-        accessor: 'email',
-      },
     ],
-    [onDeleteClicked, onEditClicked, onRoomLinkClicked]
+    [
+      onDeleteClicked,
+      onEditClicked,
+      onEmailClicked,
+      onRoomLinkClicked,
+      onOpenFileClicked,
+    ]
   );
 
   const renderRowSubComponent = useCallback((row: Row) => {

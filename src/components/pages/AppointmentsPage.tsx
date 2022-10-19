@@ -6,6 +6,7 @@ import {
   AppointmentsContext,
   emptyAppointment,
 } from '../../data/appointments';
+import { CounselorsContext, emptyCounselor } from '../../data/counselors';
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import EditAppointmentModal from '../modals/EditAppointmentModal';
 import Navbar from '../navbar/Navbar';
@@ -17,6 +18,8 @@ const AppointmentsPage: React.FC = () => {
     delete: deleteAppointment,
     update: updateAppointment,
   } = useContext(AppointmentsContext);
+
+  const { data: counselors } = useContext(CounselorsContext);
 
   const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
     useState<boolean>(false);
@@ -46,6 +49,23 @@ const AppointmentsPage: React.FC = () => {
     setIsEditAppointmentModalOpen(!isEditAppointmentModalOpen);
   };
 
+  const onAppointmentEmailClicked = (appointmentToEmail: Appointment) => {
+    const appointmentCounselor =
+      counselors.find(
+        counselor =>
+          counselor.counselorRef.id === appointmentToEmail.counselorId
+      ) || emptyCounselor;
+    let mailToUrl = `mailto:${appointmentCounselor.email}`;
+
+    for (const participant of appointmentToEmail.participants) {
+      mailToUrl += `,${participant.email}`;
+    }
+
+    mailToUrl += `?subject=${encodeURIComponent(appointmentToEmail.title)}`;
+
+    window.open(mailToUrl);
+  };
+
   return (
     <div className={'mainContainer'}>
       <nav>
@@ -62,6 +82,7 @@ const AppointmentsPage: React.FC = () => {
         <AppointmentsTable
           onDeleteClicked={onAppointmentDeleteClicked}
           onEditClicked={onAppointmentEditClicked}
+          onEmailClicked={onAppointmentEmailClicked}
         />
         <CreateAppointmentModal
           isOpen={isCreateAppointmentModalOpen}

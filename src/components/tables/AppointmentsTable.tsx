@@ -1,11 +1,18 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { MouseEvent, useCallback, useContext, useMemo } from 'react';
+import React, {
+  MouseEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { CellProps, Column, Row, Cell } from 'react-table';
 import { Appointment, AppointmentsContext } from '../../data/appointments';
 import { CounselorRef } from '../../data/counselors';
-import { User } from '../../data/users';
-import { formatDateTime } from '../../utils/DateUtils';
+import { LoggedInUserContext, User } from '../../data/users';
+import { formatDate, formatTime } from '../../utils/DateUtils';
 import XButton from '../buttons/XButton';
 import AppointmentDetails from '../details/AppointmentDetails';
 import DataTable from './DataTable';
@@ -14,13 +21,26 @@ import TableSearchFilter from './TableSearchFilter';
 type AppointmentsTableProps = {
   onDeleteClicked: (appointment: Appointment) => void;
   onEditClicked: (appointment: Appointment) => void;
+  onEmailClicked: (appointment: Appointment) => void;
 };
 
 const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
   onDeleteClicked,
   onEditClicked,
+  onEmailClicked,
 }) => {
   const { data: appointments } = useContext(AppointmentsContext);
+  const { loggedInUser } = useContext(LoggedInUserContext);
+  const [hiddenColumns, setHiddenColumns] = useState<string[]>([]);
+
+  useEffect(() => {
+    const hiddenColumns = ['id'];
+    if (loggedInUser.role === 'COUNSELOR') {
+      hiddenColumns.push('counselor');
+    }
+    setHiddenColumns(hiddenColumns);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
@@ -39,19 +59,12 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
 
   const getParticipants = useCallback((cell: Cell<any, object>) => {
     let result = 'NOT FOUND';
-    const participants = cell.row.values.participants as User[];
+    const participants = cell.row.original.participants as User[];
     if (participants) {
       if (participants.length > 0) {
         result = '';
         participants.forEach(user => {
-          result =
-            result +
-            user.firstName +
-            ' ' +
-            user.lastName +
-            ' (' +
-            user.role +
-            ') , ';
+          result = `${result}${user.firstName} ${user.lastName} (${user.role}), `;
         });
         result = result.substring(0, result.length - 2);
       }
@@ -92,6 +105,15 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
                   onEditClicked(appointment);
                 }}
               />
+              <XButton
+                text="📧"
+                title={`Email Participants`}
+                value={appointment.id}
+                onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                  e.preventDefault();
+                  onEmailClicked(appointment);
+                }}
+              />
               <button {...row.getToggleRowExpandedProps()}>
                 {row.isExpanded ? '👇' : '👉'}
               </button>
@@ -108,18 +130,22 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
         accessor: 'title',
       },
       {
-        Header: 'Start',
-        accessor: 'start',
-        Cell: ({ cell }: CellProps<object>) => (
-          <p>{formatDateTime(new Date(cell.row.values.start), -6)}</p>
-        ),
+        Header: 'Date',
+        Cell: ({ cell }: CellProps<object>) => {
+          const appointment = cell.row.original as Appointment;
+          return <p>{formatDate(appointment.start)}</p>;
+        },
       },
       {
-        Header: 'End',
-        accessor: 'end',
-        Cell: ({ cell }: CellProps<object>) => (
-          <p>{formatDateTime(new Date(cell.row.values.end), -6)}</p>
-        ),
+        Header: 'Time',
+        Cell: ({ cell }: CellProps<object>) => {
+          const appointment = cell.row.original as Appointment;
+          return (
+            <p>{`${formatTime(appointment.start)} - ${formatTime(
+              appointment.end
+            )}`}</p>
+          );
+        },
       },
       {
         Header: 'Counselor',
@@ -129,10 +155,18 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
       {
         Header: 'Participants',
         accessor: 'participants',
-        Cell: ({ cell }: CellProps<object>) => <p>{getParticipants(cell)}</p>,
+        Cell: ({ cell }: CellProps<object>) => (
+          <div>{getParticipants(cell)}</div>
+        ),
       },
     ],
-    [onEditClicked, onDeleteClicked, getCounselor, getParticipants]
+    [
+      onDeleteClicked,
+      onEditClicked,
+      onEmailClicked,
+      getCounselor,
+      getParticipants,
+    ]
   );
 
   const renderRowSubComponent = useCallback((row: Row) => {
@@ -146,7 +180,7 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
       defaultColumn={defaultColumn}
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}
-      hiddenColumns={['id']}
+      hiddenColumns={hiddenColumns}
     />
   );
 };

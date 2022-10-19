@@ -39,7 +39,7 @@ const SchoolsPage = () => {
   };
 
   const onSchoolEmailClicked = (schoolToEmail: School) => {
-    window.location.href = 'mailto:' + schoolToEmail.primaryEmail;
+    window.open(`mailto:${schoolToEmail.primaryEmail}`);
   };
 
   return (

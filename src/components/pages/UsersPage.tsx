@@ -38,8 +38,8 @@ const UsersPage = () => {
     setIsEditUserModalOpen(true);
   };
 
-  const onUserEmailClicked = (userToEdit: User) => {
-    window.location.href = `mailto:${userToEdit.email}`;
+  const onUserEmailClicked = (userToEmail: User) => {
+    window.open(`mailto:${userToEmail.email}`);
   };
 
   return (
