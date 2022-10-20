@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import '@fullcalendar/react';
 import listPlugin from '@fullcalendar/list';
 import Navbar from '../navbar/Navbar';
@@ -17,6 +17,7 @@ import { CounselorsContext } from '../../data/counselors';
 import { LoggedInUserContext } from '../../data/users';
 import { Role } from '../../services/user.service';
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
+import { createPermission, deletePermission } from '../../auth/permissions';
 
 const HomePage: React.FC = () => {
   const { loggedInUser } = useContext(LoggedInUserContext);
@@ -64,24 +65,44 @@ const StudentsTableView: React.FC = () => {
     useState<boolean>(false);
   const [initialAppointment, setInitialAppointment] =
     useState<Appointment>(emptyAppointment);
+  const [isCreateAppointmentAllowed, setIsCreateAppointmentAllowed] =
+    useState<boolean>(false);
+  const [isDeleteStudentAllowed, setIsDeleteStudentAllowed] =
+    useState<boolean>(false);
+
   const { add: addAppointment } = useContext(AppointmentsContext);
   const { delete: deleteStudent } = useContext(StudentsContext);
+  const { loggedInUser } = useContext(LoggedInUserContext);
+
+  useEffect(() => {
+    setIsCreateAppointmentAllowed(
+      createPermission(loggedInUser.role, 'appointment')
+    );
+    setIsDeleteStudentAllowed(deletePermission(loggedInUser.role, 'student'));
+  }, [loggedInUser.role]);
 
   const handleAppointmentClick = (studentToSchedule: Student) => {
-    const appointment = { ...initialAppointment };
-    appointment.participants = [studentToSchedule];
-    appointment.counselorId = studentToSchedule.studentRef.assignedCounselorId;
-    setInitialAppointment(appointment);
-    setIsCreateAppointmentModalOpen(true);
+    if (isCreateAppointmentAllowed) {
+      const appointment = { ...initialAppointment };
+      appointment.participants = [studentToSchedule];
+      appointment.counselorId =
+        studentToSchedule.studentRef.assignedCounselorId;
+      setInitialAppointment(appointment);
+      setIsCreateAppointmentModalOpen(true);
+    }
   };
 
   const handleDeleteClick = (studentToDelete: Student) => {
-    deleteStudent(studentToDelete);
+    if (isDeleteStudentAllowed) {
+      deleteStudent(studentToDelete);
+    }
   };
 
   const handleAppointmentAdded = (appointmentToAdd: Appointment) => {
-    addAppointment(appointmentToAdd);
-    setIsCreateAppointmentModalOpen(false);
+    if (isCreateAppointmentAllowed) {
+      addAppointment(appointmentToAdd);
+      setIsCreateAppointmentModalOpen(false);
+    }
   };
 
   return (
@@ -90,12 +111,14 @@ const StudentsTableView: React.FC = () => {
         onAppointmentClicked={handleAppointmentClick}
         onDeleteClicked={handleDeleteClick}
       />
-      <CreateAppointmentModal
-        isOpen={isCreateAppointmentModalOpen}
-        onClose={() => setIsCreateAppointmentModalOpen(false)}
-        initialAppointment={initialAppointment}
-        onAppointmentAdded={handleAppointmentAdded}
-      />
+      {isCreateAppointmentAllowed && (
+        <CreateAppointmentModal
+          isOpen={isCreateAppointmentModalOpen}
+          onClose={() => setIsCreateAppointmentModalOpen(false)}
+          initialAppointment={initialAppointment}
+          onAppointmentAdded={handleAppointmentAdded}
+        />
+      )}
     </>
   );
 };
@@ -162,6 +185,11 @@ const SchoolAdminView: React.FC = () => {
 
 const StudentView: React.FC = () => {
   const { data: counselors } = useContext(CounselorsContext);
+  const { loggedInUser } = useContext(LoggedInUserContext);
+  const myCounselor = counselors.find(
+    counselor =>
+      counselor.counselorRef.id === loggedInUser.studentRef?.assignedCounselorId
+  );
 
   return (
     <>
@@ -170,8 +198,12 @@ const StudentView: React.FC = () => {
         <AppointmentView />
       </div>
       <div className="rightSide">
-        <h1>My Counselor</h1>
-        <CounselorDetails counselor={counselors[0]} />
+        {myCounselor && (
+          <>
+            <h1>My Counselor</h1>
+            <CounselorDetails counselor={myCounselor} />
+          </>
+        )}
       </div>
     </>
   );
@@ -179,6 +211,12 @@ const StudentView: React.FC = () => {
 
 const GuardianView: React.FC = () => {
   const { data: counselors } = useContext(CounselorsContext);
+  const { loggedInUser } = useContext(LoggedInUserContext);
+  const myCounselor = counselors.find(
+    counselor =>
+      counselor.counselorRef.id ===
+      loggedInUser.guardianRef?.students[0].assignedCounselorId
+  );
 
   return (
     <>
@@ -187,8 +225,12 @@ const GuardianView: React.FC = () => {
         <AppointmentView />
       </div>
       <div className="rightSide">
-        <h1>My Counselor</h1>
-        <CounselorDetails counselor={counselors[0]} />
+        {myCounselor && (
+          <>
+            <h1>My Counselor</h1>
+            <CounselorDetails counselor={myCounselor} />
+          </>
+        )}
       </div>
     </>
   );

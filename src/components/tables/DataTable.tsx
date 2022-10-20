@@ -12,18 +12,19 @@ import {
   Cell,
   useExpanded,
   usePagination,
+  useSortBy,
 } from 'react-table';
-import { Appointment } from '../../data/appointments';
-import { Counselor } from '../../data/counselors';
-import { School } from '../../data/schools';
-import { Student } from '../../data/students';
 import { User } from '../../data/users';
+import { TableAppointment } from './AppointmentsTable';
+import { TableCounselor } from './CounselorsTable';
+import { TableSchool } from './SchoolsTable';
+import { TableStudent } from './StudentsTable';
 
 type DataTableData =
-  | Appointment[]
-  | Counselor[]
-  | School[]
-  | Student[]
+  | TableAppointment[]
+  | TableCounselor[]
+  | TableSchool[]
+  | TableStudent[]
   | User[];
 
 type DataTableProps = {
@@ -68,6 +69,7 @@ const DataTable: React.FC<DataTableProps> = ({
     },
     useFilters,
     useGlobalFilter,
+    useSortBy,
     useExpanded,
     usePagination
   );
@@ -162,10 +164,15 @@ type TableHeaderCellProps = {
 };
 
 const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ column }) => {
-  const { ...restColumn } = column.getHeaderProps();
+  const { ...restColumn } = column.getHeaderProps(
+    column.getSortByToggleProps()
+  );
   return (
     <th className={'jovenTh'} {...restColumn}>
       {column.render('Header')}
+      <span>
+        {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+      </span>
       {column.canFilter && <div>{column.render('Filter')}</div>}
     </th>
   );

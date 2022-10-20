@@ -21,6 +21,7 @@ export type User = {
   schoolAdminRef?: SchoolAdminRef;
   schoolStaffRef?: SchoolStaffRef;
   studentRef?: StudentRef;
+  guardianRef?: GuardianRef;
 };
 
 export type SchoolAdminRef = {
@@ -33,6 +34,12 @@ export type SchoolStaffRef = {
   id: string;
   userId: string;
   assignedSchoolId: string;
+};
+
+export type GuardianRef = {
+  id: string;
+  userId: string;
+  students: StudentRef[];
 };
 
 export const emptyUser = {

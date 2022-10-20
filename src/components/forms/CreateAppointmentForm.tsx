@@ -23,6 +23,7 @@ import {
   User,
   UsersContext,
   emptyUser,
+  LoggedInUserContext,
 } from '../../data/users';
 import {
   RepeatForFrequency,
@@ -54,13 +55,31 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     useState<number>(-1);
   const [typeSelectionIndex, setTypeSelectionIndex] = useState<number>(-1);
 
+  const [shouldShowCounselor, setShouldShowCounselor] = useState<boolean>(true);
+
   const { data: counselors } = useContext(CounselorsContext);
   const { data: schools } = useContext(SchoolsContext);
   const { data: students } = useContext(StudentsContext);
   const { data: users } = useContext(UsersContext);
+  const { loggedInUser } = useContext(LoggedInUserContext);
 
   useEffect(() => {
+    // if the logged-in user is a counselor, they can only schedule appointments for themselves.
+    if (loggedInUser.role === 'COUNSELOR') {
+      // Hide the counselor select list
+      setShouldShowCounselor(false);
+      // Set the appointment counselorID to the logged-in user's counselor id
+      setAppointment({
+        ...appointment,
+        counselorId: loggedInUser.counselorRef?.id,
+      });
+    }
+  }, [appointment, loggedInUser]);
+
+  useEffect(() => {
+    // If a default appointment is passed in, set up some UI values
     if (defaultAppointment) {
+      // If a counselor is selected, set the Counselor selection index
       if (defaultAppointment.counselorId || defaultAppointment.counselor) {
         const counselorIds = counselors.map(
           counselor => counselor.counselorRef.id
@@ -73,9 +92,13 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
           counselorIds.indexOf(targetCounselorId);
         setCounselorSelectionIndex(initialCounselorSelectionIndex);
       }
+
+      // If a type is selected, set the type selection index
       if (defaultAppointment.type) {
         setTypeSelectionIndexFromName(defaultAppointment.type);
       }
+
+      // If participants are selected, set participants selection
       if (defaultAppointment.participants.length > 0) {
         setParticipants(defaultAppointment.participants);
       }
@@ -182,7 +205,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
     const apptTitle = `${user.firstName} ${user.lastName.substring(0, 1)} (${
       schoolSelection?.name
-    })`;
+    }) - ${appointment.type}`;
     const schoolId =
       schoolSelection?.id === '-1' ? undefined : schoolSelection?.id;
 
@@ -226,13 +249,15 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
           label={'End Time'}
         />
       </label>
-      <label>
-        Counselor:{' '}
-        <SelectCounselorList
-          selectedIndex={counselorSelectionIndex}
-          onCounselorChanged={onCounselorChanged}
-        />
-      </label>
+      {shouldShowCounselor && (
+        <label>
+          Counselor:{' '}
+          <SelectCounselorList
+            selectedIndex={counselorSelectionIndex}
+            onCounselorChanged={onCounselorChanged}
+          />
+        </label>
+      )}
       <label>
         Type:{' '}
         <SelectTypeList

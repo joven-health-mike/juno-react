@@ -3,13 +3,15 @@
 const pad = (value: number | string) => ('0' + value).slice(-2);
 
 export function formatDate(date: Date): string {
-  let year = date.getFullYear();
-  let month = date.getMonth() + 1;
-  let monthString = month.toString();
-  let dayOfMonth = date.getDate();
-  let dayString = dayOfMonth.toString();
+  return `${new Date(date).toLocaleDateString()}`;
+}
 
-  return pad(monthString) + '/' + pad(dayString) + '/' + year;
+export function formatTime(date: Date): string {
+  const fullTimeString = new Date(date).toLocaleTimeString();
+  return `${fullTimeString.slice(0, 4)}${fullTimeString.slice(
+    7,
+    fullTimeString.length
+  )}`;
 }
 
 export function formatDateTime(date: Date, timeZoneOffset: number): string {

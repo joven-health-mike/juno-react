@@ -3,8 +3,8 @@
 import React, { useContext, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { LoggedInUserContext, UsersContext } from '../data/users';
-import { pagePermission } from '../auth/permissions';
-import { AvailableRoute, AvailableRoutes } from './AppRouter';
+import { AvailableRoute, pagePermission } from '../auth/permissions';
+import { AvailableRoutes } from './AppRouter';
 import { CounselorsContext } from '../data/counselors';
 import { AppointmentsContext } from '../data/appointments';
 import { SchoolsContext } from '../data/schools';
