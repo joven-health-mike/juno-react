@@ -54,7 +54,7 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
   useEffect(() => {
     const hiddenColumns = ['id'];
     if (loggedInUser.role === 'COUNSELOR') {
-      hiddenColumns.push('counselor');
+      hiddenColumns.push('counselorName');
     }
     setHiddenColumns(hiddenColumns);
     // eslint-disable-next-line react-hooks/exhaustive-deps
