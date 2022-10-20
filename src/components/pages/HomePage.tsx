@@ -185,6 +185,11 @@ const SchoolAdminView: React.FC = () => {
 
 const StudentView: React.FC = () => {
   const { data: counselors } = useContext(CounselorsContext);
+  const { loggedInUser } = useContext(LoggedInUserContext);
+  const myCounselor = counselors.find(
+    counselor =>
+      counselor.counselorRef.id === loggedInUser.studentRef?.assignedCounselorId
+  );
 
   return (
     <>
@@ -193,8 +198,12 @@ const StudentView: React.FC = () => {
         <AppointmentView />
       </div>
       <div className="rightSide">
-        <h1>My Counselor</h1>
-        <CounselorDetails counselor={counselors[0]} />
+        {myCounselor && (
+          <>
+            <h1>My Counselor</h1>
+            <CounselorDetails counselor={myCounselor} />
+          </>
+        )}
       </div>
     </>
   );
@@ -202,6 +211,12 @@ const StudentView: React.FC = () => {
 
 const GuardianView: React.FC = () => {
   const { data: counselors } = useContext(CounselorsContext);
+  const { loggedInUser } = useContext(LoggedInUserContext);
+  const myCounselor = counselors.find(
+    counselor =>
+      counselor.counselorRef.id ===
+      loggedInUser.guardianRef?.students[0].assignedCounselorId
+  );
 
   return (
     <>
@@ -210,8 +225,12 @@ const GuardianView: React.FC = () => {
         <AppointmentView />
       </div>
       <div className="rightSide">
-        <h1>My Counselor</h1>
-        <CounselorDetails counselor={counselors[0]} />
+        {myCounselor && (
+          <>
+            <h1>My Counselor</h1>
+            <CounselorDetails counselor={myCounselor} />
+          </>
+        )}
       </div>
     </>
   );

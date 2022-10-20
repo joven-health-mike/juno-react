@@ -23,11 +23,11 @@ export type AvailableRoute =
 const pagePermissions = {
   '/': allRoles,
   '/account': allRoles,
-  '/appointments': allRoles,
+  '/appointments': everyoneExceptClients,
   '/calendar': allRoles,
-  '/counselors': allRoles,
-  '/schools': allRoles,
-  '/students': allRoles,
+  '/counselors': everyoneExceptClients,
+  '/schools': jovenStaff,
+  '/students': everyoneExceptClients,
   '/users': adminsOnly,
   '/logout': allRoles,
 };
