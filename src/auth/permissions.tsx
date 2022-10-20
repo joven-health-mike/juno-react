@@ -6,7 +6,7 @@ const allRoles = ROLES;
 const adminsOnly = ['SYSADMIN', 'JOVEN_ADMIN'];
 const jovenStaff = ['SYSADMIN', 'JOVEN_ADMIN', 'JOVEN_STAFF'];
 const everyoneExceptClients = allRoles.filter(
-  role => role === 'STUDENT' || role === 'GUARDIAN'
+  role => role !== 'STUDENT' && role !== 'GUARDIAN'
 );
 
 export type AvailableRoute =

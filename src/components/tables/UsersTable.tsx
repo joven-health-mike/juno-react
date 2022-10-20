@@ -21,6 +21,12 @@ type UsersTableProps = {
   onEmailClicked: (user: User) => void;
 };
 
+export type TableUser = {
+  id: string;
+  name: string;
+  role: string;
+};
+
 const UsersTable: React.FC<UsersTableProps> = ({
   onDeleteClicked,
   onEditClicked,
@@ -33,11 +39,85 @@ const UsersTable: React.FC<UsersTableProps> = ({
     useState<boolean>(false);
   const [isUpdateUserAllowed, setIsUpdateUserAllowed] =
     useState<boolean>(false);
+  const [tableUsers, setTableUsers] = useState<TableUser[]>([]);
 
   useEffect(() => {
     setIsDeleteUserAllowed(deletePermission(loggedInUser.role, 'user'));
     setIsUpdateUserAllowed(updatePermission(loggedInUser.role, 'user'));
   }, [loggedInUser.role]);
+
+  useEffect(() => {
+    const mappedUsers = users.map(user => {
+      return {
+        id: user.id,
+        name: `${user.firstName} ${user.lastName}`,
+        role: user.role,
+      } as TableUser;
+    });
+
+    setTableUsers(mappedUsers);
+  }, [users]);
+
+  const getUserFromTableUser = useCallback(
+    (tableUser: TableUser): User => {
+      return users.find(user => user.id === tableUser.id) as User;
+    },
+    [users]
+  );
+
+  const getButtonCell = useCallback(
+    (tableUser: TableUser, row: Row) => {
+      const user = getUserFromTableUser(tableUser);
+      if (!user) return <></>;
+
+      return (
+        <>
+          {isDeleteUserAllowed && (
+            <XButton
+              text="❌"
+              title={`Delete ${user.firstName}`}
+              value={user.id}
+              onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                e.preventDefault();
+                onDeleteClicked(user);
+              }}
+            />
+          )}
+          {isUpdateUserAllowed && (
+            <XButton
+              text="✏️"
+              title={`Edit ${user.firstName}`}
+              value={user.id}
+              onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                e.preventDefault();
+                onEditClicked(user);
+              }}
+            />
+          )}
+          <XButton
+            text="📧"
+            title={`Email ${user.firstName}`}
+            value={user.id}
+            onClick={(e: MouseEvent<HTMLButtonElement>) => {
+              e.preventDefault();
+              onEmailClicked(user);
+            }}
+          />
+          <button {...row.getToggleRowExpandedProps()}>
+            {row.isExpanded ? '👇' : '👉'}
+          </button>
+        </>
+      );
+    },
+    [
+      getUserFromTableUser,
+      isDeleteUserAllowed,
+      isUpdateUserAllowed,
+      onDeleteClicked,
+      onEditClicked,
+      onEmailClicked,
+    ]
+  );
 
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
@@ -49,89 +129,36 @@ const UsersTable: React.FC<UsersTableProps> = ({
   const columns: Column[] = React.useMemo(
     () => [
       {
-        id: 'expander',
-        Header: ({ getToggleAllRowsExpandedProps, isAllRowsExpanded }) => (
-          <button {...getToggleAllRowsExpandedProps()}>
-            {isAllRowsExpanded ? '👇' : '👉'}
-          </button>
-        ),
+        id: 'buttons',
         Cell: ({ cell, row }: CellProps<object>) => {
-          const user = cell.row.original as User;
-
-          return (
-            <>
-              {isDeleteUserAllowed && (
-                <XButton
-                  text="❌"
-                  title={`Delete ${user.firstName}`}
-                  value={user.id}
-                  onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                    e.preventDefault();
-                    onDeleteClicked(user);
-                  }}
-                />
-              )}
-              {isUpdateUserAllowed && (
-                <XButton
-                  text="✏️"
-                  title={`Edit ${user.firstName}`}
-                  value={user.id}
-                  onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                    e.preventDefault();
-                    onEditClicked(user);
-                  }}
-                />
-              )}
-              <XButton
-                text="📧"
-                title={`Email ${user.firstName}`}
-                value={user.id}
-                onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                  e.preventDefault();
-                  onEmailClicked(user);
-                }}
-              />
-              <button {...row.getToggleRowExpandedProps()}>
-                {row.isExpanded ? '👇' : '👉'}
-              </button>
-            </>
-          );
+          const user = cell.row.original as TableUser;
+          return getButtonCell(user, row);
         },
       },
       {
-        Header: 'ID',
-        accessor: 'id',
-      },
-      {
-        Header: 'First Name',
-        accessor: 'firstName',
-      },
-      {
-        Header: 'Last Name',
-        accessor: 'lastName',
+        Header: 'Name',
+        accessor: 'name',
       },
       {
         Header: 'Role',
         accessor: 'role',
       },
     ],
-    [
-      isDeleteUserAllowed,
-      isUpdateUserAllowed,
-      onDeleteClicked,
-      onEditClicked,
-      onEmailClicked,
-    ]
+    [getButtonCell]
   );
 
-  const renderRowSubComponent = useCallback((row: Row) => {
-    const rowObject = row.original as User;
-    return <UserDetails user={rowObject} />;
-  }, []);
+  const renderRowSubComponent = useCallback(
+    (row: Row) => {
+      const rowObject = row.original as TableUser;
+      const user = getUserFromTableUser(rowObject);
+      return <UserDetails user={user} />;
+    },
+    [getUserFromTableUser]
+  );
 
   return (
     <DataTable
-      data={users}
+      data={tableUsers}
       defaultColumn={defaultColumn}
       columns={columns}
       renderRowSubComponent={renderRowSubComponent}

@@ -176,10 +176,14 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
     [getButtonCell]
   );
 
-  const renderRowSubComponent = useCallback((row: Row) => {
-    const rowObject = row.original as Counselor;
-    return <CounselorDetails counselor={rowObject} />;
-  }, []);
+  const renderRowSubComponent = useCallback(
+    (row: Row) => {
+      const rowObject = row.original as TableCounselor;
+      const counselor = getCounselorFromTableCounselor(rowObject);
+      return <CounselorDetails counselor={counselor} />;
+    },
+    [getCounselorFromTableCounselor]
+  );
 
   return (
     <DataTable

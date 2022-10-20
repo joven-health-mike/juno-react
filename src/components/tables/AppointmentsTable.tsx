@@ -42,6 +42,7 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
   const { data: appointments } = useContext(AppointmentsContext);
   const { data: counselors } = useContext(CounselorsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
+
   const [hiddenColumns, setHiddenColumns] = useState<string[]>([]);
   const [isDeleteAppointmentAllowed, setIsDeleteAppointmentAllowed] =
     useState<boolean>(false);
@@ -52,7 +53,7 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
   >([]);
 
   useEffect(() => {
-    const hiddenColumns = ['id'];
+    const hiddenColumns = [];
     if (loggedInUser.role === 'COUNSELOR') {
       hiddenColumns.push('counselorName');
     }
@@ -174,10 +175,6 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
           const appointment = cell.row.original as TableAppointment;
           return getButtonCell(appointment, row);
         },
-      },
-      {
-        Header: 'ID',
-        accessor: 'id',
       },
       {
         Header: 'Title',
