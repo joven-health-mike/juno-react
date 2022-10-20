@@ -1,10 +1,18 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { MouseEvent, useCallback, useContext } from 'react';
+import React, {
+  MouseEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { CellProps, Column, Row } from 'react-table';
+import { deletePermission, updatePermission } from '../../auth/permissions';
 import { CounselorsContext } from '../../data/counselors';
 import { SchoolsContext } from '../../data/schools';
 import { Student, StudentsContext } from '../../data/students';
+import { LoggedInUserContext } from '../../data/users';
 import XButton from '../buttons/XButton';
 import StudentDetails from '../details/StudentDetails';
 import DataTable from './DataTable';
@@ -24,6 +32,17 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
   const { data: counselors } = useContext(CounselorsContext);
   const { data: schools } = useContext(SchoolsContext);
   const { data: students } = useContext(StudentsContext);
+  const { loggedInUser } = useContext(LoggedInUserContext);
+
+  const [isDeleteStudentAllowed, setIsDeleteStudentAllowed] =
+    useState<boolean>(false);
+  const [isUpdateStudentAllowed, setIsUpdateStudentAllowed] =
+    useState<boolean>(false);
+
+  useEffect(() => {
+    setIsDeleteStudentAllowed(deletePermission(loggedInUser.role, 'student'));
+    setIsUpdateStudentAllowed(updatePermission(loggedInUser.role, 'student'));
+  }, [loggedInUser.role]);
 
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
@@ -46,24 +65,28 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
 
           return (
             <>
-              <XButton
-                text="❌"
-                title="Delete Student"
-                value={student.id}
-                onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                  e.preventDefault();
-                  onDeleteClicked(student);
-                }}
-              />
-              <XButton
-                text="✏️"
-                title="Edit Student"
-                value={student.id}
-                onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                  e.preventDefault();
-                  onEditClicked(student);
-                }}
-              />
+              {isDeleteStudentAllowed && (
+                <XButton
+                  text="❌"
+                  title="Delete Student"
+                  value={student.id}
+                  onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                    e.preventDefault();
+                    onDeleteClicked(student);
+                  }}
+                />
+              )}
+              {isUpdateStudentAllowed && (
+                <XButton
+                  text="✏️"
+                  title="Edit Student"
+                  value={student.id}
+                  onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                    e.preventDefault();
+                    onEditClicked(student);
+                  }}
+                />
+              )}
               <XButton
                 text="📅"
                 title="Schedule Appointment"
@@ -137,7 +160,15 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
         ),
       },
     ],
-    [counselors, onAppointmentClicked, onDeleteClicked, onEditClicked, schools]
+    [
+      counselors,
+      isDeleteStudentAllowed,
+      isUpdateStudentAllowed,
+      onAppointmentClicked,
+      onDeleteClicked,
+      onEditClicked,
+      schools,
+    ]
   );
 
   const renderRowSubComponent = useCallback((row: Row) => {

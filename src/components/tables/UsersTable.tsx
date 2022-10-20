@@ -1,8 +1,15 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { MouseEvent, useCallback, useContext } from 'react';
+import React, {
+  MouseEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { CellProps, Column, Row } from 'react-table';
-import { User, UsersContext } from '../../data/users';
+import { deletePermission, updatePermission } from '../../auth/permissions';
+import { LoggedInUserContext, User, UsersContext } from '../../data/users';
 import XButton from '../buttons/XButton';
 import UserDetails from '../details/UserDetails';
 import DataTable from './DataTable';
@@ -20,6 +27,17 @@ const UsersTable: React.FC<UsersTableProps> = ({
   onEmailClicked,
 }) => {
   const { data: users } = useContext(UsersContext);
+  const { loggedInUser } = useContext(LoggedInUserContext);
+
+  const [isDeleteUserAllowed, setIsDeleteUserAllowed] =
+    useState<boolean>(false);
+  const [isUpdateUserAllowed, setIsUpdateUserAllowed] =
+    useState<boolean>(false);
+
+  useEffect(() => {
+    setIsDeleteUserAllowed(deletePermission(loggedInUser.role, 'user'));
+    setIsUpdateUserAllowed(updatePermission(loggedInUser.role, 'user'));
+  }, [loggedInUser.role]);
 
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
@@ -42,24 +60,28 @@ const UsersTable: React.FC<UsersTableProps> = ({
 
           return (
             <>
-              <XButton
-                text="❌"
-                title={`Delete ${user.firstName}`}
-                value={user.id}
-                onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                  e.preventDefault();
-                  onDeleteClicked(user);
-                }}
-              />
-              <XButton
-                text="✏️"
-                title={`Edit ${user.firstName}`}
-                value={user.id}
-                onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                  e.preventDefault();
-                  onEditClicked(user);
-                }}
-              />
+              {isDeleteUserAllowed && (
+                <XButton
+                  text="❌"
+                  title={`Delete ${user.firstName}`}
+                  value={user.id}
+                  onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                    e.preventDefault();
+                    onDeleteClicked(user);
+                  }}
+                />
+              )}
+              {isUpdateUserAllowed && (
+                <XButton
+                  text="✏️"
+                  title={`Edit ${user.firstName}`}
+                  value={user.id}
+                  onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                    e.preventDefault();
+                    onEditClicked(user);
+                  }}
+                />
+              )}
               <XButton
                 text="📧"
                 title={`Email ${user.firstName}`}
@@ -93,7 +115,13 @@ const UsersTable: React.FC<UsersTableProps> = ({
         accessor: 'role',
       },
     ],
-    [onDeleteClicked, onEditClicked, onEmailClicked]
+    [
+      isDeleteUserAllowed,
+      isUpdateUserAllowed,
+      onDeleteClicked,
+      onEditClicked,
+      onEmailClicked,
+    ]
   );
 
   const renderRowSubComponent = useCallback((row: Row) => {

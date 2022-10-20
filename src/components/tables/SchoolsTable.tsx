@@ -116,7 +116,13 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
         accessor: 'primaryPhone',
       },
     ],
-    [onDeleteClicked, onEditClicked, onEmailClicked]
+    [
+      isDeleteSchoolAllowed,
+      isUpdateSchoolAllowed,
+      onDeleteClicked,
+      onEditClicked,
+      onEmailClicked,
+    ]
   );
 
   const renderRowSubComponent = useCallback((row: Row) => {
