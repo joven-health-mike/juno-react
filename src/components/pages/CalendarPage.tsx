@@ -25,7 +25,7 @@ import { StudentsContext } from '../../data/students';
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import AppointmentDetailsModal from '../modals/AppointmentDetailsModal';
 import { LoggedInUserContext } from '../../data/users';
-import { createPermission } from '../../auth/permissions';
+import { createPermission, deletePermission } from '../../auth/permissions';
 
 const CalendarPage: React.FC = () => {
   const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
@@ -45,9 +45,14 @@ const CalendarPage: React.FC = () => {
     useState<Appointment>(emptyAppointment);
   const [isCreateAppointmentAllowed, setIsCreateAppointmentAllowed] =
     useState<boolean>(false);
+  const [isDeleteAppointmentAllowed, setIsDeleteAppointmentAllowed] =
+    useState<boolean>(false);
 
-  const { data: appointments, add: addAppointment } =
-    useContext(AppointmentsContext);
+  const {
+    data: appointments,
+    add: addAppointment,
+    delete: deleteAppointment,
+  } = useContext(AppointmentsContext);
   const { data: counselors } = useContext(CounselorsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
   const { data: schools } = useContext(SchoolsContext);
@@ -73,6 +78,9 @@ const CalendarPage: React.FC = () => {
     setIsCreateAppointmentAllowed(
       createPermission(loggedInUser.role, 'appointment')
     );
+    setIsDeleteAppointmentAllowed(
+      deletePermission(loggedInUser.role, 'appointment')
+    );
   }, [loggedInUser.role]);
 
   useEffect(() => {
@@ -96,6 +104,45 @@ const CalendarPage: React.FC = () => {
   const handleCounselorChange = (selectedCounselor: Counselor) => {
     setSelectedCounselorIndex(counselors.indexOf(selectedCounselor));
     setCounselorSelection(selectedCounselor);
+  };
+
+  const onAppointmentDeleteClicked = (appointmentToDelete: Appointment) => {
+    if (
+      isDeleteAppointmentAllowed &&
+      window.confirm('Delete this appointment?')
+    ) {
+      deleteAppointment(appointmentToDelete);
+    }
+    setIsAppointmentDetailsModalOpen(false);
+  };
+
+  const onAppointmentEmailClicked = (appointmentToEmail: Appointment) => {
+    const appointmentCounselor =
+      counselors.find(
+        counselor =>
+          counselor.counselorRef.id === appointmentToEmail.counselorId
+      ) || emptyCounselor;
+    let mailToUrl = `mailto:${appointmentCounselor.email}`;
+
+    for (const participant of appointmentToEmail.participants) {
+      mailToUrl += `,${participant.email}`;
+    }
+
+    mailToUrl += `?subject=${encodeURIComponent(appointmentToEmail.title)}`;
+
+    window.open(mailToUrl);
+  };
+
+  const onAppointmentRoomLinkClicked = (
+    appointmentToOpenRoomLink: Appointment
+  ) => {
+    const counselor = counselors.find(
+      counselor =>
+        counselor.counselorRef.id === appointmentToOpenRoomLink.counselorId
+    );
+    if (counselor?.counselorRef?.roomLink) {
+      window.open(counselor.counselorRef.roomLink);
+    }
   };
 
   useEffect(() => {
@@ -161,6 +208,9 @@ const CalendarPage: React.FC = () => {
         isOpen={isAppointmentDetailsModalOpen}
         onClose={() => setIsAppointmentDetailsModalOpen(false)}
         appointment={clickedAppointment}
+        onRoomLinkClicked={onAppointmentRoomLinkClicked}
+        onDeleteClicked={onAppointmentDeleteClicked}
+        onEmailClicked={onAppointmentEmailClicked}
       />
     </div>
   );

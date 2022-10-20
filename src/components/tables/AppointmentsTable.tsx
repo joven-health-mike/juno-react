@@ -23,6 +23,7 @@ type AppointmentsTableProps = {
   onDeleteClicked: (appointment: Appointment) => void;
   onEditClicked: (appointment: Appointment) => void;
   onEmailClicked: (appointment: Appointment) => void;
+  onRoomLinkClicked: (appointment: Appointment) => void;
 };
 
 export type TableAppointment = {
@@ -31,13 +32,13 @@ export type TableAppointment = {
   date: string;
   time: string;
   counselorName: string;
-  participantNames: string;
 };
 
 const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
   onDeleteClicked,
   onEditClicked,
   onEmailClicked,
+  onRoomLinkClicked,
 }) => {
   const { data: appointments } = useContext(AppointmentsContext);
   const { data: counselors } = useContext(CounselorsContext);
@@ -77,11 +78,6 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
       );
       const counselorName = `${counselor?.firstName} ${counselor?.lastName}`;
 
-      let participantNames = '';
-      for (const participant of appointment.participants) {
-        participantNames += `${participant.firstName} ${participant.lastName} (${participant.role}), `;
-      }
-
       return {
         id: appointment.id,
         title: appointment.title,
@@ -90,7 +86,6 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
           appointment.end
         )}`,
         counselorName: counselorName,
-        participantNames: participantNames,
       } as TableAppointment;
     });
 
@@ -110,6 +105,10 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
     (tableAppointment: TableAppointment, row: Row) => {
       const appointment = getAppointmentFromTableAppointment(tableAppointment);
       if (!appointment) return <></>;
+
+      const counselor = counselors.find(
+        counselor => counselor.counselorRef.id === appointment.counselorId
+      );
 
       return (
         <>
@@ -144,6 +143,17 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
               onEmailClicked(appointment);
             }}
           />
+          {typeof counselor !== 'undefined' && (
+            <XButton
+              text="🖥️"
+              title={`Join ${counselor.firstName}'s Waiting Room`}
+              value={appointment.id}
+              onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                e.preventDefault();
+                onRoomLinkClicked(appointment);
+              }}
+            />
+          )}
           <button {...row.getToggleRowExpandedProps()}>
             {row.isExpanded ? '👇' : '👉'}
           </button>
@@ -151,12 +161,14 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
       );
     },
     [
+      counselors,
       getAppointmentFromTableAppointment,
       isDeleteAppointmentAllowed,
       isUpdateAppointmentAllowed,
       onDeleteClicked,
       onEditClicked,
       onEmailClicked,
+      onRoomLinkClicked,
     ]
   );
 
@@ -192,10 +204,6 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
         Header: 'Counselor',
         accessor: 'counselorName',
       },
-      {
-        Header: 'Participants',
-        accessor: 'participantNames',
-      },
     ],
     [getButtonCell]
   );
@@ -204,9 +212,21 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
     (row: Row) => {
       const tableAppointment = row.original as TableAppointment;
       const appointment = getAppointmentFromTableAppointment(tableAppointment);
-      return <AppointmentDetails appointment={appointment} />;
+      return (
+        <AppointmentDetails
+          appointment={appointment}
+          onEmailParticipantsClicked={onEmailClicked}
+          onJoinAppointmentClicked={onRoomLinkClicked}
+          onCancelAppointmentClicked={onDeleteClicked}
+        />
+      );
     },
-    [getAppointmentFromTableAppointment]
+    [
+      getAppointmentFromTableAppointment,
+      onDeleteClicked,
+      onEmailClicked,
+      onRoomLinkClicked,
+    ]
   );
 
   return (
