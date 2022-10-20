@@ -13,17 +13,17 @@ import {
   useExpanded,
   usePagination,
 } from 'react-table';
-import { Appointment } from '../../data/appointments';
 import { Counselor } from '../../data/counselors';
 import { School } from '../../data/schools';
-import { Student } from '../../data/students';
 import { User } from '../../data/users';
+import { TableAppointment } from './AppointmentsTable';
+import { TableStudent } from './StudentsTable';
 
 type DataTableData =
-  | Appointment[]
+  | TableAppointment[]
   | Counselor[]
   | School[]
-  | Student[]
+  | TableStudent[]
   | User[];
 
 type DataTableProps = {
