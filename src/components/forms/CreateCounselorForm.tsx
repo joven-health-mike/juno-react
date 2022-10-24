@@ -135,25 +135,6 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
           />
         </label>
         <label>
-          Time Zone Offset:
-          <input
-            data-testid={'input-timeZoneOffset'}
-            type="number"
-            min="-12"
-            max="14"
-            placeholder="Time Zone Offset"
-            name="timeZoneOffset"
-            value={counselor.timeZoneOffset}
-            required
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              setCounselor({
-                ...counselor,
-                timeZoneOffset: parseInt(e.target.value),
-              });
-            }}
-          />
-        </label>
-        <label>
           Room Link:
           <input
             data-testid={'input-roomLink'}

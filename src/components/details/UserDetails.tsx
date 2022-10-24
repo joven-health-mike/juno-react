@@ -17,9 +17,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user }) => {
       <p data-testid={'docsUrl'}>
         Docs URL: <a href={user.docsUrl}>{user.docsUrl}</a>
       </p>
-      <p data-testid={'timeZoneOffset'}>
-        Time Zone Offset: {user.timeZoneOffset}
-      </p>
+      <p data-testid={'timeZoneIanaName'}>Time Zone: {user.timeZoneIanaName}</p>
       <p data-testid={'userRole'}>Role: {user.role}</p>
     </>
   );

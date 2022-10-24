@@ -178,25 +178,6 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
         />
       </label>
       <label>
-        Time Zone Offset:
-        <input
-          data-testid={'input-timeZoneOffset'}
-          type="number"
-          min="-12"
-          max="14"
-          placeholder="Time Zone Offset"
-          name="timeZoneOffset"
-          value={student.timeZoneOffset}
-          required
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setStudent({
-              ...student,
-              timeZoneOffset: parseInt(e.target.value),
-            });
-          }}
-        />
-      </label>
-      <label>
         Counselor:{' '}
         <SelectCounselorList
           selectedIndex={counselorSelectionIndex}

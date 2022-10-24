@@ -221,20 +221,6 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
         />
       </label>
       <label>
-        Time Zone Offset:
-        <input
-          data-testid={'input-timeZoneOffset'}
-          type="number"
-          placeholder="Time Zone Offset"
-          name="timeZoneOffset"
-          value={user.timeZoneOffset}
-          required
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setUser({ ...user, timeZoneOffset: parseInt(e.target.value) });
-          }}
-        />
-      </label>
-      <label>
         Role:{' '}
         <SelectList
           labelText="Select a Role"

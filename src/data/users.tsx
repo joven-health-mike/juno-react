@@ -15,7 +15,7 @@ export type User = {
   username: string;
   phone?: string;
   docsUrl?: string;
-  timeZoneOffset?: number;
+  timeZoneIanaName?: string;
   role: Role;
   counselorRef?: CounselorRef;
   schoolAdminRef?: SchoolAdminRef;
@@ -50,7 +50,7 @@ export const emptyUser = {
   username: '',
   phone: '',
   docsUrl: '',
-  timeZoneOffset: 0,
+  timeZoneIanaName: '',
   role: 'JOVEN_STAFF' as Role,
 };
 

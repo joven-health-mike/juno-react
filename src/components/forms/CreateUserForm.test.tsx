@@ -15,6 +15,7 @@ const testUser = {
   email: 'email@test.com',
   username: 'username',
   phone: 'phone',
+  timeZoneIanaName: '',
   role: 'JOVEN_STAFF' as Role,
 };
 
