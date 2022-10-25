@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import { DateTime } from 'luxon';
 import {
   Appointment,
   AppointmentsContext,
@@ -21,7 +22,6 @@ import {
   SelectCounselorList,
   SelectSchoolList,
 } from '../selectList/SelectList';
-import { StudentsContext } from '../../data/students';
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import AppointmentDetailsModal from '../modals/AppointmentDetailsModal';
 import { LoggedInUserContext } from '../../data/users';
@@ -51,7 +51,6 @@ const CalendarPage: React.FC = () => {
   const { data: counselors } = useContext(CounselorsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
   const { data: schools } = useContext(SchoolsContext);
-  const { data: students } = useContext(StudentsContext);
 
   const handleAppointmentClick = (appointment: Appointment) => {
     setClickedAppointment(appointment);
@@ -60,10 +59,25 @@ const CalendarPage: React.FC = () => {
 
   const handleDateClick = (date: string) => {
     if (isCreateAppointmentAllowed) {
+      const dateObj = new Date(date);
+      const startTime = DateTime.fromObject(
+        {
+          day: dateObj.getDate() + 1,
+          month: dateObj.getMonth() + 1,
+          hour: 8,
+          minute: 0,
+          second: 0,
+          millisecond: 0,
+        },
+        { zone: loggedInUser.timeZoneIanaName }
+      ).toJSDate();
+      const endTime = DateTime.fromJSDate(startTime)
+        .set({ minute: 30 })
+        .toJSDate();
       setInitialAppointment({
         ...initialAppointment,
-        start: new Date(date + 'T08:00'),
-        end: new Date(date + 'T08:30'),
+        start: startTime,
+        end: endTime,
       });
       setIsCreateAppointmentModalOpen(true);
     }
@@ -110,7 +124,7 @@ const CalendarPage: React.FC = () => {
       return counselorMatch && schoolMatch;
     });
     setFilteredEvents(filteredEvents);
-  }, [counselorSelection, schoolSelection, appointments, students]);
+  }, [appointments, counselorSelection, schoolSelection]);
 
   useEffect(() => {
     setFilteredEvents(appointments);
