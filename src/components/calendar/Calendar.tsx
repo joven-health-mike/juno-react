@@ -1,9 +1,10 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from 'react';
+import React, { useContext } from 'react';
 import FullCalendar, { EventClickArg, PluginDef } from '@fullcalendar/react';
 import { Appointment, getColorForType } from '../../data/appointments';
 import { DateClickArg } from '@fullcalendar/interaction';
+import { LoggedInUserContext } from '../../data/users';
 
 type CalendarProps = {
   view: string;
@@ -20,6 +21,8 @@ const Calendar: React.FC<CalendarProps> = ({
   onEventClick,
   onDateClick,
 }: CalendarProps) => {
+  const { loggedInUser } = useContext(LoggedInUserContext);
+
   appointments.forEach(appointment => {
     appointment.color = getColorForType(appointment.type);
   });
@@ -44,6 +47,7 @@ const Calendar: React.FC<CalendarProps> = ({
       <FullCalendar
         events={appointments}
         plugins={plugins}
+        timeZone={loggedInUser.timeZoneIanaName}
         initialView={view}
         eventClick={(info: EventClickArg) => eventClicked(info)}
         dateClick={(info: DateClickArg) => dateClicked(info)}

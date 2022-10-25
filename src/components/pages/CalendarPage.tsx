@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import momentTimezonePlugin from '@fullcalendar/moment-timezone';
 import { DateTime } from 'luxon';
 import {
   Appointment,
@@ -159,7 +160,7 @@ const CalendarPage: React.FC = () => {
       {showCalendar && (
         <Calendar
           view="dayGridMonth"
-          plugins={[dayGridPlugin, interactionPlugin]}
+          plugins={[dayGridPlugin, interactionPlugin, momentTimezonePlugin]}
           appointments={filteredEvents}
           onEventClick={handleAppointmentClick}
           onDateClick={handleDateClick}
