@@ -22,6 +22,7 @@ import {
   User,
 } from '../../data/users';
 import { Role, ROLES } from '../../services/user.service';
+import { AvailableTimeZone, TIME_ZONES } from '../../utils/DateUtils';
 import SelectList, {
   SelectCounselorList,
   SelectSchoolList,
@@ -124,6 +125,10 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
     setSchoolSelectionIndex(newSchoolSelectionIndex);
   };
 
+  const onTimeZoneChanged = (timeZone: string) => {
+    setUser({ ...user, timeZoneIanaName: timeZone });
+  };
+
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
     const submittedUser = defaultUser ? user : { ...user, id: `-1` };
@@ -217,6 +222,19 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
           value={user.docsUrl}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             setUser({ ...user, docsUrl: e.target.value });
+          }}
+        />
+      </label>
+      <label>
+        Time Zone:{' '}
+        <SelectList
+          labelText="Select a Time Zone"
+          items={TIME_ZONES}
+          value={TIME_ZONES.indexOf(user.timeZoneIanaName || '')}
+          onItemChanged={item => {
+            return onTimeZoneChanged(
+              TIME_ZONES[parseInt(item)] as AvailableTimeZone
+            );
           }}
         />
       </label>
