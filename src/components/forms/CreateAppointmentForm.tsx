@@ -69,12 +69,14 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
       // Hide the counselor select list
       setShouldShowCounselor(false);
       // Set the appointment counselorID to the logged-in user's counselor id
-      setAppointment({
-        ...appointment,
-        counselorId: loggedInUser.counselorRef?.id,
+      setAppointment(oldAppointment => {
+        return {
+          ...oldAppointment,
+          counselorId: loggedInUser.counselorRef?.id,
+        };
       });
     }
-  }, [appointment, loggedInUser]);
+  }, [loggedInUser.counselorRef?.id, loggedInUser.role]);
 
   useEffect(() => {
     // If a default appointment is passed in, set up some UI values

@@ -85,9 +85,9 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
       return {
         id: appointment.id,
         title: appointment.title,
-        date: formatDate(appointment.start),
-        time: `${formatTime(appointment.start)} - ${formatTime(
-          appointment.end
+        date: formatDate(new Date(appointment.start)),
+        time: `${formatTime(new Date(appointment.start))} - ${formatTime(
+          new Date(appointment.end)
         )}`,
         counselorName: counselorName,
         participantNames: participantNames,
@@ -95,7 +95,7 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
     });
 
     setTableAppointments(mappedAppointments);
-  }, [appointments, counselors]);
+  }, [appointments, counselors, loggedInUser.timeZoneIanaName]);
 
   const getAppointmentFromTableAppointment = useCallback(
     (tableAppointment: TableAppointment): Appointment => {

@@ -9,6 +9,8 @@ import React, {
 } from 'react';
 import { Counselor, emptyCounselor } from '../../data/counselors';
 import { Role } from '../../services/user.service';
+import { AvailableTimeZone, TIME_ZONES } from '../../utils/DateUtils';
+import SelectList from '../selectList/SelectList';
 
 type CreateCounselorFormProps = {
   defaultCounselor?: Counselor;
@@ -33,6 +35,10 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
     }
   }, [defaultCounselor]);
 
+  const onTimeZoneChanged = (timeZone: string) => {
+    setCounselor({ ...counselor, timeZoneIanaName: timeZone });
+  };
+
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
     const submittedCounselor = defaultCounselor ? counselor : { ...counselor };
@@ -51,7 +57,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
     <>
       <form onSubmit={onFormSubmit}>
         <label>
-          First Name:
+          First Name:{' '}
           <input
             data-testid={'input-first-name'}
             type="text"
@@ -65,7 +71,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
           />
         </label>
         <label>
-          Last Name:
+          Last Name:{' '}
           <input
             data-testid={'input-last-name'}
             type="text"
@@ -79,7 +85,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
           />
         </label>
         <label>
-          Email:
+          Email:{' '}
           <input
             data-testid={'input-email'}
             type="email"
@@ -93,7 +99,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
           />
         </label>
         <label>
-          Username:
+          Username:{' '}
           <input
             data-testid={'input-username'}
             type="text"
@@ -107,7 +113,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
           />
         </label>
         <label>
-          Phone:
+          Phone:{' '}
           <input
             data-testid={'input-phone'}
             type="phone"
@@ -121,7 +127,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
           />
         </label>
         <label>
-          Docs URL:
+          Docs URL:{' '}
           <input
             data-testid={'input-docsUrl'}
             type="URL"
@@ -135,26 +141,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
           />
         </label>
         <label>
-          Time Zone Offset:
-          <input
-            data-testid={'input-timeZoneOffset'}
-            type="number"
-            min="-12"
-            max="14"
-            placeholder="Time Zone Offset"
-            name="timeZoneOffset"
-            value={counselor.timeZoneOffset}
-            required
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              setCounselor({
-                ...counselor,
-                timeZoneOffset: parseInt(e.target.value),
-              });
-            }}
-          />
-        </label>
-        <label>
-          Room Link:
+          Room Link:{' '}
           <input
             data-testid={'input-roomLink'}
             type="URL"
@@ -164,6 +151,19 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
             required
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setRoomLink(e.target.value);
+            }}
+          />
+        </label>
+        <label>
+          Time Zone:{' '}
+          <SelectList
+            labelText="Select a Time Zone"
+            items={TIME_ZONES}
+            value={TIME_ZONES.indexOf(counselor.timeZoneIanaName || '')}
+            onItemChanged={item => {
+              return onTimeZoneChanged(
+                TIME_ZONES[parseInt(item)] as AvailableTimeZone
+              );
             }}
           />
         </label>
