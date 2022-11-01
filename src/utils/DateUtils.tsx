@@ -2,8 +2,6 @@
 
 import { DateTime } from 'luxon';
 
-const DEFAULT_TIME_ZONE = 'America/Denver';
-
 export type AvailableTimeZone =
   | 'America/New_York' // Eastern
   | 'America/Chicago' // Central
@@ -19,23 +17,14 @@ export const TIME_ZONES = [
   'America/Phoenix',
 ];
 
-export function formatDate(date: Date, timeZone: string | undefined): string {
-  const luxonDate = DateTime.fromJSDate(date).setZone(
-    timeZone || DEFAULT_TIME_ZONE
-  );
-  return luxonDate.toFormat('M/dd');
+export function formatDate(date: Date): string {
+  return DateTime.fromJSDate(date).toFormat('M/dd');
 }
 
-export function formatTime(date: Date, timeZone: string | undefined): string {
-  const luxonDate = DateTime.fromJSDate(date).setZone(
-    timeZone || DEFAULT_TIME_ZONE
-  );
-  return luxonDate.toFormat('h:mm a');
+export function formatTime(date: Date): string {
+  return DateTime.fromJSDate(date).toFormat('h:mm a');
 }
 
-export function formatDateTime(
-  date: Date,
-  timeZone: string | undefined
-): string {
-  return `${formatDate(date, timeZone)} ${formatTime(date, timeZone)}`;
+export function formatDateTime(date: Date): string {
+  return `${formatDate(date)} ${formatTime(date)}`;
 }

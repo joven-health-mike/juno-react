@@ -1,8 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext } from 'react';
+import React from 'react';
 import { Appointment } from '../../data/appointments';
-import { LoggedInUserContext } from '../../data/users';
 import { formatDateTime } from '../../utils/DateUtils';
 
 type AppointmentDetailsProps = {
@@ -12,18 +11,13 @@ type AppointmentDetailsProps = {
 const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
   appointment,
 }) => {
-  const { loggedInUser } = useContext(LoggedInUserContext);
   return (
     <>
       <h2 data-testid={'title'}>{appointment.title}</h2>
       <p data-testid={'time'}>
         Time:{' '}
-        {`${formatDateTime(
-          new Date(appointment.start),
-          loggedInUser.timeZoneIanaName
-        )} - ${formatDateTime(
-          new Date(appointment.end),
-          loggedInUser.timeZoneIanaName
+        {`${formatDateTime(new Date(appointment.start))} - ${formatDateTime(
+          new Date(appointment.end)
         )}`}
       </p>
       <p data-testid={'counselorId'}>

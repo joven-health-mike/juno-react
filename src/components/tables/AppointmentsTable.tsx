@@ -85,16 +85,9 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
       return {
         id: appointment.id,
         title: appointment.title,
-        date: formatDate(
-          new Date(appointment.start),
-          loggedInUser.timeZoneIanaName
-        ),
-        time: `${formatTime(
-          new Date(appointment.start),
-          loggedInUser.timeZoneIanaName
-        )} - ${formatTime(
-          new Date(appointment.end),
-          loggedInUser.timeZoneIanaName
+        date: formatDate(new Date(appointment.start)),
+        time: `${formatTime(new Date(appointment.start))} - ${formatTime(
+          new Date(appointment.end)
         )}`,
         counselorName: counselorName,
         participantNames: participantNames,

@@ -27,7 +27,6 @@ const fakeAppointment: Appointment = {
 
 const fakeCounselorName = 'Jacek McGuinness';
 const fakeStudentName = 'Chris Moon';
-const userTimeZone = 'America/Denver';
 
 describe('AppointmentDetails', () => {
   it('should display ID', async () => {
@@ -44,14 +43,14 @@ describe('AppointmentDetails', () => {
     const view = render(<AppointmentDetails appointment={fakeAppointment} />);
     const startView = await view.findByTestId('start');
     expect(startView.innerHTML).toEqual(
-      'Start Time: ' + formatDateTime(fakeAppointment.start, userTimeZone)
+      'Start Time: ' + formatDateTime(fakeAppointment.start)
     );
   });
   it('should display end date as ISO string', async () => {
     const view = render(<AppointmentDetails appointment={fakeAppointment} />);
     const endView = await view.findByTestId('end');
     expect(endView.innerHTML).toEqual(
-      'End Time: ' + formatDateTime(fakeAppointment.end, userTimeZone)
+      'End Time: ' + formatDateTime(fakeAppointment.end)
     );
   });
   it('should display counselor ID', async () => {

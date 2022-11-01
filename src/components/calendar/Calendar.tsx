@@ -11,7 +11,7 @@ type CalendarProps = {
   plugins: PluginDef[];
   appointments: Appointment[];
   onEventClick: (appointment: Appointment) => void;
-  onDateClick: (date: string) => void;
+  onDateClick?: (date: string) => void;
 };
 
 const Calendar: React.FC<CalendarProps> = ({
@@ -38,20 +38,33 @@ const Calendar: React.FC<CalendarProps> = ({
   };
 
   const dateClicked = (info: DateClickArg) => {
-    info.jsEvent.preventDefault();
-    onDateClick(info.dateStr);
+    if (onDateClick) {
+      info.jsEvent.preventDefault();
+      onDateClick(info.dateStr);
+    }
   };
 
   return (
     <div className={'calendar'}>
-      <FullCalendar
-        events={appointments}
-        plugins={plugins}
-        timeZone={loggedInUser.timeZoneIanaName}
-        initialView={view}
-        eventClick={(info: EventClickArg) => eventClicked(info)}
-        dateClick={(info: DateClickArg) => dateClicked(info)}
-      />
+      {typeof onDateClick !== 'undefined' && (
+        <FullCalendar
+          events={appointments}
+          plugins={plugins}
+          timeZone={loggedInUser.timeZoneIanaName}
+          initialView={view}
+          eventClick={(info: EventClickArg) => eventClicked(info)}
+          dateClick={(info: DateClickArg) => dateClicked(info)}
+        />
+      )}
+      {typeof onDateClick === 'undefined' && (
+        <FullCalendar
+          events={appointments}
+          plugins={plugins}
+          timeZone={loggedInUser.timeZoneIanaName}
+          initialView={view}
+          eventClick={(info: EventClickArg) => eventClicked(info)}
+        />
+      )}
     </div>
   );
 };

@@ -58,20 +58,16 @@ const CalendarPage: React.FC = () => {
     setIsAppointmentDetailsModalOpen(true);
   };
 
-  const handleDateClick = (date: string) => {
+  const handleDateClick = (utcDateStr: string) => {
     if (isCreateAppointmentAllowed) {
-      const dateObj = new Date(date);
-      const startTime = DateTime.fromObject(
-        {
-          day: dateObj.getDate() + 1,
-          month: dateObj.getMonth() + 1,
+      const startTime = DateTime.fromFormat(utcDateStr, 'yyyy-MM-dd')
+        .set({
           hour: 8,
           minute: 0,
           second: 0,
           millisecond: 0,
-        },
-        { zone: loggedInUser.timeZoneIanaName }
-      ).toJSDate();
+        })
+        .toJSDate();
       const endTime = DateTime.fromJSDate(startTime)
         .set({ minute: 30 })
         .toJSDate();
