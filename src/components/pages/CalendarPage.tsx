@@ -4,6 +4,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import momentTimezonePlugin from '@fullcalendar/moment-timezone';
+import { DateTime } from 'luxon';
 import {
   Appointment,
   AppointmentsContext,
@@ -21,10 +23,10 @@ import {
   SelectCounselorList,
   SelectSchoolList,
 } from '../selectList/SelectList';
-import { StudentsContext } from '../../data/students';
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import AppointmentDetailsModal from '../modals/AppointmentDetailsModal';
 import { LoggedInUserContext } from '../../data/users';
+import { createPermission } from '../../auth/permissions';
 
 const CalendarPage: React.FC = () => {
   const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
@@ -42,26 +44,47 @@ const CalendarPage: React.FC = () => {
     useState<Appointment>(emptyAppointment);
   const [clickedAppointment, setClickedAppointment] =
     useState<Appointment>(emptyAppointment);
+  const [isCreateAppointmentAllowed, setIsCreateAppointmentAllowed] =
+    useState<boolean>(false);
+
   const { data: appointments, add: addAppointment } =
     useContext(AppointmentsContext);
   const { data: counselors } = useContext(CounselorsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
   const { data: schools } = useContext(SchoolsContext);
-  const { data: students } = useContext(StudentsContext);
 
   const handleAppointmentClick = (appointment: Appointment) => {
     setClickedAppointment(appointment);
     setIsAppointmentDetailsModalOpen(true);
   };
 
-  const handleDateClick = (date: string) => {
-    setInitialAppointment({
-      ...initialAppointment,
-      start: new Date(date + 'T08:00'),
-      end: new Date(date + 'T08:30'),
-    });
-    setIsCreateAppointmentModalOpen(true);
+  const handleDateClick = (utcDateStr: string) => {
+    if (isCreateAppointmentAllowed) {
+      const startTime = DateTime.fromFormat(utcDateStr, 'yyyy-MM-dd')
+        .set({
+          hour: 8,
+          minute: 0,
+          second: 0,
+          millisecond: 0,
+        })
+        .toJSDate();
+      const endTime = DateTime.fromJSDate(startTime)
+        .set({ minute: 30 })
+        .toJSDate();
+      setInitialAppointment({
+        ...initialAppointment,
+        start: startTime,
+        end: endTime,
+      });
+      setIsCreateAppointmentModalOpen(true);
+    }
   };
+
+  useEffect(() => {
+    setIsCreateAppointmentAllowed(
+      createPermission(loggedInUser.role, 'appointment')
+    );
+  }, [loggedInUser.role]);
 
   useEffect(() => {
     setShowCalendar(
@@ -70,7 +93,9 @@ const CalendarPage: React.FC = () => {
   }, [isCreateAppointmentModalOpen, isAppointmentDetailsModalOpen]);
 
   const handleAppointmentAdded = (appointment: Appointment) => {
-    addAppointment(appointment);
+    if (isCreateAppointmentAllowed) {
+      addAppointment(appointment);
+    }
     setIsCreateAppointmentModalOpen(false);
   };
 
@@ -96,7 +121,7 @@ const CalendarPage: React.FC = () => {
       return counselorMatch && schoolMatch;
     });
     setFilteredEvents(filteredEvents);
-  }, [counselorSelection, schoolSelection, appointments, students]);
+  }, [appointments, counselorSelection, schoolSelection]);
 
   useEffect(() => {
     setFilteredEvents(appointments);
@@ -131,7 +156,7 @@ const CalendarPage: React.FC = () => {
       {showCalendar && (
         <Calendar
           view="dayGridMonth"
-          plugins={[dayGridPlugin, interactionPlugin]}
+          plugins={[dayGridPlugin, interactionPlugin, momentTimezonePlugin]}
           appointments={filteredEvents}
           onEventClick={handleAppointmentClick}
           onDateClick={handleDateClick}

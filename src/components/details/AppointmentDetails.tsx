@@ -16,9 +16,8 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
       <h2 data-testid={'title'}>{appointment.title}</h2>
       <p data-testid={'time'}>
         Time:{' '}
-        {`${formatDateTime(new Date(appointment.start), -6)} - ${formatDateTime(
-          new Date(appointment.end),
-          -6
+        {`${formatDateTime(new Date(appointment.start))} - ${formatDateTime(
+          new Date(appointment.end)
         )}`}
       </p>
       <p data-testid={'counselorId'}>
@@ -32,6 +31,7 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
       ))}
       <p data-testid={'appointmentType'}>Type: {appointment.type}</p>
       <p data-testid={'appointmentStatus'}>Status: {appointment.status}</p>
+      <p data-testid={'isRecurring'}>Recurring: {appointment.isRecurring}</p>
     </>
   );
 };

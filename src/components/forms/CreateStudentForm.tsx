@@ -12,7 +12,8 @@ import { ContextData } from '../../data/ContextData';
 import { Counselor, CounselorsContext } from '../../data/counselors';
 import { School, SchoolsContext } from '../../data/schools';
 import { emptyStudent, Student } from '../../data/students';
-import {
+import { AvailableTimeZone, TIME_ZONES } from '../../utils/DateUtils';
+import SelectList, {
   SelectCounselorList,
   SelectSchoolList,
 } from '../selectList/SelectList';
@@ -74,6 +75,10 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
     const newStudent = { ...student };
     newStudent.studentRef.assignedSchoolId = school.id;
     setStudent(newStudent);
+  };
+
+  const onTimeZoneChanged = (timeZone: string) => {
+    setStudent({ ...student, timeZoneIanaName: timeZone });
   };
 
   const onFormSubmit = (e: FormEvent) => {
@@ -178,25 +183,6 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
         />
       </label>
       <label>
-        Time Zone Offset:
-        <input
-          data-testid={'input-timeZoneOffset'}
-          type="number"
-          min="-12"
-          max="14"
-          placeholder="Time Zone Offset"
-          name="timeZoneOffset"
-          value={student.timeZoneOffset}
-          required
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setStudent({
-              ...student,
-              timeZoneOffset: parseInt(e.target.value),
-            });
-          }}
-        />
-      </label>
-      <label>
         Counselor:{' '}
         <SelectCounselorList
           selectedIndex={counselorSelectionIndex}
@@ -208,6 +194,19 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
         <SelectSchoolList
           selectedIndex={schoolSelectionIndex}
           onSchoolChanged={onSchoolChanged}
+        />
+      </label>
+      <label>
+        Time Zone:{' '}
+        <SelectList
+          labelText="Select a Time Zone"
+          items={TIME_ZONES}
+          value={TIME_ZONES.indexOf(student.timeZoneIanaName || '')}
+          onItemChanged={item => {
+            return onTimeZoneChanged(
+              TIME_ZONES[parseInt(item)] as AvailableTimeZone
+            );
+          }}
         />
       </label>
 

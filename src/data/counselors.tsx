@@ -23,7 +23,7 @@ export const emptyCounselor: Counselor = {
   username: '',
   phone: '',
   docsUrl: '',
-  timeZoneOffset: 0,
+  timeZoneIanaName: '',
   role: 'JOVEN_STAFF' as Role,
   counselorRef: {
     id: '-1',
@@ -44,7 +44,7 @@ export const emptyCounselorRef: CounselorRef = {
     username: '',
     phone: '',
     docsUrl: '',
-    timeZoneOffset: 0,
+    timeZoneIanaName: '',
     role: 'JOVEN_STAFF' as Role,
   },
 };

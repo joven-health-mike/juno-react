@@ -15,12 +15,13 @@ export type User = {
   username: string;
   phone?: string;
   docsUrl?: string;
-  timeZoneOffset?: number;
+  timeZoneIanaName?: string;
   role: Role;
   counselorRef?: CounselorRef;
   schoolAdminRef?: SchoolAdminRef;
   schoolStaffRef?: SchoolStaffRef;
   studentRef?: StudentRef;
+  guardianRef?: GuardianRef;
 };
 
 export type SchoolAdminRef = {
@@ -35,6 +36,12 @@ export type SchoolStaffRef = {
   assignedSchoolId: string;
 };
 
+export type GuardianRef = {
+  id: string;
+  userId: string;
+  students: StudentRef[];
+};
+
 export const emptyUser = {
   id: '-1',
   firstName: '',
@@ -43,8 +50,20 @@ export const emptyUser = {
   username: '',
   phone: '',
   docsUrl: '',
-  timeZoneOffset: 0,
+  timeZoneIanaName: '',
   role: 'JOVEN_STAFF' as Role,
+};
+
+export const emptySchoolAdminRef = {
+  id: '-1',
+  userId: '-1',
+  assignedSchoolId: '-1',
+};
+
+export const emptySchoolStaffRef = {
+  id: '-1',
+  userId: '-1',
+  assignedSchoolId: '-1',
 };
 
 export const UsersContext = React.createContext<ContextData<User>>({

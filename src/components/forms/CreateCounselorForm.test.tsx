@@ -6,7 +6,6 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import CreateCounselorForm from './CreateCounselorForm';
-import { emptyUser } from '../../data/users';
 import { Role } from '../../services/user.service';
 import { Counselor } from '../../data/counselors';
 
@@ -18,7 +17,7 @@ const testCounselor: Counselor = {
   username: '',
   phone: '',
   docsUrl: '',
-  timeZoneOffset: 0,
+  timeZoneIanaName: '',
   role: 'JOVEN_STAFF' as Role,
   counselorRef: {
     id: '0',

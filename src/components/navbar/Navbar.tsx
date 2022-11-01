@@ -3,9 +3,8 @@
 import React, { useContext } from 'react';
 import { IconContext } from 'react-icons';
 import { Link } from 'react-router-dom';
-import { pagePermission } from '../../auth/permissions';
+import { AvailableRoute, pagePermission } from '../../auth/permissions';
 import { LoggedInUserContext } from '../../data/users';
-import { AvailableRoute } from '../../routes/AppRouter';
 import { allNavItems, NavItem } from './navBarItems';
 
 const Navbar: React.FC = () => {

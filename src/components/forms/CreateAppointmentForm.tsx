@@ -1,6 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, {
+  ChangeEvent,
   FormEvent,
   MouseEvent,
   useContext,
@@ -14,11 +15,22 @@ import {
   AppointmentTypes,
 } from '../../data/appointments';
 import { Counselor, CounselorsContext } from '../../data/counselors';
-import { emptySchool, SchoolsContext } from '../../data/schools';
+import { School, SchoolsContext, emptySchool } from '../../data/schools';
 import { Student, StudentsContext } from '../../data/students';
-import { User } from '../../data/users';
-import DateSelector from '../dateSelector/DateSelector';
 import {
+  SchoolAdminRef,
+  SchoolStaffRef,
+  User,
+  UsersContext,
+  emptyUser,
+  LoggedInUserContext,
+} from '../../data/users';
+import {
+  RepeatForFrequency,
+  REPEAT_FOR_FREQUENCIES,
+} from '../../services/appointment.service';
+import DateSelector from '../dateSelector/DateSelector';
+import SelectList, {
   SelectCounselorList,
   SelectTypeList,
   SelectUserList,
@@ -43,12 +55,33 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     useState<number>(-1);
   const [typeSelectionIndex, setTypeSelectionIndex] = useState<number>(-1);
 
+  const [shouldShowCounselor, setShouldShowCounselor] = useState<boolean>(true);
+
   const { data: counselors } = useContext(CounselorsContext);
   const { data: schools } = useContext(SchoolsContext);
   const { data: students } = useContext(StudentsContext);
+  const { data: users } = useContext(UsersContext);
+  const { loggedInUser } = useContext(LoggedInUserContext);
 
   useEffect(() => {
+    // if the logged-in user is a counselor, they can only schedule appointments for themselves.
+    if (loggedInUser.role === 'COUNSELOR') {
+      // Hide the counselor select list
+      setShouldShowCounselor(false);
+      // Set the appointment counselorID to the logged-in user's counselor id
+      setAppointment(oldAppointment => {
+        return {
+          ...oldAppointment,
+          counselorId: loggedInUser.counselorRef?.id,
+        };
+      });
+    }
+  }, [loggedInUser.counselorRef?.id, loggedInUser.role]);
+
+  useEffect(() => {
+    // If a default appointment is passed in, set up some UI values
     if (defaultAppointment) {
+      // If a counselor is selected, set the Counselor selection index
       if (defaultAppointment.counselorId || defaultAppointment.counselor) {
         const counselorIds = counselors.map(
           counselor => counselor.counselorRef.id
@@ -61,9 +94,13 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
           counselorIds.indexOf(targetCounselorId);
         setCounselorSelectionIndex(initialCounselorSelectionIndex);
       }
+
+      // If a type is selected, set the type selection index
       if (defaultAppointment.type) {
         setTypeSelectionIndexFromName(defaultAppointment.type);
       }
+
+      // If participants are selected, set participants selection
       if (defaultAppointment.participants.length > 0) {
         setParticipants(defaultAppointment.participants);
       }
@@ -93,32 +130,86 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     });
   };
 
+  const onRepeatForFrequencyChanged = (
+    repeatForFrequency: RepeatForFrequency
+  ) => {
+    setAppointment({ ...appointment, frequency: repeatForFrequency });
+  };
+
   const onParticipantsSelected = (participants: User[]) => {
     setParticipants(participants);
   };
 
-  const getAssociatedSchool = (student: Student) => {
+  const handleIsRecurringChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAppointment({ ...appointment, isRecurring: e.target.checked });
+  };
+
+  const getAssociatedSchoolFromStudent = (student: Student) => {
     return schools.find(school => {
       return school.id === student.studentRef.assignedSchoolId;
     });
   };
 
+  const getAssociatedSchoolFromSchoolAdmin = (
+    schoolAdminRef: SchoolAdminRef
+  ) => {
+    return schools.find(school => {
+      return school.id === schoolAdminRef.assignedSchoolId;
+    });
+  };
+
+  const getAssociatedSchoolFromSchoolStaff = (
+    schoolStaffRef: SchoolStaffRef
+  ) => {
+    return schools.find(school => {
+      return school.id === schoolStaffRef.assignedSchoolId;
+    });
+  };
+
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const studentSelection = students.find(student => {
-      return participants.map(user => user.id).includes(student.id);
-    });
-    const schoolSelection = studentSelection
-      ? getAssociatedSchool(studentSelection)
-      : emptySchool;
+    const mappedParticipants = participants.map(user => user.id);
+    const studentSelection = students.find(student =>
+      mappedParticipants.includes(student.id)
+    );
+    const schoolAdminSelection = users.find(
+      user =>
+        user.role === 'SCHOOL_ADMIN' && mappedParticipants.includes(user.id)
+    );
+    const schoolStaffSelection = users.find(
+      user =>
+        user.role === 'SCHOOL_STAFF' && mappedParticipants.includes(user.id)
+    );
+    let schoolSelection: School | undefined;
+    if (studentSelection) {
+      schoolSelection = getAssociatedSchoolFromStudent(studentSelection);
+    } else if (schoolAdminSelection) {
+      if (schoolAdminSelection.schoolAdminRef) {
+        schoolSelection = getAssociatedSchoolFromSchoolAdmin(
+          schoolAdminSelection.schoolAdminRef
+        );
+      }
+    } else if (schoolStaffSelection) {
+      if (schoolStaffSelection.schoolStaffRef) {
+        schoolSelection = getAssociatedSchoolFromSchoolStaff(
+          schoolStaffSelection.schoolStaffRef
+        );
+      }
+    }
 
-    const apptTitle = studentSelection
-      ? `${studentSelection.firstName} ${studentSelection.lastName.substring(
-          0,
-          1
-        )} (${schoolSelection?.name})`
-      : 'Appointment';
-    const schoolId = schoolSelection?.id || '-1';
+    schoolSelection = schoolSelection || emptySchool;
+
+    const user =
+      studentSelection ||
+      schoolAdminSelection ||
+      schoolStaffSelection ||
+      emptyUser;
+
+    const apptTitle = `${user.firstName} ${user.lastName.substring(0, 1)} (${
+      schoolSelection?.name
+    }) - ${appointment.type}`;
+    const schoolId =
+      schoolSelection?.id === '-1' ? undefined : schoolSelection?.id;
 
     let submittedAppointment = { ...appointment };
     if (!defaultAppointment) {
@@ -160,13 +251,15 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
           label={'End Time'}
         />
       </label>
-      <label>
-        Counselor:{' '}
-        <SelectCounselorList
-          selectedIndex={counselorSelectionIndex}
-          onCounselorChanged={onCounselorChanged}
-        />
-      </label>
+      {shouldShowCounselor && (
+        <label>
+          Counselor:{' '}
+          <SelectCounselorList
+            selectedIndex={counselorSelectionIndex}
+            onCounselorChanged={onCounselorChanged}
+          />
+        </label>
+      )}
       <label>
         Type:{' '}
         <SelectTypeList
@@ -181,6 +274,71 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
           onParticipantsSelected={onParticipantsSelected}
         />
       </label>
+      <label>
+        Is Recurring:{' '}
+        <input
+          type="checkbox"
+          checked={appointment.isRecurring}
+          onChange={handleIsRecurringChange}
+        />
+      </label>
+      {appointment.isRecurring && (
+        <>
+          <label>
+            Num Occurrences:{' '}
+            <input
+              data-testid={'input-numOccurrences'}
+              type="number"
+              min={2}
+              max={99}
+              placeholder="Num Occurrences"
+              name="numOccurrences"
+              value={appointment.numOccurrences}
+              required
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setAppointment({
+                  ...appointment,
+                  numOccurrences: parseInt(e.target.value),
+                });
+              }}
+            />
+          </label>
+          <label>
+            Repeat For Num:{' '}
+            <input
+              data-testid={'input-repeatForNum'}
+              type="number"
+              min={1}
+              max={99}
+              placeholder="Repeat For Num"
+              name="repeatForNum"
+              value={appointment.numRepeats}
+              required
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setAppointment({
+                  ...appointment,
+                  numRepeats: parseInt(e.target.value),
+                });
+              }}
+            />
+          </label>
+          <label>
+            Repeat For Frequency:{' '}
+            <SelectList
+              labelText="Select a Frequency"
+              items={REPEAT_FOR_FREQUENCIES}
+              value={REPEAT_FOR_FREQUENCIES.indexOf(
+                appointment.frequency || ''
+              )}
+              onItemChanged={item => {
+                return onRepeatForFrequencyChanged(
+                  REPEAT_FOR_FREQUENCIES[parseInt(item)] as RepeatForFrequency
+                );
+              }}
+            />
+          </label>
+        </>
+      )}
 
       <button type="submit" data-testid={'button-submit'}>
         Submit

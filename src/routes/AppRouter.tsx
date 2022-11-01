@@ -12,17 +12,6 @@ import StudentsPage from '../components/pages/StudentsPage';
 import UsersPage from '../components/pages/UsersPage';
 import AccountDetailPage from '../components/pages/AccountDetailPage';
 
-export type AvailableRoute =
-  | '/'
-  | '/account'
-  | '/appointments'
-  | '/calendar'
-  | '/counselors'
-  | '/schools'
-  | '/students'
-  | '/users'
-  | '/logout';
-
 interface IAppRouterParams {
   isAuthenticated: boolean;
 }

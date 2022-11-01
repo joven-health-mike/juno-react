@@ -14,11 +14,14 @@ const fakeAppointment = {
   title: 'Hello World',
   start: new Date(),
   end: new Date(),
+  isRecurring: false,
+  recurranceInfo: undefined,
   school: emptySchool,
   counselor: emptyCounselorRef,
   participants: [],
   type: 'CLINICAL',
   status: 'SCHEDULED',
+  location: 'UNKNOWN',
 };
 
 describe('CreateAppointmentForm', () => {

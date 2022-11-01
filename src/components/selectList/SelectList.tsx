@@ -11,7 +11,12 @@ import {
 } from '../../data/counselors';
 import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import { emptyStudent, Student, StudentsContext } from '../../data/students';
-import { emptyUser, User, UsersContext } from '../../data/users';
+import {
+  emptyUser,
+  LoggedInUserContext,
+  User,
+  UsersContext,
+} from '../../data/users';
 
 type SelectListProps = {
   labelText: string;
@@ -191,10 +196,17 @@ export function SelectUserList({
   selectedUsers,
   onUsersChanged,
 }: SelectUserListProps) {
+  const { loggedInUser } = useContext(LoggedInUserContext);
   const { data: users } = useContext(UsersContext);
   const userNameFormat = (user: User) =>
     `${user.firstName} ${user.lastName} (${user.role})`;
-  const userNames = users.map(user => userNameFormat(user));
+  const userListFilter =
+    loggedInUser.role !== 'SYSADMIN'
+      ? (user: User) => user.id !== loggedInUser.id
+      : () => true;
+  const userNames = users
+    .filter(userListFilter)
+    .map(user => userNameFormat(user));
   const selectedUserNames = selectedUsers.map(user => userNameFormat(user));
 
   const onItemsSelected = (selectedItems: string[]) => {
