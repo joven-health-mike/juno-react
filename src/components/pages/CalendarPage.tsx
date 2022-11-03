@@ -4,6 +4,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import momentTimezonePlugin from '@fullcalendar/moment-timezone';
+import { DateTime } from 'luxon';
 import {
   Appointment,
   AppointmentsContext,
@@ -21,7 +23,6 @@ import {
   SelectCounselorList,
   SelectSchoolList,
 } from '../selectList/SelectList';
-import { StudentsContext } from '../../data/students';
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import AppointmentDetailsModal from '../modals/AppointmentDetailsModal';
 import { LoggedInUserContext } from '../../data/users';
@@ -56,19 +57,29 @@ const CalendarPage: React.FC = () => {
   const { data: counselors } = useContext(CounselorsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
   const { data: schools } = useContext(SchoolsContext);
-  const { data: students } = useContext(StudentsContext);
 
   const handleAppointmentClick = (appointment: Appointment) => {
     setClickedAppointment(appointment);
     setIsAppointmentDetailsModalOpen(true);
   };
 
-  const handleDateClick = (date: string) => {
+  const handleDateClick = (utcDateStr: string) => {
     if (isCreateAppointmentAllowed) {
+      const startTime = DateTime.fromFormat(utcDateStr, 'yyyy-MM-dd')
+        .set({
+          hour: 8,
+          minute: 0,
+          second: 0,
+          millisecond: 0,
+        })
+        .toJSDate();
+      const endTime = DateTime.fromJSDate(startTime)
+        .set({ minute: 30 })
+        .toJSDate();
       setInitialAppointment({
         ...initialAppointment,
-        start: new Date(date + 'T08:00'),
-        end: new Date(date + 'T08:30'),
+        start: startTime,
+        end: endTime,
       });
       setIsCreateAppointmentModalOpen(true);
     }
@@ -157,7 +168,7 @@ const CalendarPage: React.FC = () => {
       return counselorMatch && schoolMatch;
     });
     setFilteredEvents(filteredEvents);
-  }, [counselorSelection, schoolSelection, appointments, students]);
+  }, [appointments, counselorSelection, schoolSelection]);
 
   useEffect(() => {
     setFilteredEvents(appointments);
@@ -192,7 +203,7 @@ const CalendarPage: React.FC = () => {
       {showCalendar && (
         <Calendar
           view="dayGridMonth"
-          plugins={[dayGridPlugin, interactionPlugin]}
+          plugins={[dayGridPlugin, interactionPlugin, momentTimezonePlugin]}
           appointments={filteredEvents}
           onEventClick={handleAppointmentClick}
           onDateClick={handleDateClick}

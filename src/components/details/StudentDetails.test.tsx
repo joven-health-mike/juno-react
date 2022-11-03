@@ -17,7 +17,7 @@ const testStudent: Student = {
   username: '',
   phone: '',
   docsUrl: '',
-  timeZoneOffset: 0,
+  timeZoneIanaName: '',
   role: 'STUDENT' as Role,
   studentRef: {
     id: '1',

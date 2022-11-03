@@ -3,6 +3,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import '@fullcalendar/react';
 import listPlugin from '@fullcalendar/list';
+import momentTimezonePlugin from '@fullcalendar/moment-timezone';
 import Navbar from '../navbar/Navbar';
 import Calendar from '../calendar/Calendar';
 import {
@@ -51,10 +52,9 @@ const AppointmentView: React.FC = () => {
     <>
       <Calendar
         view="listDay"
-        plugins={[listPlugin]}
+        plugins={[listPlugin, momentTimezonePlugin]}
         appointments={appointments}
         onEventClick={onEventClick}
-        onDateClick={() => {}}
       />
     </>
   );

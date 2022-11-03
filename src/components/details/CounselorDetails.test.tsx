@@ -16,7 +16,7 @@ const testCounselor = {
   username: '',
   phone: '',
   docsUrl: '',
-  timeZoneOffset: 0,
+  timeZoneIanaName: '',
   role: 'JOVEN_STAFF' as Role,
   counselorRef: {
     id: '-1',

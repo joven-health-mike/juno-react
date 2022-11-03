@@ -1,6 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useContext, useEffect } from 'react';
+import { Settings } from 'luxon';
 import { Route, Routes } from 'react-router-dom';
 import { LoggedInUserContext, UsersContext } from '../data/users';
 import { AvailableRoute, pagePermission } from '../auth/permissions';
@@ -13,6 +14,7 @@ import { StudentsContext } from '../data/students';
 const PrivateRoutes = () => {
   const { loggedInUser } = useContext(LoggedInUserContext);
   const role = loggedInUser.role;
+  Settings.defaultZone = loggedInUser.timeZoneIanaName || 'America/Denver';
 
   const { getAll: getUsers } = useContext(UsersContext);
   const { getAll: getCounselors } = useContext(CounselorsContext);
