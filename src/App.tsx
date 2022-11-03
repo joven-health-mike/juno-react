@@ -1,44 +1,74 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Modal from 'react-modal';
-import { AppointmentsContext, exampleAppointments } from './data/appointments';
-import { CounselorsContext, exampleCounselors } from './data/counselors';
-import { SchoolsContext, exampleSchools } from './data/schools';
-import { exampleStudents, StudentsContext } from './data/students';
-import { UsersContext, exampleUsers } from './data/users';
+import { AppointmentsContext, AppointmentsProvider } from './data/appointments';
+import { CounselorsContext, CounselorsProvider } from './data/counselors';
+import { SchoolsContext, SchoolsProvider } from './data/schools';
+import { StudentsContext, StudentsProvider } from './data/students';
+import {
+  UsersContext,
+  LoggedInUserContext,
+  UsersProvider,
+  emptyUser,
+  User,
+} from './data/users';
 import AppRouter from './routes/AppRouter';
+import { LoggedInUserService } from './services/loggedInUser.service';
 
 Modal.setAppElement('#root');
 
 function App() {
-  const [appointments, setAppointments] = useState(exampleAppointments);
-  const [counselors, setCounselors] = useState(exampleCounselors);
-  const [schools, setSchools] = useState(exampleSchools);
-  const [students, setStudents] = useState(exampleStudents);
-  const [users, setUsers] = useState(exampleUsers);
-  const appointmentsContextValue = { appointments, setAppointments };
-  const counselorsContextValue = { counselors, setCounselors };
-  const schoolsContextValue = { schools, setSchools };
-  const studentsContextValue = { students, setStudents };
-  const usersContextValue = { users, setUsers };
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loggedInUser, setLoggedInUser] = useState<User>(emptyUser);
+  const loggedInUserContextValue = { loggedInUser, setLoggedInUser };
+  const [isLoading, setIsLoading] = useState(true);
+
+  const { data: users } = useContext(UsersContext);
+  const { data: counselors } = useContext(CounselorsContext);
+  const { data: appointments } = useContext(AppointmentsContext);
+  const { data: schools } = useContext(SchoolsContext);
+  const { data: students } = useContext(StudentsContext);
+
+  useEffect(() => {
+    function main() {
+      setIsLoading(true);
+      checkAuthentication();
+    }
+    main();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function checkAuthentication() {
+    try {
+      const service = new LoggedInUserService();
+      const { data: user, status } = await service.getAll();
+      // server returns 200 if logged in and 204 if not
+      setIsAuthenticated(status === 200);
+      setLoggedInUser(user);
+    } catch (err) {
+      // TODO: What happens if the server is down or throws an error?
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
-    <AppointmentsContext.Provider value={appointmentsContextValue}>
-      <CounselorsContext.Provider value={counselorsContextValue}>
-        <SchoolsContext.Provider value={schoolsContextValue}>
-          <StudentsContext.Provider value={studentsContextValue}>
-            <UsersContext.Provider value={usersContextValue}>
-              <AppRouter
-                isLoggedIn={true}
-                role={'admin'}
-                loggedInUser={users[0]}
-              />
-            </UsersContext.Provider>
-          </StudentsContext.Provider>
-        </SchoolsContext.Provider>
-      </CounselorsContext.Provider>
-    </AppointmentsContext.Provider>
+    <LoggedInUserContext.Provider value={loggedInUserContextValue}>
+      <StudentsProvider data={students}>
+        <AppointmentsProvider data={appointments}>
+          <SchoolsProvider data={schools}>
+            <CounselorsProvider data={counselors}>
+              <UsersProvider data={users}>
+                {isLoading && <div>Loading...</div>}
+                {!isLoading && <AppRouter isAuthenticated={isAuthenticated} />}
+              </UsersProvider>
+            </CounselorsProvider>
+          </SchoolsProvider>
+        </AppointmentsProvider>
+      </StudentsProvider>
+    </LoggedInUserContext.Provider>
   );
 }
 

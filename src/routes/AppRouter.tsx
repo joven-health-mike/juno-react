@@ -1,58 +1,41 @@
-/* eslint-disable no-unused-vars */
+// Copyright 2022 Social Fabric, LLC
+
 import React from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import PublicRoutes from './PublicRoutes';
+import PrivateRoutes from './PrivateRoutes';
+import HomePage from '../components/pages/HomePage';
 import AppointmentsPage from '../components/pages/AppointmentsPage';
 import CalendarPage from '../components/pages/CalendarPage';
 import CounselorsPage from '../components/pages/CounselorsPage';
-import LoginPage from '../components/pages/LoginPage';
-import LogoutPage from '../components/pages/LogoutPage';
-import HomePage from '../components/pages/HomePage';
 import SchoolsPage from '../components/pages/SchoolsPage';
 import StudentsPage from '../components/pages/StudentsPage';
 import UsersPage from '../components/pages/UsersPage';
 import AccountDetailPage from '../components/pages/AccountDetailPage';
-import { User } from '../data/users';
 
-type AppRouterProps = {
-  isLoggedIn: boolean;
-  loggedInUser: User;
-  role: string;
+interface IAppRouterParams {
+  isAuthenticated: boolean;
+}
+
+const AppRouter: React.FC<IAppRouterParams> = ({ isAuthenticated }) => {
+  return isAuthenticated ? <PrivateRoutes /> : <PublicRoutes />;
 };
 
-const AppRouter: React.FC<AppRouterProps> = ({
-  isLoggedIn,
-  loggedInUser,
-  role,
-}) => {
-  return (
-    <Routes>
-      {isLoggedIn && (
-        <>
-          <Route path="/" element={<HomePage />} />
-          <Route
-            path="/account"
-            element={<AccountDetailPage defaultUser={loggedInUser} />}
-          />
-          <Route path="/appointments" element={<AppointmentsPage />} />
-          <Route path="/calendar" element={<CalendarPage />} />
-          <Route path="/counselors" element={<CounselorsPage />} />
-          <Route path="/schools" element={<SchoolsPage />} />
-          <Route path="/students" element={<StudentsPage />} />
-          <Route path="/users" element={<UsersPage />} />
-          <Route path="/logout" element={<LogoutPage />} />
-          <Route path="/login" element={<LoginPage />} />
-        </>
-      )}
-      <Route path="/" element={<Navigate replace to="/login" />} />
-      <Route path="/account" element={<Navigate replace to="/login" />} />
-      <Route path="/appointments" element={<Navigate replace to="/login" />} />
-      <Route path="/calendar" element={<Navigate replace to="/login" />} />
-      <Route path="/counselors" element={<Navigate replace to="/login" />} />
-      <Route path="/schools" element={<Navigate replace to="/login" />} />
-      <Route path="/students" element={<Navigate replace to="/login" />} />
-      <Route path="/users" element={<Navigate replace to="/login" />} />
-    </Routes>
-  );
+const RedirectToLogoutPage: React.FC = () => {
+  window.location.href =
+    process.env.REACT_APP_SERVER_BASE_URL + '/api/1/logout';
+  return <></>;
 };
+
+export const AvailableRoutes = [
+  { url: '/', element: <HomePage /> },
+  { url: '/account', element: <AccountDetailPage /> },
+  { url: '/appointments', element: <AppointmentsPage /> },
+  { url: '/calendar', element: <CalendarPage /> },
+  { url: '/counselors', element: <CounselorsPage /> },
+  { url: '/schools', element: <SchoolsPage /> },
+  { url: '/students', element: <StudentsPage /> },
+  { url: '/users', element: <UsersPage /> },
+  { url: '/logout', element: <RedirectToLogoutPage /> },
+];
 
 export default AppRouter;

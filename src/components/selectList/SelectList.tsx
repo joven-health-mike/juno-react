@@ -1,4 +1,9 @@
-import React, { ChangeEvent, useContext } from 'react';
+import React, { useContext } from 'react';
+import {
+  AppointmentType,
+  AppointmentTypes,
+  getAppointmentTypeById,
+} from '../../data/appointments';
 import {
   Counselor,
   CounselorsContext,
@@ -6,10 +11,16 @@ import {
 } from '../../data/counselors';
 import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import { emptyStudent, Student, StudentsContext } from '../../data/students';
+import {
+  emptyUser,
+  LoggedInUserContext,
+  User,
+  UsersContext,
+} from '../../data/users';
 
 type SelectListProps = {
   labelText: string;
-  value: string;
+  value: number;
   items: string[];
   onItemChanged: (item: string) => void;
 };
@@ -20,17 +31,21 @@ const SelectList = ({
   items,
   onItemChanged,
 }: SelectListProps) => {
-  const itemChanged = (e: ChangeEvent<HTMLSelectElement>) => {
-    e.preventDefault();
-    const item = e.target.value === labelText ? '' : e.target.value;
-    onItemChanged(item);
+  const itemChanged = (value: string) => {
+    onItemChanged(value);
   };
 
   return (
-    <select value={value} onChange={itemChanged}>
-      <option key={labelText}>{labelText}</option>
+    <select value={value} onChange={e => itemChanged(e.target.value)}>
+      <option value={-1} key={labelText}>
+        {labelText}
+      </option>
       {items.map((item, index) => {
-        return <option key={index}>{item}</option>;
+        return (
+          <option value={index} key={index}>
+            {item}
+          </option>
+        );
       })}
     </select>
   );
@@ -38,22 +53,67 @@ const SelectList = ({
 
 export default SelectList;
 
+type SelectMultipleListProps = {
+  labelText: string;
+  items: string[];
+  selectedItems: string[];
+  onItemsSelected: (items: string[]) => void;
+};
+
+export const SelectMultipleList = ({
+  labelText,
+  items,
+  selectedItems,
+  onItemsSelected,
+}: SelectMultipleListProps) => {
+  const itemsChanged = (e: any) => {
+    const newItemsSelected: string[] = [...e.target.options]
+      .filter(o => o.selected)
+      .map(o => o.value);
+    onItemsSelected(newItemsSelected);
+  };
+
+  return (
+    <select multiple onChange={itemsChanged}>
+      <option value={-1} key={labelText}>
+        {labelText}
+      </option>
+      {items.map((item, index) => {
+        const selected = selectedItems.includes(item);
+        if (selected) {
+          return (
+            <option value={index} key={index} selected>
+              {item}
+            </option>
+          );
+        } else {
+          return (
+            <option value={index} key={index}>
+              {item}
+            </option>
+          );
+        }
+      })}
+    </select>
+  );
+};
+
 type SelectCounselorListProps = {
-  value: string;
+  selectedIndex: number;
   onCounselorChanged: (counselor: Counselor) => void;
 };
 
 export function SelectCounselorList({
-  value,
+  selectedIndex,
   onCounselorChanged,
 }: SelectCounselorListProps) {
-  const { counselors } = useContext(CounselorsContext);
-  const counselorNames = counselors.map(counselor => counselor.name);
+  const { data: counselors } = useContext(CounselorsContext);
+  const counselorNames = counselors.map(
+    counselor => `${counselor.firstName} ${counselor.lastName}`
+  );
 
-  const handleCounselorChange = (counselorName: string) => {
-    const counselor = counselors.find(
-      counselor => counselor.name === counselorName
-    );
+  const handleCounselorChange = (counselorIndex: string) => {
+    const counselor = counselors[parseInt(counselorIndex)];
     onCounselorChanged(counselor ?? emptyCounselor);
   };
 
@@ -62,7 +122,7 @@ export function SelectCounselorList({
       <SelectList
         labelText={'Select a Counselor'}
         items={counselorNames}
-        value={value}
+        value={selectedIndex}
         onItemChanged={handleCounselorChange}
       />
     </>
@@ -70,19 +130,19 @@ export function SelectCounselorList({
 }
 
 type SelectSchoolListProps = {
-  value: string;
+  selectedIndex: number;
   onSchoolChanged: (school: School) => void;
 };
 
 export function SelectSchoolList({
-  value,
+  selectedIndex,
   onSchoolChanged,
 }: SelectSchoolListProps) {
-  const { schools } = useContext(SchoolsContext);
+  const { data: schools } = useContext(SchoolsContext);
   const schoolNames = schools.map(school => school.name);
 
-  const handleSchoolChange = (schoolName: string) => {
-    const school = schools.find(school => school.name === schoolName);
+  const handleSchoolChange = (schoolIndex: string) => {
+    const school = schools[parseInt(schoolIndex)];
     onSchoolChanged(school ?? emptySchool);
   };
 
@@ -91,7 +151,7 @@ export function SelectSchoolList({
       <SelectList
         labelText={'Select a School'}
         items={schoolNames}
-        value={value}
+        value={selectedIndex}
         onItemChanged={handleSchoolChange}
       />
     </>
@@ -99,7 +159,7 @@ export function SelectSchoolList({
 }
 
 type SelectStudentListProps = {
-  value: string;
+  value: number;
   onStudentChanged: (student: Student) => void;
 };
 
@@ -107,15 +167,13 @@ export function SelectStudentList({
   value,
   onStudentChanged,
 }: SelectStudentListProps) {
-  const { students } = useContext(StudentsContext);
+  const { data: students } = useContext(StudentsContext);
   const studentNames = students.map(
-    student => student.first_name + ' ' + student.last_name
+    student => `${student.firstName} ${student.lastName}`
   );
 
-  const handleStudentChange = (studentName: string) => {
-    const student = students.find(
-      student => student.first_name + ' ' + student.last_name === studentName
-    );
+  const handleStudentChange = (studentId: string) => {
+    const student = students.find(student => student.id === studentId);
     onStudentChanged(student ?? emptyStudent);
   };
 
@@ -125,6 +183,69 @@ export function SelectStudentList({
       items={studentNames}
       value={value}
       onItemChanged={handleStudentChange}
+    />
+  );
+}
+
+type SelectUserListProps = {
+  selectedUsers: User[];
+  onUsersChanged: (users: User[]) => void;
+};
+
+export function SelectUserList({
+  selectedUsers,
+  onUsersChanged,
+}: SelectUserListProps) {
+  const { loggedInUser } = useContext(LoggedInUserContext);
+  const { data: users } = useContext(UsersContext);
+  const userNameFormat = (user: User) =>
+    `${user.firstName} ${user.lastName} (${user.role})`;
+  const userListFilter =
+    loggedInUser.role !== 'SYSADMIN'
+      ? (user: User) => user.id !== loggedInUser.id
+      : () => true;
+  const userNames = users
+    .filter(userListFilter)
+    .map(user => userNameFormat(user));
+  const selectedUserNames = selectedUsers.map(user => userNameFormat(user));
+
+  const onItemsSelected = (selectedItems: string[]) => {
+    const selectedUsers = selectedItems.map(indexStr => {
+      const userName = userNames[parseInt(indexStr)];
+      const foundUser = users.find(user => userNameFormat(user) === userName);
+      return foundUser || emptyUser;
+    });
+    onUsersChanged(selectedUsers);
+  };
+
+  return (
+    <SelectMultipleList
+      selectedItems={selectedUserNames}
+      labelText={'Select Users'}
+      items={userNames}
+      onItemsSelected={onItemsSelected}
+    />
+  );
+}
+
+type SelectTypeListProps = {
+  value: number;
+  onTypeChanged: (type: AppointmentType) => void;
+};
+
+export function SelectTypeList({ value, onTypeChanged }: SelectTypeListProps) {
+  const typeNames = Object.keys(AppointmentTypes);
+
+  const handleTypeChange = (typeId: string) => {
+    onTypeChanged(getAppointmentTypeById(+typeId));
+  };
+
+  return (
+    <SelectList
+      labelText={'Select Appointment Type'}
+      items={typeNames}
+      value={value}
+      onItemChanged={handleTypeChange}
     />
   );
 }

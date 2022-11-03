@@ -1,18 +1,124 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { MouseEvent } from 'react';
-import { CellProps, Column } from 'react-table';
-import { User } from '../../data/users';
+import React, {
+  MouseEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { CellProps, Column, Row } from 'react-table';
+import { deletePermission, updatePermission } from '../../auth/permissions';
+import { LoggedInUserContext, User, UsersContext } from '../../data/users';
 import XButton from '../buttons/XButton';
+import UserDetails from '../details/UserDetails';
 import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
 
 type UsersTableProps = {
-  users: User[];
-  onDeleteClicked: (userName: string) => void;
+  onDeleteClicked: (user: User) => void;
+  onEditClicked: (user: User) => void;
+  onEmailClicked: (user: User) => void;
 };
 
-const UsersTable: React.FC<UsersTableProps> = ({ users, onDeleteClicked }) => {
+export type TableUser = {
+  id: string;
+  name: string;
+  role: string;
+};
+
+const UsersTable: React.FC<UsersTableProps> = ({
+  onDeleteClicked,
+  onEditClicked,
+  onEmailClicked,
+}) => {
+  const { data: users } = useContext(UsersContext);
+  const { loggedInUser } = useContext(LoggedInUserContext);
+
+  const [isDeleteUserAllowed, setIsDeleteUserAllowed] =
+    useState<boolean>(false);
+  const [isUpdateUserAllowed, setIsUpdateUserAllowed] =
+    useState<boolean>(false);
+  const [tableUsers, setTableUsers] = useState<TableUser[]>([]);
+
+  useEffect(() => {
+    setIsDeleteUserAllowed(deletePermission(loggedInUser.role, 'user'));
+    setIsUpdateUserAllowed(updatePermission(loggedInUser.role, 'user'));
+  }, [loggedInUser.role]);
+
+  useEffect(() => {
+    const mappedUsers = users.map(user => {
+      return {
+        id: user.id,
+        name: `${user.firstName} ${user.lastName}`,
+        role: user.role,
+      } as TableUser;
+    });
+
+    setTableUsers(mappedUsers);
+  }, [users]);
+
+  const getUserFromTableUser = useCallback(
+    (tableUser: TableUser): User => {
+      return users.find(user => user.id === tableUser.id) as User;
+    },
+    [users]
+  );
+
+  const getButtonCell = useCallback(
+    (tableUser: TableUser, row: Row) => {
+      const user = getUserFromTableUser(tableUser);
+      if (!user) return <></>;
+
+      return (
+        <>
+          {isDeleteUserAllowed && (
+            <XButton
+              text="❌"
+              title={`Delete ${user.firstName}`}
+              value={user.id}
+              onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                e.preventDefault();
+                onDeleteClicked(user);
+              }}
+            />
+          )}
+          {isUpdateUserAllowed && (
+            <XButton
+              text="✏️"
+              title={`Edit ${user.firstName}`}
+              value={user.id}
+              onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                e.preventDefault();
+                onEditClicked(user);
+              }}
+            />
+          )}
+          <XButton
+            text="📧"
+            title={`Email ${user.firstName}`}
+            value={user.id}
+            onClick={(e: MouseEvent<HTMLButtonElement>) => {
+              e.preventDefault();
+              onEmailClicked(user);
+            }}
+          />
+          <button {...row.getToggleRowExpandedProps()}>
+            {row.isExpanded ? '👇' : '👉'}
+          </button>
+        </>
+      );
+    },
+    [
+      getUserFromTableUser,
+      isDeleteUserAllowed,
+      isUpdateUserAllowed,
+      onDeleteClicked,
+      onEditClicked,
+      onEmailClicked,
+    ]
+  );
+
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
       Filter: TableSearchFilter,
@@ -23,43 +129,41 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, onDeleteClicked }) => {
   const columns: Column[] = React.useMemo(
     () => [
       {
-        Header: ' ',
-        Cell: ({ cell }: CellProps<object>) => (
-          <XButton
-            value={cell.row.values.name}
-            onClick={(e: MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault();
-              onDeleteClicked((e.target as HTMLInputElement).value);
-            }}
-          />
-        ),
-      },
-      {
-        Header: 'ID',
-        accessor: '_id',
+        id: 'buttons',
+        Cell: ({ cell, row }: CellProps<object>) => {
+          const user = cell.row.original as TableUser;
+          return getButtonCell(user, row);
+        },
       },
       {
         Header: 'Name',
         accessor: 'name',
       },
       {
-        Header: 'Email',
-        accessor: 'email',
-      },
-      {
-        Header: 'Password',
-        accessor: 'password',
-      },
-      {
         Header: 'Role',
         accessor: 'role',
       },
     ],
-    [onDeleteClicked]
+    [getButtonCell]
+  );
+
+  const renderRowSubComponent = useCallback(
+    (row: Row) => {
+      const rowObject = row.original as TableUser;
+      const user = getUserFromTableUser(rowObject);
+      return <UserDetails user={user} />;
+    },
+    [getUserFromTableUser]
   );
 
   return (
-    <DataTable data={users} defaultColumn={defaultColumn} columns={columns} />
+    <DataTable
+      data={tableUsers}
+      defaultColumn={defaultColumn}
+      columns={columns}
+      renderRowSubComponent={renderRowSubComponent}
+      hiddenColumns={['id']}
+    />
   );
 };
 

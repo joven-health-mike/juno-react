@@ -1,37 +1,112 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext } from 'react';
-import { User, UsersContext } from '../../data/users';
-import CreateUserForm from '../forms/CreateUserForm';
+import React, { useContext, useEffect, useState } from 'react';
+import {
+  createPermission,
+  deletePermission,
+  updatePermission,
+} from '../../auth/permissions';
+import {
+  emptyUser,
+  LoggedInUserContext,
+  User,
+  UsersContext,
+} from '../../data/users';
+import CreateUserModal from '../modals/CreateUserModal';
+import EditUserModal from '../modals/EditUserModal';
 import Navbar from '../navbar/Navbar';
-import { getItems } from '../navbar/navBarItems';
 import UsersTable from '../tables/UsersTable';
 
 const UsersPage = () => {
-  const role = 'admin';
+  const {
+    add: addUser,
+    delete: deleteUser,
+    update: updateUser,
+  } = useContext(UsersContext);
+  const { loggedInUser } = useContext(LoggedInUserContext);
 
-  const { users, setUsers } = useContext(UsersContext);
+  const [isCreateUserModalOpen, setIsCreateUserModalOpen] =
+    useState<boolean>(false);
+  const [isEditUserModalOpen, setIsEditUserModalOpen] =
+    useState<boolean>(false);
+  const [modalUser, setModalUser] = useState<User>(emptyUser);
+  const [isCreateUserAllowed, setIsCreateUserAllowed] =
+    useState<boolean>(false);
+  const [isDeleteUserAllowed, setIsDeleteUserAllowed] =
+    useState<boolean>(false);
+  const [isUpdateUserAllowed, setIsUpdateUserAllowed] =
+    useState<boolean>(false);
 
-  const onFormSubmit = (user: User) => {
-    setUsers([...users, user]);
+  useEffect(() => {
+    setIsCreateUserAllowed(createPermission(loggedInUser.role, 'user'));
+    setIsDeleteUserAllowed(deletePermission(loggedInUser.role, 'user'));
+    setIsUpdateUserAllowed(updatePermission(loggedInUser.role, 'user'));
+  }, [loggedInUser.role]);
+
+  const handleUserAdded = (user: User) => {
+    if (isCreateUserAllowed) {
+      addUser(user);
+    }
   };
 
-  const onUserDeleteClicked = (userName: string) => {
-    if (window.confirm('Delete this user?')) {
-      let newUsers = users.filter(user => user.name !== userName);
-      setUsers(newUsers);
+  const handleUserEdited = (user: User) => {
+    if (isUpdateUserAllowed) {
+      updateUser(user);
     }
+  };
+
+  const onUserDeleteClicked = (userToDelete: User) => {
+    if (isDeleteUserAllowed && window.confirm('Delete this user?')) {
+      deleteUser(userToDelete);
+    }
+  };
+
+  const onUserEditClicked = (userToEdit: User) => {
+    if (isUpdateUserAllowed) {
+      setModalUser(userToEdit);
+      setIsEditUserModalOpen(true);
+    }
+  };
+
+  const onUserEmailClicked = (userToEmail: User) => {
+    window.open(`mailto:${userToEmail.email}`);
   };
 
   return (
     <div className={'mainContainer'}>
       <nav>
-        <Navbar items={getItems(role)} />
+        <Navbar />
       </nav>
       <h1>Users</h1>
       <>
-        <CreateUserForm onSubmit={onFormSubmit} onCancel={() => {}} />
-        <UsersTable users={users} onDeleteClicked={onUserDeleteClicked} />
+        {isCreateUserAllowed && (
+          <>
+            <button
+              type="button"
+              onClick={() => setIsCreateUserModalOpen(true)}
+            >
+              Add User
+            </button>
+            <CreateUserModal
+              isOpen={isCreateUserModalOpen}
+              onUserAdded={handleUserAdded}
+              onClose={() => setIsCreateUserModalOpen(false)}
+            />
+          </>
+        )}
+        {isUpdateUserAllowed && (
+          <EditUserModal
+            isOpen={isEditUserModalOpen}
+            onUserEdited={handleUserEdited}
+            onClose={() => setIsEditUserModalOpen(false)}
+            initialUser={modalUser}
+          />
+        )}
+        <UsersTable
+          onDeleteClicked={onUserDeleteClicked}
+          onEditClicked={onUserEditClicked}
+          onEmailClicked={onUserEmailClicked}
+        />
       </>
     </div>
   );

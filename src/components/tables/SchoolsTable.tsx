@@ -1,21 +1,125 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { MouseEvent } from 'react';
-import { CellProps, Column } from 'react-table';
-import { School } from '../../data/schools';
+import React, {
+  MouseEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { CellProps, Column, Row } from 'react-table';
+import { deletePermission, updatePermission } from '../../auth/permissions';
+import { School, SchoolsContext } from '../../data/schools';
+import { LoggedInUserContext } from '../../data/users';
 import XButton from '../buttons/XButton';
+import SchoolDetails from '../details/SchoolDetails';
 import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
 
 type SchoolsTableProps = {
-  schools: School[];
-  onDeleteClicked: (schoolName: string) => void;
+  onDeleteClicked: (school: School) => void;
+  onEditClicked: (school: School) => void;
+  onEmailClicked: (school: School) => void;
+};
+
+export type TableSchool = {
+  id: string;
+  name: string;
+  state: string;
 };
 
 const SchoolsTable: React.FC<SchoolsTableProps> = ({
-  schools,
   onDeleteClicked,
+  onEditClicked,
+  onEmailClicked,
 }) => {
+  const { data: schools } = useContext(SchoolsContext);
+  const { loggedInUser } = useContext(LoggedInUserContext);
+
+  const [isDeleteSchoolAllowed, setIsDeleteSchoolAllowed] =
+    useState<boolean>(false);
+  const [isUpdateSchoolAllowed, setIsUpdateSchoolAllowed] =
+    useState<boolean>(false);
+  const [tableSchools, setTableSchools] = useState<TableSchool[]>([]);
+
+  useEffect(() => {
+    setIsDeleteSchoolAllowed(deletePermission(loggedInUser.role, 'school'));
+    setIsUpdateSchoolAllowed(updatePermission(loggedInUser.role, 'school'));
+  }, [loggedInUser.role]);
+
+  useEffect(() => {
+    const mappedSchools = schools.map(school => {
+      return {
+        id: school.id,
+        name: school.name,
+        state: school.state,
+      } as TableSchool;
+    });
+
+    setTableSchools(mappedSchools);
+  }, [schools]);
+
+  const getSchoolFromTableSchool = useCallback(
+    (tableSchool: TableSchool): School => {
+      return schools.find(school => school.id === tableSchool.id) as School;
+    },
+    [schools]
+  );
+
+  const getButtonCell = useCallback(
+    (tableSchool: TableSchool, row: Row) => {
+      const school = getSchoolFromTableSchool(tableSchool);
+      if (!school) return <></>;
+
+      return (
+        <>
+          {isDeleteSchoolAllowed && (
+            <XButton
+              text="❌"
+              title={`Delete ${school.name}`}
+              value={school.id}
+              onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                e.preventDefault();
+                onDeleteClicked(school);
+              }}
+            />
+          )}
+          {isUpdateSchoolAllowed && (
+            <XButton
+              text="✏️"
+              title={`Edit ${school.name}`}
+              value={school.id}
+              onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                e.preventDefault();
+                onEditClicked(school);
+              }}
+            />
+          )}
+          <XButton
+            text="📧"
+            title={`Email ${school.name}`}
+            value={school.id}
+            onClick={(e: MouseEvent<HTMLButtonElement>) => {
+              e.preventDefault();
+              onEmailClicked(school);
+            }}
+          />
+          <button {...row.getToggleRowExpandedProps()}>
+            {row.isExpanded ? '👇' : '👉'}
+          </button>
+        </>
+      );
+    },
+    [
+      getSchoolFromTableSchool,
+      isDeleteSchoolAllowed,
+      isUpdateSchoolAllowed,
+      onDeleteClicked,
+      onEditClicked,
+      onEmailClicked,
+    ]
+  );
+
   const defaultColumn: Record<string, unknown> = React.useMemo(
     () => ({
       Filter: TableSearchFilter,
@@ -26,35 +130,45 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
   const columns: Column[] = React.useMemo(
     () => [
       {
-        Header: ' ',
-        Cell: ({ cell }: CellProps<object>) => (
-          <XButton
-            value={cell.row.values.name}
-            onClick={(e: MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault();
-              onDeleteClicked((e.target as HTMLInputElement).value);
-            }}
-          />
-        ),
+        id: 'buttons',
+        Cell: ({ cell, row }: CellProps<object>) => {
+          const school = cell.row.original as TableSchool;
+          return getButtonCell(school, row);
+        },
       },
       {
         Header: 'ID',
-        accessor: '_id',
+        accessor: 'id',
       },
       {
         Header: 'Name',
         accessor: 'name',
       },
       {
-        Header: 'Email',
-        accessor: 'email',
+        Header: 'State',
+        accessor: 'state',
       },
     ],
-    [onDeleteClicked]
+    [getButtonCell]
+  );
+
+  const renderRowSubComponent = useCallback(
+    (row: Row) => {
+      const rowObject = row.original as TableSchool;
+      const school = getSchoolFromTableSchool(rowObject);
+      return <SchoolDetails school={school} />;
+    },
+    [getSchoolFromTableSchool]
   );
 
   return (
-    <DataTable data={schools} defaultColumn={defaultColumn} columns={columns} />
+    <DataTable
+      data={tableSchools}
+      defaultColumn={defaultColumn}
+      columns={columns}
+      renderRowSubComponent={renderRowSubComponent}
+      hiddenColumns={['id']}
+    />
   );
 };
 

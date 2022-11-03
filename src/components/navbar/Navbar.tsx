@@ -1,28 +1,36 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React from 'react';
+import React, { useContext } from 'react';
 import { IconContext } from 'react-icons';
 import { Link } from 'react-router-dom';
-import { NavItem } from './navBarItems';
+import { AvailableRoute, pagePermission } from '../../auth/permissions';
+import { LoggedInUserContext } from '../../data/users';
+import { allNavItems, NavItem } from './navBarItems';
 
-type NavbarProps = {
-  items: NavItem[];
-};
+const Navbar: React.FC = () => {
+  const { loggedInUser } = useContext(LoggedInUserContext);
+  const role = loggedInUser.role;
 
-const Navbar: React.FC<NavbarProps> = ({ items }) => {
+  function isRouteAllowed(route: AvailableRoute): boolean {
+    return pagePermission(role, route);
+  }
+
   return (
     <>
       <IconContext.Provider value={{ color: '#fff' }}>
         <div className={'navMenu'}>
           <ul>
-            {items.map((item: NavItem, index: number) => (
-              <li key={index} className={'navText'}>
-                <Link to={item.path}>
-                  {item.icon}
-                  <span>{item.title}</span>
-                </Link>
-              </li>
-            ))}
+            {allNavItems.map(
+              (item: NavItem, index: number) =>
+                isRouteAllowed(item.path as AvailableRoute) && (
+                  <li key={index} className={'navText'}>
+                    <Link to={item.path}>
+                      {item.icon}
+                      <span>{item.title}</span>
+                    </Link>
+                  </li>
+                )
+            )}
           </ul>
         </div>
       </IconContext.Provider>

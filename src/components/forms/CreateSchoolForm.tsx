@@ -4,15 +4,10 @@ import React, {
   ChangeEvent,
   FormEvent,
   MouseEvent,
-  useContext,
+  useEffect,
   useState,
 } from 'react';
-import {
-  emptySchool,
-  ISchoolsContext,
-  School,
-  SchoolsContext,
-} from '../../data/schools';
+import { emptySchool, School } from '../../data/schools';
 
 type CreateSchoolFormProps = {
   defaultSchool?: School;
@@ -26,11 +21,17 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
   onCancel,
 }) => {
   const [school, setSchool] = useState<School>(defaultSchool ?? emptySchool);
-  const { schools } = useContext<ISchoolsContext>(SchoolsContext);
+
+  useEffect(() => {
+    if (defaultSchool) {
+      setSchool(defaultSchool);
+    }
+  }, [defaultSchool]);
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    onSubmit({ ...school, _id: schools.length });
+    const submittedSchool = defaultSchool ? school : { ...school, id: '-1' };
+    onSubmit(submittedSchool);
   };
 
   const onFormCancel = (e: MouseEvent) => {
@@ -43,8 +44,9 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
     <>
       <form onSubmit={onFormSubmit}>
         <label>
-          Name
+          Name:
           <input
+            data-testid={'input-name'}
             type="text"
             placeholder="Name"
             name="name"
@@ -56,21 +58,98 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
           />
         </label>
         <label>
-          Email
+          Address:
           <input
-            type="email"
-            placeholder="Email"
-            name="email"
-            value={school.email}
+            data-testid={'input-address'}
+            type="text"
+            placeholder="Address"
+            name="address"
+            value={school.address}
             required
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setSchool({ ...school, email: e.target.value })
+              setSchool({ ...school, address: e.target.value })
+            }
+          />
+        </label>
+        <label>
+          City:
+          <input
+            data-testid={'input-city'}
+            type="text"
+            placeholder="City"
+            name="city"
+            value={school.city}
+            required
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setSchool({ ...school, city: e.target.value })
+            }
+          />
+        </label>
+        <label>
+          State:
+          <input
+            data-testid={'input-state'}
+            type="text"
+            placeholder="State"
+            name="state"
+            value={school.state}
+            required
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setSchool({ ...school, state: e.target.value })
+            }
+          />
+        </label>
+        <label>
+          Zip Code:
+          <input
+            data-testid={'input-zip'}
+            type="text"
+            placeholder="Zip Code"
+            name="zip"
+            value={school.zip}
+            required
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setSchool({ ...school, zip: e.target.value })
+            }
+          />
+        </label>
+        <label>
+          Email:
+          <input
+            data-testid={'input-email'}
+            type="email"
+            placeholder="Email"
+            name="primaryEmail"
+            value={school.primaryEmail}
+            required
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setSchool({ ...school, primaryEmail: e.target.value })
+            }
+          />
+        </label>
+        <label>
+          Phone Number
+          <input
+            data-testid={'input-phone'}
+            type="text"
+            placeholder="Phone Number"
+            name="primaryPhone"
+            value={school.primaryPhone}
+            required
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setSchool({ ...school, primaryPhone: e.target.value })
             }
           />
         </label>
 
-        <button type="submit">Submit</button>
-        <button type="button" onClick={onFormCancel}>
+        <button type="submit" data-testid={'button-submit'}>
+          Submit
+        </button>
+        <button
+          type="button"
+          data-testid={'button-cancel'}
+          onClick={onFormCancel}
+        >
           Cancel
         </button>
       </form>

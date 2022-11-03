@@ -4,27 +4,31 @@ import React, { useContext, useEffect, useState } from 'react';
 import '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import momentTimezonePlugin from '@fullcalendar/moment-timezone';
+import { DateTime } from 'luxon';
 import {
   Appointment,
   AppointmentsContext,
   emptyAppointment,
 } from '../../data/appointments';
-import { Counselor, emptyCounselor } from '../../data/counselors';
-import { emptySchool, School } from '../../data/schools';
+import {
+  Counselor,
+  CounselorsContext,
+  emptyCounselor,
+} from '../../data/counselors';
+import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import Calendar from '../calendar/Calendar';
 import Navbar from '../navbar/Navbar';
-import { getItems } from '../navbar/navBarItems';
 import {
   SelectCounselorList,
   SelectSchoolList,
 } from '../selectList/SelectList';
-import { StudentsContext } from '../../data/students';
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import AppointmentDetailsModal from '../modals/AppointmentDetailsModal';
+import { LoggedInUserContext } from '../../data/users';
+import { createPermission, deletePermission } from '../../auth/permissions';
 
 const CalendarPage: React.FC = () => {
-  const role = 'admin';
-
   const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
     useState<boolean>(false);
   const [isAppointmentDetailsModalOpen, setIsAppointmentDetailsModalOpen] =
@@ -32,28 +36,63 @@ const CalendarPage: React.FC = () => {
   const [showCalendar, setShowCalendar] = useState<boolean>(true);
   const [filteredEvents, setFilteredEvents] = useState<Appointment[]>([]);
   const [schoolSelection, setSchoolSelection] = useState<School>(emptySchool);
+  const [selectedSchoolIndex, setSelectedSchoolIndex] = useState(-1);
   const [counselorSelection, setCounselorSelection] =
     useState<Counselor>(emptyCounselor);
+  const [selectedCounselorIndex, setSelectedCounselorIndex] = useState(-1);
   const [initialAppointment, setInitialAppointment] =
     useState<Appointment>(emptyAppointment);
   const [clickedAppointment, setClickedAppointment] =
     useState<Appointment>(emptyAppointment);
-  const { appointments, setAppointments } = useContext(AppointmentsContext);
-  const { students } = useContext(StudentsContext);
+  const [isCreateAppointmentAllowed, setIsCreateAppointmentAllowed] =
+    useState<boolean>(false);
+  const [isDeleteAppointmentAllowed, setIsDeleteAppointmentAllowed] =
+    useState<boolean>(false);
+
+  const {
+    data: appointments,
+    add: addAppointment,
+    delete: deleteAppointment,
+  } = useContext(AppointmentsContext);
+  const { data: counselors } = useContext(CounselorsContext);
+  const { loggedInUser } = useContext(LoggedInUserContext);
+  const { data: schools } = useContext(SchoolsContext);
 
   const handleAppointmentClick = (appointment: Appointment) => {
     setClickedAppointment(appointment);
     setIsAppointmentDetailsModalOpen(true);
   };
 
-  const handleDateClick = (date: string) => {
-    setInitialAppointment({
-      ...initialAppointment,
-      start: new Date(date + 'T08:00'),
-      end: new Date(date + 'T08:30'),
-    });
-    setIsCreateAppointmentModalOpen(true);
+  const handleDateClick = (utcDateStr: string) => {
+    if (isCreateAppointmentAllowed) {
+      const startTime = DateTime.fromFormat(utcDateStr, 'yyyy-MM-dd')
+        .set({
+          hour: 8,
+          minute: 0,
+          second: 0,
+          millisecond: 0,
+        })
+        .toJSDate();
+      const endTime = DateTime.fromJSDate(startTime)
+        .set({ minute: 30 })
+        .toJSDate();
+      setInitialAppointment({
+        ...initialAppointment,
+        start: startTime,
+        end: endTime,
+      });
+      setIsCreateAppointmentModalOpen(true);
+    }
   };
+
+  useEffect(() => {
+    setIsCreateAppointmentAllowed(
+      createPermission(loggedInUser.role, 'appointment')
+    );
+    setIsDeleteAppointmentAllowed(
+      deletePermission(loggedInUser.role, 'appointment')
+    );
+  }, [loggedInUser.role]);
 
   useEffect(() => {
     setShowCalendar(
@@ -62,33 +101,74 @@ const CalendarPage: React.FC = () => {
   }, [isCreateAppointmentModalOpen, isAppointmentDetailsModalOpen]);
 
   const handleAppointmentAdded = (appointment: Appointment) => {
-    setAppointments([...appointments, appointment]);
+    if (isCreateAppointmentAllowed) {
+      addAppointment(appointment);
+    }
     setIsCreateAppointmentModalOpen(false);
   };
 
   const handleSchoolChange = (selectedSchool: School) => {
+    setSelectedSchoolIndex(schools.indexOf(selectedSchool));
     setSchoolSelection(selectedSchool);
   };
 
   const handleCounselorChange = (selectedCounselor: Counselor) => {
+    setSelectedCounselorIndex(counselors.indexOf(selectedCounselor));
     setCounselorSelection(selectedCounselor);
+  };
+
+  const onAppointmentDeleteClicked = (appointmentToDelete: Appointment) => {
+    if (
+      isDeleteAppointmentAllowed &&
+      window.confirm('Delete this appointment?')
+    ) {
+      deleteAppointment(appointmentToDelete);
+    }
+    setIsAppointmentDetailsModalOpen(false);
+  };
+
+  const onAppointmentEmailClicked = (appointmentToEmail: Appointment) => {
+    const appointmentCounselor =
+      counselors.find(
+        counselor =>
+          counselor.counselorRef.id === appointmentToEmail.counselorId
+      ) || emptyCounselor;
+    let mailToUrl = `mailto:${appointmentCounselor.email}`;
+
+    for (const participant of appointmentToEmail.participants) {
+      mailToUrl += `,${participant.email}`;
+    }
+
+    mailToUrl += `?subject=${encodeURIComponent(appointmentToEmail.title)}`;
+
+    window.open(mailToUrl);
+  };
+
+  const onAppointmentRoomLinkClicked = (
+    appointmentToOpenRoomLink: Appointment
+  ) => {
+    const counselor = counselors.find(
+      counselor =>
+        counselor.counselorRef.id === appointmentToOpenRoomLink.counselorId
+    );
+    if (counselor?.counselorRef?.roomLink) {
+      window.open(counselor.counselorRef.roomLink);
+    }
   };
 
   useEffect(() => {
     const filteredEvents = appointments.filter(appointment => {
       const counselorMatch =
-        counselorSelection._id === -1 ||
-        counselorSelection._id === appointment.counselorId;
-      const student = students.find(
-        student => student._id === appointment.studentId
-      );
-      const schoolMatch = student
-        ? schoolSelection._id === -1 || schoolSelection._id === student.schoolId
-        : false;
+        counselorSelection.id === '-1' ||
+        counselorSelection.counselorRef.id === appointment.counselorId ||
+        counselorSelection.counselorRef.id === appointment.counselor?.id;
+      const schoolMatch =
+        schoolSelection.id === '-1' ||
+        schoolSelection.id === appointment.schoolId;
       return counselorMatch && schoolMatch;
     });
     setFilteredEvents(filteredEvents);
-  }, [counselorSelection, schoolSelection, appointments, students]);
+  }, [appointments, counselorSelection, schoolSelection]);
 
   useEffect(() => {
     setFilteredEvents(appointments);
@@ -97,27 +177,33 @@ const CalendarPage: React.FC = () => {
   return (
     <div className={'mainContainer'}>
       <nav>
-        <Navbar items={getItems(role)} />
+        <Navbar />
       </nav>
       <h1>Calendar</h1>
-      <label>
-        Counselor:{' '}
-        <SelectCounselorList
-          value={counselorSelection.name}
-          onCounselorChanged={handleCounselorChange}
-        />
-      </label>
-      <label>
-        School:{' '}
-        <SelectSchoolList
-          value={schoolSelection.name}
-          onSchoolChanged={handleSchoolChange}
-        />
-      </label>
+      {loggedInUser.role !== 'COUNSELOR' && counselors.length > 1 && (
+        <label>
+          Counselor:{' '}
+          <SelectCounselorList
+            selectedIndex={selectedCounselorIndex}
+            onCounselorChanged={handleCounselorChange}
+          />
+        </label>
+      )}
+      {loggedInUser.role !== 'SCHOOL_ADMIN' &&
+        loggedInUser.role !== 'SCHOOL_STAFF' &&
+        schools.length > 1 && (
+          <label>
+            School:{' '}
+            <SelectSchoolList
+              selectedIndex={selectedSchoolIndex}
+              onSchoolChanged={handleSchoolChange}
+            />
+          </label>
+        )}
       {showCalendar && (
         <Calendar
           view="dayGridMonth"
-          plugins={[dayGridPlugin, interactionPlugin]}
+          plugins={[dayGridPlugin, interactionPlugin, momentTimezonePlugin]}
           appointments={filteredEvents}
           onEventClick={handleAppointmentClick}
           onDateClick={handleDateClick}
@@ -133,6 +219,9 @@ const CalendarPage: React.FC = () => {
         isOpen={isAppointmentDetailsModalOpen}
         onClose={() => setIsAppointmentDetailsModalOpen(false)}
         appointment={clickedAppointment}
+        onRoomLinkClicked={onAppointmentRoomLinkClicked}
+        onDeleteClicked={onAppointmentDeleteClicked}
+        onEmailClicked={onAppointmentEmailClicked}
       />
     </div>
   );

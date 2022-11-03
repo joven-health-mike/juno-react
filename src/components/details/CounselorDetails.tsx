@@ -2,6 +2,8 @@
 
 import React from 'react';
 import { Counselor } from '../../data/counselors';
+import { User } from '../../data/users';
+import UserDetails from './UserDetails';
 
 type CounselorDetailsProps = {
   counselor: Counselor;
@@ -10,10 +12,13 @@ type CounselorDetailsProps = {
 const CounselorDetails: React.FC<CounselorDetailsProps> = ({ counselor }) => {
   return (
     <>
-      <h2>{counselor.name}</h2>
-      <p>{counselor._id}</p>
-      <p>{counselor.email}</p>
-      <p>{counselor.roomLink}</p>
+      <UserDetails user={counselor as User} />
+      <p data-testid={'roomLink'}>
+        Room Link:{' '}
+        <a href={counselor.counselorRef.roomLink}>
+          {counselor.counselorRef.roomLink}
+        </a>
+      </p>
     </>
   );
 };
