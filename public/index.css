@@ -161,8 +161,7 @@ img {
 
 .modal {
   position: absolute;
-  /* height: auto;
-  width: auto; */
+  max-height: 80vh;
   float: left;
   left: 50%;
   top: 50%;
@@ -172,6 +171,7 @@ img {
   border-radius: 25px;
   padding: 50px 150px;
   box-shadow: 5px 5px 10px 5px #385aa8;
+  overflow-y: auto;
 }
 
 .overlay {
