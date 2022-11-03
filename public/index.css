@@ -161,6 +161,7 @@ img {
 
 .modal {
   position: absolute;
+  max-height: 80vh;
   float: left;
   width: 500px;
   max-height: 80vh;
