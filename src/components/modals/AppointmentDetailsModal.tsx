@@ -9,12 +9,18 @@ type AppointmentDetailsModalProps = {
   isOpen: boolean;
   onClose: () => void;
   appointment: Appointment;
+  onDeleteClicked: (appointment: Appointment) => void;
+  onEmailClicked: (appointment: Appointment) => void;
+  onRoomLinkClicked: (appointment: Appointment) => void;
 };
 
 const AppointmentDetailsModal: React.FC<AppointmentDetailsModalProps> = ({
   isOpen,
   onClose,
   appointment,
+  onDeleteClicked,
+  onEmailClicked,
+  onRoomLinkClicked,
 }) => {
   return (
     <Modal
@@ -24,7 +30,12 @@ const AppointmentDetailsModal: React.FC<AppointmentDetailsModalProps> = ({
       overlayClassName={'overlay'}
     >
       <h1>Appointment Details</h1>
-      <AppointmentDetails appointment={appointment} />
+      <AppointmentDetails
+        appointment={appointment}
+        onCancelAppointmentClicked={onDeleteClicked}
+        onJoinAppointmentClicked={onRoomLinkClicked}
+        onEmailParticipantsClicked={onEmailClicked}
+      />
     </Modal>
   );
 };

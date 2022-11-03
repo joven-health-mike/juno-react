@@ -163,6 +163,8 @@ img {
   position: absolute;
   max-height: 80vh;
   float: left;
+  width: 500px;
+  max-height: 80vh;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -171,7 +173,7 @@ img {
   border-radius: 25px;
   padding: 50px 150px;
   box-shadow: 5px 5px 10px 5px #385aa8;
-  overflow-y: auto;
+  overflow: auto;
 }
 
 .overlay {

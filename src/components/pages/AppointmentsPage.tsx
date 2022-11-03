@@ -99,6 +99,18 @@ const AppointmentsPage: React.FC = () => {
     window.open(mailToUrl);
   };
 
+  const onAppointmentRoomLinkClicked = (
+    appointmentToOpenRoomLink: Appointment
+  ) => {
+    const counselor = counselors.find(
+      counselor =>
+        counselor.counselorRef.id === appointmentToOpenRoomLink.counselorId
+    );
+    if (counselor?.counselorRef?.roomLink) {
+      window.open(counselor.counselorRef.roomLink);
+    }
+  };
+
   return (
     <div className={'mainContainer'}>
       <nav>
@@ -118,6 +130,7 @@ const AppointmentsPage: React.FC = () => {
           onDeleteClicked={onAppointmentDeleteClicked}
           onEditClicked={onAppointmentEditClicked}
           onEmailClicked={onAppointmentEmailClicked}
+          onRoomLinkClicked={onAppointmentRoomLinkClicked}
         />
         {isCreateAppointmentAllowed && (
           <CreateAppointmentModal
