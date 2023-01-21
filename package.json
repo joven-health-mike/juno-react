@@ -34,7 +34,8 @@
     "build": "react-scripts build",
     "test": "jest",
     "eject": "react-scripts eject",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "watch:css": "postcss src/assets/tailwind.css -o src/assets/main.css --watch"
   },
   "eslintConfig": {
     "extends": [
