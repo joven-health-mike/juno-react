@@ -24,7 +24,7 @@ const HomePage: React.FC = () => {
   const { loggedInUser } = useContext(LoggedInUserContext);
 
   return (
-    <div className={'mainContainer'}>
+    <div className="ml-[250px]">
       <nav>
         <Navbar />
       </nav>
@@ -125,16 +125,16 @@ const StudentsTableView: React.FC = () => {
 
 const AdminView: React.FC = () => {
   return (
-    <>
-      <div className="leftSide">
+    <div className="inline-flex items-start">
+      <div className="min-w-[47%] ml-6">
         <h1>All Appointments</h1>
         <AppointmentView />
       </div>
-      <div className="rightSide">
+      <div className="min-w-[47%] ml-6">
         <h1>All Students</h1>
         <StudentsTableView />
       </div>
-    </>
+    </div>
   );
 };
 

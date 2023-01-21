@@ -45,7 +45,7 @@ const Calendar: React.FC<CalendarProps> = ({
   };
 
   return (
-    <div className={'calendar'}>
+    <div className="my-0 mx-auto max-w-[1300px]">
       {typeof onDateClick !== 'undefined' && (
         <FullCalendar
           events={appointments}

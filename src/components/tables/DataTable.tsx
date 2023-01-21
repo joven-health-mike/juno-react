@@ -76,7 +76,10 @@ const DataTable: React.FC<DataTableProps> = ({
 
   return (
     <>
-      <table className={'jovenTable'} {...getTableProps()}>
+      <table
+        className="p-1 m-2.5 border border-solid w-[99%] table-fixed"
+        {...getTableProps()}
+      >
         <HeaderGroups headerGroups={headerGroups} />
         <BodyRows
           getTableBodyProps={getTableBodyProps}
@@ -149,7 +152,7 @@ type HeaderRowProps = {
 const HeaderRow: React.FC<HeaderRowProps> = ({ headerGroup }) => {
   const { ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps();
   return (
-    <tr className={'jovenTr'} {...restHeaderGroupProps}>
+    <tr className="p-1" {...restHeaderGroupProps}>
       {headerGroup.headers.map(column => {
         const { key } = column.getHeaderProps();
         return <TableHeaderCell key={key} column={column} />;
@@ -168,7 +171,10 @@ const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ column }) => {
     column.getSortByToggleProps()
   );
   return (
-    <th className={'jovenTh'} {...restColumn}>
+    <th
+      className="p-1 m-2.5 border border-solid w-[99%] text-whitesmoke bg-azure"
+      {...restColumn}
+    >
       {column.render('Header')}
       <span>
         {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}

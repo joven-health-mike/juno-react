@@ -2,7 +2,12 @@
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        azure: '#385aa8',
+        whitesmoke: '#F5F5F5',
+      },
+    },
   },
   plugins: [],
 };
