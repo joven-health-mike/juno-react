@@ -493,8 +493,8 @@ video {
     max-width: 1536px;
   }
 }
-.flex {
-  display: flex;
+.inline-flex {
+  display: inline-flex;
 }
 .table {
   display: table;
