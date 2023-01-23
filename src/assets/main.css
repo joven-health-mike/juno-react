@@ -499,6 +499,9 @@ video {
 .m-2 {
   margin: 0.5rem;
 }
+.m-auto {
+  margin: auto;
+}
 .my-0 {
   margin-top: 0px;
   margin-bottom: 0px;
@@ -513,6 +516,24 @@ video {
 .ml-6 {
   margin-left: 1.5rem;
 }
+.mb-2\.5 {
+  margin-bottom: 0.625rem;
+}
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+.mb-5 {
+  margin-bottom: 1.25rem;
+}
+.block {
+  display: block;
+}
+.flex {
+  display: flex;
+}
+.\!flex {
+  display: flex !important;
+}
 .inline-flex {
   display: inline-flex;
 }
@@ -521,6 +542,9 @@ video {
 }
 .w-\[99\%\] {
   width: 99%;
+}
+.\!w-60 {
+  width: 15rem !important;
 }
 .min-w-\[47\%\] {
   min-width: 47%;
@@ -534,18 +558,49 @@ video {
 .items-start {
   align-items: flex-start;
 }
+.items-center {
+  align-items: center;
+}
+.\!items-center {
+  align-items: center !important;
+}
+.self-start {
+  align-self: flex-start;
+}
+.rounded {
+  border-radius: 0.25rem;
+}
 .border {
   border-width: 1px;
 }
 .border-solid {
   border-style: solid;
 }
+.border-none {
+  border-style: none;
+}
 .bg-azure {
   --tw-bg-opacity: 1;
   background-color: rgb(56 90 168 / var(--tw-bg-opacity));
 }
+.\!bg-azure {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(56 90 168 / var(--tw-bg-opacity)) !important;
+}
 .p-1 {
   padding: 0.25rem;
+}
+.p-2\.5 {
+  padding: 0.625rem;
+}
+.p-2 {
+  padding: 0.5rem;
+}
+.p-px {
+  padding: 1px;
+}
+.text-center {
+  text-align: center;
 }
 .text-whitesmoke {
   --tw-text-opacity: 1;
@@ -555,4 +610,28 @@ video {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast)
     var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate)
     var(--tw-sepia) var(--tw-drop-shadow);
+}
+.hover\:bg-goldenfizz:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(246 247 64 / var(--tw-bg-opacity));
+}
+.hover\:bg-cornflower:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(72 145 206 / var(--tw-bg-opacity));
+}
+.\[\&\:nth-child\(even\)\]\:bg-malibu:nth-child(even) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(119 202 242 / var(--tw-bg-opacity));
+}
+.\[\&\:nth-child\(even\)\]\:hover\:bg-goldenfizz:hover:nth-child(even) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(246 247 64 / var(--tw-bg-opacity));
+}
+.\[\&\:nth-child\(odd\)\]\:bg-cornflower:nth-child(odd) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(72 145 206 / var(--tw-bg-opacity));
+}
+.\[\&\:nth-child\(odd\)\]\:hover\:bg-goldenfizz:hover:nth-child(odd) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(246 247 64 / var(--tw-bg-opacity));
 }

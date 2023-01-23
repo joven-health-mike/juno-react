@@ -91,19 +91,35 @@ const DataTable: React.FC<DataTableProps> = ({
         />
       </table>
       <div className="pagination">
-        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+        <button
+          className="p-2.5 ml-6 mb-2.5 border-none rounded cursor-pointed !bg-azure text-whitesmoke hover:bg-cornflower"
+          onClick={() => gotoPage(0)}
+          disabled={!canPreviousPage}
+        >
           {'<<'}
         </button>{' '}
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+        <button
+          className="p-2.5 ml-6 mb-2.5 border-none rounded cursor-pointed !bg-azure text-whitesmoke hover:bg-cornflower"
+          onClick={() => previousPage()}
+          disabled={!canPreviousPage}
+        >
           {'<'}
         </button>{' '}
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
+        <button
+          className="p-2.5 ml-6 mb-2.5 border-none rounded cursor-pointed !bg-azure text-whitesmoke hover:bg-cornflower"
+          onClick={() => nextPage()}
+          disabled={!canNextPage}
+        >
           {'>'}
         </button>{' '}
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+        <button
+          className="p-2.5 ml-6 mb-2.5 border-none rounded cursor-pointed !bg-azure text-whitesmoke hover:bg-cornflower"
+          onClick={() => gotoPage(pageCount - 1)}
+          disabled={!canNextPage}
+        >
           {'>>'}
         </button>{' '}
-        <span>
+        <span className="!flex !items-center">
           Page{' '}
           <strong>
             {pageIndex + 1} of {pageOptions.length}
@@ -114,6 +130,7 @@ const DataTable: React.FC<DataTableProps> = ({
           onChange={e => {
             setPageSize(Number(e.target.value));
           }}
+          className="block p-px !w-60 m-auto mb-5 self-start"
         >
           {[10, 20, 30, 40, 50].map(pageSize => (
             <option key={pageSize} value={pageSize}>
@@ -172,7 +189,7 @@ const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ column }) => {
   );
   return (
     <th
-      className="p-1 m-2.5 border border-solid w-[99%] text-whitesmoke bg-azure"
+      className="p-1 m-2.5 border border-solid w-[99%] text-whitesmoke !bg-azure"
       {...restColumn}
     >
       {column.render('Header')}
@@ -234,7 +251,7 @@ type BodyRowProps = {
 
 const BodyRow: React.FC<BodyRowProps> = ({ row }) => {
   return (
-    <tr className={'jovenTr'}>
+    <tr className="[&:nth-child(even)]:bg-malibu [&:nth-child(even)]:hover:bg-goldenfizz [&:nth-child(odd)]:bg-cornflower [&:nth-child(odd)]:hover:bg-goldenfizz p-1">
       {row.cells.map(cell => {
         const { key } = cell.getCellProps();
         return <BodyRowCell key={key} cell={cell} />;
@@ -259,8 +276,11 @@ const ExpandableBodyRow: React.FC<ExpandableBodyRowProps> = ({
     renderRowSubComponent = () => <></>;
   }
   return (
-    <tr className={'jovenTr'}>
-      <td className={'jovenTd'} colSpan={visibleColumns.length}>
+    <tr className="[&:nth-child(even)]:bg-malibu [&:nth-child(even)]:hover:bg-goldenfizz [&:nth-child(odd)]:bg-cornflower [&:nth-child(odd)]:hover:bg-goldenfizz p-1">
+      <td
+        className="p-1 border border-solid text-center"
+        colSpan={visibleColumns.length}
+      >
         {renderRowSubComponent(row)}
       </td>
     </tr>
@@ -278,9 +298,9 @@ const AddButtonRow: React.FC<AddButtonRowProps> = ({
 }) => {
   return (
     <>
-      <tr className={'jovenTr'}>
+      <tr className="[&:nth-child(even)]:bg-malibu [&:nth-child(even)]:hover:bg-goldenfizz [&:nth-child(odd)]:bg-cornflower [&:nth-child(odd)]:hover:bg-goldenfizz p-1">
         <td
-          className={'jovenTd'}
+          className="p-1 border border-solid text-center"
           colSpan={visibleColumns.length}
           onClick={addNewItem}
         >
@@ -299,7 +319,7 @@ type BodyRowCellProps = {
 const BodyRowCell: React.FC<BodyRowCellProps> = ({ cell }) => {
   const { ...restCellProps } = cell.getCellProps();
   return (
-    <td className={'jovenTd'} {...restCellProps}>
+    <td className="p-1 border border-solid text-center" {...restCellProps}>
       {cell.render('Cell')}
     </td>
   );
