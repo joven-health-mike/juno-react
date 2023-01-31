@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import '@fullcalendar/react';
 import listPlugin from '@fullcalendar/list';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone';
+import styled from 'styled-components';
 import Navbar from '../navbar/Navbar';
 import Calendar from '../calendar/Calendar';
 import {
@@ -19,6 +20,18 @@ import { LoggedInUserContext } from '../../data/users';
 import { Role } from '../../services/user.service';
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import { createPermission, deletePermission } from '../../auth/permissions';
+
+const LeftSection = styled.section`
+  margin-left: 25px;
+  float: left;
+  width: 47%;
+`;
+
+const RightSection = styled.section`
+  margin-left: 25px;
+  float: right;
+  width: 47%;
+`;
 
 const HomePage: React.FC = () => {
   const { loggedInUser } = useContext(LoggedInUserContext);
@@ -126,14 +139,14 @@ const StudentsTableView: React.FC = () => {
 const AdminView: React.FC = () => {
   return (
     <>
-      <div className="leftSide">
+      <LeftSection>
         <h1>All Appointments</h1>
         <AppointmentView />
-      </div>
-      <div className="rightSide">
+      </LeftSection>
+      <RightSection>
         <h1>All Students</h1>
         <StudentsTableView />
-      </div>
+      </RightSection>
     </>
   );
 };
@@ -141,14 +154,14 @@ const AdminView: React.FC = () => {
 const CounselorView: React.FC = () => {
   return (
     <>
-      <div className="leftSide">
+      <LeftSection>
         <h1>My Appointments</h1>
         <AppointmentView />
-      </div>
-      <div className="rightSide">
+      </LeftSection>
+      <RightSection>
         <h1>My Caseload</h1>
         <StudentsTableView />
-      </div>
+      </RightSection>
     </>
   );
 };
@@ -156,14 +169,14 @@ const CounselorView: React.FC = () => {
 const SchoolStaffView: React.FC = () => {
   return (
     <>
-      <div className="leftSide">
+      <LeftSection>
         <h1>My Appointments</h1>
         <AppointmentView />
-      </div>
-      <div className="rightSide">
+      </LeftSection>
+      <RightSection>
         <h1>My Students</h1>
         <StudentsTableView />
-      </div>
+      </RightSection>
     </>
   );
 };
@@ -171,14 +184,14 @@ const SchoolStaffView: React.FC = () => {
 const SchoolAdminView: React.FC = () => {
   return (
     <>
-      <div className="leftSide">
+      <LeftSection>
         <h1>My Appointments</h1>
         <AppointmentView />
-      </div>
-      <div className="rightSide">
+      </LeftSection>
+      <RightSection>
         <h1>My Students</h1>
         <StudentsTableView />
-      </div>
+      </RightSection>
     </>
   );
 };
@@ -193,18 +206,18 @@ const StudentView: React.FC = () => {
 
   return (
     <>
-      <div className="leftSide">
+      <LeftSection>
         <h1>My Appointments</h1>
         <AppointmentView />
-      </div>
-      <div className="rightSide">
+      </LeftSection>
+      <RightSection>
         {myCounselor && (
           <>
             <h1>My Counselor</h1>
             <CounselorDetails counselor={myCounselor} />
           </>
         )}
-      </div>
+      </RightSection>
     </>
   );
 };
@@ -220,18 +233,18 @@ const GuardianView: React.FC = () => {
 
   return (
     <>
-      <div className="leftSide">
+      <LeftSection>
         <h1>My Appointments</h1>
         <AppointmentView />
-      </div>
-      <div className="rightSide">
+      </LeftSection>
+      <RightSection>
         {myCounselor && (
           <>
             <h1>My Counselor</h1>
             <CounselorDetails counselor={myCounselor} />
           </>
         )}
-      </div>
+      </RightSection>
     </>
   );
 };
