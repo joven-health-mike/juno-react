@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-export const SERVER_BASE_URL =
-  process.env.REACT_APP_SERVER_BASE_URL || 'https://localhost';
+export const SERVER_BASE_URL = process.env.REACT_APP_SERVER_BASE_URL;
 export const SERVER_API_VERSION = process.env.REACT_APP_SERVER_API_VERSION || 1;
 export const SERVER_API_URL = SERVER_BASE_URL + '/api/' + SERVER_API_VERSION;
 
