@@ -25,6 +25,11 @@ const LinkTitle = styled.span`
   ${spanStyles}
 `;
 
+const List = styled.ul`
+  width: 100%;
+  padding-left: 0px;
+`;
+
 const Navbar: React.FC = () => {
   const { loggedInUser } = useContext(LoggedInUserContext);
   const role = loggedInUser.role;
@@ -37,7 +42,7 @@ const Navbar: React.FC = () => {
     <>
       <IconContext.Provider value={{ color: '#fff' }}>
         <div className={'navMenu'}>
-          <ul>
+          <List>
             {allNavItems.map(
               (item: NavItem, index: number) =>
                 isRouteAllowed(item.path as AvailableRoute) && (
@@ -49,7 +54,7 @@ const Navbar: React.FC = () => {
                   </li>
                 )
             )}
-          </ul>
+          </List>
         </div>
       </IconContext.Provider>
     </>
