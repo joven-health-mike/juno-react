@@ -33,4 +33,8 @@ const spanStyles = css`
   margin-left: 16px;
 `;
 
-export { buttonStyles, h1Styles, linkStyles, spanStyles };
+const formStyles = css`
+  text-align: left;
+`;
+
+export { buttonStyles, h1Styles, linkStyles, spanStyles, formStyles };

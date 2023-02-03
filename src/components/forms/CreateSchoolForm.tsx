@@ -8,11 +8,15 @@ import React, {
   useState,
 } from 'react';
 import styled from 'styled-components';
-import { buttonStyles } from '../styles/mixins';
 import { emptySchool, School } from '../../data/schools';
+import { buttonStyles, formStyles } from '../styles/mixins';
 
 const Button = styled.button`
   ${buttonStyles}
+`;
+
+const Form = styled.form`
+  ${formStyles}
 `;
 
 type CreateSchoolFormProps = {
@@ -48,7 +52,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
 
   return (
     <>
-      <form onSubmit={onFormSubmit}>
+      <Form onSubmit={onFormSubmit}>
         <label>
           Name:
           <input
@@ -158,7 +162,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
         >
           Cancel
         </Button>
-      </form>
+      </Form>
     </>
   );
 };

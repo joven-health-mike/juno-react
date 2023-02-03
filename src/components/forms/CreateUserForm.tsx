@@ -10,7 +10,6 @@ import React, {
 } from 'react';
 import styled from 'styled-components';
 import { Counselor, CounselorsContext } from '../../data/counselors';
-import { buttonStyles } from '../styles/mixins';
 import { School, SchoolsContext } from '../../data/schools';
 import { emptyUser, User } from '../../data/users';
 import { Role, ROLES } from '../../services/user.service';
@@ -19,9 +18,14 @@ import SelectList, {
   SelectCounselorList,
   SelectSchoolList,
 } from '../selectList/SelectList';
+import { buttonStyles, formStyles } from '../styles/mixins';
 
 const Button = styled.button`
   ${buttonStyles}
+`;
+
+const Form = styled.form`
+  ${formStyles}
 `;
 
 type CreateUserFormProps = {
@@ -125,7 +129,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
   };
 
   return (
-    <form onSubmit={onFormSubmit}>
+    <Form onSubmit={onFormSubmit}>
       <label>
         First Name:
         <input
@@ -294,7 +298,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
       >
         Cancel
       </Button>
-    </form>
+    </Form>
   );
 };
 

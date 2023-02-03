@@ -8,14 +8,18 @@ import React, {
   useState,
 } from 'react';
 import styled from 'styled-components';
-import { buttonStyles } from '../styles/mixins';
 import { Counselor, emptyCounselor } from '../../data/counselors';
 import { Role } from '../../services/user.service';
 import { AvailableTimeZone, TIME_ZONES } from '../../utils/DateUtils';
 import SelectList from '../selectList/SelectList';
+import { buttonStyles, formStyles } from '../styles/mixins';
 
 const Button = styled.button`
   ${buttonStyles}
+`;
+
+const Form = styled.form`
+  ${formStyles}
 `;
 
 type CreateCounselorFormProps = {
@@ -61,7 +65,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
 
   return (
     <>
-      <form onSubmit={onFormSubmit}>
+      <Form onSubmit={onFormSubmit}>
         <label>
           First Name:{' '}
           <input
@@ -184,7 +188,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
         >
           Cancel
         </Button>
-      </form>
+      </Form>
     </>
   );
 };
