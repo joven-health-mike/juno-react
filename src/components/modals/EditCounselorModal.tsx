@@ -2,8 +2,14 @@
 
 import React from 'react';
 import Modal from 'react-modal';
+import styled from 'styled-components';
 import { Counselor } from '../../data/counselors';
 import CreateCounselorForm from '../forms/CreateCounselorForm';
+import { h1Styles } from '../styles/mixins';
+
+const Header = styled.h1`
+  ${h1Styles}
+`;
 
 type EditCounselorModalProps = {
   isOpen: boolean;
@@ -25,7 +31,7 @@ const EditCounselorModal: React.FC<EditCounselorModalProps> = ({
       className={'modal'}
       overlayClassName={'overlay'}
     >
-      <h1>Edit Counselor</h1>
+      <Header>Edit Counselor</Header>
       <CreateCounselorForm
         onSubmit={onCounselorEdited}
         onCancel={onClose}

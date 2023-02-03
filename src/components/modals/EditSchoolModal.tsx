@@ -2,8 +2,14 @@
 
 import React from 'react';
 import Modal from 'react-modal';
+import styled from 'styled-components';
 import { School } from '../../data/schools';
 import CreateSchoolForm from '../forms/CreateSchoolForm';
+import { h1Styles } from '../styles/mixins';
+
+const Header = styled.h1`
+  ${h1Styles}
+`;
 
 type EditSchoolModalProps = {
   isOpen: boolean;
@@ -25,7 +31,7 @@ const EditSchoolModal: React.FC<EditSchoolModalProps> = ({
       className={'modal'}
       overlayClassName={'overlay'}
     >
-      <h1>Edit School</h1>
+      <Header>Edit School</Header>
       <CreateSchoolForm
         onSubmit={onSchoolEdited}
         onCancel={onClose}

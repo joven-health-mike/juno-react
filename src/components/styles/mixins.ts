@@ -18,4 +18,9 @@ const buttonStyles = css`
   }
 `;
 
-export { buttonStyles };
+const h1Styles = css`
+  text-align: center;
+  color: ${azure};
+`;
+
+export { buttonStyles, h1Styles };

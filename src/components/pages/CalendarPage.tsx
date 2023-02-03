@@ -6,6 +6,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone';
 import { DateTime } from 'luxon';
+import styled from 'styled-components';
 import {
   Appointment,
   AppointmentsContext,
@@ -25,8 +26,13 @@ import {
 } from '../selectList/SelectList';
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import AppointmentDetailsModal from '../modals/AppointmentDetailsModal';
+import { h1Styles } from '../styles/mixins';
 import { LoggedInUserContext } from '../../data/users';
 import { createPermission, deletePermission } from '../../auth/permissions';
+
+const Header = styled.h1`
+  ${h1Styles}
+`;
 
 const CalendarPage: React.FC = () => {
   const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
@@ -177,7 +183,7 @@ const CalendarPage: React.FC = () => {
       <nav>
         <Navbar />
       </nav>
-      <h1>Calendar</h1>
+      <Header>Calendar</Header>
       {loggedInUser.role !== 'COUNSELOR' && counselors.length > 1 && (
         <label>
           Counselor:{' '}

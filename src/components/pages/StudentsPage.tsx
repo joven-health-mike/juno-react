@@ -2,7 +2,7 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { buttonStyles } from '../styles/mixins';
+import { buttonStyles, h1Styles } from '../styles/mixins';
 import {
   createPermission,
   deletePermission,
@@ -23,6 +23,10 @@ import StudentsTable from '../tables/StudentsTable';
 
 const Button = styled.button`
   ${buttonStyles}
+`;
+
+const Header = styled.h1`
+  ${h1Styles}
 `;
 
 const StudentsPage = () => {
@@ -107,7 +111,7 @@ const StudentsPage = () => {
       <nav>
         <Navbar />
       </nav>
-      <h1>Students</h1>
+      <Header>Students</Header>
       <>
         {isCreateStudentAllowed && (
           <>

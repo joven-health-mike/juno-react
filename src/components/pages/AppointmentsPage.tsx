@@ -2,7 +2,6 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { buttonStyles } from '../styles/mixins';
 import {
   createPermission,
   deletePermission,
@@ -19,9 +18,14 @@ import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import EditAppointmentModal from '../modals/EditAppointmentModal';
 import Navbar from '../navbar/Navbar';
 import AppointmentsTable from '../tables/AppointmentsTable';
+import { buttonStyles, h1Styles } from '../styles/mixins';
 
 const Button = styled.button`
   ${buttonStyles}
+`;
+
+const Header = styled.h1`
+  ${h1Styles}
 `;
 
 const AppointmentsPage: React.FC = () => {
@@ -120,7 +124,7 @@ const AppointmentsPage: React.FC = () => {
       <nav>
         <Navbar />
       </nav>
-      <h1>Appointments</h1>
+      <Header>Appointments</Header>
       <>
         {isCreateAppointmentAllowed && (
           <Button

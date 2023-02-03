@@ -2,7 +2,6 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { buttonStyles } from '../styles/mixins';
 import {
   createPermission,
   deletePermission,
@@ -18,9 +17,14 @@ import CreateUserModal from '../modals/CreateUserModal';
 import EditUserModal from '../modals/EditUserModal';
 import Navbar from '../navbar/Navbar';
 import UsersTable from '../tables/UsersTable';
+import { buttonStyles, h1Styles } from '../styles/mixins';
 
 const Button = styled.button`
   ${buttonStyles}
+`;
+
+const Header = styled.h1`
+  ${h1Styles}
 `;
 
 const UsersPage = () => {
@@ -83,7 +87,7 @@ const UsersPage = () => {
       <nav>
         <Navbar />
       </nav>
-      <h1>Users</h1>
+      <Header>Users</Header>
       <>
         {isCreateUserAllowed && (
           <>

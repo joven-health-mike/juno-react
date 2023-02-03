@@ -2,7 +2,6 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { buttonStyles } from '../styles/mixins';
 import {
   createPermission,
   deletePermission,
@@ -14,9 +13,14 @@ import CreateSchoolModal from '../modals/CreateSchoolModal';
 import EditSchoolModal from '../modals/EditSchoolModal';
 import Navbar from '../navbar/Navbar';
 import SchoolsTable from '../tables/SchoolsTable';
+import { buttonStyles, h1Styles } from '../styles/mixins';
 
 const Button = styled.button`
   ${buttonStyles}
+`;
+
+const Header = styled.h1`
+  ${h1Styles}
 `;
 
 const SchoolsPage = () => {
@@ -77,7 +81,7 @@ const SchoolsPage = () => {
       <nav>
         <Navbar />
       </nav>
-      <h1>Schools</h1>
+      <Header>Schools</Header>
       <>
         {isCreateSchoolAllowed && (
           <>

@@ -2,8 +2,14 @@
 
 import React from 'react';
 import Modal from 'react-modal';
+import styled from 'styled-components';
 import { Appointment } from '../../data/appointments';
 import CreateAppointmentForm from '../forms/CreateAppointmentForm';
+import { h1Styles } from '../styles/mixins';
+
+const Header = styled.h1`
+  ${h1Styles}
+`;
 
 type EditAppointmentModalProps = {
   isOpen: boolean;
@@ -25,7 +31,7 @@ const EditAppointmentModal: React.FC<EditAppointmentModalProps> = ({
       className={'modal'}
       overlayClassName={'overlay'}
     >
-      <h1>Edit Appointment</h1>
+      <Header>Edit Appointment</Header>
       <CreateAppointmentForm
         onSubmit={onAppointmentAdded}
         onCancel={onClose}

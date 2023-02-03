@@ -1,7 +1,13 @@
 import React from 'react';
 import Modal from 'react-modal';
+import styled from 'styled-components';
 import { Counselor } from '../../data/counselors';
 import CreateCounselorForm from '../forms/CreateCounselorForm';
+import { h1Styles } from '../styles/mixins';
+
+const Header = styled.h1`
+  ${h1Styles}
+`;
 
 type CreateCounselorModalProps = {
   isOpen: boolean;
@@ -30,7 +36,7 @@ const CreateCounselorModal: React.FC<CreateCounselorModalProps> = ({
         className={'modal'}
         overlayClassName={'overlay'}
       >
-        <h1>Create Counselor</h1>
+        <Header>Create Counselor</Header>
         <CreateCounselorForm onSubmit={onFormSubmit} onCancel={onFormCancel} />
       </Modal>
     </div>
