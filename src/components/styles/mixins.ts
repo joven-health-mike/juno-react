@@ -23,4 +23,8 @@ const h1Styles = css`
   color: ${azure};
 `;
 
-export { buttonStyles, h1Styles };
+const linkStyles = css`
+  color: ${azure} !important;
+`;
+
+export { buttonStyles, h1Styles, linkStyles };
