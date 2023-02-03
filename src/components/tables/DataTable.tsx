@@ -14,11 +14,17 @@ import {
   usePagination,
   useSortBy,
 } from 'react-table';
+import styled from 'styled-components';
+import { buttonStyles } from '../styles/mixins';
 import { User } from '../../data/users';
 import { TableAppointment } from './AppointmentsTable';
 import { TableCounselor } from './CounselorsTable';
 import { TableSchool } from './SchoolsTable';
 import { TableStudent } from './StudentsTable';
+
+const Button = styled.button`
+  ${buttonStyles}
+`;
 
 type DataTableData =
   | TableAppointment[]
@@ -88,18 +94,18 @@ const DataTable: React.FC<DataTableProps> = ({
         />
       </table>
       <div className="pagination">
-        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+        <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {'<<'}
-        </button>{' '}
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+        </Button>{' '}
+        <Button onClick={() => previousPage()} disabled={!canPreviousPage}>
           {'<'}
-        </button>{' '}
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
+        </Button>{' '}
+        <Button onClick={() => nextPage()} disabled={!canNextPage}>
           {'>'}
-        </button>{' '}
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+        </Button>{' '}
+        <Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
           {'>>'}
-        </button>{' '}
+        </Button>{' '}
         <span>
           Page{' '}
           <strong>

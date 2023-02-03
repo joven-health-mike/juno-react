@@ -1,6 +1,8 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { buttonStyles } from '../styles/mixins';
 import {
   createPermission,
   deletePermission,
@@ -17,6 +19,10 @@ import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import EditAppointmentModal from '../modals/EditAppointmentModal';
 import Navbar from '../navbar/Navbar';
 import AppointmentsTable from '../tables/AppointmentsTable';
+
+const Button = styled.button`
+  ${buttonStyles}
+`;
 
 const AppointmentsPage: React.FC = () => {
   const {
@@ -117,12 +123,12 @@ const AppointmentsPage: React.FC = () => {
       <h1>Appointments</h1>
       <>
         {isCreateAppointmentAllowed && (
-          <button
+          <Button
             type="button"
             onClick={() => setIsCreateAppointmentModalOpen(true)}
           >
             Add Appointment
-          </button>
+          </Button>
         )}
         <AppointmentsTable
           onDeleteClicked={onAppointmentDeleteClicked}

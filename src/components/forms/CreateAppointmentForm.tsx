@@ -8,6 +8,8 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import styled from 'styled-components';
+import { buttonStyles } from '../styles/mixins';
 import {
   Appointment,
   emptyAppointment,
@@ -33,6 +35,10 @@ import SelectList, {
   SelectTypeList,
   SelectUserList,
 } from '../selectList/SelectList';
+
+const Button = styled.button`
+  ${buttonStyles}
+`;
 
 type CreateAppointmentFormProps = {
   defaultAppointment?: Appointment;
@@ -323,16 +329,16 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
         </>
       )}
 
-      <button type="submit" data-testid={'button-submit'}>
+      <Button type="submit" data-testid={'button-submit'}>
         Submit
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
         data-testid={'button-cancel'}
         onClick={onFormCancel}
       >
         Cancel
-      </button>
+      </Button>
     </form>
   );
 };

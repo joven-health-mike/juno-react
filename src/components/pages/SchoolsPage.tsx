@@ -1,6 +1,8 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { buttonStyles } from '../styles/mixins';
 import {
   createPermission,
   deletePermission,
@@ -12,6 +14,10 @@ import CreateSchoolModal from '../modals/CreateSchoolModal';
 import EditSchoolModal from '../modals/EditSchoolModal';
 import Navbar from '../navbar/Navbar';
 import SchoolsTable from '../tables/SchoolsTable';
+
+const Button = styled.button`
+  ${buttonStyles}
+`;
 
 const SchoolsPage = () => {
   const {
@@ -75,12 +81,12 @@ const SchoolsPage = () => {
       <>
         {isCreateSchoolAllowed && (
           <>
-            <button
+            <Button
               type="button"
               onClick={() => setIsCreateSchoolModalOpen(true)}
             >
               Add School
-            </button>
+            </Button>
             <CreateSchoolModal
               isOpen={isCreateSchoolModalOpen}
               onSchoolAdded={handleSchoolAdded}

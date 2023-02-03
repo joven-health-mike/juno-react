@@ -7,10 +7,16 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import styled from 'styled-components';
+import { buttonStyles } from '../styles/mixins';
 import { Counselor, emptyCounselor } from '../../data/counselors';
 import { Role } from '../../services/user.service';
 import { AvailableTimeZone, TIME_ZONES } from '../../utils/DateUtils';
 import SelectList from '../selectList/SelectList';
+
+const Button = styled.button`
+  ${buttonStyles}
+`;
 
 type CreateCounselorFormProps = {
   defaultCounselor?: Counselor;
@@ -168,16 +174,16 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
           />
         </label>
 
-        <button type="submit" data-testid={'button-submit'}>
+        <Button type="submit" data-testid={'button-submit'}>
           Submit
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           data-testid={'button-cancel'}
           onClick={onFormCancel}
         >
           Cancel
-        </button>
+        </Button>
       </form>
     </>
   );

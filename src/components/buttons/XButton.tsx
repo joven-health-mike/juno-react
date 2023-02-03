@@ -2,6 +2,14 @@
 
 import React from 'react';
 
+import styled from 'styled-components';
+
+import { buttonStyles } from '../styles/mixins';
+
+const Button = styled.button`
+  ${buttonStyles}
+`;
+
 type XButtonProps = {
   value: string;
   text?: string;
@@ -21,7 +29,7 @@ const XButton: React.FC<XButtonProps> = ({
 }) => {
   return (
     <>
-      <button
+      <Button
         data-testid={'button-x'}
         title={title}
         className={className}
@@ -30,7 +38,7 @@ const XButton: React.FC<XButtonProps> = ({
         type={type}
       >
         {text}
-      </button>
+      </Button>
     </>
   );
 };

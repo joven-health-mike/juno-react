@@ -8,7 +8,9 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import styled from 'styled-components';
 import { Counselor, CounselorsContext } from '../../data/counselors';
+import { buttonStyles } from '../styles/mixins';
 import { School, SchoolsContext } from '../../data/schools';
 import { emptyUser, User } from '../../data/users';
 import { Role, ROLES } from '../../services/user.service';
@@ -17,6 +19,10 @@ import SelectList, {
   SelectCounselorList,
   SelectSchoolList,
 } from '../selectList/SelectList';
+
+const Button = styled.button`
+  ${buttonStyles}
+`;
 
 type CreateUserFormProps = {
   defaultUser?: User;
@@ -278,16 +284,16 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
         </>
       )}
 
-      <button type="submit" data-testid={'button-submit'}>
+      <Button type="submit" data-testid={'button-submit'}>
         Submit
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
         data-testid={'button-cancel'}
         onClick={onFormCancel}
       >
         Cancel
-      </button>
+      </Button>
     </form>
   );
 };

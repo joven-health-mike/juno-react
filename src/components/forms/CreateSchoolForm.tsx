@@ -7,7 +7,13 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import styled from 'styled-components';
+import { buttonStyles } from '../styles/mixins';
 import { emptySchool, School } from '../../data/schools';
+
+const Button = styled.button`
+  ${buttonStyles}
+`;
 
 type CreateSchoolFormProps = {
   defaultSchool?: School;
@@ -142,16 +148,16 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
           />
         </label>
 
-        <button type="submit" data-testid={'button-submit'}>
+        <Button type="submit" data-testid={'button-submit'}>
           Submit
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           data-testid={'button-cancel'}
           onClick={onFormCancel}
         >
           Cancel
-        </button>
+        </Button>
       </form>
     </>
   );

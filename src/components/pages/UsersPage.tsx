@@ -1,6 +1,8 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { buttonStyles } from '../styles/mixins';
 import {
   createPermission,
   deletePermission,
@@ -16,6 +18,10 @@ import CreateUserModal from '../modals/CreateUserModal';
 import EditUserModal from '../modals/EditUserModal';
 import Navbar from '../navbar/Navbar';
 import UsersTable from '../tables/UsersTable';
+
+const Button = styled.button`
+  ${buttonStyles}
+`;
 
 const UsersPage = () => {
   const {
@@ -81,12 +87,12 @@ const UsersPage = () => {
       <>
         {isCreateUserAllowed && (
           <>
-            <button
+            <Button
               type="button"
               onClick={() => setIsCreateUserModalOpen(true)}
             >
               Add User
-            </button>
+            </Button>
             <CreateUserModal
               isOpen={isCreateUserModalOpen}
               onUserAdded={handleUserAdded}

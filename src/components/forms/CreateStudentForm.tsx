@@ -8,6 +8,8 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import styled from 'styled-components';
+import { buttonStyles } from '../styles/mixins';
 import { ContextData } from '../../data/ContextData';
 import { Counselor, CounselorsContext } from '../../data/counselors';
 import { School, SchoolsContext } from '../../data/schools';
@@ -17,6 +19,10 @@ import SelectList, {
   SelectCounselorList,
   SelectSchoolList,
 } from '../selectList/SelectList';
+
+const Button = styled.button`
+  ${buttonStyles}
+`;
 
 type CreateStudentFormProps = {
   defaultStudent?: Student;
@@ -227,12 +233,12 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
         />
       </label>
 
-      <button type="submit" data-testid="button-submit">
+      <Button type="submit" data-testid="button-submit">
         Submit
-      </button>
-      <button type="button" data-testid="button-cancel" onClick={onFormCancel}>
+      </Button>
+      <Button type="button" data-testid="button-cancel" onClick={onFormCancel}>
         Cancel
-      </button>
+      </Button>
     </form>
   );
 };

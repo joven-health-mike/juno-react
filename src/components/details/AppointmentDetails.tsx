@@ -1,10 +1,16 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { buttonStyles } from '../styles/mixins';
 import { deletePermission } from '../../auth/permissions';
 import { Appointment } from '../../data/appointments';
 import { LoggedInUserContext } from '../../data/users';
 import { formatDateTime } from '../../utils/DateUtils';
+
+const Button = styled.button`
+  ${buttonStyles}
+`;
 
 type AppointmentDetailsProps = {
   appointment: Appointment;
@@ -52,22 +58,22 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
       <p data-testid={'appointmentStatus'}>Status: {appointment.status}</p>
       <div>
         {typeof onJoinAppointmentClicked !== 'undefined' && (
-          <button onClick={() => onJoinAppointmentClicked(appointment)}>
+          <Button onClick={() => onJoinAppointmentClicked(appointment)}>
             Join Appointment
-          </button>
+          </Button>
         )}
 
         {typeof onEmailParticipantsClicked !== 'undefined' && (
-          <button onClick={() => onEmailParticipantsClicked(appointment)}>
+          <Button onClick={() => onEmailParticipantsClicked(appointment)}>
             Email Participants
-          </button>
+          </Button>
         )}
 
         {isDeleteAppointmentAllowed &&
           typeof onCancelAppointmentClicked !== 'undefined' && (
-            <button onClick={() => onCancelAppointmentClicked(appointment)}>
+            <Button onClick={() => onCancelAppointmentClicked(appointment)}>
               Cancel Appointment
-            </button>
+            </Button>
           )}
       </div>
     </>

@@ -1,6 +1,8 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { buttonStyles } from '../styles/mixins';
 import {
   createPermission,
   deletePermission,
@@ -18,6 +20,10 @@ import CreateStudentModal from '../modals/CreateStudentModal';
 import EditStudentModal from '../modals/EditStudentModal';
 import Navbar from '../navbar/Navbar';
 import StudentsTable from '../tables/StudentsTable';
+
+const Button = styled.button`
+  ${buttonStyles}
+`;
 
 const StudentsPage = () => {
   const {
@@ -105,12 +111,12 @@ const StudentsPage = () => {
       <>
         {isCreateStudentAllowed && (
           <>
-            <button
+            <Button
               type="button"
               onClick={() => setIsCreateStudentModalOpen(true)}
             >
               Add Student
-            </button>
+            </Button>
             <CreateStudentModal
               isOpen={isCreateStudentModalOpen}
               onStudentAdded={handleStudentAdded}
