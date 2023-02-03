@@ -26,6 +26,15 @@ const Button = styled.button`
   ${buttonStyles}
 `;
 
+const TableHeader = styled.th`
+  padding: 5px;
+  border: 1px solid;
+  margin: 10px;
+  width: 99%;
+  background-color: #385aa8;
+  color: whitesmoke;
+`;
+
 type DataTableData =
   | TableAppointment[]
   | TableCounselor[]
@@ -174,13 +183,13 @@ const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ column }) => {
     column.getSortByToggleProps()
   );
   return (
-    <th className={'jovenTh'} {...restColumn}>
+    <TableHeader className={'jovenTh'} {...restColumn}>
       {column.render('Header')}
       <span>
         {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
       </span>
       {column.canFilter && <div>{column.render('Filter')}</div>}
-    </th>
+    </TableHeader>
   );
 };
 
