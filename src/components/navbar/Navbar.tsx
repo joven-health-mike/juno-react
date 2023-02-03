@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { AvailableRoute, pagePermission } from '../../auth/permissions';
 import { LoggedInUserContext } from '../../data/users';
+import { spanStyles } from '../styles/mixins';
 import { allNavItems, NavItem } from './navBarItems';
 
 const StyledLink = styled(Link)`
@@ -18,6 +19,10 @@ const StyledLink = styled(Link)`
   align-items: center;
   padding: 0 16px;
   border-radius: 4px;
+`;
+
+const LinkTitle = styled.span`
+  ${spanStyles}
 `;
 
 const Navbar: React.FC = () => {
@@ -39,7 +44,7 @@ const Navbar: React.FC = () => {
                   <li key={index} className={'navText'}>
                     <StyledLink to={item.path}>
                       {item.icon}
-                      <span>{item.title}</span>
+                      <LinkTitle>{item.title}</LinkTitle>
                     </StyledLink>
                   </li>
                 )

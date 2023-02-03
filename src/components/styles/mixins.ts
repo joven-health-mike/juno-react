@@ -27,4 +27,10 @@ const linkStyles = css`
   color: ${azure} !important;
 `;
 
-export { buttonStyles, h1Styles, linkStyles };
+const spanStyles = css`
+  align-items: center !important;
+  display: flex !important;
+  margin-left: 16px;
+`;
+
+export { buttonStyles, h1Styles, linkStyles, spanStyles };

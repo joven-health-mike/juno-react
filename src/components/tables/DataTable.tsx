@@ -15,8 +15,8 @@ import {
   useSortBy,
 } from 'react-table';
 import styled from 'styled-components';
-import { buttonStyles } from '../styles/mixins';
 import { User } from '../../data/users';
+import { buttonStyles, spanStyles } from '../styles/mixins';
 import { TableAppointment } from './AppointmentsTable';
 import { TableCounselor } from './CounselorsTable';
 import { TableSchool } from './SchoolsTable';
@@ -24,6 +24,10 @@ import { TableStudent } from './StudentsTable';
 
 const Button = styled.button`
   ${buttonStyles}
+`;
+
+const Wrapper = styled.span`
+  ${spanStyles}
 `;
 
 const TableHeader = styled.th`
@@ -115,12 +119,12 @@ const DataTable: React.FC<DataTableProps> = ({
         <Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
           {'>>'}
         </Button>{' '}
-        <span>
+        <Wrapper>
           Page{' '}
           <strong>
             {pageIndex + 1} of {pageOptions.length}
           </strong>{' '}
-        </span>
+        </Wrapper>
         <select
           value={pageSize}
           onChange={e => {
@@ -185,9 +189,9 @@ const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ column }) => {
   return (
     <TableHeader className={'jovenTh'} {...restColumn}>
       {column.render('Header')}
-      <span>
+      <Wrapper>
         {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-      </span>
+      </Wrapper>
       {column.canFilter && <div>{column.render('Filter')}</div>}
     </TableHeader>
   );
