@@ -194,15 +194,12 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     const apptTitle = `${user.firstName} ${user.lastName.substring(0, 1)} (${
       schoolSelection?.name
     }) - ${appointment.type}`;
-    const schoolId =
-      schoolSelection?.id === '-1' ? undefined : schoolSelection?.id;
 
     let submittedAppointment = { ...appointment };
     if (!defaultAppointment) {
       submittedAppointment.id = '-1';
     }
     submittedAppointment.title = apptTitle;
-    submittedAppointment.schoolId = schoolId;
     submittedAppointment.participants = participants;
     submittedAppointment.status = 'SCHEDULED';
     onSubmit(submittedAppointment);

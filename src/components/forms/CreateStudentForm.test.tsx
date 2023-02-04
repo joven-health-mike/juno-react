@@ -6,20 +6,20 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import CreateStudentForm from './CreateStudentForm';
-import { Student } from '../../data/students';
+import { Student, StudentStatus } from '../../data/students';
 import { Role } from '../../services/user.service';
 
 const testStudent: Student = {
   firstName: 'firstName',
   lastName: 'lastName',
-  id: '0',
-  email: '',
-  username: '',
-  phone: '',
-  docsUrl: '',
-  timeZoneIanaName: '',
+  id: '-1',
+  email: 'email@test.com',
+  username: 'username',
+  phone: '240-204-1492',
+  docsUrl: 'https://docs.com',
+  timeZoneIanaName: 'America/New_York',
   role: 'JOVEN_STAFF' as Role,
-  studentStatus: 'ACTIVE',
+  studentStatus: 'ACTIVE' as StudentStatus,
 };
 
 describe('CreateStudentForm', () => {
@@ -32,6 +32,37 @@ describe('CreateStudentForm', () => {
         onCancel={jest.fn()}
       />
     );
+
+    //add name
+    const inputFirstName = (await view.findByTestId(
+      'input-first-name'
+    )) as HTMLInputElement;
+    inputFirstName.value = 'firstName';
+
+    const inputLastName = (await view.findByTestId(
+      'input-last-name'
+    )) as HTMLInputElement;
+    inputLastName.value = 'lastName';
+
+    const inputEmail = (await view.findByTestId(
+      'input-email'
+    )) as HTMLInputElement;
+    inputEmail.value = 'email@test.com';
+
+    const inputUsername = (await view.findByTestId(
+      'input-username'
+    )) as HTMLInputElement;
+    inputUsername.value = 'username';
+
+    const inputPhone = (await view.findByTestId(
+      'input-phone'
+    )) as HTMLInputElement;
+    inputPhone.value = '240-204-1492';
+
+    const inputDocsUrl = (await view.findByTestId(
+      'input-docsUrl'
+    )) as HTMLInputElement;
+    inputDocsUrl.value = 'https://docs.com';
 
     // click submit button
     const button = await view.findByTestId('button-submit');

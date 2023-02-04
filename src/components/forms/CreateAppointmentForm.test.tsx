@@ -10,7 +10,7 @@ import { emptySchool } from '../../data/schools';
 
 const fakeAppointment = {
   id: '0',
-  title: 'Hello World',
+  title: '  () - CLINICAL',
   start: new Date(),
   end: new Date(),
   isRecurring: false,

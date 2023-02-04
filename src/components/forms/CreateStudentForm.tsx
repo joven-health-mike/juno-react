@@ -11,7 +11,7 @@ import React, {
 import { ContextData } from '../../data/ContextData';
 import { Counselor, CounselorsContext } from '../../data/counselors';
 import { School, SchoolsContext } from '../../data/schools';
-import { emptyStudent, Student } from '../../data/students';
+import { emptyStudent, Student, StudentStatus } from '../../data/students';
 import { AvailableTimeZone, TIME_ZONES } from '../../utils/DateUtils';
 import SelectList, {
   SelectCounselorList,
@@ -77,6 +77,10 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
 
   const onTimeZoneChanged = (timeZone: string) => {
     setStudent({ ...student, timeZoneIanaName: timeZone });
+  };
+
+  const onStatusChanged = (status: string) => {
+    setStudent({ ...student, studentStatus: status as StudentStatus });
   };
 
   const onFormSubmit = (e: FormEvent) => {
@@ -203,6 +207,21 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
           onItemChanged={item => {
             return onTimeZoneChanged(
               TIME_ZONES[parseInt(item)] as AvailableTimeZone
+            );
+          }}
+        />
+      </label>
+      <label>
+        Status:{' '}
+        <SelectList
+          labelText="Select a Status"
+          items={['ACTIVE', 'DISCHARGED', 'DELETED']}
+          value={['ACTIVE', 'DISCHARGED', 'DELETED'].indexOf(
+            student.studentStatus || ''
+          )}
+          onItemChanged={item => {
+            return onStatusChanged(
+              ['ACTIVE', 'DISCHARGED', 'DELETED'][parseInt(item)]
             );
           }}
         />

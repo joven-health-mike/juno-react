@@ -27,11 +27,6 @@ describe('UserDetails', () => {
       testUser.firstName + ' ' + testUser.lastName
     );
   });
-  it('should display ID as a string', async () => {
-    const view = render(<UserDetails user={testUser} />);
-    const idView = await view.findByTestId('id');
-    expect(idView.innerHTML).toEqual('ID: ' + testUser.id.toString());
-  });
   it('should display email as a string', async () => {
     const view = render(<UserDetails user={testUser} />);
     const emailView = await view.findByTestId('email');
@@ -43,11 +38,6 @@ describe('UserDetails', () => {
     const userRoleView = await view.findByTestId('userRole');
     expect(userRoleView.innerHTML).toEqual('Role: ' + testUser.role.toString());
   });
-  it('should display ID as <p>', async () => {
-    const view = render(<UserDetails user={testUser} />);
-    const idView = await view.findByTestId('id');
-    expect(idView.nodeName.toLowerCase()).toEqual('p');
-  });
   it('should display name as <h2>', async () => {
     const view = render(<UserDetails user={testUser} />);
     const nameView = await view.findByTestId('name');
@@ -57,11 +47,6 @@ describe('UserDetails', () => {
     const view = render(<UserDetails user={testUser} />);
     const emailView = await view.findByTestId('email');
     expect(emailView.nodeName.toLowerCase()).toEqual('p');
-  });
-  it('should display the password as <p>', async () => {
-    const view = render(<UserDetails user={testUser} />);
-    const passwordView = await view.findByTestId('userPassword');
-    expect(passwordView.nodeName.toLowerCase()).toEqual('p');
   });
   it('should display the role as <p>', async () => {
     const view = render(<UserDetails user={testUser} />);

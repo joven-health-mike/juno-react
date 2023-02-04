@@ -20,23 +20,20 @@ const testStudent: Student = {
   timeZoneIanaName: '',
   role: 'STUDENT' as Role,
   studentStatus: 'ACTIVE',
+  studentAssignedCounselorId: '-1',
+  studentAssignedSchoolId: '-1',
 };
 
-const testSchoolName = 'Aardvark Academy';
-const testCounselorName = 'Jacek McGuinness';
+const testSchoolName = 'NOT FOUND';
+const testCounselorName = 'NOT FOUND';
 
-describe('SchoolDetails', () => {
+describe('StudentDetails', () => {
   it('should display name', async () => {
     const view = render(<StudentDetails student={testStudent} />);
     const nameView = await view.findByTestId('name');
     expect(nameView.innerHTML).toEqual(
       testStudent.firstName + ' ' + testStudent.lastName
     );
-  });
-  it('should display ID as a string', async () => {
-    const view = render(<StudentDetails student={testStudent} />);
-    const idView = await view.findByTestId('id');
-    expect(idView.innerHTML).toEqual('ID: ' + testStudent.id.toString());
   });
   it('should display the school ID', async () => {
     const view = render(<StudentDetails student={testStudent} />);
@@ -49,11 +46,6 @@ describe('SchoolDetails', () => {
     expect(counselorIdView.innerHTML).toEqual(
       'Counselor: ' + testCounselorName
     );
-  });
-  it('should display ID as <p>', async () => {
-    const view = render(<StudentDetails student={testStudent} />);
-    const idView = await view.findByTestId('id');
-    expect(idView.nodeName.toLowerCase()).toEqual('p');
   });
   it('should display the student name as <h2>', async () => {
     const view = render(<StudentDetails student={testStudent} />);

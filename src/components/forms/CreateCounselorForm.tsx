@@ -146,7 +146,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
             data-testid={'input-roomLink'}
             type="URL"
             placeholder="Room Link"
-            name="roomLink"
+            name="counselorRoomLink"
             value={roomLink}
             required
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
