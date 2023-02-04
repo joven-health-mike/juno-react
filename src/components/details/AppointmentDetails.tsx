@@ -2,11 +2,11 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { buttonStyles } from '../styles/mixins';
 import { deletePermission } from '../../auth/permissions';
 import { Appointment } from '../../data/appointments';
 import { LoggedInUserContext } from '../../data/users';
 import { formatDateTime } from '../../utils/DateUtils';
+import { buttonStyles } from '../styles/mixins';
 
 const Button = styled.button`
   ${buttonStyles}

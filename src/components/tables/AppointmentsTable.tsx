@@ -10,7 +10,6 @@ import React, {
 } from 'react';
 import { CellProps, Column, Row } from 'react-table';
 import styled from 'styled-components';
-import { buttonStyles } from '../styles/mixins';
 import { deletePermission, updatePermission } from '../../auth/permissions';
 import { Appointment, AppointmentsContext } from '../../data/appointments';
 import { CounselorsContext } from '../../data/counselors';
@@ -18,6 +17,7 @@ import { LoggedInUserContext } from '../../data/users';
 import { formatDate, formatTime } from '../../utils/DateUtils';
 import XButton from '../buttons/XButton';
 import AppointmentDetails from '../details/AppointmentDetails';
+import { buttonStyles } from '../styles/mixins';
 import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
 

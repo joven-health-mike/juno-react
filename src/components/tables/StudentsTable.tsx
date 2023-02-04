@@ -9,7 +9,6 @@ import React, {
 } from 'react';
 import { CellProps, Column, Row } from 'react-table';
 import styled from 'styled-components';
-import { buttonStyles } from '../styles/mixins';
 import { deletePermission, updatePermission } from '../../auth/permissions';
 import { CounselorsContext } from '../../data/counselors';
 import { SchoolsContext } from '../../data/schools';
@@ -17,6 +16,7 @@ import { Student, StudentsContext } from '../../data/students';
 import { LoggedInUserContext } from '../../data/users';
 import XButton from '../buttons/XButton';
 import StudentDetails from '../details/StudentDetails';
+import { buttonStyles } from '../styles/mixins';
 import DataTable from './DataTable';
 import { TableStudentSmall } from './StudentsSmallTable';
 import TableSearchFilter from './TableSearchFilter';

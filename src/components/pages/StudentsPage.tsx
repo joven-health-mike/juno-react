@@ -2,7 +2,6 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { buttonStyles, h1Styles } from '../styles/mixins';
 import {
   createPermission,
   deletePermission,
@@ -20,6 +19,7 @@ import CreateStudentModal from '../modals/CreateStudentModal';
 import EditStudentModal from '../modals/EditStudentModal';
 import Navbar from '../navbar/Navbar';
 import StudentsTable from '../tables/StudentsTable';
+import { buttonStyles, h1Styles } from '../styles/mixins';
 
 const Button = styled.button`
   ${buttonStyles}

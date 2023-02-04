@@ -1,9 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from 'react';
-
 import styled from 'styled-components';
-
 import { buttonStyles } from '../styles/mixins';
 
 const Button = styled.button`
