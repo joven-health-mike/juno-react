@@ -19,13 +19,7 @@ const testStudent: Student = {
   docsUrl: '',
   timeZoneIanaName: '',
   role: 'STUDENT' as Role,
-  studentRef: {
-    id: '1',
-    userId: '1',
-    assignedSchoolId: '1',
-    assignedCounselorId: '2',
-    status: 'ACTIVE',
-  },
+  studentStatus: 'ACTIVE',
 };
 
 const testSchoolName = 'Aardvark Academy';

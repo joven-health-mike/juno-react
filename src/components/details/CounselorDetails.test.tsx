@@ -18,11 +18,7 @@ const testCounselor = {
   docsUrl: '',
   timeZoneIanaName: '',
   role: 'JOVEN_STAFF' as Role,
-  counselorRef: {
-    id: '-1',
-    userId: '0',
-    roomLink: 'https://www.zoomtest.com',
-  },
+  counselorRoomLink: '',
 };
 
 describe('CounselorDetails', () => {
@@ -47,7 +43,7 @@ describe('CounselorDetails', () => {
     const view = render(<CounselorDetails counselor={testCounselor} />);
     const roomLinkView = await view.findByTestId('roomLink');
     expect(roomLinkView.innerHTML).toEqual(
-      'Room Link: ' + testCounselor.counselorRef.roomLink.toString()
+      'Room Link: ' + testCounselor.counselorRoomLink.toString()
     );
   });
   it('should display ID as <p>', async () => {

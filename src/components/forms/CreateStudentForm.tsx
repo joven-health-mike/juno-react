@@ -43,16 +43,14 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
     if (defaultStudent) {
       setStudent(defaultStudent);
       const selectedSchool = schools.find(
-        school => school.id === defaultStudent.studentRef.assignedSchoolId
+        school => school.id === defaultStudent.studentAssignedSchoolId
       );
       const defaultSchoolSelectionIndex = selectedSchool
         ? schools.indexOf(selectedSchool)
         : -1;
       setSchoolSelectionIndex(defaultSchoolSelectionIndex);
       const selectedCounselor = counselors.find(
-        counselor =>
-          counselor.counselorRef.id ===
-          defaultStudent.studentRef.assignedCounselorId
+        counselor => counselor.id === defaultStudent.studentAssignedCounselorId
       );
       const defaultCounselorSelectionIndex = selectedCounselor
         ? counselors
@@ -66,14 +64,14 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelectionIndex(counselors.indexOf(counselor));
     const newStudent = { ...student };
-    newStudent.studentRef.assignedCounselorId = counselor.counselorRef.id;
+    newStudent.studentAssignedCounselorId = counselor.id;
     setStudent(newStudent);
   };
 
   const onSchoolChanged = (school: School) => {
     setSchoolSelectionIndex(schools.indexOf(school));
     const newStudent = { ...student };
-    newStudent.studentRef.assignedSchoolId = school.id;
+    newStudent.studentAssignedSchoolId = school.id;
     setStudent(newStudent);
   };
 

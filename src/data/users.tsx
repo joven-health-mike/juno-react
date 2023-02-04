@@ -3,9 +3,7 @@
 import React, { FC, useState } from 'react';
 import { Role, UserService } from '../services/user.service';
 import { ContextData } from './ContextData';
-import { CounselorRef } from './counselors';
 import { DataProviderProps } from './DataProviderProps';
-import { StudentRef } from './students';
 
 export type User = {
   id: string;
@@ -17,29 +15,11 @@ export type User = {
   docsUrl?: string;
   timeZoneIanaName?: string;
   role: Role;
-  counselorRef?: CounselorRef;
-  schoolAdminRef?: SchoolAdminRef;
-  schoolStaffRef?: SchoolStaffRef;
-  studentRef?: StudentRef;
-  guardianRef?: GuardianRef;
-};
-
-export type SchoolAdminRef = {
-  id: string;
-  userId: string;
-  assignedSchoolId: string;
-};
-
-export type SchoolStaffRef = {
-  id: string;
-  userId: string;
-  assignedSchoolId: string;
-};
-
-export type GuardianRef = {
-  id: string;
-  userId: string;
-  students: StudentRef[];
+  guardianStudents?: User[];
+  studentAssignedCounselorId?: string;
+  studentAssignedSchoolId?: string;
+  schoolAdminAssignedSchoolId?: string;
+  schoolStaffAssignedSchoolId?: string;
 };
 
 export const emptyUser = {
@@ -52,18 +32,6 @@ export const emptyUser = {
   docsUrl: '',
   timeZoneIanaName: '',
   role: 'JOVEN_STAFF' as Role,
-};
-
-export const emptySchoolAdminRef = {
-  id: '-1',
-  userId: '-1',
-  assignedSchoolId: '-1',
-};
-
-export const emptySchoolStaffRef = {
-  id: '-1',
-  userId: '-1',
-  assignedSchoolId: '-1',
 };
 
 export const UsersContext = React.createContext<ContextData<User>>({

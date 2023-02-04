@@ -6,17 +6,13 @@ import { ContextData } from './ContextData';
 import { DataProviderProps } from './DataProviderProps';
 import { User } from './users';
 
-export type Student = User & { studentRef: StudentRef };
+export type Student = User & {
+  studentAssignedCounselorId?: string;
+  studentAssignedSchoolId?: string;
+  studentStatus: StudentStatus;
+};
 
 export type StudentStatus = 'ACTIVE' | 'DISCHARGED';
-
-export type StudentRef = {
-  id: string;
-  userId: string;
-  assignedSchoolId: string;
-  assignedCounselorId: string;
-  status: StudentStatus;
-};
 
 export const emptyStudent: Student = {
   id: '-1',
@@ -28,13 +24,7 @@ export const emptyStudent: Student = {
   docsUrl: '',
   timeZoneIanaName: '',
   role: 'STUDENT' as Role,
-  studentRef: {
-    id: '-1',
-    userId: '-1',
-    assignedSchoolId: '-1',
-    assignedCounselorId: '-1',
-    status: 'ACTIVE',
-  },
+  studentStatus: 'ACTIVE' as StudentStatus,
 };
 
 export const StudentsContext = React.createContext<ContextData<Student>>({

@@ -29,9 +29,9 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
   const [roomLink, setRoomLink] = useState<string>('');
 
   useEffect(() => {
-    if (defaultCounselor) {
+    if (defaultCounselor && defaultCounselor.counselorRoomLink) {
       setCounselor(defaultCounselor);
-      setRoomLink(defaultCounselor.counselorRef.roomLink);
+      setRoomLink(defaultCounselor.counselorRoomLink);
     }
   }, [defaultCounselor]);
 
@@ -43,7 +43,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
     e.preventDefault();
     const submittedCounselor = defaultCounselor ? counselor : { ...counselor };
     submittedCounselor.role = 'COUNSELOR' as Role;
-    submittedCounselor.counselorRef.roomLink = roomLink;
+    submittedCounselor.counselorRoomLink = roomLink;
     onSubmit(submittedCounselor);
   };
 

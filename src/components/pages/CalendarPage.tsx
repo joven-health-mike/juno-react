@@ -130,8 +130,7 @@ const CalendarPage: React.FC = () => {
   const onAppointmentEmailClicked = (appointmentToEmail: Appointment) => {
     const appointmentCounselor =
       counselors.find(
-        counselor =>
-          counselor.counselorRef.id === appointmentToEmail.counselorId
+        counselor => counselor.id === appointmentToEmail.counselorId
       ) || emptyCounselor;
     let mailToUrl = `mailto:${appointmentCounselor.email}`;
 
@@ -148,11 +147,10 @@ const CalendarPage: React.FC = () => {
     appointmentToOpenRoomLink: Appointment
   ) => {
     const counselor = counselors.find(
-      counselor =>
-        counselor.counselorRef.id === appointmentToOpenRoomLink.counselorId
+      counselor => counselor.id === appointmentToOpenRoomLink.counselorId
     );
-    if (counselor?.counselorRef?.roomLink) {
-      window.open(counselor.counselorRef.roomLink);
+    if (counselor?.counselorRoomLink) {
+      window.open(counselor.counselorRoomLink);
     }
   };
 
@@ -160,8 +158,8 @@ const CalendarPage: React.FC = () => {
     const filteredEvents = appointments.filter(appointment => {
       const counselorMatch =
         counselorSelection.id === '-1' ||
-        counselorSelection.counselorRef.id === appointment.counselorId ||
-        counselorSelection.counselorRef.id === appointment.counselor?.id;
+        counselorSelection.id === appointment.counselorId ||
+        counselorSelection.id === appointment.counselor?.id;
       const schoolMatch =
         schoolSelection.id === '-1' ||
         schoolSelection.id === appointment.schoolId;

@@ -19,11 +19,7 @@ const testCounselor: Counselor = {
   docsUrl: '',
   timeZoneIanaName: '',
   role: 'JOVEN_STAFF' as Role,
-  counselorRef: {
-    id: '0',
-    userId: '-1',
-    roomLink: 'https://www.zoomtest.com',
-  },
+  counselorRoomLink: 'https://www.zoomtest.com',
 };
 
 describe('CreateCounselorForm', () => {
@@ -93,8 +89,6 @@ describe('CreateCounselorForm', () => {
   });
 
   test('Check if room links match', () => {
-    expect(testCounselor.counselorRef.roomLink).toBe(
-      'https://www.zoomtest.com'
-    );
+    expect(testCounselor.counselorRoomLink).toBe('https://www.zoomtest.com');
   });
 });

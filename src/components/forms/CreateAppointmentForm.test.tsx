@@ -7,7 +7,6 @@ import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import CreateAppointmentForm from './CreateAppointmentForm';
 import { emptySchool } from '../../data/schools';
-import { emptyCounselorRef } from '../../data/counselors';
 
 const fakeAppointment = {
   id: '0',
@@ -17,7 +16,6 @@ const fakeAppointment = {
   isRecurring: false,
   recurranceInfo: undefined,
   school: emptySchool,
-  counselor: emptyCounselorRef,
   participants: [],
   type: 'CLINICAL',
   status: 'SCHEDULED',
