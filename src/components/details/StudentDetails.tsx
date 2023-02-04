@@ -15,12 +15,11 @@ const StudentDetails: React.FC<StudentDetailsProps> = ({ student }) => {
   const { data: counselors } = useContext(CounselorsContext);
 
   const schoolName =
-    schools.find(school => school.id === student.studentRef.assignedSchoolId)
+    schools.find(school => school.id === student.studentAssignedSchoolId)
       ?.name || 'NOT FOUND';
 
   const counselor = counselors.find(
-    counselor =>
-      counselor.counselorRef.id === student.studentRef.assignedCounselorId
+    counselor => counselor.id === student.studentAssignedCounselorId
   );
 
   const counselorName = counselor
@@ -32,7 +31,7 @@ const StudentDetails: React.FC<StudentDetailsProps> = ({ student }) => {
       <UserDetails user={student} />
       <p data-testid={'schoolId'}>School: {schoolName}</p>
       <p data-testid={'counselorId'}>Counselor: {counselorName}</p>
-      <p data-testid={'status'}>Status: {student.studentRef.status}</p>
+      <p data-testid={'status'}>Status: {student.studentStatus}</p>
     </>
   );
 };

@@ -18,8 +18,6 @@ import { Counselor, CounselorsContext } from '../../data/counselors';
 import { School, SchoolsContext, emptySchool } from '../../data/schools';
 import { Student, StudentsContext } from '../../data/students';
 import {
-  SchoolAdminRef,
-  SchoolStaffRef,
   User,
   UsersContext,
   emptyUser,
@@ -72,20 +70,18 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
       setAppointment(oldAppointment => {
         return {
           ...oldAppointment,
-          counselorId: loggedInUser.counselorRef?.id,
+          counselorId: loggedInUser.id,
         };
       });
     }
-  }, [loggedInUser.counselorRef?.id, loggedInUser.role]);
+  }, [loggedInUser.id, loggedInUser.role]);
 
   useEffect(() => {
     // If a default appointment is passed in, set up some UI values
     if (defaultAppointment) {
       // If a counselor is selected, set the Counselor selection index
       if (defaultAppointment.counselorId || defaultAppointment.counselor) {
-        const counselorIds = counselors.map(
-          counselor => counselor.counselorRef.id
-        );
+        const counselorIds = counselors.map(counselor => counselor.id);
         const targetCounselorId =
           defaultAppointment.counselorId ||
           defaultAppointment.counselor?.id ||
@@ -119,7 +115,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelectionIndex(counselors.indexOf(counselor));
-    setAppointment({ ...appointment, counselorId: counselor.counselorRef.id });
+    setAppointment({ ...appointment, counselorId: counselor.id });
   };
 
   const onTypeChanged = (type: AppointmentType) => {
@@ -146,23 +142,19 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
   const getAssociatedSchoolFromStudent = (student: Student) => {
     return schools.find(school => {
-      return school.id === student.studentRef.assignedSchoolId;
+      return school.id === student.studentAssignedSchoolId;
     });
   };
 
-  const getAssociatedSchoolFromSchoolAdmin = (
-    schoolAdminRef: SchoolAdminRef
-  ) => {
+  const getAssociatedSchoolFromSchoolAdmin = (schoolAdmin: User) => {
     return schools.find(school => {
-      return school.id === schoolAdminRef.assignedSchoolId;
+      return school.id === schoolAdmin.schoolAdminAssignedSchoolId;
     });
   };
 
-  const getAssociatedSchoolFromSchoolStaff = (
-    schoolStaffRef: SchoolStaffRef
-  ) => {
+  const getAssociatedSchoolFromSchoolStaff = (schoolStaff: User) => {
     return schools.find(school => {
-      return school.id === schoolStaffRef.assignedSchoolId;
+      return school.id === schoolStaff.schoolStaffAssignedSchoolId;
     });
   };
 
@@ -184,17 +176,11 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     if (studentSelection) {
       schoolSelection = getAssociatedSchoolFromStudent(studentSelection);
     } else if (schoolAdminSelection) {
-      if (schoolAdminSelection.schoolAdminRef) {
-        schoolSelection = getAssociatedSchoolFromSchoolAdmin(
-          schoolAdminSelection.schoolAdminRef
-        );
-      }
+      schoolSelection =
+        getAssociatedSchoolFromSchoolAdmin(schoolAdminSelection);
     } else if (schoolStaffSelection) {
-      if (schoolStaffSelection.schoolStaffRef) {
-        schoolSelection = getAssociatedSchoolFromSchoolStaff(
-          schoolStaffSelection.schoolStaffRef
-        );
-      }
+      schoolSelection =
+        getAssociatedSchoolFromSchoolStaff(schoolStaffSelection);
     }
 
     schoolSelection = schoolSelection || emptySchool;
@@ -208,15 +194,12 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     const apptTitle = `${user.firstName} ${user.lastName.substring(0, 1)} (${
       schoolSelection?.name
     }) - ${appointment.type}`;
-    const schoolId =
-      schoolSelection?.id === '-1' ? undefined : schoolSelection?.id;
 
     let submittedAppointment = { ...appointment };
     if (!defaultAppointment) {
       submittedAppointment.id = '-1';
     }
     submittedAppointment.title = apptTitle;
-    submittedAppointment.schoolId = schoolId;
     submittedAppointment.participants = participants;
     submittedAppointment.status = 'SCHEDULED';
     onSubmit(submittedAppointment);

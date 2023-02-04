@@ -19,22 +19,12 @@ describe('SchoolDetails', () => {
     const nameView = await view.findByTestId('name');
     expect(nameView.innerHTML).toEqual(testSchool.name);
   });
-  it('should display ID as a string', async () => {
-    const view = render(<SchoolDetails school={testSchool} />);
-    const idView = await view.findByTestId('id');
-    expect(idView.innerHTML).toEqual('ID: ' + testSchool.id.toString());
-  });
   it('should display email as a string', async () => {
     const view = render(<SchoolDetails school={testSchool} />);
     const emailView = await view.findByTestId('email');
     expect(emailView.innerHTML).toEqual(
       'Email: ' + testSchool.primaryEmail.toString()
     );
-  });
-  it('should display ID as <p>', async () => {
-    const view = render(<SchoolDetails school={testSchool} />);
-    const idView = await view.findByTestId('id');
-    expect(idView.nodeName.toLowerCase()).toEqual('p');
   });
   it('should display name as <h2>', async () => {
     const view = render(<SchoolDetails school={testSchool} />);

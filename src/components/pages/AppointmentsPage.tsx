@@ -85,8 +85,7 @@ const AppointmentsPage: React.FC = () => {
   const onAppointmentEmailClicked = (appointmentToEmail: Appointment) => {
     const appointmentCounselor =
       counselors.find(
-        counselor =>
-          counselor.counselorRef.id === appointmentToEmail.counselorId
+        counselor => counselor.id === appointmentToEmail.counselorId
       ) || emptyCounselor;
     let mailToUrl = `mailto:${appointmentCounselor.email}`;
 
@@ -103,11 +102,10 @@ const AppointmentsPage: React.FC = () => {
     appointmentToOpenRoomLink: Appointment
   ) => {
     const counselor = counselors.find(
-      counselor =>
-        counselor.counselorRef.id === appointmentToOpenRoomLink.counselorId
+      counselor => counselor.id === appointmentToOpenRoomLink.counselorId
     );
-    if (counselor?.counselorRef?.roomLink) {
-      window.open(counselor.counselorRef.roomLink);
+    if (counselor?.counselorRoomLink) {
+      window.open(counselor.counselorRoomLink);
     }
   };
 

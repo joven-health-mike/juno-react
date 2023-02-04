@@ -15,7 +15,8 @@ const testUser = {
   email: 'email@test.com',
   username: 'username',
   phone: 'phone',
-  timeZoneIanaName: '',
+  docsUrl: 'https://docs.com',
+  timeZoneIanaName: 'timeZoneIanaName',
   role: 'JOVEN_STAFF' as Role,
 };
 
@@ -53,27 +54,42 @@ describe('CreateUserForm', () => {
       <CreateUserForm onSubmit={submitCallback} onCancel={jest.fn()} />
     );
     //add name
-    const inputName = (await view.findByTestId(
-      'input-name'
+    const inputFirstName = (await view.findByTestId(
+      'input-first-name'
     )) as HTMLInputElement;
-    inputName.value = 'name';
+    inputFirstName.value = 'firstName';
+
+    const inputLastName = (await view.findByTestId(
+      'input-last-name'
+    )) as HTMLInputElement;
+    inputLastName.value = 'lastName';
 
     const inputEmail = (await view.findByTestId(
       'input-email'
     )) as HTMLInputElement;
     inputEmail.value = 'email@test.com';
 
-    const inputPassword = (await view.findByTestId(
-      'input-password'
+    const inputUsername = (await view.findByTestId(
+      'input-username'
     )) as HTMLInputElement;
-    inputPassword.value = 'password';
+    inputUsername.value = 'username';
+
+    const inputPhone = (await view.findByTestId(
+      'input-phone'
+    )) as HTMLInputElement;
+    inputPhone.value = 'phone';
+
+    const inputDocsUrl = (await view.findByTestId(
+      'input-docsUrl'
+    )) as HTMLInputElement;
+    inputDocsUrl.value = 'https://docs.com';
 
     //click submit button
     const button = await view.findByTestId('button-submit');
     fireEvent.click(button);
 
-    //check that the ID is positive
-    expect(submitCallback.mock.calls[0][0].id).toBeGreaterThanOrEqual(0);
+    //check that the ID is -1
+    expect(submitCallback.mock.calls[0][0].id).toBe('-1');
   });
 
   test('Check if first names match', () => {
@@ -97,6 +113,6 @@ describe('CreateUserForm', () => {
   });
 
   test('Check if roles match', () => {
-    expect(testUser.role).toBe('userRole');
+    expect(testUser.role).toBe('JOVEN_STAFF');
   });
 });

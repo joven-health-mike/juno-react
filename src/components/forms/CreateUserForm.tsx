@@ -8,19 +8,9 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import {
-  Counselor,
-  CounselorRef,
-  CounselorsContext,
-} from '../../data/counselors';
+import { Counselor, CounselorsContext } from '../../data/counselors';
 import { School, SchoolsContext } from '../../data/schools';
-import { StudentRef } from '../../data/students';
-import {
-  emptyUser,
-  SchoolAdminRef,
-  SchoolStaffRef,
-  User,
-} from '../../data/users';
+import { emptyUser, User } from '../../data/users';
 import { Role, ROLES } from '../../services/user.service';
 import { AvailableTimeZone, TIME_ZONES } from '../../utils/DateUtils';
 import SelectList, {
@@ -58,50 +48,37 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
 
       let initialSchoolSelectionIndex: number,
         initialCounselorSelectionIndex: number;
-      let counselorRef: CounselorRef | undefined,
-        schoolAdminRef: SchoolAdminRef | undefined,
-        schoolStaffRef: SchoolStaffRef | undefined,
-        studentRef: StudentRef | undefined;
 
       switch (defaultUser.role) {
         case 'COUNSELOR':
-          setIsCounselor(defaultUser.role === 'COUNSELOR');
-          counselorRef = defaultUser.counselorRef;
-          if (counselorRef) setRoomLink(counselorRef.roomLink);
+          setIsCounselor(true);
+          const roomLink = (defaultUser as Counselor).counselorRoomLink ?? '';
+          setRoomLink(roomLink);
           break;
         case 'SCHOOL_ADMIN':
-          setIsSchoolAdmin(defaultUser.role === 'SCHOOL_ADMIN');
-          schoolAdminRef = defaultUser.schoolAdminRef;
-          if (schoolAdminRef) {
-            initialSchoolSelectionIndex = schools
-              .map(school => school.id)
-              .indexOf(schoolAdminRef.assignedSchoolId);
-            setSchoolSelectionIndex(initialSchoolSelectionIndex);
-          }
+          setIsSchoolAdmin(true);
+          initialSchoolSelectionIndex = schools
+            .map(school => school.id)
+            .indexOf(defaultUser.schoolAdminAssignedSchoolId ?? '');
+          setSchoolSelectionIndex(initialSchoolSelectionIndex);
           break;
         case 'SCHOOL_STAFF':
-          setIsSchoolStaff(defaultUser.role === 'SCHOOL_STAFF');
-          schoolStaffRef = defaultUser.schoolStaffRef;
-          if (schoolStaffRef) {
-            initialSchoolSelectionIndex = schools
-              .map(school => school.id)
-              .indexOf(schoolStaffRef.assignedSchoolId);
-            setSchoolSelectionIndex(initialSchoolSelectionIndex);
-          }
+          setIsSchoolStaff(true);
+          initialSchoolSelectionIndex = schools
+            .map(school => school.id)
+            .indexOf(defaultUser.schoolStaffAssignedSchoolId ?? '');
+          setSchoolSelectionIndex(initialSchoolSelectionIndex);
           break;
         case 'STUDENT':
-          setIsStudent(defaultUser.role === 'STUDENT');
-          studentRef = defaultUser.studentRef;
-          if (studentRef) {
-            initialCounselorSelectionIndex = counselors
-              .map(counselor => counselor.counselorRef.id)
-              .indexOf(studentRef.assignedCounselorId);
-            setCounselorSelectionIndex(initialCounselorSelectionIndex);
-            initialSchoolSelectionIndex = schools
-              .map(school => school.id)
-              .indexOf(studentRef.assignedSchoolId);
-            setSchoolSelectionIndex(initialSchoolSelectionIndex);
-          }
+          setIsStudent(true);
+          initialCounselorSelectionIndex = counselors
+            .map(counselor => counselor.id)
+            .indexOf(defaultUser.studentAssignedCounselorId ?? '');
+          setCounselorSelectionIndex(initialCounselorSelectionIndex);
+          initialSchoolSelectionIndex = schools
+            .map(school => school.id)
+            .indexOf(defaultUser.studentAssignedSchoolId ?? '');
+          setSchoolSelectionIndex(initialSchoolSelectionIndex);
           break;
         default:
           break;
@@ -256,7 +233,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
             data-testid={'input-counselor-roomLink'}
             type="URL"
             placeholder="Room Link"
-            name="counselorRef.roomLink"
+            name="counselorRoomLink"
             value={roomLink}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setRoomLink(e.target.value);

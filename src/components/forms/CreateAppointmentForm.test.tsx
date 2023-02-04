@@ -7,17 +7,15 @@ import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import CreateAppointmentForm from './CreateAppointmentForm';
 import { emptySchool } from '../../data/schools';
-import { emptyCounselorRef } from '../../data/counselors';
 
 const fakeAppointment = {
   id: '0',
-  title: 'Hello World',
+  title: '  () - CLINICAL',
   start: new Date(),
   end: new Date(),
   isRecurring: false,
   recurranceInfo: undefined,
   school: emptySchool,
-  counselor: emptyCounselorRef,
   participants: [],
   type: 'CLINICAL',
   status: 'SCHEDULED',

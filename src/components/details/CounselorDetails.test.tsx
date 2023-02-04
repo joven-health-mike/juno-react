@@ -18,23 +18,16 @@ const testCounselor = {
   docsUrl: '',
   timeZoneIanaName: '',
   role: 'JOVEN_STAFF' as Role,
-  counselorRef: {
-    id: '-1',
-    userId: '0',
-    roomLink: 'https://www.zoomtest.com',
-  },
+  counselorRoomLink: 'https://room.link',
 };
 
 describe('CounselorDetails', () => {
   it('should display name', async () => {
     const view = render(<CounselorDetails counselor={testCounselor} />);
     const nameView = await view.findByTestId('name');
-    expect(nameView.innerHTML).toEqual(testCounselor.firstName);
-  });
-  it('should display ID as a string', async () => {
-    const view = render(<CounselorDetails counselor={testCounselor} />);
-    const idView = await view.findByTestId('id');
-    expect(idView.innerHTML).toEqual('ID: ' + testCounselor.id.toString());
+    expect(nameView.innerHTML).toEqual(
+      `${testCounselor.firstName} ${testCounselor.lastName}`
+    );
   });
   it('should display email as a string', async () => {
     const view = render(<CounselorDetails counselor={testCounselor} />);
@@ -47,13 +40,8 @@ describe('CounselorDetails', () => {
     const view = render(<CounselorDetails counselor={testCounselor} />);
     const roomLinkView = await view.findByTestId('roomLink');
     expect(roomLinkView.innerHTML).toEqual(
-      'Room Link: ' + testCounselor.counselorRef.roomLink.toString()
+      `Room Link: <a href="${testCounselor.counselorRoomLink}">${testCounselor.counselorRoomLink}</a>`
     );
-  });
-  it('should display ID as <p>', async () => {
-    const view = render(<CounselorDetails counselor={testCounselor} />);
-    const idView = await view.findByTestId('id');
-    expect(idView.nodeName.toLowerCase()).toEqual('p');
   });
   it('should display name as <h2>', async () => {
     const view = render(<CounselorDetails counselor={testCounselor} />);

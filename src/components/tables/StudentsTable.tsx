@@ -54,11 +54,10 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
   useEffect(() => {
     const mappedStudents = students.map(student => {
       const schoolName = schools.find(
-        school => school.id === student.studentRef.assignedSchoolId
+        school => school.id === student.studentAssignedSchoolId
       )?.name;
       const counselor = counselors.find(
-        counselor =>
-          counselor.counselorRef.id === student.studentRef.assignedCounselorId
+        counselor => counselor.id === student.studentAssignedCounselorId
       );
       const counselorName = `${counselor?.firstName} ${counselor?.lastName}`;
 

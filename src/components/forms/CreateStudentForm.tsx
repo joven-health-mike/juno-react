@@ -11,7 +11,7 @@ import React, {
 import { ContextData } from '../../data/ContextData';
 import { Counselor, CounselorsContext } from '../../data/counselors';
 import { School, SchoolsContext } from '../../data/schools';
-import { emptyStudent, Student } from '../../data/students';
+import { emptyStudent, Student, StudentStatus } from '../../data/students';
 import { AvailableTimeZone, TIME_ZONES } from '../../utils/DateUtils';
 import SelectList, {
   SelectCounselorList,
@@ -43,16 +43,14 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
     if (defaultStudent) {
       setStudent(defaultStudent);
       const selectedSchool = schools.find(
-        school => school.id === defaultStudent.studentRef.assignedSchoolId
+        school => school.id === defaultStudent.studentAssignedSchoolId
       );
       const defaultSchoolSelectionIndex = selectedSchool
         ? schools.indexOf(selectedSchool)
         : -1;
       setSchoolSelectionIndex(defaultSchoolSelectionIndex);
       const selectedCounselor = counselors.find(
-        counselor =>
-          counselor.counselorRef.id ===
-          defaultStudent.studentRef.assignedCounselorId
+        counselor => counselor.id === defaultStudent.studentAssignedCounselorId
       );
       const defaultCounselorSelectionIndex = selectedCounselor
         ? counselors
@@ -66,19 +64,23 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelectionIndex(counselors.indexOf(counselor));
     const newStudent = { ...student };
-    newStudent.studentRef.assignedCounselorId = counselor.counselorRef.id;
+    newStudent.studentAssignedCounselorId = counselor.id;
     setStudent(newStudent);
   };
 
   const onSchoolChanged = (school: School) => {
     setSchoolSelectionIndex(schools.indexOf(school));
     const newStudent = { ...student };
-    newStudent.studentRef.assignedSchoolId = school.id;
+    newStudent.studentAssignedSchoolId = school.id;
     setStudent(newStudent);
   };
 
   const onTimeZoneChanged = (timeZone: string) => {
     setStudent({ ...student, timeZoneIanaName: timeZone });
+  };
+
+  const onStatusChanged = (status: string) => {
+    setStudent({ ...student, studentStatus: status as StudentStatus });
   };
 
   const onFormSubmit = (e: FormEvent) => {
@@ -205,6 +207,21 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
           onItemChanged={item => {
             return onTimeZoneChanged(
               TIME_ZONES[parseInt(item)] as AvailableTimeZone
+            );
+          }}
+        />
+      </label>
+      <label>
+        Status:{' '}
+        <SelectList
+          labelText="Select a Status"
+          items={['ACTIVE', 'DISCHARGED', 'DELETED']}
+          value={['ACTIVE', 'DISCHARGED', 'DELETED'].indexOf(
+            student.studentStatus || ''
+          )}
+          onItemChanged={item => {
+            return onStatusChanged(
+              ['ACTIVE', 'DISCHARGED', 'DELETED'][parseInt(item)]
             );
           }}
         />

@@ -6,14 +6,7 @@ import { ContextData } from './ContextData';
 import { DataProviderProps } from './DataProviderProps';
 import { User } from './users';
 
-export type Counselor = User & { counselorRef: CounselorRef };
-
-export type CounselorRef = {
-  id: string;
-  userId: string;
-  roomLink: string;
-  user?: User;
-};
+export type Counselor = User & { counselorRoomLink?: string }; // TODO: Sync with server model
 
 export const emptyCounselor: Counselor = {
   id: '-1',
@@ -25,28 +18,7 @@ export const emptyCounselor: Counselor = {
   docsUrl: '',
   timeZoneIanaName: '',
   role: 'JOVEN_STAFF' as Role,
-  counselorRef: {
-    id: '-1',
-    userId: '-1',
-    roomLink: '',
-  },
-};
-
-export const emptyCounselorRef: CounselorRef = {
-  id: '-1',
-  userId: '-1',
-  roomLink: '',
-  user: {
-    id: '-1',
-    firstName: '',
-    lastName: '',
-    email: '',
-    username: '',
-    phone: '',
-    docsUrl: '',
-    timeZoneIanaName: '',
-    role: 'JOVEN_STAFF' as Role,
-  },
+  counselorRoomLink: '',
 };
 
 export const CounselorsContext = React.createContext<ContextData<Counselor>>({
@@ -87,13 +59,16 @@ export const CounselorsProvider: FC<DataProviderProps<Counselor[]>> = ({
     },
     update: async function (data: Counselor): Promise<void> {
       try {
-        const { data: counselor } = await service.update(data, `${data.id}`);
+        const { data: updatedCounselor } = await service.update(
+          data,
+          `${data.id}`
+        );
         // remove the old counselor from the list
         const newCounselors = [...counselors].filter(
-          counselor => counselor.id !== counselor.counselorRef.id
+          counselor => counselor.id !== updatedCounselor.id
         );
         // and add the new counselor returned from the server
-        setCounselors([...newCounselors, counselor as Counselor]);
+        setCounselors([...newCounselors, updatedCounselor as Counselor]);
       } catch (error) {
         console.error(error);
       }

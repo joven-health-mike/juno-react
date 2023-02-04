@@ -98,8 +98,7 @@ const StudentsTableView: React.FC = () => {
     if (isCreateAppointmentAllowed) {
       const appointment = { ...initialAppointment };
       appointment.participants = [studentToSchedule];
-      appointment.counselorId =
-        studentToSchedule.studentRef.assignedCounselorId;
+      appointment.counselorId = studentToSchedule.studentAssignedCounselorId;
       setInitialAppointment(appointment);
       setIsCreateAppointmentModalOpen(true);
     }
@@ -200,8 +199,7 @@ const StudentView: React.FC = () => {
   const { data: counselors } = useContext(CounselorsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
   const myCounselor = counselors.find(
-    counselor =>
-      counselor.counselorRef.id === loggedInUser.studentRef?.assignedCounselorId
+    counselor => counselor.id === loggedInUser.studentAssignedCounselorId
   );
 
   return (
@@ -223,14 +221,6 @@ const StudentView: React.FC = () => {
 };
 
 const GuardianView: React.FC = () => {
-  const { data: counselors } = useContext(CounselorsContext);
-  const { loggedInUser } = useContext(LoggedInUserContext);
-  const myCounselor = counselors.find(
-    counselor =>
-      counselor.counselorRef.id ===
-      loggedInUser.guardianRef?.students[0].assignedCounselorId
-  );
-
   return (
     <>
       <LeftSection>
@@ -238,12 +228,8 @@ const GuardianView: React.FC = () => {
         <AppointmentView />
       </LeftSection>
       <RightSection>
-        {myCounselor && (
-          <>
-            <h1>My Counselor</h1>
-            <CounselorDetails counselor={myCounselor} />
-          </>
-        )}
+        <h1>My Students</h1>
+        <StudentsTableView />
       </RightSection>
     </>
   );

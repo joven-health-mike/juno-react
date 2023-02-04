@@ -80,7 +80,7 @@ const CounselorsPage: React.FC = () => {
   };
 
   const onCounselorRoomLinkClicked = (counselorToOpenRoomLink: Counselor) => {
-    window.open(counselorToOpenRoomLink.counselorRef.roomLink);
+    window.open(counselorToOpenRoomLink.counselorRoomLink);
   };
 
   const onCounselorFileOpenClicked = (counselorToOpenFile: Counselor) => {

@@ -15,9 +15,7 @@ const CounselorDetails: React.FC<CounselorDetailsProps> = ({ counselor }) => {
       <UserDetails user={counselor as User} />
       <p data-testid={'roomLink'}>
         Room Link:{' '}
-        <a href={counselor.counselorRef.roomLink}>
-          {counselor.counselorRef.roomLink}
-        </a>
+        <a href={counselor.counselorRoomLink}>{counselor.counselorRoomLink}</a>
       </p>
     </>
   );

@@ -3,7 +3,6 @@
 import React, { FC, useState } from 'react';
 import { AppointmentService } from '../services/appointment.service';
 import { ContextData } from './ContextData';
-import { CounselorRef } from './counselors';
 import { DataProviderProps } from './DataProviderProps';
 import { School } from './schools';
 import { User } from './users';
@@ -19,7 +18,7 @@ export type Appointment = {
   frequency?: string;
   school?: School;
   schoolId?: string;
-  counselor?: CounselorRef;
+  counselor?: User;
   counselorId?: string;
   participants: User[];
   type: string;
