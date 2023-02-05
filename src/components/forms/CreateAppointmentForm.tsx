@@ -80,10 +80,10 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     // If a default appointment is passed in, set up some UI values
     if (defaultAppointment) {
       // If a counselor is selected, set the Counselor selection index
-      if (defaultAppointment.counselorId || defaultAppointment.counselor) {
+      if (defaultAppointment.counselorUserId || defaultAppointment.counselor) {
         const counselorIds = counselors.map(counselor => counselor.id);
         const targetCounselorId =
-          defaultAppointment.counselorId ||
+          defaultAppointment.counselorUserId ||
           defaultAppointment.counselor?.id ||
           "APPOINTMENT DIDN'T HAVE COUNSELORID OR COUNSELOR.ID";
         const initialCounselorSelectionIndex =
@@ -115,7 +115,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelectionIndex(counselors.indexOf(counselor));
-    setAppointment({ ...appointment, counselorId: counselor.id });
+    setAppointment({ ...appointment, counselorUserId: counselor.id });
   };
 
   const onTypeChanged = (type: AppointmentType) => {
@@ -202,6 +202,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     submittedAppointment.title = apptTitle;
     submittedAppointment.participants = participants;
     submittedAppointment.status = 'SCHEDULED';
+    submittedAppointment.schoolId = schoolSelection.id;
     onSubmit(submittedAppointment);
   };
 

@@ -19,7 +19,7 @@ export type Appointment = {
   school?: School;
   schoolId?: string;
   counselor?: User;
-  counselorId?: string;
+  counselorUserId?: string;
   participants: User[];
   type: string;
   status: string;

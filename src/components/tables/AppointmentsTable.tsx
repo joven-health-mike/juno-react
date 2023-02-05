@@ -74,7 +74,7 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
   useEffect(() => {
     const mappedAppointments = appointments.map(appointment => {
       const counselor = counselors.find(
-        counselor => counselor.id === appointment.counselorId
+        counselor => counselor.id === appointment.counselorUserId
       );
       const counselorName = `${counselor?.firstName} ${counselor?.lastName}`;
 
@@ -107,7 +107,7 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
       if (!appointment) return <></>;
 
       const counselor = counselors.find(
-        counselor => counselor.id === appointment.counselorId
+        counselor => counselor.id === appointment.counselorUserId
       );
 
       return (

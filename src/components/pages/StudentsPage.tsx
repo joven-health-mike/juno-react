@@ -89,7 +89,7 @@ const StudentsPage = () => {
   const onAppointmentStudentClicked = (studentToSchedule: Student) => {
     if (isCreateAppointmentAllowed) {
       modalAppointment.participants = [studentToSchedule];
-      modalAppointment.counselorId =
+      modalAppointment.counselorUserId =
         studentToSchedule.studentAssignedCounselorId;
       setModalAppointment(modalAppointment);
       setIsCreateAppointmentModalOpen(true);

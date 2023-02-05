@@ -98,7 +98,8 @@ const StudentsTableView: React.FC = () => {
     if (isCreateAppointmentAllowed) {
       const appointment = { ...initialAppointment };
       appointment.participants = [studentToSchedule];
-      appointment.counselorId = studentToSchedule.studentAssignedCounselorId;
+      appointment.counselorUserId =
+        studentToSchedule.studentAssignedCounselorId;
       setInitialAppointment(appointment);
       setIsCreateAppointmentModalOpen(true);
     }
