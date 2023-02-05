@@ -202,6 +202,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     submittedAppointment.title = apptTitle;
     submittedAppointment.participants = participants;
     submittedAppointment.status = 'SCHEDULED';
+    submittedAppointment.schoolId = schoolSelection.id;
     onSubmit(submittedAppointment);
   };
 
