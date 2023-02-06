@@ -29,10 +29,9 @@ const Calendar: React.FC<CalendarProps> = ({
 
   const eventClicked = (info: EventClickArg) => {
     info.jsEvent.preventDefault();
-    // this should use the ID instead of the title
-    let eventTitle = info.event._def.title;
+    let eventId = info.event.id;
     const theEvent = appointments.find(
-      appointment => appointment.title === eventTitle
+      appointment => appointment.id === eventId
     );
     if (theEvent) onEventClick(theEvent);
   };

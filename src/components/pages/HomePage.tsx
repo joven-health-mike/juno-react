@@ -106,7 +106,7 @@ const StudentsTableView: React.FC = () => {
   };
 
   const handleDeleteClick = (studentToDelete: Student) => {
-    if (isDeleteStudentAllowed) {
+    if (isDeleteStudentAllowed && window.confirm('Delete this student?')) {
       deleteStudent(studentToDelete);
     }
   };
