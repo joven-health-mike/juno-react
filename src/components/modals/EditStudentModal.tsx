@@ -18,6 +18,14 @@ const EditStudentModal: React.FC<EditStudentModalProps> = ({
   onStudentEdited,
   initialStudent,
 }) => {
+  const onFormSubmit = (student: Student) => {
+    onStudentEdited(student);
+    onClose();
+  };
+  const onFormCancel = () => {
+    onClose();
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -27,8 +35,8 @@ const EditStudentModal: React.FC<EditStudentModalProps> = ({
     >
       <h1>Edit Student</h1>
       <CreateStudentForm
-        onSubmit={onStudentEdited}
-        onCancel={onClose}
+        onSubmit={onFormSubmit}
+        onCancel={onFormCancel}
         defaultStudent={initialStudent}
       />
     </Modal>

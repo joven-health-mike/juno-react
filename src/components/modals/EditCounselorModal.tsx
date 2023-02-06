@@ -18,6 +18,14 @@ const EditCounselorModal: React.FC<EditCounselorModalProps> = ({
   onCounselorEdited,
   initialCounselor,
 }) => {
+  const onFormSubmit = (counselor: Counselor) => {
+    onCounselorEdited(counselor);
+    onClose();
+  };
+  const onFormCancel = () => {
+    onClose();
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -27,8 +35,8 @@ const EditCounselorModal: React.FC<EditCounselorModalProps> = ({
     >
       <h1>Edit Counselor</h1>
       <CreateCounselorForm
-        onSubmit={onCounselorEdited}
-        onCancel={onClose}
+        onSubmit={onFormSubmit}
+        onCancel={onFormCancel}
         defaultCounselor={initialCounselor}
       />
     </Modal>

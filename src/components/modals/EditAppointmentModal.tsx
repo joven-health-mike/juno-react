@@ -18,6 +18,14 @@ const EditAppointmentModal: React.FC<EditAppointmentModalProps> = ({
   onAppointmentAdded,
   initialAppointment,
 }) => {
+  const onFormSubmit = (appointment: Appointment) => {
+    onAppointmentAdded(appointment);
+    onClose();
+  };
+  const onFormCancel = () => {
+    onClose();
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -27,8 +35,8 @@ const EditAppointmentModal: React.FC<EditAppointmentModalProps> = ({
     >
       <h1>Edit Appointment</h1>
       <CreateAppointmentForm
-        onSubmit={onAppointmentAdded}
-        onCancel={onClose}
+        onSubmit={onFormSubmit}
+        onCancel={onFormCancel}
         defaultAppointment={initialAppointment}
       />
     </Modal>

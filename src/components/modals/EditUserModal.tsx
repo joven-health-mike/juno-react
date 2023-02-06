@@ -18,6 +18,14 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
   onUserEdited,
   initialUser,
 }) => {
+  const onFormSubmit = (user: User) => {
+    onUserEdited(user);
+    onClose();
+  };
+  const onFormCancel = () => {
+    onClose();
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -27,8 +35,8 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
     >
       <h1>Edit User</h1>
       <CreateUserForm
-        onSubmit={onUserEdited}
-        onCancel={onClose}
+        onSubmit={onFormSubmit}
+        onCancel={onFormCancel}
         defaultUser={initialUser}
       />
     </Modal>
