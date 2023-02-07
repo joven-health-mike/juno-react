@@ -2,9 +2,15 @@
 
 import React, { useContext } from 'react';
 import FullCalendar, { EventClickArg, PluginDef } from '@fullcalendar/react';
+import styled from 'styled-components';
 import { Appointment, getColorForType } from '../../data/appointments';
 import { DateClickArg } from '@fullcalendar/interaction';
 import { LoggedInUserContext } from '../../data/users';
+
+const Wrapper = styled.div`
+  margin: 0 auto;
+  max-width: 1300px;
+`;
 
 type CalendarProps = {
   view: string;
@@ -44,7 +50,7 @@ const Calendar: React.FC<CalendarProps> = ({
   };
 
   return (
-    <div className={'calendar'}>
+    <Wrapper>
       {typeof onDateClick !== 'undefined' && (
         <FullCalendar
           events={appointments}
@@ -64,7 +70,7 @@ const Calendar: React.FC<CalendarProps> = ({
           eventClick={(info: EventClickArg) => eventClicked(info)}
         />
       )}
-    </div>
+    </Wrapper>
   );
 };
 
