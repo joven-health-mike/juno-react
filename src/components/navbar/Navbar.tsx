@@ -3,13 +3,13 @@
 import React, { useContext } from 'react';
 import { IconContext } from 'react-icons';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { AvailableRoute, pagePermission } from '../../auth/permissions';
 import { LoggedInUserContext } from '../../data/users';
 import { spanStyles } from '../styles/mixins';
 import { allNavItems, NavItem } from './navBarItems';
 
-const StyledLink = styled(Link)`
+const linkStyles = css`
   text-decoration: none;
   color: white !important;
   font-size: 18px;
@@ -21,6 +21,10 @@ const StyledLink = styled(Link)`
   border-radius: 4px;
 `;
 
+const StyledLink = styled(Link)`
+  ${linkStyles}
+`;
+
 const LinkTitle = styled.span`
   ${spanStyles}
 `;
@@ -28,6 +32,35 @@ const LinkTitle = styled.span`
 const List = styled.ul`
   width: 100%;
   padding-left: 0px;
+`;
+
+const Wrapper = styled.div`
+  background-color: #4891ce;
+  width: 250px;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+`;
+
+const ListItem = styled.li`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px, 0ps, 8ps, 16px;
+  list-style: none;
+  height: 60px;
+
+  a {
+    ${linkStyles}
+  }
+
+  a:hover {
+    background-color: #77caf2;
+    color: #385aa8;
+  }
 `;
 
 const Navbar: React.FC = () => {
@@ -41,21 +74,21 @@ const Navbar: React.FC = () => {
   return (
     <>
       <IconContext.Provider value={{ color: '#fff' }}>
-        <div className={'navMenu'}>
+        <Wrapper>
           <List>
             {allNavItems.map(
               (item: NavItem, index: number) =>
                 isRouteAllowed(item.path as AvailableRoute) && (
-                  <li key={index} className={'navText'}>
+                  <ListItem key={index}>
                     <StyledLink to={item.path}>
                       {item.icon}
                       <LinkTitle>{item.title}</LinkTitle>
                     </StyledLink>
-                  </li>
+                  </ListItem>
                 )
             )}
           </List>
-        </div>
+        </Wrapper>
       </IconContext.Provider>
     </>
   );
