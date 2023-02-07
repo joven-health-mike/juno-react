@@ -12,7 +12,12 @@ import { Counselor, emptyCounselor } from '../../data/counselors';
 import { Role } from '../../services/user.service';
 import { AvailableTimeZone, TIME_ZONES } from '../../utils/DateUtils';
 import SelectList from '../selectList/SelectList';
-import { buttonStyles, formStyles, inputStyles } from '../styles/mixins';
+import {
+  buttonStyles,
+  formStyles,
+  inputStyles,
+  labelStyles,
+} from '../styles/mixins';
 
 const Button = styled.button`
   ${buttonStyles}
@@ -24,6 +29,10 @@ const Form = styled.form`
 
 const Input = styled.input`
   ${inputStyles}
+`;
+
+const Label = styled.label`
+  ${labelStyles}
 `;
 
 type CreateCounselorFormProps = {
@@ -70,7 +79,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
   return (
     <>
       <Form onSubmit={onFormSubmit}>
-        <label>
+        <Label>
           First Name:{' '}
           <Input
             data-testid={'input-first-name'}
@@ -83,8 +92,8 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
               setCounselor({ ...counselor, firstName: e.target.value });
             }}
           />
-        </label>
-        <label>
+        </Label>
+        <Label>
           Last Name:{' '}
           <Input
             data-testid={'input-last-name'}
@@ -97,8 +106,8 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
               setCounselor({ ...counselor, lastName: e.target.value });
             }}
           />
-        </label>
-        <label>
+        </Label>
+        <Label>
           Email:{' '}
           <Input
             data-testid={'input-email'}
@@ -111,8 +120,8 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
               setCounselor({ ...counselor, email: e.target.value })
             }
           />
-        </label>
-        <label>
+        </Label>
+        <Label>
           Username:{' '}
           <Input
             data-testid={'input-username'}
@@ -125,8 +134,8 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
               setCounselor({ ...counselor, username: e.target.value });
             }}
           />
-        </label>
-        <label>
+        </Label>
+        <Label>
           Phone:{' '}
           <Input
             data-testid={'input-phone'}
@@ -139,8 +148,8 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
               setCounselor({ ...counselor, phone: e.target.value });
             }}
           />
-        </label>
-        <label>
+        </Label>
+        <Label>
           Docs URL:{' '}
           <Input
             data-testid={'input-docsUrl'}
@@ -153,8 +162,8 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
               setCounselor({ ...counselor, docsUrl: e.target.value });
             }}
           />
-        </label>
-        <label>
+        </Label>
+        <Label>
           Room Link:{' '}
           <Input
             data-testid={'input-roomLink'}
@@ -167,8 +176,8 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
               setRoomLink(e.target.value);
             }}
           />
-        </label>
-        <label>
+        </Label>
+        <Label>
           Time Zone:{' '}
           <SelectList
             labelText="Select a Time Zone"
@@ -180,7 +189,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
               );
             }}
           />
-        </label>
+        </Label>
 
         <Button type="submit" data-testid={'button-submit'}>
           Submit

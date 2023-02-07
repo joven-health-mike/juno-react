@@ -18,7 +18,12 @@ import SelectList, {
   SelectCounselorList,
   SelectSchoolList,
 } from '../selectList/SelectList';
-import { buttonStyles, formStyles, inputStyles } from '../styles/mixins';
+import {
+  buttonStyles,
+  formStyles,
+  inputStyles,
+  labelStyles,
+} from '../styles/mixins';
 
 const Button = styled.button`
   ${buttonStyles}
@@ -30,6 +35,10 @@ const Form = styled.form`
 
 const Input = styled.input`
   ${inputStyles}
+`;
+
+const Label = styled.label`
+  ${labelStyles}
 `;
 
 type CreateStudentFormProps = {
@@ -114,7 +123,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
 
   return (
     <Form onSubmit={onFormSubmit}>
-      <label>
+      <Label>
         First Name:
         <Input
           data-testid={'input-first-name'}
@@ -127,8 +136,8 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
             setStudent({ ...student, firstName: e.target.value });
           }}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Last Name:
         <Input
           data-testid={'input-last-name'}
@@ -141,8 +150,8 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
             setStudent({ ...student, lastName: e.target.value });
           }}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Email:
         <Input
           data-testid={'input-email'}
@@ -155,8 +164,8 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
             setStudent({ ...student, email: e.target.value })
           }
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Username:
         <Input
           data-testid={'input-username'}
@@ -169,8 +178,8 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
             setStudent({ ...student, username: e.target.value });
           }}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Phone:
         <Input
           data-testid={'input-phone'}
@@ -183,8 +192,8 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
             setStudent({ ...student, phone: e.target.value });
           }}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Docs URL:
         <Input
           data-testid={'input-docsUrl'}
@@ -197,22 +206,22 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
             setStudent({ ...student, docsUrl: e.target.value });
           }}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Counselor:{' '}
         <SelectCounselorList
           selectedIndex={counselorSelectionIndex}
           onCounselorChanged={onCounselorChanged}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         School:{' '}
         <SelectSchoolList
           selectedIndex={schoolSelectionIndex}
           onSchoolChanged={onSchoolChanged}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Time Zone:{' '}
         <SelectList
           labelText="Select a Time Zone"
@@ -224,8 +233,8 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
             );
           }}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Status:{' '}
         <SelectList
           labelText="Select a Status"
@@ -239,7 +248,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
             );
           }}
         />
-      </label>
+      </Label>
 
       <Button type="submit" data-testid="button-submit">
         Submit

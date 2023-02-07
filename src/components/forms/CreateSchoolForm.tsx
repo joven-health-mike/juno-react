@@ -9,7 +9,12 @@ import React, {
 } from 'react';
 import styled from 'styled-components';
 import { emptySchool, School } from '../../data/schools';
-import { buttonStyles, formStyles, inputStyles } from '../styles/mixins';
+import {
+  buttonStyles,
+  formStyles,
+  inputStyles,
+  labelStyles,
+} from '../styles/mixins';
 
 const Button = styled.button`
   ${buttonStyles}
@@ -21,6 +26,10 @@ const Form = styled.form`
 
 const Input = styled.input`
   ${inputStyles}
+`;
+
+const Label = styled.label`
+  ${labelStyles}
 `;
 
 type CreateSchoolFormProps = {
@@ -57,7 +66,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
   return (
     <>
       <Form onSubmit={onFormSubmit}>
-        <label>
+        <Label>
           Name:
           <Input
             data-testid={'input-name'}
@@ -70,8 +79,8 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
               setSchool({ ...school, name: e.target.value })
             }
           />
-        </label>
-        <label>
+        </Label>
+        <Label>
           Address:
           <Input
             data-testid={'input-address'}
@@ -84,8 +93,8 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
               setSchool({ ...school, address: e.target.value })
             }
           />
-        </label>
-        <label>
+        </Label>
+        <Label>
           City:
           <Input
             data-testid={'input-city'}
@@ -98,8 +107,8 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
               setSchool({ ...school, city: e.target.value })
             }
           />
-        </label>
-        <label>
+        </Label>
+        <Label>
           State:
           <Input
             data-testid={'input-state'}
@@ -112,8 +121,8 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
               setSchool({ ...school, state: e.target.value })
             }
           />
-        </label>
-        <label>
+        </Label>
+        <Label>
           Zip Code:
           <Input
             data-testid={'input-zip'}
@@ -126,8 +135,8 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
               setSchool({ ...school, zip: e.target.value })
             }
           />
-        </label>
-        <label>
+        </Label>
+        <Label>
           Email:
           <Input
             data-testid={'input-email'}
@@ -140,8 +149,8 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
               setSchool({ ...school, primaryEmail: e.target.value })
             }
           />
-        </label>
-        <label>
+        </Label>
+        <Label>
           Phone Number
           <Input
             data-testid={'input-phone'}
@@ -154,7 +163,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
               setSchool({ ...school, primaryPhone: e.target.value })
             }
           />
-        </label>
+        </Label>
 
         <Button type="submit" data-testid={'button-submit'}>
           Submit
