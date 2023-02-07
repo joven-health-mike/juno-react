@@ -37,4 +37,19 @@ const formStyles = css`
   text-align: left;
 `;
 
-export { buttonStyles, h1Styles, linkStyles, spanStyles, formStyles };
+const inputStyles = css`
+  display: block;
+  padding: 1px;
+  width: 15em !important;
+  margin: auto;
+  margin-bottom: 20px;
+`;
+
+export {
+  buttonStyles,
+  h1Styles,
+  linkStyles,
+  spanStyles,
+  formStyles,
+  inputStyles,
+};

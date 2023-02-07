@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import styled from 'styled-components';
 import { emptySchool, School } from '../../data/schools';
-import { buttonStyles, formStyles } from '../styles/mixins';
+import { buttonStyles, formStyles, inputStyles } from '../styles/mixins';
 
 const Button = styled.button`
   ${buttonStyles}
@@ -17,6 +17,10 @@ const Button = styled.button`
 
 const Form = styled.form`
   ${formStyles}
+`;
+
+const Input = styled.input`
+  ${inputStyles}
 `;
 
 type CreateSchoolFormProps = {
@@ -55,7 +59,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
       <Form onSubmit={onFormSubmit}>
         <label>
           Name:
-          <input
+          <Input
             data-testid={'input-name'}
             type="text"
             placeholder="Name"
@@ -69,7 +73,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
         </label>
         <label>
           Address:
-          <input
+          <Input
             data-testid={'input-address'}
             type="text"
             placeholder="Address"
@@ -83,7 +87,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
         </label>
         <label>
           City:
-          <input
+          <Input
             data-testid={'input-city'}
             type="text"
             placeholder="City"
@@ -97,7 +101,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
         </label>
         <label>
           State:
-          <input
+          <Input
             data-testid={'input-state'}
             type="text"
             placeholder="State"
@@ -111,7 +115,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
         </label>
         <label>
           Zip Code:
-          <input
+          <Input
             data-testid={'input-zip'}
             type="text"
             placeholder="Zip Code"
@@ -125,7 +129,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
         </label>
         <label>
           Email:
-          <input
+          <Input
             data-testid={'input-email'}
             type="email"
             placeholder="Email"
@@ -139,7 +143,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
         </label>
         <label>
           Phone Number
-          <input
+          <Input
             data-testid={'input-phone'}
             type="text"
             placeholder="Phone Number"

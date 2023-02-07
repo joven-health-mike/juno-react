@@ -2,6 +2,12 @@
 
 import React from 'react';
 import { Row } from 'react-table';
+import styled from 'styled-components';
+import { inputStyles } from '../styles/mixins';
+
+const Input = styled.input`
+  ${inputStyles}
+`;
 
 type TableSearchFilterProps = {
   column: {
@@ -18,13 +24,13 @@ const TableSearchFilter: React.FC<TableSearchFilterProps> = ({
 
   return (
     <>
-      <input
+      <Input
         value={filterValue || ''}
         onChange={e => {
           setFilter(e.target.value);
         }}
         placeholder={`Search ${count} records...`}
-      ></input>
+      ></Input>
     </>
   );
 };

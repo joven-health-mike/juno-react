@@ -18,7 +18,7 @@ import SelectList, {
   SelectCounselorList,
   SelectSchoolList,
 } from '../selectList/SelectList';
-import { buttonStyles, formStyles } from '../styles/mixins';
+import { buttonStyles, formStyles, inputStyles } from '../styles/mixins';
 
 const Button = styled.button`
   ${buttonStyles}
@@ -26,6 +26,10 @@ const Button = styled.button`
 
 const Form = styled.form`
   ${formStyles}
+`;
+
+const Input = styled.input`
+  ${inputStyles}
 `;
 
 type CreateStudentFormProps = {
@@ -112,7 +116,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
     <Form onSubmit={onFormSubmit}>
       <label>
         First Name:
-        <input
+        <Input
           data-testid={'input-first-name'}
           type="text"
           placeholder="First Name"
@@ -126,7 +130,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       </label>
       <label>
         Last Name:
-        <input
+        <Input
           data-testid={'input-last-name'}
           type="text"
           placeholder="Last Name"
@@ -140,7 +144,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       </label>
       <label>
         Email:
-        <input
+        <Input
           data-testid={'input-email'}
           type="email"
           placeholder="Email"
@@ -154,7 +158,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       </label>
       <label>
         Username:
-        <input
+        <Input
           data-testid={'input-username'}
           type="text"
           placeholder="Username"
@@ -168,7 +172,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       </label>
       <label>
         Phone:
-        <input
+        <Input
           data-testid={'input-phone'}
           type="phone"
           placeholder="Phone"
@@ -182,7 +186,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       </label>
       <label>
         Docs URL:
-        <input
+        <Input
           data-testid={'input-docsUrl'}
           type="URL"
           placeholder="Docs URL"

@@ -34,7 +34,7 @@ import SelectList, {
   SelectTypeList,
   SelectUserList,
 } from '../selectList/SelectList';
-import { buttonStyles, formStyles } from '../styles/mixins';
+import { buttonStyles, formStyles, inputStyles } from '../styles/mixins';
 
 const Button = styled.button`
   ${buttonStyles}
@@ -42,6 +42,10 @@ const Button = styled.button`
 
 const Form = styled.form`
   ${formStyles}
+`;
+
+const Input = styled.input`
+  ${inputStyles}
 `;
 
 type CreateAppointmentFormProps = {
@@ -270,7 +274,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
       </label>
       <label>
         Is Recurring:{' '}
-        <input
+        <Input
           type="checkbox"
           checked={appointment.isRecurring}
           onChange={handleIsRecurringChange}
@@ -280,7 +284,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
         <>
           <label>
             Num Occurrences:{' '}
-            <input
+            <Input
               data-testid={'input-numOccurrences'}
               type="number"
               min={2}
@@ -299,7 +303,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
           </label>
           <label>
             Repeat For Num:{' '}
-            <input
+            <Input
               data-testid={'input-repeatForNum'}
               type="number"
               min={1}

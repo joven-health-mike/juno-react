@@ -18,7 +18,7 @@ import SelectList, {
   SelectCounselorList,
   SelectSchoolList,
 } from '../selectList/SelectList';
-import { buttonStyles, formStyles } from '../styles/mixins';
+import { buttonStyles, formStyles, inputStyles } from '../styles/mixins';
 
 const Button = styled.button`
   ${buttonStyles}
@@ -26,6 +26,10 @@ const Button = styled.button`
 
 const Form = styled.form`
   ${formStyles}
+`;
+
+const Input = styled.input`
+  ${inputStyles}
 `;
 
 type CreateUserFormProps = {
@@ -132,7 +136,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
     <Form onSubmit={onFormSubmit}>
       <label>
         First Name:
-        <input
+        <Input
           data-testid={'input-first-name'}
           type="text"
           placeholder="First Name"
@@ -146,7 +150,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
       </label>
       <label>
         Last Name:
-        <input
+        <Input
           data-testid={'input-last-name'}
           type="text"
           placeholder="Last Name"
@@ -160,7 +164,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
       </label>
       <label>
         Email:
-        <input
+        <Input
           data-testid={'input-email'}
           type="email"
           placeholder="Email"
@@ -174,7 +178,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
       </label>
       <label>
         Username:
-        <input
+        <Input
           data-testid={'input-username'}
           type="text"
           placeholder="Username"
@@ -188,7 +192,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
       </label>
       <label>
         Phone:
-        <input
+        <Input
           data-testid={'input-phone'}
           type="phone"
           placeholder="Phone"
@@ -201,7 +205,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
       </label>
       <label>
         Docs URL:
-        <input
+        <Input
           data-testid={'input-docsUrl'}
           type="URL"
           placeholder="Docs URL"
@@ -239,7 +243,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
       {isCounselor && (
         <label>
           Room Link:
-          <input
+          <Input
             data-testid={'input-counselor-roomLink'}
             type="URL"
             placeholder="Room Link"
