@@ -3,6 +3,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { deletePermission } from '../../auth/permissions';
 import { Appointment } from '../../data/appointments';
+import { CounselorsContext } from '../../data/counselors';
+import { SchoolsContext } from '../../data/schools';
 import { LoggedInUserContext } from '../../data/users';
 import { formatDateTime } from '../../utils/DateUtils';
 
@@ -20,6 +22,22 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
   onCancelAppointmentClicked,
 }) => {
   const { loggedInUser } = useContext(LoggedInUserContext);
+  const { data: counselors } = useContext(CounselorsContext);
+  const { data: schools } = useContext(SchoolsContext);
+
+  const counselor =
+    appointment.counselor ||
+    counselors.find(counselor => counselor.id === appointment.counselorUserId);
+
+  const counselorName = counselor
+    ? `${counselor.firstName} ${counselor.lastName}`
+    : 'NOT FOUND';
+
+  const school =
+    appointment.school ||
+    schools.find(school => school.id === appointment.schoolId);
+
+  const schoolName = school ? school.name : 'NOT FOUND';
 
   const [isDeleteAppointmentAllowed, setIsDeleteAppointmentAllowed] =
     useState<boolean>(false);
@@ -39,11 +57,8 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
           new Date(appointment.end)
         )}`}
       </p>
-      <p data-testid={'counselorId'}>
-        Counselor:{' '}
-        {`${appointment.counselor?.firstName} ${appointment.counselor?.lastName}`}
-      </p>
-      <p data-testid={'schoolId'}>School: {appointment.school?.name}</p>
+      <p data-testid={'counselorId'}>Counselor: {counselorName}</p>
+      <p data-testid={'schoolId'}>School: {schoolName}</p>
       <p data-testid={'participants'}>Participants:</p>
       {appointment.participants.map((user, index) => (
         <p key={index}>{`${user.firstName} ${user.lastName} (${user.role})`}</p>
