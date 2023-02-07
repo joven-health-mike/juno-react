@@ -3,6 +3,7 @@
 import React, { useContext, useEffect } from 'react';
 import { Settings } from 'luxon';
 import { Route, Routes } from 'react-router-dom';
+import styled from 'styled-components';
 import { LoggedInUserContext, UsersContext } from '../data/users';
 import { AvailableRoute, pagePermission } from '../auth/permissions';
 import { AvailableRoutes } from './AppRouter';
@@ -10,6 +11,11 @@ import { CounselorsContext } from '../data/counselors';
 import { AppointmentsContext } from '../data/appointments';
 import { SchoolsContext } from '../data/schools';
 import { StudentsContext } from '../data/students';
+import { h1Styles } from '../components/styles/mixins';
+
+const Header = styled.h1`
+  ${h1Styles}
+`;
 
 const PrivateRoutes = () => {
   const { loggedInUser } = useContext(LoggedInUserContext);
@@ -45,7 +51,7 @@ const PrivateRoutes = () => {
           )
         );
       })}
-      <Route path="*" element={<h1>404 - Not Found</h1>} />
+      <Route path="*" element={<Header>404 - Not Found</Header>} />
     </Routes>
   );
 };

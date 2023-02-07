@@ -8,12 +8,18 @@ import React, {
   useState,
 } from 'react';
 import { CellProps, Column, Row } from 'react-table';
+import styled from 'styled-components';
 import { deletePermission, updatePermission } from '../../auth/permissions';
 import { LoggedInUserContext, User, UsersContext } from '../../data/users';
 import XButton from '../buttons/XButton';
 import UserDetails from '../details/UserDetails';
+import { buttonStyles } from '../styles/mixins';
 import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
+
+const Button = styled.button`
+  ${buttonStyles}
+`;
 
 type UsersTableProps = {
   onDeleteClicked: (user: User) => void;
@@ -103,9 +109,9 @@ const UsersTable: React.FC<UsersTableProps> = ({
               onEmailClicked(user);
             }}
           />
-          <button {...row.getToggleRowExpandedProps()}>
+          <Button {...row.getToggleRowExpandedProps()}>
             {row.isExpanded ? '👇' : '👉'}
-          </button>
+          </Button>
         </>
       );
     },

@@ -7,7 +7,17 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import styled from 'styled-components';
 import { emptySchool, School } from '../../data/schools';
+import { buttonStyles, formStyles } from '../styles/mixins';
+
+const Button = styled.button`
+  ${buttonStyles}
+`;
+
+const Form = styled.form`
+  ${formStyles}
+`;
 
 type CreateSchoolFormProps = {
   defaultSchool?: School;
@@ -42,7 +52,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
 
   return (
     <>
-      <form onSubmit={onFormSubmit}>
+      <Form onSubmit={onFormSubmit}>
         <label>
           Name:
           <input
@@ -142,17 +152,17 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
           />
         </label>
 
-        <button type="submit" data-testid={'button-submit'}>
+        <Button type="submit" data-testid={'button-submit'}>
           Submit
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           data-testid={'button-cancel'}
           onClick={onFormCancel}
         >
           Cancel
-        </button>
-      </form>
+        </Button>
+      </Form>
     </>
   );
 };

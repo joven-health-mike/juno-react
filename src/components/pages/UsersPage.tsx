@@ -1,6 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components';
 import {
   createPermission,
   deletePermission,
@@ -16,6 +17,15 @@ import CreateUserModal from '../modals/CreateUserModal';
 import EditUserModal from '../modals/EditUserModal';
 import Navbar from '../navbar/Navbar';
 import UsersTable from '../tables/UsersTable';
+import { buttonStyles, h1Styles } from '../styles/mixins';
+
+const Button = styled.button`
+  ${buttonStyles}
+`;
+
+const Header = styled.h1`
+  ${h1Styles}
+`;
 
 const UsersPage = () => {
   const {
@@ -77,16 +87,16 @@ const UsersPage = () => {
       <nav>
         <Navbar />
       </nav>
-      <h1>Users</h1>
+      <Header>Users</Header>
       <>
         {isCreateUserAllowed && (
           <>
-            <button
+            <Button
               type="button"
               onClick={() => setIsCreateUserModalOpen(true)}
             >
               Add User
-            </button>
+            </Button>
             <CreateUserModal
               isOpen={isCreateUserModalOpen}
               onUserAdded={handleUserAdded}

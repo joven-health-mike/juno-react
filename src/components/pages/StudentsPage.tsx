@@ -1,6 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components';
 import {
   createPermission,
   deletePermission,
@@ -18,6 +19,15 @@ import CreateStudentModal from '../modals/CreateStudentModal';
 import EditStudentModal from '../modals/EditStudentModal';
 import Navbar from '../navbar/Navbar';
 import StudentsTable from '../tables/StudentsTable';
+import { buttonStyles, h1Styles } from '../styles/mixins';
+
+const Button = styled.button`
+  ${buttonStyles}
+`;
+
+const Header = styled.h1`
+  ${h1Styles}
+`;
 
 const StudentsPage = () => {
   const {
@@ -101,16 +111,16 @@ const StudentsPage = () => {
       <nav>
         <Navbar />
       </nav>
-      <h1>Students</h1>
+      <Header>Students</Header>
       <>
         {isCreateStudentAllowed && (
           <>
-            <button
+            <Button
               type="button"
               onClick={() => setIsCreateStudentModalOpen(true)}
             >
               Add Student
-            </button>
+            </Button>
             <CreateStudentModal
               isOpen={isCreateStudentModalOpen}
               onStudentAdded={handleStudentAdded}

@@ -8,6 +8,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import styled from 'styled-components';
 import {
   Appointment,
   emptyAppointment,
@@ -33,6 +34,15 @@ import SelectList, {
   SelectTypeList,
   SelectUserList,
 } from '../selectList/SelectList';
+import { buttonStyles, formStyles } from '../styles/mixins';
+
+const Button = styled.button`
+  ${buttonStyles}
+`;
+
+const Form = styled.form`
+  ${formStyles}
+`;
 
 type CreateAppointmentFormProps = {
   defaultAppointment?: Appointment;
@@ -214,7 +224,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   };
 
   return (
-    <form onSubmit={onFormSubmit}>
+    <Form onSubmit={onFormSubmit}>
       <label>
         Start Time:
         <DateSelector
@@ -324,17 +334,17 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
         </>
       )}
 
-      <button type="submit" data-testid={'button-submit'}>
+      <Button type="submit" data-testid={'button-submit'}>
         Submit
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
         data-testid={'button-cancel'}
         onClick={onFormCancel}
       >
         Cancel
-      </button>
-    </form>
+      </Button>
+    </Form>
   );
 };
 

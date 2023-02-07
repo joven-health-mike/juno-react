@@ -9,6 +9,7 @@ import React, {
   useState,
 } from 'react';
 import { CellProps, Column, Row } from 'react-table';
+import styled from 'styled-components';
 import { deletePermission, updatePermission } from '../../auth/permissions';
 import { Appointment, AppointmentsContext } from '../../data/appointments';
 import { CounselorsContext } from '../../data/counselors';
@@ -16,8 +17,13 @@ import { LoggedInUserContext } from '../../data/users';
 import { formatDate, formatTime } from '../../utils/DateUtils';
 import XButton from '../buttons/XButton';
 import AppointmentDetails from '../details/AppointmentDetails';
+import { buttonStyles } from '../styles/mixins';
 import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
+
+const Button = styled.button`
+  ${buttonStyles}
+`;
 
 type AppointmentsTableProps = {
   onDeleteClicked: (appointment: Appointment) => void;
@@ -154,9 +160,9 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
               }}
             />
           )}
-          <button {...row.getToggleRowExpandedProps()}>
+          <Button {...row.getToggleRowExpandedProps()}>
             {row.isExpanded ? '👇' : '👉'}
-          </button>
+          </Button>
         </>
       );
     },

@@ -14,11 +14,30 @@ import {
   usePagination,
   useSortBy,
 } from 'react-table';
+import styled from 'styled-components';
 import { User } from '../../data/users';
+import { buttonStyles, spanStyles } from '../styles/mixins';
 import { TableAppointment } from './AppointmentsTable';
 import { TableCounselor } from './CounselorsTable';
 import { TableSchool } from './SchoolsTable';
 import { TableStudent } from './StudentsTable';
+
+const Button = styled.button`
+  ${buttonStyles}
+`;
+
+const Wrapper = styled.span`
+  ${spanStyles}
+`;
+
+const TableHeader = styled.th`
+  padding: 5px;
+  border: 1px solid;
+  margin: 10px;
+  width: 99%;
+  background-color: #385aa8;
+  color: whitesmoke;
+`;
 
 type DataTableData =
   | TableAppointment[]
@@ -88,24 +107,24 @@ const DataTable: React.FC<DataTableProps> = ({
         />
       </table>
       <div className="pagination">
-        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+        <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {'<<'}
-        </button>{' '}
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+        </Button>{' '}
+        <Button onClick={() => previousPage()} disabled={!canPreviousPage}>
           {'<'}
-        </button>{' '}
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
+        </Button>{' '}
+        <Button onClick={() => nextPage()} disabled={!canNextPage}>
           {'>'}
-        </button>{' '}
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+        </Button>{' '}
+        <Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
           {'>>'}
-        </button>{' '}
-        <span>
+        </Button>{' '}
+        <Wrapper>
           Page{' '}
           <strong>
             {pageIndex + 1} of {pageOptions.length}
           </strong>{' '}
-        </span>
+        </Wrapper>
         <select
           value={pageSize}
           onChange={e => {
@@ -168,13 +187,13 @@ const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ column }) => {
     column.getSortByToggleProps()
   );
   return (
-    <th className={'jovenTh'} {...restColumn}>
+    <TableHeader className={'jovenTh'} {...restColumn}>
       {column.render('Header')}
-      <span>
+      <Wrapper>
         {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-      </span>
+      </Wrapper>
       {column.canFilter && <div>{column.render('Filter')}</div>}
-    </th>
+    </TableHeader>
   );
 };
 

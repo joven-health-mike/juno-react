@@ -10,7 +10,13 @@ import {
   FaUserFriends,
 } from 'react-icons/fa';
 import { IoMdLogOut, IoMdBusiness, IoMdContacts } from 'react-icons/io';
+import styled from 'styled-components';
 import image from '../../assets/Logo-192sq-alphabg.png';
+
+const Image = styled.img`
+  height: 19px;
+  width: 19px;
+`;
 
 export type NavItem = {
   title: string;
@@ -21,7 +27,7 @@ export type NavItem = {
 export const allNavItems: NavItem[] = [
   {
     title: 'Joven Health',
-    icon: <img src={image} alt="logo" />,
+    icon: <Image src={image} alt="logo" />,
     path: '/',
   },
   {

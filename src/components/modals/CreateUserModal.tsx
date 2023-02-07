@@ -1,7 +1,13 @@
 import React from 'react';
 import Modal from 'react-modal';
+import styled from 'styled-components';
 import { User } from '../../data/users';
 import CreateUserForm from '../forms/CreateUserForm';
+import { h1Styles } from '../styles/mixins';
+
+const Header = styled.h1`
+  ${h1Styles}
+`;
 
 type CreateUserModalProps = {
   isOpen: boolean;
@@ -30,7 +36,7 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
         className={'modal'}
         overlayClassName={'overlay'}
       >
-        <h1>Create User</h1>
+        <Header>Create User</Header>
         <CreateUserForm onSubmit={onFormSubmit} onCancel={onFormCancel} />
       </Modal>
     </div>

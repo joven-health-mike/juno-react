@@ -2,8 +2,14 @@
 
 import React from 'react';
 import Modal from 'react-modal';
+import styled from 'styled-components';
 import { Appointment } from '../../data/appointments';
 import AppointmentDetails from '../details/AppointmentDetails';
+import { h1Styles } from '../styles/mixins';
+
+const Header = styled.h1`
+  ${h1Styles}
+`;
 
 type AppointmentDetailsModalProps = {
   isOpen: boolean;
@@ -29,7 +35,7 @@ const AppointmentDetailsModal: React.FC<AppointmentDetailsModalProps> = ({
       className={'modal'}
       overlayClassName={'overlay'}
     >
-      <h1>Appointment Details</h1>
+      <Header>Appointment Details</Header>
       <AppointmentDetails
         appointment={appointment}
         onCancelAppointmentClicked={onDeleteClicked}

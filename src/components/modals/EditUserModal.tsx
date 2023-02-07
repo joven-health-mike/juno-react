@@ -2,8 +2,14 @@
 
 import React from 'react';
 import Modal from 'react-modal';
+import styled from 'styled-components';
 import { User } from '../../data/users';
 import CreateUserForm from '../forms/CreateUserForm';
+import { h1Styles } from '../styles/mixins';
+
+const Header = styled.h1`
+  ${h1Styles}
+`;
 
 type EditUserModalProps = {
   isOpen: boolean;
@@ -33,7 +39,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
       className={'modal'}
       overlayClassName={'overlay'}
     >
-      <h1>Edit User</h1>
+      <Header>Edit User</Header>
       <CreateUserForm
         onSubmit={onFormSubmit}
         onCancel={onFormCancel}

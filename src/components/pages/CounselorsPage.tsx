@@ -1,6 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components';
 import {
   createPermission,
   deletePermission,
@@ -16,6 +17,15 @@ import CreateCounselorModal from '../modals/CreateCounselorModal';
 import EditCounselorModal from '../modals/EditCounselorModal';
 import Navbar from '../navbar/Navbar';
 import CounselorsTable from '../tables/CounselorsTable';
+import { buttonStyles, h1Styles } from '../styles/mixins';
+
+const Button = styled.button`
+  ${buttonStyles}
+`;
+
+const Header = styled.h1`
+  ${h1Styles}
+`;
 
 const CounselorsPage: React.FC = () => {
   const {
@@ -92,16 +102,16 @@ const CounselorsPage: React.FC = () => {
       <nav>
         <Navbar />
       </nav>
-      <h1>Counselors</h1>
+      <Header>Counselors</Header>
       <>
         {isCreateCounselorAllowed && (
           <>
-            <button
+            <Button
               type="button"
               onClick={() => setIsCreateCounselorModalOpen(true)}
             >
               Add Counselor
-            </button>
+            </Button>
             <CreateCounselorModal
               isOpen={isCreateCounselorModalOpen}
               onCounselorAdded={handleCounselorAdded}

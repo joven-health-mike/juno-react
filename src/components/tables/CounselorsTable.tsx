@@ -8,13 +8,19 @@ import React, {
   useState,
 } from 'react';
 import { CellProps, Column, Row } from 'react-table';
+import styled from 'styled-components';
 import { deletePermission, updatePermission } from '../../auth/permissions';
 import { Counselor, CounselorsContext } from '../../data/counselors';
 import { LoggedInUserContext } from '../../data/users';
 import XButton from '../buttons/XButton';
 import CounselorDetails from '../details/CounselorDetails';
+import { buttonStyles } from '../styles/mixins';
 import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
+
+const Button = styled.button`
+  ${buttonStyles}
+`;
 
 type CounselorsTableProps = {
   onDeleteClicked: (counselor: Counselor) => void;
@@ -130,9 +136,9 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
               onOpenFileClicked(counselor);
             }}
           />
-          <button {...row.getToggleRowExpandedProps()}>
+          <Button {...row.getToggleRowExpandedProps()}>
             {row.isExpanded ? '👇' : '👉'}
-          </button>
+          </Button>
         </>
       );
     },
