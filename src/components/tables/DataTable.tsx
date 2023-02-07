@@ -16,7 +16,7 @@ import {
 } from 'react-table';
 import styled from 'styled-components';
 import { User } from '../../data/users';
-import { buttonStyles, spanStyles } from '../styles/mixins';
+import { buttonStyles, spanStyles, selectStyles } from '../styles/mixins';
 import { TableAppointment } from './AppointmentsTable';
 import { TableCounselor } from './CounselorsTable';
 import { TableSchool } from './SchoolsTable';
@@ -28,6 +28,10 @@ const Button = styled.button`
 
 const Wrapper = styled.span`
   ${spanStyles}
+`;
+
+const Select = styled.select`
+  ${selectStyles}
 `;
 
 const TableHeader = styled.th`
@@ -125,7 +129,7 @@ const DataTable: React.FC<DataTableProps> = ({
             {pageIndex + 1} of {pageOptions.length}
           </strong>{' '}
         </Wrapper>
-        <select
+        <Select
           value={pageSize}
           onChange={e => {
             setPageSize(Number(e.target.value));
@@ -136,7 +140,7 @@ const DataTable: React.FC<DataTableProps> = ({
               Show {pageSize}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
     </>
   );

@@ -45,6 +45,11 @@ const inputStyles = css`
   margin-bottom: 20px;
 `;
 
+const selectStyles = css`
+  ${inputStyles}
+  align-self: flex-start;
+`;
+
 export {
   buttonStyles,
   h1Styles,
@@ -52,4 +57,5 @@ export {
   spanStyles,
   formStyles,
   inputStyles,
+  selectStyles,
 };
