@@ -1,9 +1,9 @@
 import React from 'react';
-import Modal from 'react-modal';
 import styled from 'styled-components';
 import { Student } from '../../data/students';
 import CreateStudentForm from '../forms/CreateStudentForm';
 import { h1Styles } from '../styles/mixins';
+import { BaseModal as Modal } from './BaseModal';
 
 const Header = styled.h1`
   ${h1Styles}
@@ -30,12 +30,7 @@ const CreateStudentModal: React.FC<CreateStudentModalProps> = ({
 
   return (
     <div>
-      <Modal
-        isOpen={isOpen}
-        onRequestClose={onClose}
-        className={'modal'}
-        overlayClassName={'overlay'}
-      >
+      <Modal isOpen={isOpen} onRequestClose={onClose}>
         <Header>Create Student</Header>
         <CreateStudentForm onSubmit={onFormSubmit} onCancel={onFormCancel} />
       </Modal>

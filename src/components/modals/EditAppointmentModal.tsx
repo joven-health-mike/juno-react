@@ -1,11 +1,11 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from 'react';
-import Modal from 'react-modal';
 import styled from 'styled-components';
 import { Appointment } from '../../data/appointments';
 import CreateAppointmentForm from '../forms/CreateAppointmentForm';
 import { h1Styles } from '../styles/mixins';
+import { BaseModal as Modal } from './BaseModal';
 
 const Header = styled.h1`
   ${h1Styles}
@@ -33,12 +33,7 @@ const EditAppointmentModal: React.FC<EditAppointmentModalProps> = ({
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={onClose}
-      className={'modal'}
-      overlayClassName={'overlay'}
-    >
+    <Modal isOpen={isOpen} onRequestClose={onClose}>
       <Header>Edit Appointment</Header>
       <CreateAppointmentForm
         onSubmit={onFormSubmit}
