@@ -77,7 +77,7 @@ const SchoolsPage = () => {
   };
 
   return (
-    <div className={'mainContainer'}>
+    <>
       <nav>
         <Navbar />
       </nav>
@@ -112,7 +112,7 @@ const SchoolsPage = () => {
           onEmailClicked={onSchoolEmailClicked}
         />
       </>
-    </div>
+    </>
   );
 };
 

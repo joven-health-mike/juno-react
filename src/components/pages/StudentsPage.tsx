@@ -107,7 +107,7 @@ const StudentsPage = () => {
   };
 
   return (
-    <div className={'mainContainer'}>
+    <>
       <nav>
         <Navbar />
       </nav>
@@ -150,7 +150,7 @@ const StudentsPage = () => {
           onAppointmentClicked={onAppointmentStudentClicked}
         />
       </>
-    </div>
+    </>
   );
 };
 

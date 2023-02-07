@@ -17,6 +17,10 @@ const Header = styled.h1`
   ${h1Styles}
 `;
 
+const Container = styled.div`
+  margin-left: 250px;
+`;
+
 const PrivateRoutes = () => {
   const { loggedInUser } = useContext(LoggedInUserContext);
   const role = loggedInUser.role;
@@ -47,7 +51,11 @@ const PrivateRoutes = () => {
       {AvailableRoutes.map((route, index) => {
         return (
           isRouteAllowed(route.url as AvailableRoute) && (
-            <Route key={index} path={route.url} element={route.element} />
+            <Route
+              key={index}
+              path={route.url}
+              element={<Container>{route.element}</Container>}
+            />
           )
         );
       })}

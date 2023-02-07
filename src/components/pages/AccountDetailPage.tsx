@@ -18,14 +18,14 @@ const AccountDetailPage: React.FC<AccountDetailPageProps> = () => {
   const envMessage = process.env.REACT_APP_HELLO_WORLD;
 
   return (
-    <div className={'mainContainer'}>
+    <>
       <nav>
         <Navbar />
       </nav>
       <Header>Account Details</Header>
       <UserDetails user={loggedInUser} />
       <h2>{envMessage}</h2>
-    </div>
+    </>
   );
 };
 

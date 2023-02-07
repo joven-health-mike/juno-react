@@ -183,7 +183,7 @@ const CalendarPage: React.FC = () => {
   }, [appointments]);
 
   return (
-    <div className={'mainContainer'}>
+    <>
       <nav>
         <Navbar />
       </nav>
@@ -231,7 +231,7 @@ const CalendarPage: React.FC = () => {
         onDeleteClicked={onAppointmentDeleteClicked}
         onEmailClicked={onAppointmentEmailClicked}
       />
-    </div>
+    </>
   );
 };
 
