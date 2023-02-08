@@ -2,6 +2,7 @@
 
 import React, { FC, useState } from 'react';
 import { AppointmentService } from '../services/appointment.service';
+import { AxiosResponse } from 'axios';
 import { ContextData } from './ContextData';
 import { DataProviderProps } from './DataProviderProps';
 import { School } from './schools';
@@ -107,11 +108,18 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
     },
     add: async function (data: Appointment): Promise<void> {
       try {
-        const { data: appointment } = await service.create(data);
-        appointment.participants = data.participants;
-        appointment.counselor = data.counselor;
-        appointment.school = data.school;
-        setAppointments([...appointments, appointment]);
+        // since recurring meetings create multiple appointments, this response actually returns an array of appointments.
+        const { data: appointment } = (await service.create(
+          data
+        )) as AxiosResponse<unknown>;
+        const apptArray = appointment as Appointment[];
+        apptArray.forEach(appt => {
+          appt.participants = data.participants;
+          appt.school = data.school;
+          appt.counselor = data.counselor;
+        });
+        console.log(JSON.stringify(apptArray));
+        setAppointments([...appointments, ...apptArray]);
       } catch (error) {
         console.error(error);
       }
