@@ -1,10 +1,10 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from 'react';
-import Modal from 'react-modal';
+import ReactModal from 'react-modal';
 import styled from 'styled-components';
 
-const StyledModal = styled(Modal).attrs({
+const StyledModal = styled(ReactModal).attrs({
   portalClassName: 'overlay',
 })`
   position: absolute;
@@ -38,11 +38,7 @@ type ModalProps = {
   children: JSX.Element | JSX.Element[];
 };
 
-const BaseModal: React.FC<ModalProps> = ({
-  isOpen,
-  onRequestClose,
-  children,
-}) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onRequestClose, children }) => {
   return (
     <StyledModal isOpen={isOpen} onRequestClose={onRequestClose}>
       {children}
@@ -50,4 +46,4 @@ const BaseModal: React.FC<ModalProps> = ({
   );
 };
 
-export { BaseModal };
+export default Modal;

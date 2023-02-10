@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Appointment } from '../../data/appointments';
 import CreateAppointmentForm from '../forms/CreateAppointmentForm';
 import { h1Styles } from '../styles/mixins';
-import { BaseModal as Modal } from './BaseModal';
+import Modal from './Modal';
 
 const Header = styled.h1`
   ${h1Styles}

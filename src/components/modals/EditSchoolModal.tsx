@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { School } from '../../data/schools';
 import CreateSchoolForm from '../forms/CreateSchoolForm';
 import { h1Styles } from '../styles/mixins';
-import { BaseModal as Modal } from './BaseModal';
+import Modal from './Modal';
 
 const Header = styled.h1`
   ${h1Styles}
