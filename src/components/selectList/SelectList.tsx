@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import styled from 'styled-components';
 import {
   AppointmentType,
   AppointmentTypes,
@@ -17,6 +18,11 @@ import {
   User,
   UsersContext,
 } from '../../data/users';
+import { selectStyles } from '../styles/mixins';
+
+const Select = styled.select`
+  ${selectStyles}
+`;
 
 type SelectListProps = {
   labelText: string;
@@ -36,7 +42,7 @@ const SelectList = ({
   };
 
   return (
-    <select value={value} onChange={e => itemChanged(e.target.value)}>
+    <Select value={value} onChange={e => itemChanged(e.target.value)}>
       <option value={-1} key={labelText}>
         {labelText}
       </option>
@@ -47,7 +53,7 @@ const SelectList = ({
           </option>
         );
       })}
-    </select>
+    </Select>
   );
 };
 
@@ -74,7 +80,7 @@ export const SelectMultipleList = ({
   };
 
   return (
-    <select multiple onChange={itemsChanged}>
+    <Select multiple onChange={itemsChanged}>
       <option value={-1} key={labelText}>
         {labelText}
       </option>
@@ -94,7 +100,7 @@ export const SelectMultipleList = ({
           );
         }
       })}
-    </select>
+    </Select>
   );
 };
 

@@ -16,7 +16,7 @@ import {
 } from 'react-table';
 import styled from 'styled-components';
 import { User } from '../../data/users';
-import { buttonStyles, spanStyles } from '../styles/mixins';
+import { buttonStyles, spanStyles, selectStyles } from '../styles/mixins';
 import { TableAppointment } from './AppointmentsTable';
 import { TableCounselor } from './CounselorsTable';
 import { TableSchool } from './SchoolsTable';
@@ -30,6 +30,18 @@ const Wrapper = styled.span`
   ${spanStyles}
 `;
 
+const Select = styled.select`
+  ${selectStyles}
+`;
+
+const Table = styled.table`
+  padding: 5px;
+  border: 1px solid;
+  margin: 10px;
+  width: 99%;
+  table-layout: fixed;
+`;
+
 const TableHeader = styled.th`
   padding: 5px;
   border: 1px solid;
@@ -37,6 +49,28 @@ const TableHeader = styled.th`
   width: 99%;
   background-color: #385aa8;
   color: whitesmoke;
+`;
+
+const TableRow = styled.tr`
+  padding: 5px;
+
+  &:nth-child(even) {
+    background-color: #77caf2;
+  }
+
+  &:nth-child(odd) {
+    background-color: #4891ce;
+  }
+
+  &:hover {
+    background-color: #f6f740;
+  }
+`;
+
+const TableCell = styled.td`
+  padding: 5px;
+  border: 1px solid;
+  text-align: center;
 `;
 
 type DataTableData =
@@ -95,7 +129,7 @@ const DataTable: React.FC<DataTableProps> = ({
 
   return (
     <>
-      <table className={'jovenTable'} {...getTableProps()}>
+      <Table {...getTableProps()}>
         <HeaderGroups headerGroups={headerGroups} />
         <BodyRows
           getTableBodyProps={getTableBodyProps}
@@ -105,7 +139,7 @@ const DataTable: React.FC<DataTableProps> = ({
           renderRowSubComponent={renderRowSubComponent}
           addNewItem={addNewItem}
         />
-      </table>
+      </Table>
       <div className="pagination">
         <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {'<<'}
@@ -125,7 +159,7 @@ const DataTable: React.FC<DataTableProps> = ({
             {pageIndex + 1} of {pageOptions.length}
           </strong>{' '}
         </Wrapper>
-        <select
+        <Select
           value={pageSize}
           onChange={e => {
             setPageSize(Number(e.target.value));
@@ -136,7 +170,7 @@ const DataTable: React.FC<DataTableProps> = ({
               Show {pageSize}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
     </>
   );
@@ -168,12 +202,12 @@ type HeaderRowProps = {
 const HeaderRow: React.FC<HeaderRowProps> = ({ headerGroup }) => {
   const { ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps();
   return (
-    <tr className={'jovenTr'} {...restHeaderGroupProps}>
+    <TableRow {...restHeaderGroupProps}>
       {headerGroup.headers.map(column => {
         const { key } = column.getHeaderProps();
         return <TableHeaderCell key={key} column={column} />;
       })}
-    </tr>
+    </TableRow>
   );
 };
 
@@ -187,7 +221,7 @@ const TableHeaderCell: React.FC<TableHeaderCellProps> = ({ column }) => {
     column.getSortByToggleProps()
   );
   return (
-    <TableHeader className={'jovenTh'} {...restColumn}>
+    <TableHeader {...restColumn}>
       {column.render('Header')}
       <Wrapper>
         {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
@@ -247,12 +281,12 @@ type BodyRowProps = {
 
 const BodyRow: React.FC<BodyRowProps> = ({ row }) => {
   return (
-    <tr className={'jovenTr'}>
+    <TableRow>
       {row.cells.map(cell => {
         const { key } = cell.getCellProps();
         return <BodyRowCell key={key} cell={cell} />;
       })}
-    </tr>
+    </TableRow>
   );
 };
 
@@ -272,11 +306,11 @@ const ExpandableBodyRow: React.FC<ExpandableBodyRowProps> = ({
     renderRowSubComponent = () => <></>;
   }
   return (
-    <tr className={'jovenTr'}>
-      <td className={'jovenTd'} colSpan={visibleColumns.length}>
+    <TableRow>
+      <TableCell colSpan={visibleColumns.length}>
         {renderRowSubComponent(row)}
-      </td>
-    </tr>
+      </TableCell>
+    </TableRow>
   );
 };
 
@@ -291,15 +325,11 @@ const AddButtonRow: React.FC<AddButtonRowProps> = ({
 }) => {
   return (
     <>
-      <tr className={'jovenTr'}>
-        <td
-          className={'jovenTd'}
-          colSpan={visibleColumns.length}
-          onClick={addNewItem}
-        >
+      <TableRow>
+        <TableCell colSpan={visibleColumns.length} onClick={addNewItem}>
           +
-        </td>
-      </tr>
+        </TableCell>
+      </TableRow>
     </>
   );
 };
@@ -311,11 +341,7 @@ type BodyRowCellProps = {
 
 const BodyRowCell: React.FC<BodyRowCellProps> = ({ cell }) => {
   const { ...restCellProps } = cell.getCellProps();
-  return (
-    <td className={'jovenTd'} {...restCellProps}>
-      {cell.render('Cell')}
-    </td>
-  );
+  return <TableCell {...restCellProps}>{cell.render('Cell')}</TableCell>;
 };
 
 export default DataTable;

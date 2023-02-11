@@ -34,7 +34,12 @@ import SelectList, {
   SelectTypeList,
   SelectUserList,
 } from '../selectList/SelectList';
-import { buttonStyles, formStyles } from '../styles/mixins';
+import {
+  buttonStyles,
+  formStyles,
+  inputStyles,
+  labelStyles,
+} from '../styles/mixins';
 
 const Button = styled.button`
   ${buttonStyles}
@@ -42,6 +47,14 @@ const Button = styled.button`
 
 const Form = styled.form`
   ${formStyles}
+`;
+
+const Input = styled.input`
+  ${inputStyles}
+`;
+
+const Label = styled.label`
+  ${labelStyles}
 `;
 
 type CreateAppointmentFormProps = {
@@ -225,7 +238,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
   return (
     <Form onSubmit={onFormSubmit}>
-      <label>
+      <Label>
         Start Time:
         <DateSelector
           selected={new Date(appointment.start)}
@@ -234,8 +247,8 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
           }
           label={'Start Time'}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         End Time:
         <DateSelector
           selected={new Date(appointment.end)}
@@ -244,43 +257,43 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
           }
           label={'End Time'}
         />
-      </label>
+      </Label>
       {shouldShowCounselor && (
-        <label>
+        <Label>
           Counselor:{' '}
           <SelectCounselorList
             selectedIndex={counselorSelectionIndex}
             onCounselorChanged={onCounselorChanged}
           />
-        </label>
+        </Label>
       )}
-      <label>
+      <Label>
         Type:{' '}
         <SelectTypeList
           value={typeSelectionIndex}
           onTypeChanged={onTypeChanged}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Participants:{' '}
         <SelectParticipants
           selectedParticipants={participants}
           onParticipantsSelected={onParticipantsSelected}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Is Recurring:{' '}
-        <input
+        <Input
           type="checkbox"
           checked={appointment.isRecurring}
           onChange={handleIsRecurringChange}
         />
-      </label>
+      </Label>
       {appointment.isRecurring && (
         <>
-          <label>
+          <Label>
             Num Occurrences:{' '}
-            <input
+            <Input
               data-testid={'input-numOccurrences'}
               type="number"
               min={2}
@@ -296,10 +309,10 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
                 });
               }}
             />
-          </label>
-          <label>
+          </Label>
+          <Label>
             Repeat For Num:{' '}
-            <input
+            <Input
               data-testid={'input-repeatForNum'}
               type="number"
               min={1}
@@ -315,8 +328,8 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
                 });
               }}
             />
-          </label>
-          <label>
+          </Label>
+          <Label>
             Repeat For Frequency:{' '}
             <SelectList
               labelText="Select a Frequency"
@@ -330,7 +343,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
                 );
               }}
             />
-          </label>
+          </Label>
         </>
       )}
 

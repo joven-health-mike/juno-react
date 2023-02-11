@@ -83,7 +83,7 @@ const UsersPage = () => {
   };
 
   return (
-    <div className={'mainContainer'}>
+    <>
       <nav>
         <Navbar />
       </nav>
@@ -118,7 +118,7 @@ const UsersPage = () => {
           onEmailClicked={onUserEmailClicked}
         />
       </>
-    </div>
+    </>
   );
 };
 

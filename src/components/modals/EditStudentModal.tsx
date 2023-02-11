@@ -1,11 +1,11 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from 'react';
-import Modal from 'react-modal';
 import styled from 'styled-components';
 import { Student } from '../../data/students';
 import CreateStudentForm from '../forms/CreateStudentForm';
 import { h1Styles } from '../styles/mixins';
+import Modal from './Modal';
 
 const Header = styled.h1`
   ${h1Styles}
@@ -33,12 +33,7 @@ const EditStudentModal: React.FC<EditStudentModalProps> = ({
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={onClose}
-      className={'modal'}
-      overlayClassName={'overlay'}
-    >
+    <Modal isOpen={isOpen} onRequestClose={onClose}>
       <Header>Edit Student</Header>
       <CreateStudentForm
         onSubmit={onFormSubmit}

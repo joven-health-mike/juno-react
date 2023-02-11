@@ -98,7 +98,7 @@ const CounselorsPage: React.FC = () => {
   };
 
   return (
-    <div className={'mainContainer'}>
+    <>
       <nav>
         <Navbar />
       </nav>
@@ -135,7 +135,7 @@ const CounselorsPage: React.FC = () => {
           onOpenFileClicked={onCounselorFileOpenClicked}
         />
       </>
-    </div>
+    </>
   );
 };
 

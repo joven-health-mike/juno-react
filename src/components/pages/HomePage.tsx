@@ -42,7 +42,7 @@ const HomePage: React.FC = () => {
   const { loggedInUser } = useContext(LoggedInUserContext);
 
   return (
-    <div className={'mainContainer'}>
+    <>
       <nav>
         <Navbar />
       </nav>
@@ -54,7 +54,7 @@ const HomePage: React.FC = () => {
       {loggedInUser.role === ('COUNSELOR' as Role) && <CounselorView />}
       {loggedInUser.role === ('STUDENT' as Role) && <StudentView />}
       {loggedInUser.role === ('GUARDIAN' as Role) && <GuardianView />}
-    </div>
+    </>
   );
 };
 

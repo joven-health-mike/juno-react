@@ -12,7 +12,12 @@ import { Counselor, emptyCounselor } from '../../data/counselors';
 import { Role } from '../../services/user.service';
 import { AvailableTimeZone, TIME_ZONES } from '../../utils/DateUtils';
 import SelectList from '../selectList/SelectList';
-import { buttonStyles, formStyles } from '../styles/mixins';
+import {
+  buttonStyles,
+  formStyles,
+  inputStyles,
+  labelStyles,
+} from '../styles/mixins';
 
 const Button = styled.button`
   ${buttonStyles}
@@ -20,6 +25,14 @@ const Button = styled.button`
 
 const Form = styled.form`
   ${formStyles}
+`;
+
+const Input = styled.input`
+  ${inputStyles}
+`;
+
+const Label = styled.label`
+  ${labelStyles}
 `;
 
 type CreateCounselorFormProps = {
@@ -66,9 +79,9 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
   return (
     <>
       <Form onSubmit={onFormSubmit}>
-        <label>
+        <Label>
           First Name:{' '}
-          <input
+          <Input
             data-testid={'input-first-name'}
             type="text"
             placeholder="First Name"
@@ -79,10 +92,10 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
               setCounselor({ ...counselor, firstName: e.target.value });
             }}
           />
-        </label>
-        <label>
+        </Label>
+        <Label>
           Last Name:{' '}
-          <input
+          <Input
             data-testid={'input-last-name'}
             type="text"
             placeholder="Last Name"
@@ -93,10 +106,10 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
               setCounselor({ ...counselor, lastName: e.target.value });
             }}
           />
-        </label>
-        <label>
+        </Label>
+        <Label>
           Email:{' '}
-          <input
+          <Input
             data-testid={'input-email'}
             type="email"
             placeholder="Email"
@@ -107,10 +120,10 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
               setCounselor({ ...counselor, email: e.target.value })
             }
           />
-        </label>
-        <label>
+        </Label>
+        <Label>
           Username:{' '}
-          <input
+          <Input
             data-testid={'input-username'}
             type="text"
             placeholder="Username"
@@ -121,10 +134,10 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
               setCounselor({ ...counselor, username: e.target.value });
             }}
           />
-        </label>
-        <label>
+        </Label>
+        <Label>
           Phone:{' '}
-          <input
+          <Input
             data-testid={'input-phone'}
             type="phone"
             placeholder="Phone"
@@ -135,10 +148,10 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
               setCounselor({ ...counselor, phone: e.target.value });
             }}
           />
-        </label>
-        <label>
+        </Label>
+        <Label>
           Docs URL:{' '}
-          <input
+          <Input
             data-testid={'input-docsUrl'}
             type="URL"
             placeholder="Docs URL"
@@ -149,10 +162,10 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
               setCounselor({ ...counselor, docsUrl: e.target.value });
             }}
           />
-        </label>
-        <label>
+        </Label>
+        <Label>
           Room Link:{' '}
-          <input
+          <Input
             data-testid={'input-roomLink'}
             type="URL"
             placeholder="Room Link"
@@ -163,8 +176,8 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
               setRoomLink(e.target.value);
             }}
           />
-        </label>
-        <label>
+        </Label>
+        <Label>
           Time Zone:{' '}
           <SelectList
             labelText="Select a Time Zone"
@@ -176,7 +189,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
               );
             }}
           />
-        </label>
+        </Label>
 
         <Button type="submit" data-testid={'button-submit'}>
           Submit

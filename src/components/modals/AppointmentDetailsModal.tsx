@@ -1,11 +1,11 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React from 'react';
-import Modal from 'react-modal';
 import styled from 'styled-components';
 import { Appointment } from '../../data/appointments';
 import AppointmentDetails from '../details/AppointmentDetails';
 import { h1Styles } from '../styles/mixins';
+import Modal from './Modal';
 
 const Header = styled.h1`
   ${h1Styles}
@@ -29,12 +29,7 @@ const AppointmentDetailsModal: React.FC<AppointmentDetailsModalProps> = ({
   onRoomLinkClicked,
 }) => {
   return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={onClose}
-      className={'modal'}
-      overlayClassName={'overlay'}
-    >
+    <Modal isOpen={isOpen} onRequestClose={onClose}>
       <Header>Appointment Details</Header>
       <AppointmentDetails
         appointment={appointment}

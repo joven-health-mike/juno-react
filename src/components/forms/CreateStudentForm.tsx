@@ -18,7 +18,12 @@ import SelectList, {
   SelectCounselorList,
   SelectSchoolList,
 } from '../selectList/SelectList';
-import { buttonStyles, formStyles } from '../styles/mixins';
+import {
+  buttonStyles,
+  formStyles,
+  inputStyles,
+  labelStyles,
+} from '../styles/mixins';
 
 const Button = styled.button`
   ${buttonStyles}
@@ -26,6 +31,14 @@ const Button = styled.button`
 
 const Form = styled.form`
   ${formStyles}
+`;
+
+const Input = styled.input`
+  ${inputStyles}
+`;
+
+const Label = styled.label`
+  ${labelStyles}
 `;
 
 type CreateStudentFormProps = {
@@ -110,9 +123,9 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
 
   return (
     <Form onSubmit={onFormSubmit}>
-      <label>
+      <Label>
         First Name:
-        <input
+        <Input
           data-testid={'input-first-name'}
           type="text"
           placeholder="First Name"
@@ -123,10 +136,10 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
             setStudent({ ...student, firstName: e.target.value });
           }}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Last Name:
-        <input
+        <Input
           data-testid={'input-last-name'}
           type="text"
           placeholder="Last Name"
@@ -137,10 +150,10 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
             setStudent({ ...student, lastName: e.target.value });
           }}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Email:
-        <input
+        <Input
           data-testid={'input-email'}
           type="email"
           placeholder="Email"
@@ -151,10 +164,10 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
             setStudent({ ...student, email: e.target.value })
           }
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Username:
-        <input
+        <Input
           data-testid={'input-username'}
           type="text"
           placeholder="Username"
@@ -165,10 +178,10 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
             setStudent({ ...student, username: e.target.value });
           }}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Phone:
-        <input
+        <Input
           data-testid={'input-phone'}
           type="phone"
           placeholder="Phone"
@@ -179,10 +192,10 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
             setStudent({ ...student, phone: e.target.value });
           }}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Docs URL:
-        <input
+        <Input
           data-testid={'input-docsUrl'}
           type="URL"
           placeholder="Docs URL"
@@ -193,22 +206,22 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
             setStudent({ ...student, docsUrl: e.target.value });
           }}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Counselor:{' '}
         <SelectCounselorList
           selectedIndex={counselorSelectionIndex}
           onCounselorChanged={onCounselorChanged}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         School:{' '}
         <SelectSchoolList
           selectedIndex={schoolSelectionIndex}
           onSchoolChanged={onSchoolChanged}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Time Zone:{' '}
         <SelectList
           labelText="Select a Time Zone"
@@ -220,8 +233,8 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
             );
           }}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Status:{' '}
         <SelectList
           labelText="Select a Status"
@@ -235,7 +248,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
             );
           }}
         />
-      </label>
+      </Label>
 
       <Button type="submit" data-testid="button-submit">
         Submit

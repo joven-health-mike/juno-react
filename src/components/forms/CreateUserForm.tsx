@@ -18,7 +18,12 @@ import SelectList, {
   SelectCounselorList,
   SelectSchoolList,
 } from '../selectList/SelectList';
-import { buttonStyles, formStyles } from '../styles/mixins';
+import {
+  buttonStyles,
+  formStyles,
+  inputStyles,
+  labelStyles,
+} from '../styles/mixins';
 
 const Button = styled.button`
   ${buttonStyles}
@@ -26,6 +31,14 @@ const Button = styled.button`
 
 const Form = styled.form`
   ${formStyles}
+`;
+
+const Input = styled.input`
+  ${inputStyles}
+`;
+
+const Label = styled.label`
+  ${labelStyles}
 `;
 
 type CreateUserFormProps = {
@@ -130,9 +143,9 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
 
   return (
     <Form onSubmit={onFormSubmit}>
-      <label>
+      <Label>
         First Name:
-        <input
+        <Input
           data-testid={'input-first-name'}
           type="text"
           placeholder="First Name"
@@ -143,10 +156,10 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
             setUser({ ...user, firstName: e.target.value });
           }}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Last Name:
-        <input
+        <Input
           data-testid={'input-last-name'}
           type="text"
           placeholder="Last Name"
@@ -157,10 +170,10 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
             setUser({ ...user, lastName: e.target.value });
           }}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Email:
-        <input
+        <Input
           data-testid={'input-email'}
           type="email"
           placeholder="Email"
@@ -171,10 +184,10 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
             setUser({ ...user, email: e.target.value })
           }
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Username:
-        <input
+        <Input
           data-testid={'input-username'}
           type="text"
           placeholder="Username"
@@ -185,10 +198,10 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
             setUser({ ...user, username: e.target.value });
           }}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Phone:
-        <input
+        <Input
           data-testid={'input-phone'}
           type="phone"
           placeholder="Phone"
@@ -198,10 +211,10 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
             setUser({ ...user, phone: e.target.value });
           }}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Docs URL:
-        <input
+        <Input
           data-testid={'input-docsUrl'}
           type="URL"
           placeholder="Docs URL"
@@ -211,8 +224,8 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
             setUser({ ...user, docsUrl: e.target.value });
           }}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Time Zone:{' '}
         <SelectList
           labelText="Select a Time Zone"
@@ -224,8 +237,8 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
             );
           }}
         />
-      </label>
-      <label>
+      </Label>
+      <Label>
         Role:{' '}
         <SelectList
           labelText="Select a Role"
@@ -235,11 +248,11 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
             return onRoleChanged(ROLES[parseInt(item)] as Role);
           }}
         />
-      </label>
+      </Label>
       {isCounselor && (
-        <label>
+        <Label>
           Room Link:
-          <input
+          <Input
             data-testid={'input-counselor-roomLink'}
             type="URL"
             placeholder="Room Link"
@@ -249,42 +262,42 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
               setRoomLink(e.target.value);
             }}
           />
-        </label>
+        </Label>
       )}
       {isSchoolAdmin && (
-        <label>
+        <Label>
           School:{' '}
           <SelectSchoolList
             selectedIndex={schoolSelectionIndex}
             onSchoolChanged={onSchoolChanged}
           />
-        </label>
+        </Label>
       )}
       {isSchoolStaff && (
-        <label>
+        <Label>
           School:{' '}
           <SelectSchoolList
             selectedIndex={schoolSelectionIndex}
             onSchoolChanged={onSchoolChanged}
           />
-        </label>
+        </Label>
       )}
       {isStudent && (
         <>
-          <label>
+          <Label>
             Counselor:{' '}
             <SelectCounselorList
               selectedIndex={counselorSelectionIndex}
               onCounselorChanged={onCounselorChanged}
             />
-          </label>
-          <label>
+          </Label>
+          <Label>
             School:{' '}
             <SelectSchoolList
               selectedIndex={schoolSelectionIndex}
               onSchoolChanged={onSchoolChanged}
             />
-          </label>
+          </Label>
         </>
       )}
 

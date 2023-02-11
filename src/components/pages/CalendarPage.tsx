@@ -26,12 +26,16 @@ import {
 } from '../selectList/SelectList';
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import AppointmentDetailsModal from '../modals/AppointmentDetailsModal';
-import { h1Styles } from '../styles/mixins';
+import { h1Styles, labelStyles } from '../styles/mixins';
 import { LoggedInUserContext } from '../../data/users';
 import { createPermission, deletePermission } from '../../auth/permissions';
 
 const Header = styled.h1`
   ${h1Styles}
+`;
+
+const Label = styled.label`
+  ${labelStyles}
 `;
 
 const CalendarPage: React.FC = () => {
@@ -179,30 +183,30 @@ const CalendarPage: React.FC = () => {
   }, [appointments]);
 
   return (
-    <div className={'mainContainer'}>
+    <>
       <nav>
         <Navbar />
       </nav>
       <Header>Calendar</Header>
       {loggedInUser.role !== 'COUNSELOR' && counselors.length > 1 && (
-        <label>
+        <Label>
           Counselor:{' '}
           <SelectCounselorList
             selectedIndex={selectedCounselorIndex}
             onCounselorChanged={handleCounselorChange}
           />
-        </label>
+        </Label>
       )}
       {loggedInUser.role !== 'SCHOOL_ADMIN' &&
         loggedInUser.role !== 'SCHOOL_STAFF' &&
         schools.length > 1 && (
-          <label>
+          <Label>
             School:{' '}
             <SelectSchoolList
               selectedIndex={selectedSchoolIndex}
               onSchoolChanged={handleSchoolChange}
             />
-          </label>
+          </Label>
         )}
       {showCalendar && (
         <Calendar
@@ -227,7 +231,7 @@ const CalendarPage: React.FC = () => {
         onDeleteClicked={onAppointmentDeleteClicked}
         onEmailClicked={onAppointmentEmailClicked}
       />
-    </div>
+    </>
   );
 };
 

@@ -120,7 +120,7 @@ const AppointmentsPage: React.FC = () => {
   };
 
   return (
-    <div className={'mainContainer'}>
+    <>
       <nav>
         <Navbar />
       </nav>
@@ -157,7 +157,7 @@ const AppointmentsPage: React.FC = () => {
           />
         )}
       </>
-    </div>
+    </>
   );
 };
 
