@@ -24,12 +24,19 @@ const CreateAppointmentModal: React.FC<CreateAppointmentModalProps> = ({
   onAppointmentAdded,
   initialAppointment,
 }) => {
+  const onFormSubmit = (appointment: Appointment) => {
+    onAppointmentAdded(appointment);
+    onClose();
+  };
+  const onFormCancel = () => {
+    onClose();
+  };
   return (
     <Modal isOpen={isOpen} onRequestClose={onClose}>
       <Header>Create Appointment</Header>
       <CreateAppointmentForm
-        onSubmit={onAppointmentAdded}
-        onCancel={onClose}
+        onSubmit={onFormSubmit}
+        onCancel={onFormCancel}
         defaultAppointment={initialAppointment}
       />
     </Modal>
