@@ -1,5 +1,6 @@
 import React from 'react';
 import DatePicker from 'react-datepicker';
+import { Wrapper } from './styled';
 
 type DateSelectorProps = {
   selected: Date;
@@ -13,14 +14,16 @@ const DateSelector: React.FC<DateSelectorProps> = ({
   label,
 }) => {
   return (
-    <DatePicker
-      selected={selected}
-      onChange={onChange}
-      showTimeSelect
-      timeFormat="h:mm"
-      timeCaption={label}
-      dateFormat="MMMM d, yyyy h:mm aa"
-    />
+    <Wrapper>
+      <DatePicker
+        selected={selected}
+        onChange={onChange}
+        showTimeSelect
+        timeFormat="h:mm"
+        timeCaption={label}
+        dateFormat="MMMM d, yyyy h:mm aa"
+      />
+    </Wrapper>
   );
 };
 
