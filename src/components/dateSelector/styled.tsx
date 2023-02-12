@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { inputStyles } from '../styles/mixins';
 
 const Wrapper = styled.div`
   .react-datepicker__year-read-view--down-arrow,
@@ -708,6 +709,9 @@ const Wrapper = styled.div`
   }
 
   .react-datepicker__input-container {
+    input {
+      ${inputStyles}
+    }
     position: relative;
     display: inline-block;
     width: 100%;
