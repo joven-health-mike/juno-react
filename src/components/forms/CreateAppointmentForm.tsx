@@ -93,7 +93,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
       setAppointment(oldAppointment => {
         return {
           ...oldAppointment,
-          counselorId: loggedInUser.id,
+          counselorUserId: loggedInUser.id,
         };
       });
     }
