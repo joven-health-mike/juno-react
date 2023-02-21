@@ -26,7 +26,7 @@ const pagePermissions = {
   '/appointments': everyoneExceptClients,
   '/calendar': allRoles,
   '/counselors': everyoneExceptClients,
-  '/schools': jovenStaff,
+  '/schools': allRoles,
   '/students': everyoneExceptClients,
   '/users': adminsOnly,
   '/logout': allRoles,
