@@ -62,7 +62,7 @@ const SchoolsPage = () => {
   };
 
   const onSchoolDeleteClicked = (schoolToDelete: School) => {
-    if (isDeleteSchoolAllowed && window.confirm('Delete this user?')) {
+    if (isDeleteSchoolAllowed && window.confirm('Delete this school?')) {
       deleteSchool(schoolToDelete);
     }
   };
