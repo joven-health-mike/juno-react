@@ -29,6 +29,7 @@ type StudentsTableProps = {
   onDeleteClicked: (student: Student) => void;
   onEditClicked: (student: Student) => void;
   onAppointmentClicked: (student: Student) => void;
+  onOpenFileClicked: (student: Student) => void;
 };
 
 export type TableStudent = TableStudentSmall & {
@@ -40,6 +41,7 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
   onDeleteClicked,
   onEditClicked,
   onAppointmentClicked,
+  onOpenFileClicked,
 }) => {
   const { data: counselors } = useContext(CounselorsContext);
   const { data: schools } = useContext(SchoolsContext);
@@ -125,6 +127,15 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
               onAppointmentClicked(student);
             }}
           />
+          <XButton
+            text="📁"
+            title={`Open ${student.firstName}'s File`}
+            value={student.id}
+            onClick={(e: MouseEvent<HTMLButtonElement>) => {
+              e.preventDefault();
+              onOpenFileClicked(student);
+            }}
+          />
           <Button {...row.getToggleRowExpandedProps()}>
             {row.isExpanded ? '👇' : '👉'}
           </Button>
@@ -138,6 +149,7 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
       onAppointmentClicked,
       onDeleteClicked,
       onEditClicked,
+      onOpenFileClicked,
     ]
   );
 

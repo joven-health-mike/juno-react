@@ -18,6 +18,7 @@ import TableSearchFilter from './TableSearchFilter';
 type StudentsSmallTableProps = {
   onDeleteClicked: (student: Student) => void;
   onAppointmentClicked: (student: Student) => void;
+  onOpenFileClicked: (student: Student) => void;
 };
 
 export type TableStudentSmall = {
@@ -28,6 +29,7 @@ export type TableStudentSmall = {
 const StudentsSmallTable: React.FC<StudentsSmallTableProps> = ({
   onDeleteClicked,
   onAppointmentClicked,
+  onOpenFileClicked,
 }) => {
   const { data: students } = useContext(StudentsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
@@ -87,6 +89,15 @@ const StudentsSmallTable: React.FC<StudentsSmallTableProps> = ({
               onAppointmentClicked(student);
             }}
           />
+          <XButton
+            text="📁"
+            title={`Open ${student.firstName}'s File`}
+            value={student.id}
+            onClick={(e: MouseEvent<HTMLButtonElement>) => {
+              e.preventDefault();
+              onOpenFileClicked(student);
+            }}
+          />
         </>
       );
     },
@@ -95,6 +106,7 @@ const StudentsSmallTable: React.FC<StudentsSmallTableProps> = ({
       isDeleteStudentAllowed,
       onAppointmentClicked,
       onDeleteClicked,
+      onOpenFileClicked,
     ]
   );
 
