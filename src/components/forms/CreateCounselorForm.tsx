@@ -9,9 +9,10 @@ import React, {
 } from 'react';
 import styled from 'styled-components';
 import { Counselor, emptyCounselor } from '../../data/counselors';
+import { School } from '../../data/schools';
 import { Role } from '../../services/user.service';
 import { AvailableTimeZone, TIME_ZONES } from '../../utils/DateUtils';
-import SelectList from '../selectList/SelectList';
+import SelectList, { SelectMultipleSchoolList } from '../selectList/SelectList';
 import {
   buttonStyles,
   formStyles,
@@ -50,11 +51,15 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
     defaultCounselor ?? emptyCounselor
   );
   const [roomLink, setRoomLink] = useState<string>('');
+  const [assignedSchools, setAssignedSchools] = useState<School[]>([]);
 
   useEffect(() => {
     if (defaultCounselor && defaultCounselor.counselorRoomLink) {
       setCounselor(defaultCounselor);
       setRoomLink(defaultCounselor.counselorRoomLink);
+    }
+    if (defaultCounselor?.counselorAssignedSchools) {
+      setAssignedSchools(defaultCounselor.counselorAssignedSchools);
     }
   }, [defaultCounselor]);
 
@@ -62,11 +67,16 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
     setCounselor({ ...counselor, timeZoneIanaName: timeZone });
   };
 
+  const handleAssignedSchoolsChanged = (schools: School[]) => {
+    setAssignedSchools(schools);
+  };
+
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
     const submittedCounselor = defaultCounselor ? counselor : { ...counselor };
     submittedCounselor.role = 'COUNSELOR' as Role;
     submittedCounselor.counselorRoomLink = roomLink;
+    submittedCounselor.counselorAssignedSchools = assignedSchools;
     onSubmit(submittedCounselor);
   };
 
@@ -188,6 +198,13 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
                 TIME_ZONES[parseInt(item)] as AvailableTimeZone
               );
             }}
+          />
+        </Label>
+        <Label>
+          Schools:{' '}
+          <SelectMultipleSchoolList
+            selectedSchools={assignedSchools}
+            onSchoolsChanged={handleAssignedSchoolsChanged}
           />
         </Label>
 

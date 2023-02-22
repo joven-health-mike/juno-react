@@ -164,6 +164,38 @@ export function SelectSchoolList({
   );
 }
 
+type SelectMultipleSchoolListProps = {
+  selectedSchools: School[];
+  onSchoolsChanged: (schools: School[]) => void;
+};
+
+export function SelectMultipleSchoolList({
+  selectedSchools,
+  onSchoolsChanged,
+}: SelectMultipleSchoolListProps) {
+  const { data: schools } = useContext(SchoolsContext);
+  const schoolNames = schools.map(school => school.name);
+  const selectedSchoolNames = selectedSchools.map(school => school.name);
+
+  const onItemsSelected = (selectedItems: string[]) => {
+    const selectedSchools = selectedItems.map(indexStr => {
+      const schoolName = schoolNames[parseInt(indexStr)];
+      const foundSchool = schools.find(school => school.name === schoolName);
+      return foundSchool || emptySchool;
+    });
+    onSchoolsChanged(selectedSchools);
+  };
+
+  return (
+    <SelectMultipleList
+      selectedItems={selectedSchoolNames}
+      labelText={'Select Schools'}
+      items={schoolNames}
+      onItemsSelected={onItemsSelected}
+    />
+  );
+}
+
 type SelectStudentListProps = {
   value: number;
   onStudentChanged: (student: Student) => void;
