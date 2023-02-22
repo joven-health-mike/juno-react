@@ -189,6 +189,7 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
     (row: Row) => {
       const tableStudent = row.original as TableStudent;
       const student = getStudentFromTableStudent(tableStudent);
+      if (typeof student === 'undefined') return <></>;
       return <StudentDetails student={student} />;
     },
     [getStudentFromTableStudent]
