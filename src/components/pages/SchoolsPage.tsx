@@ -76,6 +76,10 @@ const SchoolsPage = () => {
     window.open(`mailto:${schoolToEmail.primaryEmail}`);
   };
 
+  const onSchoolFileOpenClicked = (schoolToOpenFile: School) => {
+    window.open(schoolToOpenFile.docsUrl);
+  };
+
   return (
     <>
       <nav>
@@ -110,6 +114,7 @@ const SchoolsPage = () => {
           onDeleteClicked={onSchoolDeleteClicked}
           onEditClicked={onSchoolEditClicked}
           onEmailClicked={onSchoolEmailClicked}
+          onOpenFileClicked={onSchoolFileOpenClicked}
         />
       </>
     </>
