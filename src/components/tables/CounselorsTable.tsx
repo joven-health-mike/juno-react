@@ -186,6 +186,7 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
     (row: Row) => {
       const rowObject = row.original as TableCounselor;
       const counselor = getCounselorFromTableCounselor(rowObject);
+      if (typeof counselor === 'undefined') return <></>;
       return <CounselorDetails counselor={counselor} />;
     },
     [getCounselorFromTableCounselor]

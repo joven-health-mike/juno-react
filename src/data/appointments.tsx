@@ -118,7 +118,6 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
           appt.school = data.school;
           appt.counselor = data.counselor;
         });
-        console.log(JSON.stringify(apptArray));
         setAppointments([...appointments, ...apptArray]);
       } catch (error) {
         console.error(error);

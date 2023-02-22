@@ -162,6 +162,7 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
     (row: Row) => {
       const rowObject = row.original as TableSchool;
       const school = getSchoolFromTableSchool(rowObject);
+      if (typeof school === 'undefined') return <></>;
       return <SchoolDetails school={school} />;
     },
     [getSchoolFromTableSchool]
