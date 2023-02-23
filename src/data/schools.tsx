@@ -14,6 +14,7 @@ export type School = {
   zip?: string;
   primaryEmail?: string;
   primaryPhone?: string;
+  docsUrl?: string;
 };
 
 export const emptySchool = {

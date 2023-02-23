@@ -116,6 +116,10 @@ const StudentsTableView: React.FC = () => {
     }
   };
 
+  const handleOpenFileClick = (studentToOpenFile: Student) => {
+    window.open(studentToOpenFile.docsUrl);
+  };
+
   const handleAppointmentAdded = (appointmentToAdd: Appointment) => {
     if (isCreateAppointmentAllowed) {
       addAppointment(appointmentToAdd);
@@ -128,6 +132,7 @@ const StudentsTableView: React.FC = () => {
       <StudentsSmallTable
         onAppointmentClicked={handleAppointmentClick}
         onDeleteClicked={handleDeleteClick}
+        onOpenFileClicked={handleOpenFileClick}
       />
       {isCreateAppointmentAllowed && (
         <CreateAppointmentModal

@@ -157,6 +157,7 @@ const UsersTable: React.FC<UsersTableProps> = ({
     (row: Row) => {
       const rowObject = row.original as TableUser;
       const user = getUserFromTableUser(rowObject);
+      if (typeof user === 'undefined') return <></>;
       return <UserDetails user={user} />;
     },
     [getUserFromTableUser]

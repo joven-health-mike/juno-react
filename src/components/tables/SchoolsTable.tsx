@@ -26,6 +26,7 @@ type SchoolsTableProps = {
   onDeleteClicked: (school: School) => void;
   onEditClicked: (school: School) => void;
   onEmailClicked: (school: School) => void;
+  onOpenFileClicked: (school: School) => void;
 };
 
 export type TableSchool = {
@@ -38,6 +39,7 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
   onDeleteClicked,
   onEditClicked,
   onEmailClicked,
+  onOpenFileClicked,
 }) => {
   const { data: schools } = useContext(SchoolsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
@@ -110,6 +112,15 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
               onEmailClicked(school);
             }}
           />
+          <XButton
+            text="📁"
+            title={`Open ${school.name}'s File`}
+            value={school.id}
+            onClick={(e: MouseEvent<HTMLButtonElement>) => {
+              e.preventDefault();
+              onOpenFileClicked(school);
+            }}
+          />
           <Button {...row.getToggleRowExpandedProps()}>
             {row.isExpanded ? '👇' : '👉'}
           </Button>
@@ -123,6 +134,7 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
       onDeleteClicked,
       onEditClicked,
       onEmailClicked,
+      onOpenFileClicked,
     ]
   );
 
@@ -162,6 +174,7 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
     (row: Row) => {
       const rowObject = row.original as TableSchool;
       const school = getSchoolFromTableSchool(rowObject);
+      if (typeof school === 'undefined') return <></>;
       return <SchoolDetails school={school} />;
     },
     [getSchoolFromTableSchool]

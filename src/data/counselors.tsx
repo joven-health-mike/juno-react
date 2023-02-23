@@ -4,9 +4,13 @@ import React, { FC, useState } from 'react';
 import { Role, UserService } from '../services/user.service';
 import { ContextData } from './ContextData';
 import { DataProviderProps } from './DataProviderProps';
+import { School } from './schools';
 import { User } from './users';
 
-export type Counselor = User & { counselorRoomLink?: string }; // TODO: Sync with server model
+export type Counselor = User & {
+  counselorRoomLink?: string;
+  counselorAssignedSchools?: School[];
+}; // TODO: Sync with server model
 
 export const emptyCounselor: Counselor = {
   id: '-1',
@@ -19,6 +23,7 @@ export const emptyCounselor: Counselor = {
   timeZoneIanaName: '',
   role: 'JOVEN_STAFF' as Role,
   counselorRoomLink: '',
+  counselorAssignedSchools: [],
 };
 
 export const CounselorsContext = React.createContext<ContextData<Counselor>>({

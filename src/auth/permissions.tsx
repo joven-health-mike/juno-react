@@ -40,7 +40,7 @@ export type AvailableDbCrudObject =
   | 'user';
 
 const createPermissions = {
-  appointment: allRoles,
+  appointment: everyoneExceptClients,
   counselor: adminsOnly,
   school: adminsOnly,
   student: jovenStaff,

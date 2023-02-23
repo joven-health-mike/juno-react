@@ -62,7 +62,7 @@ const SchoolsPage = () => {
   };
 
   const onSchoolDeleteClicked = (schoolToDelete: School) => {
-    if (isDeleteSchoolAllowed && window.confirm('Delete this user?')) {
+    if (isDeleteSchoolAllowed && window.confirm('Delete this school?')) {
       deleteSchool(schoolToDelete);
     }
   };
@@ -74,6 +74,10 @@ const SchoolsPage = () => {
 
   const onSchoolEmailClicked = (schoolToEmail: School) => {
     window.open(`mailto:${schoolToEmail.primaryEmail}`);
+  };
+
+  const onSchoolFileOpenClicked = (schoolToOpenFile: School) => {
+    window.open(schoolToOpenFile.docsUrl);
   };
 
   return (
@@ -110,6 +114,7 @@ const SchoolsPage = () => {
           onDeleteClicked={onSchoolDeleteClicked}
           onEditClicked={onSchoolEditClicked}
           onEmailClicked={onSchoolEmailClicked}
+          onOpenFileClicked={onSchoolFileOpenClicked}
         />
       </>
     </>

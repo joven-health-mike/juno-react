@@ -218,6 +218,7 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
     (row: Row) => {
       const tableAppointment = row.original as TableAppointment;
       const appointment = getAppointmentFromTableAppointment(tableAppointment);
+      if (typeof appointment === 'undefined') return <></>;
       return (
         <AppointmentDetails
           appointment={appointment}

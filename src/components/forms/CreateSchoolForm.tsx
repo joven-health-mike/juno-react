@@ -67,7 +67,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
     <>
       <Form onSubmit={onFormSubmit}>
         <Label>
-          Name:
+          Name:{' '}
           <Input
             data-testid={'input-name'}
             type="text"
@@ -81,7 +81,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
           />
         </Label>
         <Label>
-          Address:
+          Address:{' '}
           <Input
             data-testid={'input-address'}
             type="text"
@@ -95,7 +95,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
           />
         </Label>
         <Label>
-          City:
+          City:{' '}
           <Input
             data-testid={'input-city'}
             type="text"
@@ -109,7 +109,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
           />
         </Label>
         <Label>
-          State:
+          State:{' '}
           <Input
             data-testid={'input-state'}
             type="text"
@@ -123,7 +123,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
           />
         </Label>
         <Label>
-          Zip Code:
+          Zip Code:{' '}
           <Input
             data-testid={'input-zip'}
             type="text"
@@ -137,7 +137,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
           />
         </Label>
         <Label>
-          Email:
+          Email:{' '}
           <Input
             data-testid={'input-email'}
             type="email"
@@ -151,7 +151,7 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
           />
         </Label>
         <Label>
-          Phone Number
+          Phone Number:{' '}
           <Input
             data-testid={'input-phone'}
             type="text"
@@ -162,6 +162,20 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setSchool({ ...school, primaryPhone: e.target.value })
             }
+          />
+        </Label>
+        <Label>
+          Docs URL:{' '}
+          <Input
+            data-testid={'input-docsUrl'}
+            type="URL"
+            placeholder="Docs URL"
+            name="docsUrl"
+            value={school.docsUrl}
+            required
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setSchool({ ...school, docsUrl: e.target.value });
+            }}
           />
         </Label>
 

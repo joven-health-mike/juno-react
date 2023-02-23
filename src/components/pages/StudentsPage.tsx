@@ -106,6 +106,10 @@ const StudentsPage = () => {
     }
   };
 
+  const onOpenFileStudentClicked = (studentToOpenFile: Student) => {
+    window.open(studentToOpenFile.docsUrl);
+  };
+
   return (
     <>
       <nav>
@@ -148,6 +152,7 @@ const StudentsPage = () => {
           onDeleteClicked={onDeleteStudentClicked}
           onEditClicked={onEditStudentClicked}
           onAppointmentClicked={onAppointmentStudentClicked}
+          onOpenFileClicked={onOpenFileStudentClicked}
         />
       </>
     </>
