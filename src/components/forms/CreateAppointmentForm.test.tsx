@@ -53,7 +53,6 @@ describe('CreateAppointmentForm', () => {
     expect(cancelCallback).toHaveBeenCalled();
   });
 
-  // TODO: Test form validations
   // TODO: Test submit with new values
   // TODO: Test submit new recurring appointment
 });
