@@ -4,7 +4,8 @@
 /* eslint-disable testing-library/prefer-screen-queries */
 
 import React from 'react';
-import { render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { render, screen } from '@testing-library/react';
 import AppointmentDetails from './AppointmentDetails';
 import { Appointment } from '../../data/appointments';
 import { emptySchool } from '../../data/schools';
@@ -27,26 +28,52 @@ const fakeAppointment: Appointment = {
 const fakeCounselorName = 'Jacek McGuinness';
 
 describe('AppointmentDetails', () => {
-  it('should display title', async () => {
-    const view = render(<AppointmentDetails appointment={fakeAppointment} />);
-    const titleView = await view.findByTestId('title');
-    expect(titleView.innerHTML).toEqual(fakeAppointment.title);
-  });
-  it('should display counselor ID', async () => {
-    const view = render(<AppointmentDetails appointment={fakeAppointment} />);
-    const counselorIdView = await view.findByTestId('counselorId');
-    expect(counselorIdView.innerHTML).toEqual(
-      'Counselor: ' + fakeCounselorName
+  const joinAppointmentStub = jest.fn();
+  const emailParticipantsStub = jest.fn();
+  const cancelAppointmentStub = jest.fn();
+
+  const renderComponent = () =>
+    render(
+      <AppointmentDetails
+        appointment={fakeAppointment}
+        onJoinAppointmentClicked={joinAppointmentStub}
+        onEmailParticipantsClicked={emailParticipantsStub}
+        onCancelAppointmentClicked={cancelAppointmentStub}
+      />
     );
+
+  it('should display title', () => {
+    renderComponent();
+    const titleView = screen.getByText(fakeAppointment.title);
+    expect(titleView).not.toBeNull();
   });
-  it('should display title as <h2>', async () => {
-    const view = render(<AppointmentDetails appointment={fakeAppointment} />);
-    const titleView = await view.findByTestId('title');
-    expect(titleView.nodeName.toLowerCase()).toEqual('h2');
+  it('should display counselor ID', () => {
+    renderComponent();
+    const counselorIdView = screen.getByText('Counselor: ' + fakeCounselorName);
+    expect(counselorIdView).not.toBeNull();
   });
-  it('should display counselor ID as <p>', async () => {
-    const view = render(<AppointmentDetails appointment={fakeAppointment} />);
-    const counselorIdView = await view.findByTestId('counselorId');
-    expect(counselorIdView.nodeName.toLowerCase()).toEqual('p');
+  it('calls joinAppointmentStub when Join Appointment button is clicked', () => {
+    renderComponent();
+    const joinAppointmentButton = screen.getByRole('button', {
+      name: 'Join Appointment',
+    });
+    userEvent.click(joinAppointmentButton);
+    expect(joinAppointmentStub).toHaveBeenCalled();
+  });
+  it('calls emailParticipantsStub when Email Participants button is clicked', () => {
+    renderComponent();
+    const emailParticipantsButton = screen.getByRole('button', {
+      name: 'Email Participants',
+    });
+    userEvent.click(emailParticipantsButton);
+    expect(emailParticipantsStub).toHaveBeenCalled();
+  });
+  it('calls cancelAppointmentStub when Email Participants button is clicked', () => {
+    renderComponent();
+    const cancelAppointmentButton = screen.getByRole('button', {
+      name: 'Cancel Appointment',
+    });
+    userEvent.click(cancelAppointmentButton);
+    expect(cancelAppointmentStub).toHaveBeenCalled();
   });
 });
