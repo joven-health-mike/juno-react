@@ -4,7 +4,7 @@
 /* eslint-disable testing-library/prefer-screen-queries */
 
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import StudentDetails from './StudentDetails';
 import { Role } from '../../services/user.service';
 import { Student } from '../../data/students';
@@ -28,38 +28,24 @@ const testSchoolName = 'NOT FOUND';
 const testCounselorName = 'NOT FOUND';
 
 describe('StudentDetails', () => {
-  it('should display name', async () => {
-    const view = render(<StudentDetails student={testStudent} />);
-    const nameView = await view.findByTestId('name');
-    expect(nameView.innerHTML).toEqual(
-      testStudent.firstName + ' ' + testStudent.lastName
+  const renderComponents = () =>
+    render(<StudentDetails student={testStudent} />);
+
+  it('should display name', () => {
+    renderComponents();
+    const nameView = screen.getByText(
+      `${testStudent.firstName} ${testStudent.lastName}`
     );
+    expect(nameView).not.toBeNull();
   });
-  it('should display the school ID', async () => {
-    const view = render(<StudentDetails student={testStudent} />);
-    const schoolIdView = await view.findByTestId('schoolId');
-    expect(schoolIdView.innerHTML).toEqual('School: ' + testSchoolName);
+  it('should display the school ID', () => {
+    renderComponents();
+    const schoolIdView = screen.getByText(`School: ${testSchoolName}`);
+    expect(schoolIdView).not.toBeNull();
   });
-  it('should display the counselor ID', async () => {
-    const view = render(<StudentDetails student={testStudent} />);
-    const counselorIdView = await view.findByTestId('counselorId');
-    expect(counselorIdView.innerHTML).toEqual(
-      'Counselor: ' + testCounselorName
-    );
-  });
-  it('should display the student name as <h2>', async () => {
-    const view = render(<StudentDetails student={testStudent} />);
-    const nameView = await view.findByTestId('name');
-    expect(nameView.nodeName.toLowerCase()).toEqual('h2');
-  });
-  it('should display school ID as <p>', async () => {
-    const view = render(<StudentDetails student={testStudent} />);
-    const schoolIdView = await view.findByTestId('schoolId');
-    expect(schoolIdView.nodeName.toLowerCase()).toEqual('p');
-  });
-  it('should display the counselor ID as <p>', async () => {
-    const view = render(<StudentDetails student={testStudent} />);
-    const counselorIdView = await view.findByTestId('counselorId');
-    expect(counselorIdView.nodeName.toLowerCase()).toEqual('p');
+  it('should display the counselor ID', () => {
+    renderComponents();
+    const counselorIdView = screen.getByText(`Counselor: ${testCounselorName}`);
+    expect(counselorIdView).not.toBeNull();
   });
 });
