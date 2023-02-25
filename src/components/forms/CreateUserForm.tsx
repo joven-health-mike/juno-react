@@ -146,7 +146,6 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
       <Label>
         First Name:
         <Input
-          data-testid={'input-first-name'}
           type="text"
           placeholder="First Name"
           name="firstName"
@@ -160,7 +159,6 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
       <Label>
         Last Name:
         <Input
-          data-testid={'input-last-name'}
           type="text"
           placeholder="Last Name"
           name="lastName"
@@ -174,7 +172,6 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
       <Label>
         Email:
         <Input
-          data-testid={'input-email'}
           type="email"
           placeholder="Email"
           name="email"
@@ -188,7 +185,6 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
       <Label>
         Username:
         <Input
-          data-testid={'input-username'}
           type="text"
           placeholder="Username"
           name="username"
@@ -202,7 +198,6 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
       <Label>
         Phone:
         <Input
-          data-testid={'input-phone'}
           type="phone"
           placeholder="Phone"
           name="phone"
@@ -215,7 +210,6 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
       <Label>
         Docs URL:
         <Input
-          data-testid={'input-docsUrl'}
           type="URL"
           placeholder="Docs URL"
           name="docsUrl"
@@ -253,7 +247,6 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
         <Label>
           Room Link:
           <Input
-            data-testid={'input-counselor-roomLink'}
             type="URL"
             placeholder="Room Link"
             name="counselorRoomLink"
@@ -301,14 +294,8 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
         </>
       )}
 
-      <Button type="submit" data-testid={'button-submit'}>
-        Submit
-      </Button>
-      <Button
-        type="button"
-        data-testid={'button-cancel'}
-        onClick={onFormCancel}
-      >
+      <Button type="submit">Submit</Button>
+      <Button type="button" onClick={onFormCancel}>
         Cancel
       </Button>
     </Form>
