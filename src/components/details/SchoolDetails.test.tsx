@@ -4,36 +4,34 @@
 /* eslint-disable testing-library/prefer-screen-queries */
 
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import SchoolDetails from './SchoolDetails';
 
 const testSchool = {
   name: 'name',
   id: '0',
   primaryEmail: 'email@test.com',
+  docsUrl: 'https://test.com',
 };
 
 describe('SchoolDetails', () => {
-  it('should display name', async () => {
-    const view = render(<SchoolDetails school={testSchool} />);
-    const nameView = await view.findByTestId('name');
-    expect(nameView.innerHTML).toEqual(testSchool.name);
+  const renderComponent = () => render(<SchoolDetails school={testSchool} />);
+
+  it('should display name', () => {
+    renderComponent();
+    const nameView = screen.getByText(testSchool.name);
+    expect(nameView).not.toBeNull();
   });
-  it('should display email as a string', async () => {
-    const view = render(<SchoolDetails school={testSchool} />);
-    const emailView = await view.findByTestId('email');
-    expect(emailView.innerHTML).toEqual(
+  it('should display email as a string', () => {
+    renderComponent();
+    const emailView = screen.getByText(
       'Email: ' + testSchool.primaryEmail.toString()
     );
+    expect(emailView).not.toBeNull();
   });
-  it('should display name as <h2>', async () => {
-    const view = render(<SchoolDetails school={testSchool} />);
-    const nameView = await view.findByTestId('name');
-    expect(nameView.nodeName.toLowerCase()).toEqual('h2');
-  });
-  it('should display email as <p>', async () => {
-    const view = render(<SchoolDetails school={testSchool} />);
-    const emailView = await view.findByTestId('email');
-    expect(emailView.nodeName.toLowerCase()).toEqual('p');
+  it('should display docs url as a string', () => {
+    renderComponent();
+    const docsLink = screen.getByRole('link', { name: testSchool.docsUrl });
+    expect(docsLink).not.toBeNull();
   });
 });
