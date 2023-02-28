@@ -13,7 +13,7 @@ import {
   emptyAppointment,
 } from '../../data/appointments';
 import StudentsSmallTable from '../tables/StudentsSmallTable';
-import { Student, StudentsContext } from '../../data/students';
+import { Student } from '../../data/students';
 import CounselorDetails from '../details/CounselorDetails';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
 import { Role } from '../../services/user.service';
@@ -89,7 +89,7 @@ const StudentsTableView: React.FC = () => {
     useState<boolean>(false);
 
   const { add: addAppointment } = useContext(AppointmentsContext);
-  const { delete: deleteStudent } = useContext(StudentsContext);
+  const { delete: deleteStudent } = useContext(UsersContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
   useEffect(() => {

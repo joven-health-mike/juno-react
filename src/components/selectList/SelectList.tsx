@@ -11,7 +11,7 @@ import {
   getCounselors,
 } from '../../data/counselors';
 import { emptySchool, School, SchoolsContext } from '../../data/schools';
-import { emptyStudent, Student, StudentsContext } from '../../data/students';
+import { emptyStudent, getStudents, Student } from '../../data/students';
 import {
   emptyUser,
   LoggedInUserContext,
@@ -206,7 +206,8 @@ export function SelectStudentList({
   value,
   onStudentChanged,
 }: SelectStudentListProps) {
-  const { data: students } = useContext(StudentsContext);
+  const { data: users } = useContext(UsersContext);
+  const students = useMemo(() => getStudents(users), [users]);
   const studentNames = students.map(
     student => `${student.firstName} ${student.lastName}`
   );

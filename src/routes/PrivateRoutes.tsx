@@ -9,7 +9,6 @@ import { AvailableRoute, pagePermission } from '../auth/permissions';
 import { AvailableRoutes } from './AppRouter';
 import { AppointmentsContext } from '../data/appointments';
 import { SchoolsContext } from '../data/schools';
-import { StudentsContext } from '../data/students';
 import { h1Styles } from '../components/styles/mixins';
 
 const Header = styled.h1`
@@ -28,12 +27,10 @@ const PrivateRoutes = () => {
   const { getAll: getUsers } = useContext(UsersContext);
   const { getAll: getAppointments } = useContext(AppointmentsContext);
   const { getAll: getSchools } = useContext(SchoolsContext);
-  const { getAll: getStudents } = useContext(StudentsContext);
 
   useEffect(() => {
     getAppointments();
     getSchools();
-    getStudents();
     getUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

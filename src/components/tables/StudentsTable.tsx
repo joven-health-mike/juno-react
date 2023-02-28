@@ -13,7 +13,7 @@ import styled from 'styled-components';
 import { deletePermission, updatePermission } from '../../auth/permissions';
 import { getCounselors } from '../../data/counselors';
 import { SchoolsContext } from '../../data/schools';
-import { Student, StudentsContext } from '../../data/students';
+import { getStudents, Student } from '../../data/students';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
 import XButton from '../buttons/XButton';
 import StudentDetails from '../details/StudentDetails';
@@ -46,8 +46,8 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
 }) => {
   const { data: users } = useContext(UsersContext);
   const counselors = useMemo(() => getCounselors(users), [users]);
+  const students = useMemo(() => getStudents(users), [users]);
   const { data: schools } = useContext(SchoolsContext);
-  const { data: students } = useContext(StudentsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
   const [isDeleteStudentAllowed, setIsDeleteStudentAllowed] =

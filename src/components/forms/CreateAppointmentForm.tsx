@@ -18,7 +18,7 @@ import {
 } from '../../data/appointments';
 import { Counselor, getCounselors } from '../../data/counselors';
 import { School, SchoolsContext, emptySchool } from '../../data/schools';
-import { Student, StudentsContext } from '../../data/students';
+import { getStudents, Student } from '../../data/students';
 import {
   User,
   UsersContext,
@@ -80,9 +80,9 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   const [shouldShowCounselor, setShouldShowCounselor] = useState<boolean>(true);
 
   const { data: users } = useContext(UsersContext);
+  const students = useMemo(() => getStudents(users), [users]);
   const counselors = useMemo(() => getCounselors(users), [users]);
   const { data: schools } = useContext(SchoolsContext);
-  const { data: students } = useContext(StudentsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
   useEffect(() => {
