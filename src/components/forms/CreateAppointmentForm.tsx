@@ -15,7 +15,7 @@ import {
   AppointmentType,
   AppointmentTypes,
 } from '../../data/appointments';
-import { Counselor, CounselorsContext } from '../../data/counselors';
+import { Counselor, useCounselors } from '../../data/counselors';
 import { School, SchoolsContext, emptySchool } from '../../data/schools';
 import { Student, StudentsContext } from '../../data/students';
 import {
@@ -78,7 +78,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
   const [shouldShowCounselor, setShouldShowCounselor] = useState<boolean>(true);
 
-  const { data: counselors } = useContext(CounselorsContext);
+  const counselors = useCounselors();
   const { data: schools } = useContext(SchoolsContext);
   const { data: students } = useContext(StudentsContext);
   const { data: users } = useContext(UsersContext);

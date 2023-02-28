@@ -12,7 +12,7 @@ import { CellProps, Column, Row } from 'react-table';
 import styled from 'styled-components';
 import { deletePermission, updatePermission } from '../../auth/permissions';
 import { Appointment, AppointmentsContext } from '../../data/appointments';
-import { CounselorsContext } from '../../data/counselors';
+import { useCounselors } from '../../data/counselors';
 import { LoggedInUserContext } from '../../data/users';
 import { formatDate, formatTime } from '../../utils/DateUtils';
 import XButton from '../buttons/XButton';
@@ -47,7 +47,7 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
   onRoomLinkClicked,
 }) => {
   const { data: appointments } = useContext(AppointmentsContext);
-  const { data: counselors } = useContext(CounselorsContext);
+  const counselors = useCounselors();
   const { loggedInUser } = useContext(LoggedInUserContext);
 
   const [hiddenColumns, setHiddenColumns] = useState<string[]>([]);

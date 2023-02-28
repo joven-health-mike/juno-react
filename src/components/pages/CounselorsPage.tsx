@@ -7,12 +7,8 @@ import {
   deletePermission,
   updatePermission,
 } from '../../auth/permissions';
-import {
-  Counselor,
-  CounselorsContext,
-  emptyCounselor,
-} from '../../data/counselors';
-import { LoggedInUserContext } from '../../data/users';
+import { Counselor, emptyCounselor } from '../../data/counselors';
+import { LoggedInUserContext, UsersContext } from '../../data/users';
 import CreateCounselorModal from '../modals/CreateCounselorModal';
 import EditCounselorModal from '../modals/EditCounselorModal';
 import Navbar from '../navbar/Navbar';
@@ -32,7 +28,7 @@ const CounselorsPage: React.FC = () => {
     add: addCounselor,
     delete: deleteCounselor,
     update: updateCounselor,
-  } = useContext(CounselorsContext);
+  } = useContext(UsersContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
   const [isCreateCounselorModalOpen, setIsCreateCounselorModalOpen] =
@@ -73,6 +69,7 @@ const CounselorsPage: React.FC = () => {
   };
 
   const onCounselorDeleteClicked = (counselorToDelete: Counselor) => {
+    console.log('CounselorsPage.onCounselorDeleteClicked');
     if (isDeleteCounselorAllowed && window.confirm('Delete this counselor?')) {
       deleteCounselor(counselorToDelete);
     }

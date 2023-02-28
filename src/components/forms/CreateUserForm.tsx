@@ -9,7 +9,7 @@ import React, {
   useState,
 } from 'react';
 import styled from 'styled-components';
-import { Counselor, CounselorsContext } from '../../data/counselors';
+import { Counselor, useCounselors } from '../../data/counselors';
 import { School, SchoolsContext } from '../../data/schools';
 import { emptyUser, User } from '../../data/users';
 import { Role, ROLES } from '../../services/user.service';
@@ -62,7 +62,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = ({
   const [schoolSelectionIndex, setSchoolSelectionIndex] = useState<number>(-1);
   const [user, setUser] = useState<User>(defaultUser ?? emptyUser);
 
-  const { data: counselors } = useContext(CounselorsContext);
+  const counselors = useCounselors();
   const { data: schools } = useContext(SchoolsContext);
 
   useEffect(() => {

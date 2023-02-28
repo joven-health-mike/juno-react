@@ -12,7 +12,7 @@ import {
   AppointmentsContext,
   emptyAppointment,
 } from '../../data/appointments';
-import { CounselorsContext, emptyCounselor } from '../../data/counselors';
+import { emptyCounselor, useCounselors } from '../../data/counselors';
 import { LoggedInUserContext } from '../../data/users';
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import EditAppointmentModal from '../modals/EditAppointmentModal';
@@ -34,7 +34,7 @@ const AppointmentsPage: React.FC = () => {
     delete: deleteAppointment,
     update: updateAppointment,
   } = useContext(AppointmentsContext);
-  const { data: counselors } = useContext(CounselorsContext);
+  const counselors = useCounselors();
   const { loggedInUser } = useContext(LoggedInUserContext);
 
   const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =

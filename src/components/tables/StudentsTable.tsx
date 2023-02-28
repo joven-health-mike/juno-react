@@ -10,7 +10,7 @@ import React, {
 import { CellProps, Column, Row } from 'react-table';
 import styled from 'styled-components';
 import { deletePermission, updatePermission } from '../../auth/permissions';
-import { CounselorsContext } from '../../data/counselors';
+import { useCounselors } from '../../data/counselors';
 import { SchoolsContext } from '../../data/schools';
 import { Student, StudentsContext } from '../../data/students';
 import { LoggedInUserContext } from '../../data/users';
@@ -43,7 +43,7 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
   onAppointmentClicked,
   onOpenFileClicked,
 }) => {
-  const { data: counselors } = useContext(CounselorsContext);
+  const counselors = useCounselors();
   const { data: schools } = useContext(SchoolsContext);
   const { data: students } = useContext(StudentsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);

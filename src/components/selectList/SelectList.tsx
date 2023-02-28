@@ -7,8 +7,8 @@ import {
 } from '../../data/appointments';
 import {
   Counselor,
-  CounselorsContext,
   emptyCounselor,
+  useCounselors,
 } from '../../data/counselors';
 import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import { emptyStudent, Student, StudentsContext } from '../../data/students';
@@ -113,7 +113,7 @@ export function SelectCounselorList({
   selectedIndex,
   onCounselorChanged,
 }: SelectCounselorListProps) {
-  const { data: counselors } = useContext(CounselorsContext);
+  const counselors = useCounselors();
   const counselorNames = counselors.map(
     counselor => `${counselor.firstName} ${counselor.lastName}`
   );

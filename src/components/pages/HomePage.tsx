@@ -15,12 +15,12 @@ import {
 import StudentsSmallTable from '../tables/StudentsSmallTable';
 import { Student, StudentsContext } from '../../data/students';
 import CounselorDetails from '../details/CounselorDetails';
-import { CounselorsContext } from '../../data/counselors';
 import { LoggedInUserContext } from '../../data/users';
 import { Role } from '../../services/user.service';
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import { createPermission, deletePermission } from '../../auth/permissions';
 import { h1Styles } from '../styles/mixins';
+import { useCounselors } from '../../data/counselors';
 
 const LeftSection = styled.section`
   margin-left: 25px;
@@ -207,7 +207,7 @@ const SchoolAdminView: React.FC = () => {
 };
 
 const StudentView: React.FC = () => {
-  const { data: counselors } = useContext(CounselorsContext);
+  const counselors = useCounselors();
   const { loggedInUser } = useContext(LoggedInUserContext);
   const myCounselor = counselors.find(
     counselor => counselor.id === loggedInUser.studentAssignedCounselorId

@@ -10,7 +10,7 @@ import React, {
 } from 'react';
 import styled from 'styled-components';
 import { ContextData } from '../../data/ContextData';
-import { Counselor, CounselorsContext } from '../../data/counselors';
+import { Counselor, useCounselors } from '../../data/counselors';
 import { School, SchoolsContext } from '../../data/schools';
 import { emptyStudent, Student, StudentStatus } from '../../data/students';
 import { AvailableTimeZone, TIME_ZONES } from '../../utils/DateUtils';
@@ -59,8 +59,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
     useState<number>(-1);
   const [schoolSelectionIndex, setSchoolSelectionIndex] = useState<number>(-1);
   const { data: schools } = useContext<ContextData<School>>(SchoolsContext);
-  const { data: counselors } =
-    useContext<ContextData<Counselor>>(CounselorsContext);
+  const counselors = useCounselors();
 
   useEffect(() => {
     if (defaultStudent) {

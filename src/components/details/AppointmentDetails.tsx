@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { deletePermission } from '../../auth/permissions';
 import { Appointment } from '../../data/appointments';
-import { CounselorsContext } from '../../data/counselors';
+import { useCounselors } from '../../data/counselors';
 import { SchoolsContext } from '../../data/schools';
 import { LoggedInUserContext } from '../../data/users';
 import { formatDateTime } from '../../utils/DateUtils';
@@ -28,7 +28,7 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
   onCancelAppointmentClicked,
 }) => {
   const { loggedInUser } = useContext(LoggedInUserContext);
-  const { data: counselors } = useContext(CounselorsContext);
+  const counselors = useCounselors();
   const { data: schools } = useContext(SchoolsContext);
 
   const counselor =

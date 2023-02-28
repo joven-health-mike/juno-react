@@ -14,8 +14,8 @@ import {
 } from '../../data/appointments';
 import {
   Counselor,
-  CounselorsContext,
   emptyCounselor,
+  useCounselors,
 } from '../../data/counselors';
 import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import Calendar from '../calendar/Calendar';
@@ -64,7 +64,7 @@ const CalendarPage: React.FC = () => {
     add: addAppointment,
     delete: deleteAppointment,
   } = useContext(AppointmentsContext);
-  const { data: counselors } = useContext(CounselorsContext);
+  const counselors = useCounselors();
   const { loggedInUser } = useContext(LoggedInUserContext);
   const { data: schools } = useContext(SchoolsContext);
 

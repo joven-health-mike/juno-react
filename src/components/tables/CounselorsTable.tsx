@@ -10,7 +10,7 @@ import React, {
 import { CellProps, Column, Row } from 'react-table';
 import styled from 'styled-components';
 import { deletePermission, updatePermission } from '../../auth/permissions';
-import { Counselor, CounselorsContext } from '../../data/counselors';
+import { Counselor, useCounselors } from '../../data/counselors';
 import { LoggedInUserContext } from '../../data/users';
 import XButton from '../buttons/XButton';
 import CounselorDetails from '../details/CounselorDetails';
@@ -42,7 +42,7 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
   onRoomLinkClicked,
   onOpenFileClicked,
 }) => {
-  const { data: counselors } = useContext(CounselorsContext);
+  const counselors = useCounselors();
   const { loggedInUser } = useContext(LoggedInUserContext);
 
   const [isDeleteCounselorAllowed, setIsDeleteCounselorAllowed] =
@@ -93,6 +93,7 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
               title={`Delete ${counselor.firstName}`}
               value={counselor.id}
               onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                console.log('CounselorsTable.onCounselorDeleteClicked');
                 e.preventDefault();
                 onDeleteClicked(counselor);
               }}

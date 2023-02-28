@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import { LoggedInUserContext, UsersContext } from '../data/users';
 import { AvailableRoute, pagePermission } from '../auth/permissions';
 import { AvailableRoutes } from './AppRouter';
-import { CounselorsContext } from '../data/counselors';
 import { AppointmentsContext } from '../data/appointments';
 import { SchoolsContext } from '../data/schools';
 import { StudentsContext } from '../data/students';
@@ -27,14 +26,12 @@ const PrivateRoutes = () => {
   Settings.defaultZone = loggedInUser.timeZoneIanaName || 'America/Denver';
 
   const { getAll: getUsers } = useContext(UsersContext);
-  const { getAll: getCounselors } = useContext(CounselorsContext);
   const { getAll: getAppointments } = useContext(AppointmentsContext);
   const { getAll: getSchools } = useContext(SchoolsContext);
   const { getAll: getStudents } = useContext(StudentsContext);
 
   useEffect(() => {
     getAppointments();
-    getCounselors();
     getSchools();
     getStudents();
     getUsers();
