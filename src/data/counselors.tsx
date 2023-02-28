@@ -1,9 +1,8 @@
 // Copyright 2022 Social Fabric, LLC
 
-import { useContext } from 'react';
 import { Role } from '../services/user.service';
 import { School } from './schools';
-import { User, UsersContext } from './users';
+import { User } from './users';
 
 export type Counselor = User & {
   counselorRoomLink?: string;
@@ -24,8 +23,7 @@ export const emptyCounselor: Counselor = {
   counselorAssignedSchools: [],
 };
 
-export const useCounselors = () => {
-  const { data: users } = useContext(UsersContext);
+export const getCounselors = (users: User[]) => {
   return users
     .filter(user => user.role === 'COUNSELOR')
     .map(counselor => counselor as Counselor);

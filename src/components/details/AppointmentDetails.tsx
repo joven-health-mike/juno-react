@@ -1,12 +1,12 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { deletePermission } from '../../auth/permissions';
 import { Appointment } from '../../data/appointments';
-import { useCounselors } from '../../data/counselors';
+import { getCounselors } from '../../data/counselors';
 import { SchoolsContext } from '../../data/schools';
-import { LoggedInUserContext } from '../../data/users';
+import { LoggedInUserContext, UsersContext } from '../../data/users';
 import { formatDateTime } from '../../utils/DateUtils';
 import { buttonStyles } from '../styles/mixins';
 
@@ -28,7 +28,8 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
   onCancelAppointmentClicked,
 }) => {
   const { loggedInUser } = useContext(LoggedInUserContext);
-  const counselors = useCounselors();
+  const { data: users } = useContext(UsersContext);
+  const counselors = useMemo(() => getCounselors(users), [users]);
   const { data: schools } = useContext(SchoolsContext);
 
   const counselor =

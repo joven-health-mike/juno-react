@@ -69,7 +69,6 @@ const CounselorsPage: React.FC = () => {
   };
 
   const onCounselorDeleteClicked = (counselorToDelete: Counselor) => {
-    console.log('CounselorsPage.onCounselorDeleteClicked');
     if (isDeleteCounselorAllowed && window.confirm('Delete this counselor?')) {
       deleteCounselor(counselorToDelete);
     }

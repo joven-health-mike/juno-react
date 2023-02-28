@@ -1,9 +1,10 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext } from 'react';
-import { useCounselors } from '../../data/counselors';
+import React, { useContext, useMemo } from 'react';
+import { getCounselors } from '../../data/counselors';
 import { SchoolsContext } from '../../data/schools';
 import { Student } from '../../data/students';
+import { UsersContext } from '../../data/users';
 import UserDetails from './UserDetails';
 
 type StudentDetailsProps = {
@@ -12,7 +13,8 @@ type StudentDetailsProps = {
 
 const StudentDetails: React.FC<StudentDetailsProps> = ({ student }) => {
   const { data: schools } = useContext(SchoolsContext);
-  const counselors = useCounselors();
+  const { data: users } = useContext(UsersContext);
+  const counselors = useMemo(() => getCounselors(users), [users]);
 
   const schoolName =
     schools.find(school => school.id === student.studentAssignedSchoolId)

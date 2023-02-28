@@ -6,6 +6,7 @@ import React, {
   MouseEvent,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import styled from 'styled-components';
@@ -15,7 +16,7 @@ import {
   AppointmentType,
   AppointmentTypes,
 } from '../../data/appointments';
-import { Counselor, useCounselors } from '../../data/counselors';
+import { Counselor, getCounselors } from '../../data/counselors';
 import { School, SchoolsContext, emptySchool } from '../../data/schools';
 import { Student, StudentsContext } from '../../data/students';
 import {
@@ -78,10 +79,10 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
   const [shouldShowCounselor, setShouldShowCounselor] = useState<boolean>(true);
 
-  const counselors = useCounselors();
+  const { data: users } = useContext(UsersContext);
+  const counselors = useMemo(() => getCounselors(users), [users]);
   const { data: schools } = useContext(SchoolsContext);
   const { data: students } = useContext(StudentsContext);
-  const { data: users } = useContext(UsersContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
   useEffect(() => {
