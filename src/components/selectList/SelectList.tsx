@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import styled from 'styled-components';
 import {
   AppointmentType,
@@ -7,11 +7,11 @@ import {
 } from '../../data/appointments';
 import {
   Counselor,
-  CounselorsContext,
   emptyCounselor,
+  getCounselors,
 } from '../../data/counselors';
 import { emptySchool, School, SchoolsContext } from '../../data/schools';
-import { emptyStudent, Student, StudentsContext } from '../../data/students';
+import { emptyStudent, getStudents, Student } from '../../data/students';
 import {
   emptyUser,
   LoggedInUserContext,
@@ -113,7 +113,8 @@ export function SelectCounselorList({
   selectedIndex,
   onCounselorChanged,
 }: SelectCounselorListProps) {
-  const { data: counselors } = useContext(CounselorsContext);
+  const { data: users } = useContext(UsersContext);
+  const counselors = useMemo(() => getCounselors(users), [users]);
   const counselorNames = counselors.map(
     counselor => `${counselor.firstName} ${counselor.lastName}`
   );
@@ -205,7 +206,8 @@ export function SelectStudentList({
   value,
   onStudentChanged,
 }: SelectStudentListProps) {
-  const { data: students } = useContext(StudentsContext);
+  const { data: users } = useContext(UsersContext);
+  const students = useMemo(() => getStudents(users), [users]);
   const studentNames = students.map(
     student => `${student.firstName} ${student.lastName}`
   );

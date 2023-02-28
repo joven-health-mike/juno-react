@@ -3,9 +3,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import Modal from 'react-modal';
 import { AppointmentsContext, AppointmentsProvider } from './data/appointments';
-import { CounselorsContext, CounselorsProvider } from './data/counselors';
 import { SchoolsContext, SchoolsProvider } from './data/schools';
-import { StudentsContext, StudentsProvider } from './data/students';
 import {
   UsersContext,
   LoggedInUserContext,
@@ -25,10 +23,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   const { data: users } = useContext(UsersContext);
-  const { data: counselors } = useContext(CounselorsContext);
   const { data: appointments } = useContext(AppointmentsContext);
   const { data: schools } = useContext(SchoolsContext);
-  const { data: students } = useContext(StudentsContext);
 
   useEffect(() => {
     function main() {
@@ -56,18 +52,14 @@ function App() {
 
   return (
     <LoggedInUserContext.Provider value={loggedInUserContextValue}>
-      <StudentsProvider data={students}>
-        <AppointmentsProvider data={appointments}>
-          <SchoolsProvider data={schools}>
-            <CounselorsProvider data={counselors}>
-              <UsersProvider data={users}>
-                {isLoading && <div>Loading...</div>}
-                {!isLoading && <AppRouter isAuthenticated={isAuthenticated} />}
-              </UsersProvider>
-            </CounselorsProvider>
-          </SchoolsProvider>
-        </AppointmentsProvider>
-      </StudentsProvider>
+      <AppointmentsProvider data={appointments}>
+        <SchoolsProvider data={schools}>
+          <UsersProvider data={users}>
+            {isLoading && <div>Loading...</div>}
+            {!isLoading && <AppRouter isAuthenticated={isAuthenticated} />}
+          </UsersProvider>
+        </SchoolsProvider>
+      </AppointmentsProvider>
     </LoggedInUserContext.Provider>
   );
 }

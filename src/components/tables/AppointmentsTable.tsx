@@ -12,8 +12,8 @@ import { CellProps, Column, Row } from 'react-table';
 import styled from 'styled-components';
 import { deletePermission, updatePermission } from '../../auth/permissions';
 import { Appointment, AppointmentsContext } from '../../data/appointments';
-import { CounselorsContext } from '../../data/counselors';
-import { LoggedInUserContext } from '../../data/users';
+import { getCounselors } from '../../data/counselors';
+import { LoggedInUserContext, UsersContext } from '../../data/users';
 import { formatDate, formatTime } from '../../utils/DateUtils';
 import XButton from '../buttons/XButton';
 import AppointmentDetails from '../details/AppointmentDetails';
@@ -47,7 +47,8 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
   onRoomLinkClicked,
 }) => {
   const { data: appointments } = useContext(AppointmentsContext);
-  const { data: counselors } = useContext(CounselorsContext);
+  const { data: users } = useContext(UsersContext);
+  const counselors = useMemo(() => getCounselors(users), [users]);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
   const [hiddenColumns, setHiddenColumns] = useState<string[]>([]);
