@@ -188,6 +188,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     });
   };
 
+  // TODO: Refactor this using strategy pattern for each role
   const generateAppointmentTitleLocal = (
     submittedAppointment: Appointment,
     schoolName: string
