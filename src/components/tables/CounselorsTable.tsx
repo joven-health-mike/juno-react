@@ -5,13 +5,14 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import { CellProps, Column, Row } from 'react-table';
 import styled from 'styled-components';
 import { deletePermission, updatePermission } from '../../auth/permissions';
-import { Counselor, CounselorsContext } from '../../data/counselors';
-import { LoggedInUserContext } from '../../data/users';
+import { Counselor, getCounselors } from '../../data/counselors';
+import { LoggedInUserContext, UsersContext } from '../../data/users';
 import XButton from '../buttons/XButton';
 import CounselorDetails from '../details/CounselorDetails';
 import { buttonStyles } from '../styles/mixins';
@@ -42,7 +43,8 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
   onRoomLinkClicked,
   onOpenFileClicked,
 }) => {
-  const { data: counselors } = useContext(CounselorsContext);
+  const { data: users } = useContext(UsersContext);
+  const counselors = useMemo(() => getCounselors(users), [users]);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
   const [isDeleteCounselorAllowed, setIsDeleteCounselorAllowed] =

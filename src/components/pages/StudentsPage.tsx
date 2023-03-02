@@ -12,8 +12,8 @@ import {
   AppointmentsContext,
   emptyAppointment,
 } from '../../data/appointments';
-import { emptyStudent, Student, StudentsContext } from '../../data/students';
-import { LoggedInUserContext } from '../../data/users';
+import { emptyStudent, Student } from '../../data/students';
+import { LoggedInUserContext, UsersContext } from '../../data/users';
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import CreateStudentModal from '../modals/CreateStudentModal';
 import EditStudentModal from '../modals/EditStudentModal';
@@ -34,7 +34,7 @@ const StudentsPage = () => {
     add: addStudent,
     delete: deleteStudent,
     update: updateStudent,
-  } = useContext(StudentsContext);
+  } = useContext(UsersContext);
   const { add: addAppointment } = useContext(AppointmentsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
 

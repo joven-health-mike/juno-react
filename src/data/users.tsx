@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import { Role, UserService } from '../services/user.service';
 import { ContextData } from './ContextData';
 import { DataProviderProps } from './DataProviderProps';
@@ -45,6 +45,7 @@ export const UsersContext = React.createContext<ContextData<User>>({
 
 export const UsersProvider: FC<DataProviderProps<User[]>> = ({ children }) => {
   const [users, setUsers] = useState<User[]>([]);
+  const { loggedInUser, setLoggedInUser } = useContext(LoggedInUserContext);
   const service = new UserService();
 
   const delegate: ContextData<User> = {
@@ -81,6 +82,10 @@ export const UsersProvider: FC<DataProviderProps<User[]>> = ({ children }) => {
         // and add the new one
         newUsers.push(user);
         setUsers(newUsers);
+
+        if (user.id === loggedInUser.id) {
+          setLoggedInUser(user);
+        }
       } catch (error) {
         console.error(error);
       }

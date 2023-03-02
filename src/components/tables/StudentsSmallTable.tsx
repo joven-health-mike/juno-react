@@ -5,12 +5,13 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import { CellProps, Column, Row } from 'react-table';
 import { deletePermission } from '../../auth/permissions';
-import { Student, StudentsContext } from '../../data/students';
-import { LoggedInUserContext } from '../../data/users';
+import { getStudents, Student } from '../../data/students';
+import { LoggedInUserContext, UsersContext } from '../../data/users';
 import XButton from '../buttons/XButton';
 import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
@@ -31,7 +32,8 @@ const StudentsSmallTable: React.FC<StudentsSmallTableProps> = ({
   onAppointmentClicked,
   onOpenFileClicked,
 }) => {
-  const { data: students } = useContext(StudentsContext);
+  const { data: users } = useContext(UsersContext);
+  const students = useMemo(() => getStudents(users), [users]);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
   const [isDeleteStudentAllowed, setIsDeleteStudentAllowed] =

@@ -42,6 +42,31 @@ export const emptyAppointment = {
   location: 'UNKNOWN',
 };
 
+/* <Name> + <Name> + <Name> (<SchoolName>) - <AppointmentType> */
+export const generateAppointmentTitle = (
+  names: string[],
+  schoolName: string | undefined,
+  appointmentTypeName: string
+) => {
+  let result = '';
+
+  if (names.length > 0) {
+    names.forEach(name => {
+      result += `${name} + `;
+    });
+
+    // remove trailing '+ ' (leaving a space after the last name)
+    result = result.slice(0, -2);
+  }
+
+  if (schoolName) {
+    result += `(${schoolName}) - `;
+  }
+  result += `${appointmentTypeName}`;
+
+  return result;
+};
+
 export const AppointmentTypes = {
   Clinical: { id: 0, name: 'CLINICAL', color: 'green' },
   Consultation: { id: 1, name: 'CONSULTATION', color: 'blue' },

@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -14,8 +14,8 @@ import {
 } from '../../data/appointments';
 import {
   Counselor,
-  CounselorsContext,
   emptyCounselor,
+  getCounselors,
 } from '../../data/counselors';
 import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import Calendar from '../calendar/Calendar';
@@ -27,7 +27,7 @@ import {
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import AppointmentDetailsModal from '../modals/AppointmentDetailsModal';
 import { h1Styles, labelStyles } from '../styles/mixins';
-import { LoggedInUserContext } from '../../data/users';
+import { LoggedInUserContext, UsersContext } from '../../data/users';
 import { createPermission, deletePermission } from '../../auth/permissions';
 
 const Header = styled.h1`
@@ -64,7 +64,8 @@ const CalendarPage: React.FC = () => {
     add: addAppointment,
     delete: deleteAppointment,
   } = useContext(AppointmentsContext);
-  const { data: counselors } = useContext(CounselorsContext);
+  const { data: users } = useContext(UsersContext);
+  const counselors = useMemo(() => getCounselors(users), [users]);
   const { loggedInUser } = useContext(LoggedInUserContext);
   const { data: schools } = useContext(SchoolsContext);
 

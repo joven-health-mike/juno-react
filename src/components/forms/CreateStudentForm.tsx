@@ -6,13 +6,15 @@ import React, {
   MouseEvent,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import styled from 'styled-components';
 import { ContextData } from '../../data/ContextData';
-import { Counselor, CounselorsContext } from '../../data/counselors';
+import { Counselor, getCounselors } from '../../data/counselors';
 import { School, SchoolsContext } from '../../data/schools';
 import { emptyStudent, Student, StudentStatus } from '../../data/students';
+import { UsersContext } from '../../data/users';
 import { AvailableTimeZone, TIME_ZONES } from '../../utils/DateUtils';
 import SelectList, {
   SelectCounselorList,
@@ -59,8 +61,8 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
     useState<number>(-1);
   const [schoolSelectionIndex, setSchoolSelectionIndex] = useState<number>(-1);
   const { data: schools } = useContext<ContextData<School>>(SchoolsContext);
-  const { data: counselors } =
-    useContext<ContextData<Counselor>>(CounselorsContext);
+  const { data: users } = useContext(UsersContext);
+  const counselors = useMemo(() => getCounselors(users), [users]);
 
   useEffect(() => {
     if (defaultStudent) {

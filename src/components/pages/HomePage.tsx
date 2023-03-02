@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import '@fullcalendar/react';
 import listPlugin from '@fullcalendar/list';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone';
@@ -13,14 +13,14 @@ import {
   emptyAppointment,
 } from '../../data/appointments';
 import StudentsSmallTable from '../tables/StudentsSmallTable';
-import { Student, StudentsContext } from '../../data/students';
+import { Student } from '../../data/students';
 import CounselorDetails from '../details/CounselorDetails';
-import { CounselorsContext } from '../../data/counselors';
-import { LoggedInUserContext } from '../../data/users';
+import { LoggedInUserContext, UsersContext } from '../../data/users';
 import { Role } from '../../services/user.service';
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import { createPermission, deletePermission } from '../../auth/permissions';
 import { h1Styles } from '../styles/mixins';
+import { getCounselors } from '../../data/counselors';
 
 const LeftSection = styled.section`
   margin-left: 25px;
@@ -89,7 +89,7 @@ const StudentsTableView: React.FC = () => {
     useState<boolean>(false);
 
   const { add: addAppointment } = useContext(AppointmentsContext);
-  const { delete: deleteStudent } = useContext(StudentsContext);
+  const { delete: deleteStudent } = useContext(UsersContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
   useEffect(() => {
@@ -207,7 +207,8 @@ const SchoolAdminView: React.FC = () => {
 };
 
 const StudentView: React.FC = () => {
-  const { data: counselors } = useContext(CounselorsContext);
+  const { data: users } = useContext(UsersContext);
+  const counselors = useMemo(() => getCounselors(users), [users]);
   const { loggedInUser } = useContext(LoggedInUserContext);
   const myCounselor = counselors.find(
     counselor => counselor.id === loggedInUser.studentAssignedCounselorId

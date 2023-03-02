@@ -6,6 +6,7 @@ import React, {
   MouseEvent,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import styled from 'styled-components';
@@ -14,16 +15,12 @@ import {
   emptyAppointment,
   AppointmentType,
   AppointmentTypes,
+  generateAppointmentTitle,
 } from '../../data/appointments';
-import { Counselor, CounselorsContext } from '../../data/counselors';
+import { Counselor, getCounselors } from '../../data/counselors';
 import { School, SchoolsContext, emptySchool } from '../../data/schools';
-import { Student, StudentsContext } from '../../data/students';
-import {
-  User,
-  UsersContext,
-  emptyUser,
-  LoggedInUserContext,
-} from '../../data/users';
+import { getStudents, Student } from '../../data/students';
+import { User, UsersContext, LoggedInUserContext } from '../../data/users';
 import {
   RepeatForFrequency,
   REPEAT_FOR_FREQUENCIES,
@@ -78,10 +75,10 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
   const [shouldShowCounselor, setShouldShowCounselor] = useState<boolean>(true);
 
-  const { data: counselors } = useContext(CounselorsContext);
-  const { data: schools } = useContext(SchoolsContext);
-  const { data: students } = useContext(StudentsContext);
   const { data: users } = useContext(UsersContext);
+  const students = useMemo(() => getStudents(users), [users]);
+  const counselors = useMemo(() => getCounselors(users), [users]);
+  const { data: schools } = useContext(SchoolsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
   useEffect(() => {
@@ -181,51 +178,136 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     });
   };
 
+  const getAssociatedSchoolFromGuardian = (guardian: User) => {
+    let schoolId = '-1';
+    if (guardian.guardianStudents && guardian.guardianStudents.length > 0) {
+      schoolId = guardian.guardianStudents[0].studentAssignedSchoolId || '-1';
+    }
+    return schools.find(school => {
+      return school.id === schoolId;
+    });
+  };
+
+  // TODO: Refactor this using strategy pattern for each role
+  const generateAppointmentTitleLocal = (
+    submittedAppointment: Appointment,
+    schoolName: string
+  ) => {
+    const names: string[] = [];
+    const appointmentTypeName = submittedAppointment.type;
+
+    const students = participants.filter(
+      participant => participant.role === 'STUDENT'
+    );
+
+    if (students.length > 0) {
+      names.push(
+        ...students.map(
+          student => `${student.firstName} ${student.lastName.substring(0, 1)}`
+        )
+      );
+    } else {
+      const schoolFolks = participants.filter(
+        participant =>
+          participant.role === 'SCHOOL_ADMIN' ||
+          participant.role === 'SCHOOL_STAFF'
+      );
+
+      if (schoolFolks.length > 0) {
+        names.push(
+          ...schoolFolks.map(
+            schoolFolk =>
+              `${schoolFolk.firstName} ${schoolFolk.lastName.substring(0, 1)}`
+          )
+        );
+      } else {
+        const guardians = participants.filter(
+          participant => participant.role === 'GUARDIAN'
+        );
+
+        if (guardians.length > 0) {
+          names.push(
+            ...guardians.map(
+              guardian =>
+                `${guardian.firstName} ${guardian.lastName.substring(0, 1)}`
+            )
+          );
+        } else {
+          const counselors = participants.filter(
+            participant => participant.role === 'COUNSELOR'
+          );
+
+          if (counselors.length > 0) {
+            names.push(
+              ...counselors.map(
+                counselor =>
+                  `${counselor.firstName} ${counselor.lastName.substring(0, 1)}`
+              )
+            );
+          } else {
+            names.push(
+              ...participants.map(
+                participant =>
+                  `${participant.firstName} ${participant.lastName.substring(
+                    0,
+                    1
+                  )}`
+              )
+            );
+          }
+        }
+      }
+    }
+
+    return generateAppointmentTitle(names, schoolName, appointmentTypeName);
+  };
+
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const mappedParticipants = participants.map(user => user.id);
+    const participantIds = participants.map(user => user.id);
     const studentSelection = students.find(student =>
-      mappedParticipants.includes(student.id)
+      participantIds.includes(student.id)
     );
     const schoolAdminSelection = users.find(
-      user =>
-        user.role === 'SCHOOL_ADMIN' && mappedParticipants.includes(user.id)
+      user => user.role === 'SCHOOL_ADMIN' && participantIds.includes(user.id)
     );
     const schoolStaffSelection = users.find(
-      user =>
-        user.role === 'SCHOOL_STAFF' && mappedParticipants.includes(user.id)
+      user => user.role === 'SCHOOL_STAFF' && participantIds.includes(user.id)
+    );
+    const guardianSelection = users.find(
+      user => user.role === 'GUARDIAN' && participantIds.includes(user.id)
     );
     let schoolSelection: School | undefined;
     if (studentSelection) {
+      console.log('found a student');
       schoolSelection = getAssociatedSchoolFromStudent(studentSelection);
     } else if (schoolAdminSelection) {
+      console.log('found a school admin');
       schoolSelection =
         getAssociatedSchoolFromSchoolAdmin(schoolAdminSelection);
     } else if (schoolStaffSelection) {
+      console.log('found a school staff');
       schoolSelection =
         getAssociatedSchoolFromSchoolStaff(schoolStaffSelection);
+    } else if (guardianSelection) {
+      console.log('found a guardian');
+      schoolSelection = getAssociatedSchoolFromGuardian(guardianSelection);
     }
 
     schoolSelection = schoolSelection || emptySchool;
-
-    const user =
-      studentSelection ||
-      schoolAdminSelection ||
-      schoolStaffSelection ||
-      emptyUser;
-
-    const apptTitle = `${user.firstName} ${user.lastName.substring(0, 1)} (${
-      schoolSelection?.name
-    }) - ${appointment.type}`;
 
     let submittedAppointment = { ...appointment };
     if (!defaultAppointment) {
       submittedAppointment.id = '-1';
     }
-    submittedAppointment.title = apptTitle;
+
+    submittedAppointment.schoolId = schoolSelection.id;
+    submittedAppointment.title = generateAppointmentTitleLocal(
+      submittedAppointment,
+      schoolSelection?.name
+    );
     submittedAppointment.participants = participants;
     submittedAppointment.status = 'SCHEDULED';
-    submittedAppointment.schoolId = schoolSelection.id;
     onSubmit(submittedAppointment);
   };
 

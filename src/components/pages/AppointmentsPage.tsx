@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import {
   createPermission,
@@ -12,8 +12,8 @@ import {
   AppointmentsContext,
   emptyAppointment,
 } from '../../data/appointments';
-import { CounselorsContext, emptyCounselor } from '../../data/counselors';
-import { LoggedInUserContext } from '../../data/users';
+import { emptyCounselor, getCounselors } from '../../data/counselors';
+import { LoggedInUserContext, UsersContext } from '../../data/users';
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import EditAppointmentModal from '../modals/EditAppointmentModal';
 import Navbar from '../navbar/Navbar';
@@ -34,7 +34,8 @@ const AppointmentsPage: React.FC = () => {
     delete: deleteAppointment,
     update: updateAppointment,
   } = useContext(AppointmentsContext);
-  const { data: counselors } = useContext(CounselorsContext);
+  const { data: users } = useContext(UsersContext);
+  const counselors = useMemo(() => getCounselors(users), [users]);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
   const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
