@@ -221,7 +221,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
         );
       } else {
         const guardians = participants.filter(
-          participant => (participant.role = 'GUARDIAN')
+          participant => participant.role === 'GUARDIAN'
         );
 
         if (guardians.length > 0) {
@@ -233,7 +233,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
           );
         } else {
           const counselors = participants.filter(
-            participant => (participant.role = 'COUNSELOR')
+            participant => participant.role === 'COUNSELOR'
           );
 
           if (counselors.length > 0) {
