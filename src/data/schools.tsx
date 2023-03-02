@@ -20,7 +20,13 @@ export type School = {
 export const emptySchool = {
   id: '-1',
   name: '',
+  address: '',
+  city: '',
+  state: '',
+  zip: '',
   primaryEmail: '',
+  primaryPhone: '',
+  docsUrl: '',
 };
 
 export const SchoolsContext = React.createContext<ContextData<School>>({
