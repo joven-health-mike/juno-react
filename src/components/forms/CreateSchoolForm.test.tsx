@@ -93,7 +93,6 @@ describe('CreateSchoolForm', () => {
     //click submit button
     const button = screen.getByRole('button', { name: 'Submit' });
     fireEvent.click(button);
-    console.log(screen.debug());
 
     //check that the ID is positive
     expect(submitCallback.mock.calls[0][0].id).toBe('-1');
