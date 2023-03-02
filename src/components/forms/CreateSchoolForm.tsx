@@ -69,7 +69,6 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
         <Label>
           Name:{' '}
           <Input
-            data-testid={'input-name'}
             type="text"
             placeholder="Name"
             name="name"
@@ -83,7 +82,6 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
         <Label>
           Address:{' '}
           <Input
-            data-testid={'input-address'}
             type="text"
             placeholder="Address"
             name="address"
@@ -97,7 +95,6 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
         <Label>
           City:{' '}
           <Input
-            data-testid={'input-city'}
             type="text"
             placeholder="City"
             name="city"
@@ -111,7 +108,6 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
         <Label>
           State:{' '}
           <Input
-            data-testid={'input-state'}
             type="text"
             placeholder="State"
             name="state"
@@ -125,7 +121,6 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
         <Label>
           Zip Code:{' '}
           <Input
-            data-testid={'input-zip'}
             type="text"
             placeholder="Zip Code"
             name="zip"
@@ -139,7 +134,6 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
         <Label>
           Email:{' '}
           <Input
-            data-testid={'input-email'}
             type="email"
             placeholder="Email"
             name="primaryEmail"
@@ -153,7 +147,6 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
         <Label>
           Phone Number:{' '}
           <Input
-            data-testid={'input-phone'}
             type="text"
             placeholder="Phone Number"
             name="primaryPhone"
@@ -167,7 +160,6 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
         <Label>
           Docs URL:{' '}
           <Input
-            data-testid={'input-docsUrl'}
             type="URL"
             placeholder="Docs URL"
             name="docsUrl"
@@ -179,14 +171,8 @@ const CreateSchoolForm: React.FC<CreateSchoolFormProps> = ({
           />
         </Label>
 
-        <Button type="submit" data-testid={'button-submit'}>
-          Submit
-        </Button>
-        <Button
-          type="button"
-          data-testid={'button-cancel'}
-          onClick={onFormCancel}
-        >
+        <Button type="submit">Submit</Button>
+        <Button type="button" onClick={onFormCancel}>
           Cancel
         </Button>
       </Form>

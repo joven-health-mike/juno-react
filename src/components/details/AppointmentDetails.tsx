@@ -57,14 +57,14 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
 
   return (
     <>
-      <h2 data-testid={'title'}>{appointment.title}</h2>
+      <h2>{appointment.title}</h2>
       <p data-testid={'time'}>
         Time:{' '}
         {`${formatDateTime(new Date(appointment.start))} - ${formatDateTime(
           new Date(appointment.end)
         )}`}
       </p>
-      <p data-testid={'counselorId'}>Counselor: {counselorName}</p>
+      <p>Counselor: {counselorName}</p>
       <p data-testid={'schoolId'}>School: {schoolName}</p>
       <p data-testid={'participants'}>Participants:</p>
       {appointment.participants.map((user, index) => (

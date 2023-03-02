@@ -16,8 +16,8 @@ type SchoolDetailsProps = {
 const SchoolDetails: React.FC<SchoolDetailsProps> = ({ school }) => {
   return (
     <>
-      <h2 data-testid={'name'}>{school.name}</h2>
-      <p data-testid={'email'}>Email: {school.primaryEmail}</p>
+      <h2>{school.name}</h2>
+      <p>Email: {school.primaryEmail}</p>
       <p data-testid={'phone'}>Phone: {school.primaryPhone}</p>
       <p data-testid={'fullAddress'}>
         Address:{' '}

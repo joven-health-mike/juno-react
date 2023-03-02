@@ -429,14 +429,8 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
         </>
       )}
 
-      <Button type="submit" data-testid={'button-submit'}>
-        Submit
-      </Button>
-      <Button
-        type="button"
-        data-testid={'button-cancel'}
-        onClick={onFormCancel}
-      >
+      <Button type="submit">Submit</Button>
+      <Button type="button" onClick={onFormCancel}>
         Cancel
       </Button>
     </Form>

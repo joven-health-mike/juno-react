@@ -128,7 +128,6 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       <Label>
         First Name:
         <Input
-          data-testid={'input-first-name'}
           type="text"
           placeholder="First Name"
           name="firstName"
@@ -142,7 +141,6 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       <Label>
         Last Name:
         <Input
-          data-testid={'input-last-name'}
           type="text"
           placeholder="Last Name"
           name="lastName"
@@ -156,7 +154,6 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       <Label>
         Email:
         <Input
-          data-testid={'input-email'}
           type="email"
           placeholder="Email"
           name="email"
@@ -170,7 +167,6 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       <Label>
         Username:
         <Input
-          data-testid={'input-username'}
           type="text"
           placeholder="Username"
           name="username"
@@ -184,7 +180,6 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       <Label>
         Phone:
         <Input
-          data-testid={'input-phone'}
           type="phone"
           placeholder="Phone"
           name="phone"
@@ -198,7 +193,6 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
       <Label>
         Docs URL:
         <Input
-          data-testid={'input-docsUrl'}
           type="URL"
           placeholder="Docs URL"
           name="docsUrl"
@@ -252,10 +246,8 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
         />
       </Label>
 
-      <Button type="submit" data-testid="button-submit">
-        Submit
-      </Button>
-      <Button type="button" data-testid="button-cancel" onClick={onFormCancel}>
+      <Button type="submit">Submit</Button>
+      <Button type="button" onClick={onFormCancel}>
         Cancel
       </Button>
     </Form>

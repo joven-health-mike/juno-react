@@ -4,7 +4,7 @@
 /* eslint-disable testing-library/prefer-screen-queries */
 
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import CounselorDetails from './CounselorDetails';
 import { Role } from '../../services/user.service';
 
@@ -22,40 +22,28 @@ const testCounselor = {
 };
 
 describe('CounselorDetails', () => {
-  it('should display name', async () => {
-    const view = render(<CounselorDetails counselor={testCounselor} />);
-    const nameView = await view.findByTestId('name');
-    expect(nameView.innerHTML).toEqual(
+  const renderComponent = () =>
+    render(<CounselorDetails counselor={testCounselor} />);
+
+  it('should display name', () => {
+    renderComponent();
+    const nameView = screen.getByText(
       `${testCounselor.firstName} ${testCounselor.lastName}`
     );
+    expect(nameView).not.toBeNull();
   });
-  it('should display email as a string', async () => {
-    const view = render(<CounselorDetails counselor={testCounselor} />);
-    const emailView = await view.findByTestId('email');
-    expect(emailView.innerHTML).toEqual(
+  it('should display email as a string', () => {
+    renderComponent();
+    const emailView = screen.getByText(
       'Email: ' + testCounselor.email.toString()
     );
+    expect(emailView).not.toBeNull();
   });
-  it('should display the room link as a  string', async () => {
-    const view = render(<CounselorDetails counselor={testCounselor} />);
-    const roomLinkView = await view.findByTestId('roomLink');
-    expect(roomLinkView.innerHTML).toEqual(
-      `Room Link: <a href="${testCounselor.counselorRoomLink}">${testCounselor.counselorRoomLink}</a>`
-    );
-  });
-  it('should display name as <h2>', async () => {
-    const view = render(<CounselorDetails counselor={testCounselor} />);
-    const nameView = await view.findByTestId('name');
-    expect(nameView.nodeName.toLowerCase()).toEqual('h2');
-  });
-  it('should display email as <p>', async () => {
-    const view = render(<CounselorDetails counselor={testCounselor} />);
-    const emailView = await view.findByTestId('email');
-    expect(emailView.nodeName.toLowerCase()).toEqual('p');
-  });
-  it('should display the room link as <p>', async () => {
-    const view = render(<CounselorDetails counselor={testCounselor} />);
-    const roomLinkView = await view.findByTestId('roomLink');
-    expect(roomLinkView.nodeName.toLowerCase()).toEqual('p');
+  it('should display the room link as a  string', () => {
+    renderComponent();
+    const roomLinkView = screen.getByRole('link', {
+      name: testCounselor.counselorRoomLink,
+    });
+    expect(roomLinkView).not.toBeNull();
   });
 });

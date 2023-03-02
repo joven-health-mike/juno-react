@@ -4,7 +4,8 @@
 /* eslint-disable testing-library/prefer-screen-queries */
 
 import React from 'react';
-import { fireEvent, render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { fireEvent, render, screen } from '@testing-library/react';
 import CreateUserForm from './CreateUserForm';
 import { Role } from '../../services/user.service';
 
@@ -21,9 +22,9 @@ const testUser = {
 };
 
 describe('CreateUserForm', () => {
-  it('Should submit default user if nothing has changed', async () => {
+  it('Should submit default user if nothing has changed', () => {
     const submitCallback = jest.fn();
-    const view = render(
+    render(
       <CreateUserForm
         defaultUser={testUser}
         onSubmit={submitCallback}
@@ -32,87 +33,59 @@ describe('CreateUserForm', () => {
     );
 
     // click submit button
-    const button = await view.findByTestId('button-submit');
+    const button = screen.getByRole('button', { name: 'Submit' });
     fireEvent.click(button);
 
     expect(submitCallback).toHaveBeenCalledWith(testUser);
   });
-  test('Cancel button calls onCancel callback', async () => {
+  test('Cancel button calls onCancel callback', () => {
     const cancelCallback = jest.fn();
-    const view = render(
-      <CreateUserForm onSubmit={jest.fn()} onCancel={cancelCallback} />
-    );
+    render(<CreateUserForm onSubmit={jest.fn()} onCancel={cancelCallback} />);
 
-    const button = await view.findByTestId('button-cancel');
+    const button = screen.getByRole('button', { name: 'Cancel' });
     fireEvent.click(button);
 
     expect(cancelCallback).toHaveBeenCalled();
   });
-  test('a new user should have a positive ID', async () => {
+  test('a new user should have a positive ID', () => {
     const submitCallback = jest.fn();
-    const view = render(
-      <CreateUserForm onSubmit={submitCallback} onCancel={jest.fn()} />
-    );
+    render(<CreateUserForm onSubmit={submitCallback} onCancel={jest.fn()} />);
     //add name
-    const inputFirstName = (await view.findByTestId(
-      'input-first-name'
-    )) as HTMLInputElement;
-    inputFirstName.value = 'firstName';
+    const inputFirstName = screen.getByRole('textbox', {
+      name: 'First Name:',
+    }) as HTMLInputElement;
+    userEvent.type(inputFirstName, 'firstName');
 
-    const inputLastName = (await view.findByTestId(
-      'input-last-name'
-    )) as HTMLInputElement;
-    inputLastName.value = 'lastName';
+    const inputLastName = screen.getByRole('textbox', {
+      name: 'Last Name:',
+    }) as HTMLInputElement;
+    userEvent.type(inputLastName, 'lastName');
 
-    const inputEmail = (await view.findByTestId(
-      'input-email'
-    )) as HTMLInputElement;
-    inputEmail.value = 'email@test.com';
+    const inputEmail = screen.getByRole('textbox', {
+      name: 'Email:',
+    }) as HTMLInputElement;
+    userEvent.type(inputEmail, 'email@test.com');
 
-    const inputUsername = (await view.findByTestId(
-      'input-username'
-    )) as HTMLInputElement;
-    inputUsername.value = 'username';
+    const inputUsername = screen.getByRole('textbox', {
+      name: 'Username:',
+    }) as HTMLInputElement;
+    userEvent.type(inputUsername, 'username');
 
-    const inputPhone = (await view.findByTestId(
-      'input-phone'
-    )) as HTMLInputElement;
-    inputPhone.value = 'phone';
+    const inputPhone = screen.getByRole('textbox', {
+      name: 'Phone:',
+    }) as HTMLInputElement;
+    userEvent.type(inputPhone, 'phone');
 
-    const inputDocsUrl = (await view.findByTestId(
-      'input-docsUrl'
-    )) as HTMLInputElement;
-    inputDocsUrl.value = 'https://docs.com';
+    const inputDocsUrl = screen.getByRole('textbox', {
+      name: 'Docs URL:',
+    }) as HTMLInputElement;
+    userEvent.type(inputDocsUrl, 'https://docs.com');
 
     //click submit button
-    const button = await view.findByTestId('button-submit');
+    const button = screen.getByRole('button', { name: 'Submit' });
     fireEvent.click(button);
 
     //check that the ID is -1
     expect(submitCallback.mock.calls[0][0].id).toBe('-1');
-  });
-
-  test('Check if first names match', () => {
-    expect(testUser.firstName).toBe('firstName');
-  });
-
-  test('Check if last names match', () => {
-    expect(testUser.lastName).toBe('lastName');
-  });
-
-  test('Check if emails match', () => {
-    expect(testUser.email).toBe('email@test.com');
-  });
-
-  test('Check if usernames match', () => {
-    expect(testUser.username).toBe('username');
-  });
-
-  test('Check if phones match', () => {
-    expect(testUser.phone).toBe('phone');
-  });
-
-  test('Check if roles match', () => {
-    expect(testUser.role).toBe('JOVEN_STAFF');
   });
 });

@@ -28,7 +28,6 @@ const XButton: React.FC<XButtonProps> = ({
   return (
     <>
       <Button
-        data-testid={'button-x'}
         title={title}
         className={className}
         value={value}

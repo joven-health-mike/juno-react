@@ -31,8 +31,8 @@ const StudentDetails: React.FC<StudentDetailsProps> = ({ student }) => {
   return (
     <>
       <UserDetails user={student} />
-      <p data-testid={'schoolId'}>School: {schoolName}</p>
-      <p data-testid={'counselorId'}>Counselor: {counselorName}</p>
+      <p>School: {schoolName}</p>
+      <p>Counselor: {counselorName}</p>
       <p data-testid={'status'}>Status: {student.studentStatus}</p>
     </>
   );

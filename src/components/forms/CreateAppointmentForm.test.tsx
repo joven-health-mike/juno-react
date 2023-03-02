@@ -4,18 +4,19 @@
 /* eslint-disable testing-library/prefer-screen-queries */
 
 import React from 'react';
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import CreateAppointmentForm from './CreateAppointmentForm';
 import { emptySchool } from '../../data/schools';
 
 const fakeAppointment = {
   id: '0',
-  title: '  () - CLINICAL',
+  title: 'CLINICAL',
   start: new Date(),
   end: new Date(),
   isRecurring: false,
   recurranceInfo: undefined,
   school: emptySchool,
+  schoolId: '-1',
   participants: [],
   type: 'CLINICAL',
   status: 'SCHEDULED',
@@ -23,9 +24,9 @@ const fakeAppointment = {
 };
 
 describe('CreateAppointmentForm', () => {
-  it('should submit defaultAppointment if nothing is changed', async () => {
+  it('should submit defaultAppointment if nothing is changed', () => {
     const submitCallback = jest.fn();
-    const view = render(
+    render(
       <CreateAppointmentForm
         defaultAppointment={fakeAppointment}
         onSubmit={submitCallback}
@@ -34,21 +35,24 @@ describe('CreateAppointmentForm', () => {
     );
 
     // click submit button
-    const button = await view.findByTestId('button-submit');
+    const button = screen.getByRole('button', { name: 'Submit' });
     fireEvent.click(button);
 
     expect(submitCallback).toHaveBeenCalledWith(fakeAppointment);
   });
-  test('cancel button calls onCancel callback', async () => {
+  it('cancel button calls onCancel callback', () => {
     const cancelCallback = jest.fn();
-    const view = render(
+    render(
       <CreateAppointmentForm onSubmit={jest.fn()} onCancel={cancelCallback} />
     );
 
-    // click submit button
-    const button = await view.findByTestId('button-cancel');
+    // click cancel button
+    const button = screen.getByRole('button', { name: 'Cancel' });
     fireEvent.click(button);
 
     expect(cancelCallback).toHaveBeenCalled();
   });
+
+  // TODO: Test submit with new values
+  // TODO: Test submit new recurring appointment
 });
