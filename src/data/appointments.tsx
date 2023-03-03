@@ -70,6 +70,21 @@ export const generateAppointmentTitle = (
   return result;
 };
 
+export type AppointmentStatus =
+  | 'SCHEDULED'
+  | 'CANCELLED'
+  | 'ONGOING'
+  | 'FINISHED'
+  | 'DELETED';
+
+export const APPOINTMENT_STATUSES = [
+  'SCHEDULED',
+  'CANCELLED',
+  'ONGOING',
+  'FINISHED',
+  'DELETED',
+];
+
 export const AppointmentTypes = {
   Clinical: { id: 0, name: 'CLINICAL', color: 'green' },
   Consultation: { id: 1, name: 'CONSULTATION', color: 'blue' },

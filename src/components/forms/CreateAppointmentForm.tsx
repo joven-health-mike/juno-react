@@ -16,6 +16,8 @@ import {
   AppointmentType,
   AppointmentTypes,
   generateAppointmentTitle,
+  APPOINTMENT_STATUSES,
+  AppointmentStatus,
 } from '../../data/appointments';
 import { Counselor, getCounselors } from '../../data/counselors';
 import { School, SchoolsContext, emptySchool } from '../../data/schools';
@@ -158,6 +160,10 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
   const handleIsRecurringChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAppointment({ ...appointment, isRecurring: e.target.checked });
+  };
+
+  const onStatusChanged = (status: AppointmentStatus) => {
+    setAppointment({ ...appointment, status: status });
   };
 
   const getAssociatedSchoolFromStudent = (student: Student) => {
@@ -307,7 +313,6 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
       schoolSelection?.name
     );
     submittedAppointment.participants = participants;
-    submittedAppointment.status = 'SCHEDULED';
     onSubmit(submittedAppointment);
   };
 
@@ -354,6 +359,19 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
         <SelectTypeList
           value={typeSelectionIndex}
           onTypeChanged={onTypeChanged}
+        />
+      </Label>
+      <Label>
+        Status:{' '}
+        <SelectList
+          labelText="Select a Status"
+          items={APPOINTMENT_STATUSES}
+          value={APPOINTMENT_STATUSES.indexOf(appointment.status)}
+          onItemChanged={item => {
+            return onStatusChanged(
+              APPOINTMENT_STATUSES[parseInt(item)] as AppointmentStatus
+            );
+          }}
         />
       </Label>
       <Label>
