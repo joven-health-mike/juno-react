@@ -21,7 +21,6 @@ import {
 } from '../../data/appointments';
 import { Counselor, getCounselors } from '../../data/counselors';
 import { School, SchoolsContext, emptySchool } from '../../data/schools';
-import { getStudents, Student } from '../../data/students';
 import { User, UsersContext, LoggedInUserContext } from '../../data/users';
 import {
   RepeatForFrequency,
@@ -30,6 +29,7 @@ import {
 import DateSelector from '../dateSelector/DateSelector';
 import SelectList, {
   SelectCounselorList,
+  SelectSchoolList,
   SelectTypeList,
   SelectUserList,
 } from '../selectList/SelectList';
@@ -73,13 +73,13 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   const [participants, setParticipants] = useState<User[]>([]);
   const [counselorSelectionIndex, setCounselorSelectionIndex] =
     useState<number>(-1);
+  const [schoolSelectionIndex, setSchoolSelectionIndex] = useState<number>(-1);
   const [typeSelectionIndex, setTypeSelectionIndex] = useState<number>(-1);
   const [duration, setDuration] = useState<string>('30');
 
   const [shouldShowCounselor, setShouldShowCounselor] = useState<boolean>(true);
 
   const { data: users } = useContext(UsersContext);
-  const students = useMemo(() => getStudents(users), [users]);
   const counselors = useMemo(() => getCounselors(users), [users]);
   const { data: schools } = useContext(SchoolsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
@@ -115,6 +115,16 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
         setCounselorSelectionIndex(initialCounselorSelectionIndex);
       }
 
+      if (defaultAppointment.schoolId || defaultAppointment.school) {
+        const schoolIds = schools.map(school => school.id);
+        const targetSchoolId =
+          defaultAppointment.schoolId ||
+          defaultAppointment.school?.id ||
+          "APPOINTMENT DIDN'T HAVE SCHOOLID OR SCHOOL.ID";
+        const initialSchoolSelectionIndex = schoolIds.indexOf(targetSchoolId);
+        setSchoolSelectionIndex(initialSchoolSelectionIndex);
+      }
+
       // If a type is selected, set the type selection index
       if (defaultAppointment.type) {
         setTypeSelectionIndexFromName(defaultAppointment.type);
@@ -125,7 +135,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
         setParticipants(defaultAppointment.participants);
       }
     }
-  }, [counselors, defaultAppointment]);
+  }, [counselors, schools, defaultAppointment]);
 
   const setTypeSelectionIndexFromName = (appointmentTypeName: string) => {
     let i = 0;
@@ -140,6 +150,11 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelectionIndex(counselors.indexOf(counselor));
     setAppointment({ ...appointment, counselorUserId: counselor.id });
+  };
+
+  const onSchoolChanged = (school: School) => {
+    setSchoolSelectionIndex(schools.indexOf(school));
+    setAppointment({ ...appointment, schoolId: school.id });
   };
 
   const onTypeChanged = (type: AppointmentType) => {
@@ -168,40 +183,13 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     setAppointment({ ...appointment, status: status });
   };
 
-  const getAssociatedSchoolFromStudent = (student: Student) => {
-    return schools.find(school => {
-      return school.id === student.studentAssignedSchoolId;
-    });
-  };
-
-  const getAssociatedSchoolFromSchoolAdmin = (schoolAdmin: User) => {
-    return schools.find(school => {
-      return school.id === schoolAdmin.schoolAdminAssignedSchoolId;
-    });
-  };
-
-  const getAssociatedSchoolFromSchoolStaff = (schoolStaff: User) => {
-    return schools.find(school => {
-      return school.id === schoolStaff.schoolStaffAssignedSchoolId;
-    });
-  };
-
-  const getAssociatedSchoolFromGuardian = (guardian: User) => {
-    let schoolId = '-1';
-    if (guardian.guardianStudents && guardian.guardianStudents.length > 0) {
-      schoolId = guardian.guardianStudents[0].studentAssignedSchoolId || '-1';
-    }
-    return schools.find(school => {
-      return school.id === schoolId;
-    });
-  };
-
   // TODO: Refactor this using strategy pattern for each role
-  const generateAppointmentTitleLocal = (
-    submittedAppointment: Appointment,
-    schoolName: string
-  ) => {
+  const generateAppointmentTitleLocal = (submittedAppointment: Appointment) => {
     const names: string[] = [];
+    const schoolName = (
+      schools.find(school => school.id === submittedAppointment.schoolId) ||
+      emptySchool
+    ).name;
     const appointmentTypeName = submittedAppointment.type;
 
     const students = participants.filter(
@@ -272,44 +260,14 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const participantIds = participants.map(user => user.id);
-    const studentSelection = students.find(student =>
-      participantIds.includes(student.id)
-    );
-    const schoolAdminSelection = users.find(
-      user => user.role === 'SCHOOL_ADMIN' && participantIds.includes(user.id)
-    );
-    const schoolStaffSelection = users.find(
-      user => user.role === 'SCHOOL_STAFF' && participantIds.includes(user.id)
-    );
-    const guardianSelection = users.find(
-      user => user.role === 'GUARDIAN' && participantIds.includes(user.id)
-    );
-    let schoolSelection: School | undefined;
-    if (studentSelection) {
-      schoolSelection = getAssociatedSchoolFromStudent(studentSelection);
-    } else if (schoolAdminSelection) {
-      schoolSelection =
-        getAssociatedSchoolFromSchoolAdmin(schoolAdminSelection);
-    } else if (schoolStaffSelection) {
-      schoolSelection =
-        getAssociatedSchoolFromSchoolStaff(schoolStaffSelection);
-    } else if (guardianSelection) {
-      schoolSelection = getAssociatedSchoolFromGuardian(guardianSelection);
-    }
-
-    schoolSelection = schoolSelection || emptySchool;
 
     let submittedAppointment = { ...appointment };
     if (!defaultAppointment) {
       submittedAppointment.id = '-1';
     }
 
-    submittedAppointment.schoolId = schoolSelection.id;
-    submittedAppointment.title = generateAppointmentTitleLocal(
-      submittedAppointment,
-      schoolSelection?.name
-    );
+    submittedAppointment.title =
+      generateAppointmentTitleLocal(submittedAppointment);
     submittedAppointment.participants = participants;
 
     const startDate = new Date(appointment.start);
@@ -374,6 +332,13 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
               APPOINTMENT_STATUSES[parseInt(item)] as AppointmentStatus
             );
           }}
+        />
+      </Label>
+      <Label>
+        School:{' '}
+        <SelectSchoolList
+          selectedIndex={schoolSelectionIndex}
+          onSchoolChanged={onSchoolChanged}
         />
       </Label>
       <Label>
