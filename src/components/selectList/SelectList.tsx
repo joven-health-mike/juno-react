@@ -228,16 +228,17 @@ export function SelectStudentList({
 }
 
 type SelectUserListProps = {
+  users: User[];
   selectedUsers: User[];
   onUsersChanged: (users: User[]) => void;
 };
 
 export function SelectUserList({
+  users,
   selectedUsers,
   onUsersChanged,
 }: SelectUserListProps) {
   const { loggedInUser } = useContext(LoggedInUserContext);
-  const { data: users } = useContext(UsersContext);
   const userNameFormat = (user: User) =>
     `${user.firstName} ${user.lastName} (${user.role})`;
   const userListFilter =

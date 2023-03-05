@@ -4,6 +4,7 @@ import React, {
   ChangeEvent,
   FormEvent,
   MouseEvent,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -71,6 +72,9 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     defaultAppointment ?? emptyAppointment
   );
   const [participants, setParticipants] = useState<User[]>([]);
+  const [availableParticipants, setAvailableParticipants] = useState<User[]>(
+    []
+  );
   const [counselorSelectionIndex, setCounselorSelectionIndex] =
     useState<number>(-1);
   const [schoolSelectionIndex, setSchoolSelectionIndex] = useState<number>(-1);
@@ -100,6 +104,39 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     }
   }, [loggedInUser.id, loggedInUser.role]);
 
+  const determineAvailableParticipants = useCallback(
+    (school: School) => {
+      setAvailableParticipants(
+        users.filter(user => {
+          if (
+            user.role === 'STUDENT' &&
+            user.studentAssignedSchoolId === school.id
+          )
+            return true;
+          else if (
+            user.role === 'SCHOOL_ADMIN' &&
+            user.schoolAdminAssignedSchoolId === school.id
+          )
+            return true;
+          else if (
+            user.role === 'SCHOOL_STAFF' &&
+            user.schoolStaffAssignedSchoolId === school.id
+          )
+            return true;
+          else if (
+            user.role === 'GUARDIAN' &&
+            (user.guardianStudents?.length || 0) > 0 &&
+            user.guardianStudents![0].studentAssignedSchoolId === school.id
+          )
+            return true;
+
+          return false;
+        })
+      );
+    },
+    [users]
+  );
+
   useEffect(() => {
     // If a default appointment is passed in, set up some UI values
     if (defaultAppointment) {
@@ -123,6 +160,9 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
           "APPOINTMENT DIDN'T HAVE SCHOOLID OR SCHOOL.ID";
         const initialSchoolSelectionIndex = schoolIds.indexOf(targetSchoolId);
         setSchoolSelectionIndex(initialSchoolSelectionIndex);
+        determineAvailableParticipants(
+          schools.find(school => school.id === targetSchoolId) || emptySchool
+        );
       }
 
       // If a type is selected, set the type selection index
@@ -135,7 +175,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
         setParticipants(defaultAppointment.participants);
       }
     }
-  }, [counselors, schools, defaultAppointment]);
+  }, [counselors, schools, defaultAppointment, determineAvailableParticipants]);
 
   const setTypeSelectionIndexFromName = (appointmentTypeName: string) => {
     let i = 0;
@@ -155,6 +195,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   const onSchoolChanged = (school: School) => {
     setSchoolSelectionIndex(schools.indexOf(school));
     setAppointment({ ...appointment, schoolId: school.id });
+    determineAvailableParticipants(school);
   };
 
   const onTypeChanged = (type: AppointmentType) => {
@@ -344,6 +385,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
       <Label>
         Participants:{' '}
         <SelectParticipants
+          availableParticipants={availableParticipants}
           selectedParticipants={participants}
           onParticipantsSelected={onParticipantsSelected}
         />
@@ -425,17 +467,20 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 export default CreateAppointmentForm;
 
 export type SelectParticipantsProps = {
+  availableParticipants: User[];
   selectedParticipants: User[];
   onParticipantsSelected(users: User[]): void;
 };
 
 export const SelectParticipants: React.FC<SelectParticipantsProps> = ({
+  availableParticipants,
   selectedParticipants,
   onParticipantsSelected,
 }) => {
   return (
     <>
       <SelectUserList
+        users={availableParticipants}
         selectedUsers={selectedParticipants}
         onUsersChanged={onParticipantsSelected}
       />
