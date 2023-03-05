@@ -206,12 +206,6 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     });
   };
 
-  const onRepeatForFrequencyChanged = (
-    repeatForFrequency: RepeatForFrequency
-  ) => {
-    setAppointment({ ...appointment, frequency: repeatForFrequency });
-  };
-
   const onParticipantsSelected = (participants: User[]) => {
     setParticipants(participants);
   };
@@ -399,61 +393,27 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
         />
       </Label>
       {appointment.isRecurring && (
-        <>
-          <Label>
-            Num Occurrences:{' '}
-            <Input
-              data-testid={'input-numOccurrences'}
-              type="number"
-              min={2}
-              max={99}
-              placeholder="Num Occurrences"
-              name="numOccurrences"
-              value={appointment.numOccurrences}
-              required
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                setAppointment({
-                  ...appointment,
-                  numOccurrences: parseInt(e.target.value),
-                });
-              }}
-            />
-          </Label>
-          <Label>
-            Repeat For Num:{' '}
-            <Input
-              data-testid={'input-repeatForNum'}
-              type="number"
-              min={1}
-              max={99}
-              placeholder="Repeat For Num"
-              name="repeatForNum"
-              value={appointment.numRepeats}
-              required
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                setAppointment({
-                  ...appointment,
-                  numRepeats: parseInt(e.target.value),
-                });
-              }}
-            />
-          </Label>
-          <Label>
-            Repeat For Frequency:{' '}
-            <SelectList
-              labelText="Select a Frequency"
-              items={REPEAT_FOR_FREQUENCIES}
-              value={REPEAT_FOR_FREQUENCIES.indexOf(
-                appointment.frequency || ''
-              )}
-              onItemChanged={item => {
-                return onRepeatForFrequencyChanged(
-                  REPEAT_FOR_FREQUENCIES[parseInt(item)] as RepeatForFrequency
-                );
-              }}
-            />
-          </Label>
-        </>
+        <Label>
+          <SelectIsRecurring
+            initialNumOccurrences={appointment.numOccurrences || 0}
+            initialRepeatForNum={appointment.numRepeats || 0}
+            initialRepeatForFrequency={
+              (appointment.frequency as RepeatForFrequency) || 'WEEKS'
+            }
+            onRecurringInfoChanged={function (
+              numOccurrences: number,
+              repeatForNum: number,
+              repeatForFrequency: RepeatForFrequency
+            ): void {
+              setAppointment({
+                ...appointment,
+                numOccurrences: numOccurrences,
+                numRepeats: repeatForNum,
+                frequency: repeatForFrequency,
+              });
+            }}
+          />
+        </Label>
       )}
 
       <Button type="submit">Submit</Button>
@@ -484,6 +444,91 @@ export const SelectParticipants: React.FC<SelectParticipantsProps> = ({
         selectedUsers={selectedParticipants}
         onUsersChanged={onParticipantsSelected}
       />
+    </>
+  );
+};
+
+export type SelectIsRecurringProps = {
+  initialNumOccurrences: number;
+  initialRepeatForNum: number;
+  initialRepeatForFrequency: RepeatForFrequency;
+  onRecurringInfoChanged(
+    numOccurrences: number,
+    repeatForNum: number,
+    repeatForFrequency: RepeatForFrequency
+  ): void;
+};
+
+export const SelectIsRecurring: React.FC<SelectIsRecurringProps> = ({
+  initialNumOccurrences,
+  initialRepeatForNum,
+  initialRepeatForFrequency,
+  onRecurringInfoChanged,
+}) => {
+  const [numOccurrences, setNumOccurrences] = useState<number>(
+    initialNumOccurrences
+  );
+  const [repeatForNum, setRepeatForNum] = useState<number>(initialRepeatForNum);
+  const [repeatForFrequency, setRepeatForFrequency] =
+    useState<RepeatForFrequency>(initialRepeatForFrequency);
+
+  return (
+    <>
+      {`Repeat every`}{' '}
+      <Input
+        type="number"
+        min={1}
+        max={10}
+        placeholder="Repeat For Num"
+        name="repeatForNum"
+        value={repeatForNum}
+        required
+        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+          const changedRepeatForNum = parseInt(e.target.value);
+          setRepeatForNum(changedRepeatForNum);
+          onRecurringInfoChanged(
+            numOccurrences,
+            changedRepeatForNum,
+            repeatForFrequency
+          );
+        }}
+      />
+      <SelectList
+        labelText="Select a Frequency"
+        items={REPEAT_FOR_FREQUENCIES}
+        value={REPEAT_FOR_FREQUENCIES.indexOf(repeatForFrequency || '')}
+        onItemChanged={item => {
+          const changedFrequency = REPEAT_FOR_FREQUENCIES[
+            parseInt(item)
+          ] as RepeatForFrequency;
+          setRepeatForFrequency(changedFrequency);
+          onRecurringInfoChanged(
+            numOccurrences,
+            repeatForNum,
+            changedFrequency
+          );
+        }}
+      />
+      {`for `}
+      <Input
+        type="number"
+        min={2}
+        max={99}
+        placeholder="Num Occurrences"
+        name="numOccurrences"
+        value={numOccurrences}
+        required
+        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+          const changedNumOccurrences = parseInt(e.target.value);
+          setNumOccurrences(changedNumOccurrences);
+          onRecurringInfoChanged(
+            changedNumOccurrences,
+            repeatForNum,
+            repeatForFrequency
+          );
+        }}
+      />
+      {' ' + repeatForFrequency}
     </>
   );
 };
