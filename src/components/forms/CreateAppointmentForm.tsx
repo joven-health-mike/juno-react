@@ -74,6 +74,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   const [counselorSelectionIndex, setCounselorSelectionIndex] =
     useState<number>(-1);
   const [typeSelectionIndex, setTypeSelectionIndex] = useState<number>(-1);
+  const [duration, setDuration] = useState<string>('30');
 
   const [shouldShowCounselor, setShouldShowCounselor] = useState<boolean>(true);
 
@@ -82,6 +83,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
   const counselors = useMemo(() => getCounselors(users), [users]);
   const { data: schools } = useContext(SchoolsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
+  const DURATIONS = ['15', '30', '45', '60', '75', '90'];
 
   useEffect(() => {
     // if the logged-in user is a counselor, they can only schedule appointments for themselves.
@@ -285,18 +287,14 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
     );
     let schoolSelection: School | undefined;
     if (studentSelection) {
-      console.log('found a student');
       schoolSelection = getAssociatedSchoolFromStudent(studentSelection);
     } else if (schoolAdminSelection) {
-      console.log('found a school admin');
       schoolSelection =
         getAssociatedSchoolFromSchoolAdmin(schoolAdminSelection);
     } else if (schoolStaffSelection) {
-      console.log('found a school staff');
       schoolSelection =
         getAssociatedSchoolFromSchoolStaff(schoolStaffSelection);
     } else if (guardianSelection) {
-      console.log('found a guardian');
       schoolSelection = getAssociatedSchoolFromGuardian(guardianSelection);
     }
 
@@ -313,6 +311,11 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
       schoolSelection?.name
     );
     submittedAppointment.participants = participants;
+
+    const startDate = new Date(appointment.start);
+    const endDate = new Date(startDate.getTime() + parseInt(duration) * 60000);
+    submittedAppointment.end = endDate;
+
     onSubmit(submittedAppointment);
   };
 
@@ -336,13 +339,12 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
         />
       </Label>
       <Label>
-        End Time:
-        <DateSelector
-          selected={new Date(appointment.end)}
-          onChange={(date: Date) =>
-            setAppointment({ ...appointment, end: date })
-          }
-          label={'End Time'}
+        Duration:
+        <SelectList
+          labelText={'Select Duration'}
+          items={DURATIONS}
+          value={DURATIONS.indexOf(duration || '')}
+          onItemChanged={item => setDuration(DURATIONS[parseInt(item)])}
         />
       </Label>
       {shouldShowCounselor && (
