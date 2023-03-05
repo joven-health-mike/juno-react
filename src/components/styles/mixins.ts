@@ -40,7 +40,7 @@ const formStyles = css`
 const inputStyles = css`
   display: block;
   padding: 1px;
-  width: 15em !important;
+  width: 25em !important;
   margin: auto;
   margin-bottom: 20px;
 `;
