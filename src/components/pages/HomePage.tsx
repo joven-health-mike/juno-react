@@ -89,7 +89,7 @@ const StudentsTableView: React.FC = () => {
     useState<boolean>(false);
 
   const { add: addAppointment } = useContext(AppointmentsContext);
-  const { delete: deleteStudent } = useContext(UsersContext);
+  const { update: updateStudent } = useContext(UsersContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
   useEffect(() => {
@@ -112,7 +112,8 @@ const StudentsTableView: React.FC = () => {
 
   const handleDeleteClick = (studentToDelete: Student) => {
     if (isDeleteStudentAllowed && window.confirm('Delete this student?')) {
-      deleteStudent(studentToDelete);
+      studentToDelete.studentStatus = 'DISCHARGED';
+      updateStudent(studentToDelete);
     }
   };
 

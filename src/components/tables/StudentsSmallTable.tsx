@@ -10,7 +10,7 @@ import React, {
 } from 'react';
 import { CellProps, Column, Row } from 'react-table';
 import { deletePermission } from '../../auth/permissions';
-import { getStudents, Student } from '../../data/students';
+import { getActiveStudents, Student } from '../../data/students';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
 import XButton from '../buttons/XButton';
 import DataTable from './DataTable';
@@ -33,7 +33,7 @@ const StudentsSmallTable: React.FC<StudentsSmallTableProps> = ({
   onOpenFileClicked,
 }) => {
   const { data: users } = useContext(UsersContext);
-  const students = useMemo(() => getStudents(users), [users]);
+  const students = useMemo(() => getActiveStudents(users), [users]);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
   const [isDeleteStudentAllowed, setIsDeleteStudentAllowed] =
