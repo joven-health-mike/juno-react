@@ -30,11 +30,7 @@ const Header = styled.h1`
 `;
 
 const StudentsPage = () => {
-  const {
-    add: addStudent,
-    delete: deleteStudent,
-    update: updateStudent,
-  } = useContext(UsersContext);
+  const { add: addStudent, update: updateStudent } = useContext(UsersContext);
   const { add: addAppointment } = useContext(AppointmentsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
@@ -84,8 +80,9 @@ const StudentsPage = () => {
   };
 
   const onDeleteStudentClicked = (studentToDelete: Student) => {
-    if (isDeleteStudentAllowed && window.confirm('Delete this student?')) {
-      deleteStudent(studentToDelete);
+    if (isDeleteStudentAllowed && window.confirm('Discharge this student?')) {
+      studentToDelete.studentStatus = 'DISCHARGED';
+      updateStudent(studentToDelete);
     }
   };
 

@@ -24,8 +24,12 @@ export const emptyStudent: Student = {
   studentStatus: 'ACTIVE' as StudentStatus,
 };
 
-export const getStudents = (users: User[]) => {
+export const getActiveStudents = (users: User[]) => {
   return users
-    .filter(user => user.role === 'STUDENT')
+    .filter(
+      user =>
+        user.role === 'STUDENT' &&
+        (user as Student).studentStatus !== 'DISCHARGED'
+    )
     .map(student => student as Student);
 };
