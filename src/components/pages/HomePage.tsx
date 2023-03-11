@@ -1,6 +1,12 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import '@fullcalendar/react';
 import listPlugin from '@fullcalendar/list';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone';
@@ -11,6 +17,8 @@ import {
   Appointment,
   AppointmentsContext,
   emptyAppointment,
+  getTableColumnHeadersForAppointments,
+  getTableDataForAppointments,
 } from '../../data/appointments';
 import StudentsSmallTable from '../tables/StudentsSmallTable';
 import { Student } from '../../data/students';
@@ -21,6 +29,7 @@ import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import { createPermission, deletePermission } from '../../auth/permissions';
 import { h1Styles } from '../styles/mixins';
 import { getCounselors } from '../../data/counselors';
+import MaterialTable from '../tables/MaterialTable';
 
 const LeftSection = styled.section`
   margin-left: 25px;
@@ -148,16 +157,23 @@ const StudentsTableView: React.FC = () => {
 };
 
 const AdminView: React.FC = () => {
+  const { data: appointments } = useContext(AppointmentsContext);
+  const tableData: string[][] = useMemo(
+    () => getTableDataForAppointments(appointments),
+    [appointments]
+  );
+  const tableColumnHeaders: string[] = useMemo(
+    () => getTableColumnHeadersForAppointments(appointments),
+    [appointments]
+  );
+
   return (
     <>
-      <LeftSection>
-        <Header>All Appointments</Header>
-        <AppointmentView />
-      </LeftSection>
-      <RightSection>
-        <Header>All Students</Header>
-        <StudentsTableView />
-      </RightSection>
+      <MaterialTable
+        rows={tableData}
+        columnHeaders={tableColumnHeaders}
+        hideColumnIndexes={[0]}
+      />
     </>
   );
 };

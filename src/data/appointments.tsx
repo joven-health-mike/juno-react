@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { FC, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { AppointmentService } from '../services/appointment.service';
 import { AxiosResponse } from 'axios';
 import { ContextData } from './ContextData';
@@ -202,4 +202,21 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
       {children}
     </AppointmentsContext.Provider>
   );
+};
+
+export const getTableColumnHeadersForAppointments = (
+  appointments: Appointment[]
+): string[] => {
+  return ['id', 'Title', 'Start', 'End'];
+};
+
+export const getTableDataForAppointments = (
+  appointments: Appointment[]
+): string[][] => {
+  return appointments.map(appointment => [
+    appointment.id,
+    appointment.title,
+    new Date(appointment.start).toISOString(),
+    new Date(appointment.end).toISOString(),
+  ]);
 };
