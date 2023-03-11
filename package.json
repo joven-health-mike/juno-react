@@ -9,6 +9,7 @@
     "@fullcalendar/list": "^5.11.0",
     "@fullcalendar/moment-timezone": "^5.11.3",
     "@fullcalendar/react": "^5.11.1",
+    "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.11.12",
     "@mui/styled-engine-sc": "^5.11.11",
     "@testing-library/jest-dom": "^5.16.4",
