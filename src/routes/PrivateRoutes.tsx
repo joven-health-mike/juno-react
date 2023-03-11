@@ -1,12 +1,12 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { Settings } from 'luxon';
 import { Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 import { LoggedInUserContext, UsersContext } from '../data/users';
-import { AvailableRoute, pagePermission } from '../auth/permissions';
-import { AvailableRoutes } from './AppRouter';
+import { AvailableRoute } from '../auth/permissions';
+import { AvailableRoutes, isRouteAllowed } from './AppRouter';
 import { AppointmentsContext } from '../data/appointments';
 import { SchoolsContext } from '../data/schools';
 import { h1Styles } from '../components/styles/mixins';
@@ -27,6 +27,7 @@ const PrivateRoutes = () => {
   const { getAll: getUsers } = useContext(UsersContext);
   const { getAll: getAppointments } = useContext(AppointmentsContext);
   const { getAll: getSchools } = useContext(SchoolsContext);
+  const { data: users } = useContext(UsersContext);
 
   useEffect(() => {
     getAppointments();
@@ -35,25 +36,28 @@ const PrivateRoutes = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function isRouteAllowed(route: AvailableRoute): boolean {
-    return pagePermission(role, route);
-  }
+  const isRouteAllowedForUser = useCallback(
+    (route: AvailableRoute) => isRouteAllowed(route, role, users),
+    [users, role]
+  );
 
   return (
     // allow available routes based on user permissions
     <Routes>
-      {AvailableRoutes.map((route, index) => {
-        return (
-          isRouteAllowed(route.url as AvailableRoute) && (
-            <Route
-              key={index}
-              path={route.url}
-              element={<Container>{route.element}</Container>}
-            />
-          )
-        );
-      })}
-      <Route path="*" element={<Header>404 - Not Found</Header>} />
+      <>
+        {AvailableRoutes.map((route, index) => {
+          return (
+            isRouteAllowedForUser(route.url as AvailableRoute) && (
+              <Route
+                key={index}
+                path={route.url}
+                element={<Container>{route.element}</Container>}
+              />
+            )
+          );
+        })}
+        <Route path="*" element={<Header>404 - Not Found</Header>} />
+      </>
     </Routes>
   );
 };

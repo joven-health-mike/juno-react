@@ -51,12 +51,17 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
     defaultCounselor ?? emptyCounselor
   );
   const [roomLink, setRoomLink] = useState<string>('');
+  const [roomLink2, setRoomLink2] = useState<string>('');
   const [assignedSchools, setAssignedSchools] = useState<School[]>([]);
 
   useEffect(() => {
     if (defaultCounselor && defaultCounselor.counselorRoomLink) {
       setCounselor(defaultCounselor);
       setRoomLink(defaultCounselor.counselorRoomLink);
+    }
+    if (defaultCounselor && defaultCounselor.counselorRoomLink2) {
+      setCounselor(defaultCounselor);
+      setRoomLink2(defaultCounselor.counselorRoomLink2);
     }
     if (defaultCounselor?.counselorAssignedSchools) {
       setAssignedSchools(defaultCounselor.counselorAssignedSchools);
@@ -76,6 +81,7 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
     const submittedCounselor = defaultCounselor ? counselor : { ...counselor };
     submittedCounselor.role = 'COUNSELOR' as Role;
     submittedCounselor.counselorRoomLink = roomLink;
+    submittedCounselor.counselorRoomLink2 = roomLink2;
     submittedCounselor.counselorAssignedSchools = assignedSchools;
     onSubmit(submittedCounselor);
   };
@@ -177,6 +183,19 @@ const CreateCounselorForm: React.FC<CreateCounselorFormProps> = ({
             required
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setRoomLink(e.target.value);
+            }}
+          />
+        </Label>
+        <Label>
+          Room Link 2:{' '}
+          <Input
+            type="URL"
+            placeholder="Room Link 2"
+            name="counselorRoomLink2"
+            value={roomLink2}
+            required
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setRoomLink2(e.target.value);
             }}
           />
         </Label>

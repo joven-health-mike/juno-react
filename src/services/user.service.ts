@@ -40,9 +40,11 @@ export type Role =
   | 'SCHOOL_ADMIN'
   | 'SCHOOL_STAFF'
   | 'STUDENT'
+  | 'TEACHER'
   | 'GUARDIAN'
   | 'COUNSELOR'
-  | 'SYSADMIN';
+  | 'SYSADMIN'
+  | 'UNASSIGNED';
 
 export const ROLES = [
   'JOVEN_ADMIN',
@@ -50,7 +52,9 @@ export const ROLES = [
   'SCHOOL_ADMIN',
   'SCHOOL_STAFF',
   'STUDENT',
+  'TEACHER',
   'GUARDIAN',
   'COUNSELOR',
   'SYSADMIN',
+  'UNASSIGNED',
 ];

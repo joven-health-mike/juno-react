@@ -1,11 +1,12 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { IconContext } from 'react-icons';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
-import { AvailableRoute, pagePermission } from '../../auth/permissions';
-import { LoggedInUserContext } from '../../data/users';
+import { AvailableRoute } from '../../auth/permissions';
+import { LoggedInUserContext, UsersContext } from '../../data/users';
+import { isRouteAllowed } from '../../routes/AppRouter';
 import { spanStyles } from '../styles/mixins';
 import { allNavItems, NavItem } from './navBarItems';
 
@@ -66,10 +67,12 @@ const ListItem = styled.li`
 const Navbar: React.FC = () => {
   const { loggedInUser } = useContext(LoggedInUserContext);
   const role = loggedInUser.role;
+  const { data: users } = useContext(UsersContext);
 
-  function isRouteAllowed(route: AvailableRoute): boolean {
-    return pagePermission(role, route);
-  }
+  const isRouteAllowedForUser = useCallback(
+    (route: AvailableRoute) => isRouteAllowed(route, role, users),
+    [users, role]
+  );
 
   return (
     <>
@@ -78,7 +81,7 @@ const Navbar: React.FC = () => {
           <List>
             {allNavItems.map(
               (item: NavItem, index: number) =>
-                isRouteAllowed(item.path as AvailableRoute) && (
+                isRouteAllowedForUser(item.path as AvailableRoute) && (
                   <ListItem key={index}>
                     <StyledLink to={item.path}>
                       {item.icon}

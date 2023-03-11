@@ -10,7 +10,7 @@ export type User = {
   firstName: string;
   lastName: string;
   email?: string;
-  username: string;
+  username?: string;
   phone?: string;
   docsUrl?: string;
   timeZoneIanaName?: string;
