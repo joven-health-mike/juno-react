@@ -45,6 +45,14 @@ const inputStyles = css`
   margin-bottom: 20px;
 `;
 
+const tableInputStyles = css`
+  display: block;
+  padding: 1px;
+  width: 15em !important;
+  margin: auto;
+  margin-bottom: 10px;
+`;
+
 const selectStyles = css`
   ${inputStyles}
   align-self: flex-start;
@@ -65,6 +73,7 @@ export {
   spanStyles,
   formStyles,
   inputStyles,
+  tableInputStyles,
   selectStyles,
   labelStyles,
 };

@@ -1,5 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
+import { TablePagination } from '@mui/material';
 import React, { ReactNode } from 'react';
 import {
   useTable,
@@ -16,22 +17,14 @@ import {
 } from 'react-table';
 import styled from 'styled-components';
 import { User } from '../../data/users';
-import { buttonStyles, spanStyles, selectStyles } from '../styles/mixins';
+import { spanStyles } from '../styles/mixins';
 import { TableAppointment } from './AppointmentsTable';
 import { TableCounselor } from './CounselorsTable';
 import { TableSchool } from './SchoolsTable';
 import { TableStudent } from './StudentsTable';
 
-const Button = styled.button`
-  ${buttonStyles}
-`;
-
 const Wrapper = styled.span`
   ${spanStyles}
-`;
-
-const Select = styled.select`
-  ${selectStyles}
 `;
 
 const Table = styled.table`
@@ -105,11 +98,7 @@ const DataTable: React.FC<DataTableProps> = ({
     page,
     canPreviousPage,
     canNextPage,
-    pageOptions,
-    pageCount,
     gotoPage,
-    nextPage,
-    previousPage,
     setPageSize,
     visibleColumns,
     state: { pageIndex, pageSize },
@@ -140,38 +129,21 @@ const DataTable: React.FC<DataTableProps> = ({
           addNewItem={addNewItem}
         />
       </Table>
-      <div className="pagination">
-        <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-          {'<<'}
-        </Button>{' '}
-        <Button onClick={() => previousPage()} disabled={!canPreviousPage}>
-          {'<'}
-        </Button>{' '}
-        <Button onClick={() => nextPage()} disabled={!canNextPage}>
-          {'>'}
-        </Button>{' '}
-        <Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-          {'>>'}
-        </Button>{' '}
-        <Wrapper>
-          Page{' '}
-          <strong>
-            {pageIndex + 1} of {pageOptions.length}
-          </strong>{' '}
-        </Wrapper>
-        <Select
-          value={pageSize}
-          onChange={e => {
-            setPageSize(Number(e.target.value));
-          }}
-        >
-          {[10, 20, 30, 40, 50].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </Select>
-      </div>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={data.length}
+        rowsPerPage={pageSize}
+        page={pageIndex}
+        showFirstButton={canPreviousPage}
+        showLastButton={canNextPage}
+        onPageChange={(e, newPage) => {
+          gotoPage(newPage);
+        }}
+        onRowsPerPageChange={e => {
+          setPageSize(Number(e.target.value));
+        }}
+      />
     </>
   );
 };

@@ -3,10 +3,10 @@
 import React from 'react';
 import { Row } from 'react-table';
 import styled from 'styled-components';
-import { inputStyles } from '../styles/mixins';
+import { tableInputStyles } from '../styles/mixins';
 
 const Input = styled.input`
-  ${inputStyles}
+  ${tableInputStyles}
 `;
 
 type TableSearchFilterProps = {

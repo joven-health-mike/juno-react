@@ -8,7 +8,7 @@ import {
   ExpandLess,
   ExpandMore,
 } from '@mui/icons-material';
-import { IconButton } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import React, {
   useCallback,
   useContext,
@@ -195,18 +195,34 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
       {
         Header: 'Title',
         accessor: 'title',
+        Cell: ({ cell }: CellProps<object>) => {
+          const appointment = cell.row.original as TableAppointment;
+          return <Typography>{appointment.title}</Typography>;
+        },
       },
       {
         Header: 'Date',
         accessor: 'date',
+        Cell: ({ cell }: CellProps<object>) => {
+          const appointment = cell.row.original as TableAppointment;
+          return <Typography>{appointment.date}</Typography>;
+        },
       },
       {
         Header: 'Time',
         accessor: 'time',
+        Cell: ({ cell }: CellProps<object>) => {
+          const appointment = cell.row.original as TableAppointment;
+          return <Typography>{appointment.time}</Typography>;
+        },
       },
       {
         Header: 'Counselor',
         accessor: 'counselorName',
+        Cell: ({ cell }: CellProps<object>) => {
+          const appointment = cell.row.original as TableAppointment;
+          return <Typography>{appointment.counselorName}</Typography>;
+        },
       },
     ],
     [getButtonCell]
