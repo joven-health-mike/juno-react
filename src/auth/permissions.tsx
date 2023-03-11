@@ -6,7 +6,7 @@ const allRoles = ROLES;
 const adminsOnly = ['SYSADMIN', 'JOVEN_ADMIN'];
 const jovenStaff = ['SYSADMIN', 'JOVEN_ADMIN', 'JOVEN_STAFF'];
 const everyoneExceptClients = allRoles.filter(
-  role => role !== 'STUDENT' && role !== 'GUARDIAN'
+  role => role !== 'STUDENT' && role !== 'TEACHER' && role !== 'GUARDIAN'
 );
 
 export type AvailableRoute =
@@ -17,6 +17,7 @@ export type AvailableRoute =
   | '/counselors'
   | '/schools'
   | '/students'
+  | '/teachers'
   | '/users'
   | '/logout';
 
@@ -28,6 +29,7 @@ const pagePermissions = {
   '/counselors': everyoneExceptClients,
   '/schools': allRoles,
   '/students': everyoneExceptClients,
+  '/teachers': everyoneExceptClients,
   '/users': adminsOnly,
   '/logout': allRoles,
 };
@@ -37,6 +39,7 @@ export type AvailableDbCrudObject =
   | 'counselor'
   | 'school'
   | 'student'
+  | 'teacher'
   | 'user';
 
 const createPermissions = {
@@ -44,6 +47,7 @@ const createPermissions = {
   counselor: adminsOnly,
   school: adminsOnly,
   student: jovenStaff,
+  teacher: jovenStaff,
   user: adminsOnly,
 };
 
@@ -52,6 +56,7 @@ const deletePermissions = {
   counselor: adminsOnly,
   school: adminsOnly,
   student: jovenStaff,
+  teacher: jovenStaff,
   user: adminsOnly,
 };
 
@@ -60,6 +65,7 @@ const updatePermissions = {
   counselor: adminsOnly,
   school: adminsOnly,
   student: jovenStaff,
+  teacher: jovenStaff,
   user: adminsOnly,
 };
 

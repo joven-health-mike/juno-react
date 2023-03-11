@@ -9,8 +9,13 @@ import CalendarPage from '../components/pages/CalendarPage';
 import CounselorsPage from '../components/pages/CounselorsPage';
 import SchoolsPage from '../components/pages/SchoolsPage';
 import StudentsPage from '../components/pages/StudentsPage';
+import TeachersPage from '../components/pages/TeachersPage';
 import UsersPage from '../components/pages/UsersPage';
 import AccountDetailPage from '../components/pages/AccountDetailPage';
+import { AvailableRoute, pagePermission } from '../auth/permissions';
+import { getActiveTeachers } from '../data/teachers';
+import { User } from '../data/users';
+import { Role } from '../services/user.service';
 
 interface IAppRouterParams {
   isAuthenticated: boolean;
@@ -34,8 +39,25 @@ export const AvailableRoutes = [
   { url: '/counselors', element: <CounselorsPage /> },
   { url: '/schools', element: <SchoolsPage /> },
   { url: '/students', element: <StudentsPage /> },
+  { url: '/teachers', element: <TeachersPage /> },
   { url: '/users', element: <UsersPage /> },
   { url: '/logout', element: <RedirectToLogoutPage /> },
 ];
+
+export const isRouteAllowed = (
+  route: AvailableRoute,
+  role: Role,
+  users: User[]
+): boolean => {
+  if (route === '/teachers') {
+    const teachers = getActiveTeachers(users);
+    const teachersExist = teachers.length > 0;
+    const teacherRouteAllowed =
+      role === 'SYSADMIN' || (route === '/teachers' && teachersExist);
+    return teacherRouteAllowed && pagePermission(role, route);
+  }
+
+  return pagePermission(role, route);
+};
 
 export default AppRouter;

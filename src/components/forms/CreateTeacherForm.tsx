@@ -13,7 +13,8 @@ import styled from 'styled-components';
 import { ContextData } from '../../data/ContextData';
 import { Counselor, getCounselors } from '../../data/counselors';
 import { School, SchoolsContext } from '../../data/schools';
-import { emptyStudent, Student, StudentStatus } from '../../data/students';
+import { StudentStatus } from '../../data/students';
+import { emptyTeacher, Teacher } from '../../data/teachers';
 import { UsersContext } from '../../data/users';
 import { Role } from '../../services/user.service';
 import { AvailableTimeZone, TIME_ZONES } from '../../utils/DateUtils';
@@ -44,19 +45,19 @@ const Label = styled.label`
   ${labelStyles}
 `;
 
-type CreateStudentFormProps = {
-  defaultStudent?: Student;
-  onSubmit: (student: Student) => void;
+type CreateTeacherFormProps = {
+  defaultTeacher?: Teacher;
+  onSubmit: (teacher: Teacher) => void;
   onCancel: () => void;
 };
 
-const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
-  defaultStudent = emptyStudent,
+const CreateTeacherForm: React.FC<CreateTeacherFormProps> = ({
+  defaultTeacher = emptyTeacher,
   onSubmit,
   onCancel,
 }) => {
-  const [student, setStudent] = useState<Student>(
-    defaultStudent ?? emptyStudent
+  const [teacher, setTeacher] = useState<Teacher>(
+    defaultTeacher ?? emptyTeacher
   );
   const [counselorSelectionIndex, setCounselorSelectionIndex] =
     useState<number>(-1);
@@ -66,17 +67,17 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
   const counselors = useMemo(() => getCounselors(users), [users]);
 
   useEffect(() => {
-    if (defaultStudent) {
-      setStudent(defaultStudent);
+    if (defaultTeacher) {
+      setTeacher(defaultTeacher);
       const selectedSchool = schools.find(
-        school => school.id === defaultStudent.studentAssignedSchoolId
+        school => school.id === defaultTeacher.studentAssignedSchoolId
       );
       const defaultSchoolSelectionIndex = selectedSchool
         ? schools.indexOf(selectedSchool)
         : -1;
       setSchoolSelectionIndex(defaultSchoolSelectionIndex);
       const selectedCounselor = counselors.find(
-        counselor => counselor.id === defaultStudent.studentAssignedCounselorId
+        counselor => counselor.id === defaultTeacher.studentAssignedCounselorId
       );
       const defaultCounselorSelectionIndex = selectedCounselor
         ? counselors
@@ -85,43 +86,43 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
         : -1;
       setCounselorSelectionIndex(defaultCounselorSelectionIndex);
     }
-  }, [counselors, defaultStudent, schools]);
+  }, [counselors, defaultTeacher, schools]);
 
   const onCounselorChanged = (counselor: Counselor) => {
     setCounselorSelectionIndex(counselors.indexOf(counselor));
-    const newStudent = { ...student };
-    newStudent.studentAssignedCounselorId = counselor.id;
-    setStudent(newStudent);
+    const newTeacher = { ...teacher };
+    newTeacher.studentAssignedCounselorId = counselor.id;
+    setTeacher(newTeacher);
   };
 
   const onSchoolChanged = (school: School) => {
     setSchoolSelectionIndex(schools.indexOf(school));
-    const newStudent = { ...student };
-    newStudent.studentAssignedSchoolId = school.id;
-    setStudent(newStudent);
+    const newTeacher = { ...teacher };
+    newTeacher.studentAssignedSchoolId = school.id;
+    setTeacher(newTeacher);
   };
 
   const onTimeZoneChanged = (timeZone: string) => {
-    setStudent({ ...student, timeZoneIanaName: timeZone });
+    setTeacher({ ...teacher, timeZoneIanaName: timeZone });
   };
 
   const onStatusChanged = (status: string) => {
-    setStudent({ ...student, studentStatus: status as StudentStatus });
+    setTeacher({ ...teacher, studentStatus: status as StudentStatus });
   };
 
   const onFormSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const submittedStudent = defaultStudent
-      ? student
-      : { ...student, id: `-1` };
-    submittedStudent.role = 'STUDENT' as Role;
-    onSubmit(submittedStudent);
+    const submittedTeacher = defaultTeacher
+      ? teacher
+      : { ...teacher, id: `-1` };
+    submittedTeacher.role = 'TEACHER' as Role;
+    onSubmit(submittedTeacher);
   };
 
   const onFormCancel = (e: MouseEvent) => {
     e.preventDefault();
     setSchoolSelectionIndex(-1);
-    setStudent(emptyStudent);
+    setTeacher(emptyTeacher);
     onCancel();
   };
 
@@ -133,10 +134,10 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
           type="text"
           placeholder="First Name"
           name="firstName"
-          value={student.firstName}
+          value={teacher.firstName}
           required
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setStudent({ ...student, firstName: e.target.value });
+            setTeacher({ ...teacher, firstName: e.target.value });
           }}
         />
       </Label>
@@ -146,10 +147,10 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
           type="text"
           placeholder="Last Name"
           name="lastName"
-          value={student.lastName}
+          value={teacher.lastName}
           required
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setStudent({ ...student, lastName: e.target.value });
+            setTeacher({ ...teacher, lastName: e.target.value });
           }}
         />
       </Label>
@@ -159,10 +160,10 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
           type="email"
           placeholder="Email"
           name="email"
-          value={student.email}
+          value={teacher.email}
           required
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setStudent({ ...student, email: e.target.value })
+            setTeacher({ ...teacher, email: e.target.value })
           }
         />
       </Label>
@@ -172,10 +173,10 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
           type="text"
           placeholder="Username"
           name="username"
-          value={student.username}
+          value={teacher.username}
           required
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setStudent({ ...student, username: e.target.value });
+            setTeacher({ ...teacher, username: e.target.value });
           }}
         />
       </Label>
@@ -185,10 +186,10 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
           type="phone"
           placeholder="Phone"
           name="phone"
-          value={student.phone}
+          value={teacher.phone}
           required
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setStudent({ ...student, phone: e.target.value });
+            setTeacher({ ...teacher, phone: e.target.value });
           }}
         />
       </Label>
@@ -198,10 +199,10 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
           type="URL"
           placeholder="Docs URL"
           name="docsUrl"
-          value={student.docsUrl}
+          value={teacher.docsUrl}
           required
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setStudent({ ...student, docsUrl: e.target.value });
+            setTeacher({ ...teacher, docsUrl: e.target.value });
           }}
         />
       </Label>
@@ -224,7 +225,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
         <SelectList
           labelText="Select a Time Zone"
           items={TIME_ZONES}
-          value={TIME_ZONES.indexOf(student.timeZoneIanaName || '')}
+          value={TIME_ZONES.indexOf(teacher.timeZoneIanaName || '')}
           onItemChanged={item => {
             return onTimeZoneChanged(
               TIME_ZONES[parseInt(item)] as AvailableTimeZone
@@ -238,7 +239,7 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
           labelText="Select a Status"
           items={['ACTIVE', 'DISCHARGED', 'DELETED']}
           value={['ACTIVE', 'DISCHARGED', 'DELETED'].indexOf(
-            student.studentStatus || ''
+            teacher.studentStatus || ''
           )}
           onItemChanged={item => {
             return onStatusChanged(
@@ -256,4 +257,4 @@ const CreateStudentForm: React.FC<CreateStudentFormProps> = ({
   );
 };
 
-export default CreateStudentForm;
+export default CreateTeacherForm;

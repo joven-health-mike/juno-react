@@ -6,8 +6,9 @@ import { User } from './users';
 
 export type Counselor = User & {
   counselorRoomLink?: string;
+  counselorRoomLink2?: string;
   counselorAssignedSchools?: School[];
-}; // TODO: Sync with server model
+};
 
 export const emptyCounselor: Counselor = {
   id: '-1',
@@ -18,8 +19,9 @@ export const emptyCounselor: Counselor = {
   phone: '',
   docsUrl: '',
   timeZoneIanaName: '',
-  role: 'JOVEN_STAFF' as Role,
+  role: 'COUNSELOR' as Role,
   counselorRoomLink: '',
+  counselorRoomLink2: '',
   counselorAssignedSchools: [],
 };
 

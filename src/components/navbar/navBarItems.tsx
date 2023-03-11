@@ -61,6 +61,11 @@ export const allNavItems: NavItem[] = [
     path: '/students',
   },
   {
+    title: 'Teachers',
+    icon: <IoMdContacts />,
+    path: '/teachers',
+  },
+  {
     title: 'Users',
     icon: <FaUserAstronaut />,
     path: '/users',
