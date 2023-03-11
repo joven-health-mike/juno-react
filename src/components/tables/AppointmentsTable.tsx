@@ -1,7 +1,15 @@
 // Copyright 2022 Social Fabric, LLC
 
+import {
+  Computer,
+  Delete,
+  Edit,
+  Email,
+  ExpandLess,
+  ExpandMore,
+} from '@mui/icons-material';
+import { IconButton } from '@mui/material';
 import React, {
-  MouseEvent,
   useCallback,
   useContext,
   useEffect,
@@ -9,21 +17,14 @@ import React, {
   useState,
 } from 'react';
 import { CellProps, Column, Row } from 'react-table';
-import styled from 'styled-components';
 import { deletePermission, updatePermission } from '../../auth/permissions';
 import { Appointment, AppointmentsContext } from '../../data/appointments';
 import { getCounselors } from '../../data/counselors';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
 import { formatDate, formatTime } from '../../utils/DateUtils';
-import XButton from '../buttons/XButton';
 import AppointmentDetails from '../details/AppointmentDetails';
-import { buttonStyles } from '../styles/mixins';
 import DataTable from './DataTable';
 import TableSearchFilter from './TableSearchFilter';
-
-const Button = styled.button`
-  ${buttonStyles}
-`;
 
 type AppointmentsTableProps = {
   onDeleteClicked: (appointment: Appointment) => void;
@@ -120,50 +121,46 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
       return (
         <>
           {isDeleteAppointmentAllowed && (
-            <XButton
-              text="❌"
-              title="Delete Appointment"
-              value={appointment.id}
-              onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
+            <IconButton
+              aria-label="delete"
+              onClick={() => {
                 onDeleteClicked(appointment);
               }}
-            />
+            >
+              <Delete />
+            </IconButton>
           )}
           {isUpdateAppointmentAllowed && (
-            <XButton
-              text="✏️"
-              title="Edit Appointment"
-              value={appointment.id}
-              onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
+            <IconButton
+              aria-label="edit"
+              onClick={() => {
                 onEditClicked(appointment);
               }}
-            />
+            >
+              <Edit />
+            </IconButton>
           )}
-          <XButton
-            text="📧"
-            title={`Email Participants`}
-            value={appointment.id}
-            onClick={(e: MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault();
+          <IconButton
+            aria-label="email"
+            onClick={() => {
               onEmailClicked(appointment);
             }}
-          />
+          >
+            <Email />
+          </IconButton>
           {typeof counselor !== 'undefined' && (
-            <XButton
-              text="🖥️"
-              title={`Join ${counselor.firstName}'s Waiting Room`}
-              value={appointment.id}
-              onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
+            <IconButton
+              aria-label="roomLink"
+              onClick={() => {
                 onRoomLinkClicked(appointment);
               }}
-            />
+            >
+              <Computer />
+            </IconButton>
           )}
-          <Button {...row.getToggleRowExpandedProps()}>
-            {row.isExpanded ? '👇' : '👉'}
-          </Button>
+          <IconButton aria-label="expand" {...row.getToggleRowExpandedProps()}>
+            {row.isExpanded ? <ExpandLess /> : <ExpandMore />}
+          </IconButton>
         </>
       );
     },

@@ -18,11 +18,9 @@ import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import EditAppointmentModal from '../modals/EditAppointmentModal';
 import Navbar from '../navbar/Navbar';
 import AppointmentsTable from '../tables/AppointmentsTable';
-import { buttonStyles, h1Styles } from '../styles/mixins';
-
-const Button = styled.button`
-  ${buttonStyles}
-`;
+import { h1Styles } from '../styles/mixins';
+import { Add } from '@mui/icons-material';
+import { Button } from '@mui/material';
 
 const Header = styled.h1`
   ${h1Styles}
@@ -129,8 +127,11 @@ const AppointmentsPage: React.FC = () => {
       <>
         {isCreateAppointmentAllowed && (
           <Button
-            type="button"
-            onClick={() => setIsCreateAppointmentModalOpen(true)}
+            variant="contained"
+            endIcon={<Add />}
+            onClick={() => {
+              setIsCreateAppointmentModalOpen(true);
+            }}
           >
             Add Appointment
           </Button>
