@@ -221,9 +221,12 @@ describe('CreateAppointmentForm', () => {
     const checkbox = screen.getByRole('checkbox');
     userEvent.click(checkbox);
 
-    const repeatOptions = screen.getAllByRole('spinbutton');
-    userEvent.type(repeatOptions[0], '2');
-    userEvent.type(repeatOptions[1], '6');
+    const repeatFor = screen.getByTestId('repeatForNum');
+    const numOccurrences = screen.getByTestId('numOccurrences');
+    // using fireEvent.change because userEvent.type
+    // treats repeatForNum and numOccurrences as if they were the same input
+    fireEvent.change(repeatFor, { target: { value: 2 } });
+    fireEvent.change(numOccurrences, { target: { value: 6 } });
 
     const button = screen.getByRole('button', { name: 'Submit' });
     fireEvent.click(button);
