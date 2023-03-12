@@ -307,6 +307,7 @@ const CreateAppointmentForm: React.FC<CreateAppointmentFormProps> = ({
 
     const startDate = new Date(appointment.start);
     const endDate = new Date(startDate.getTime() + parseInt(duration) * 60000);
+    submittedAppointment.start = startDate;
     submittedAppointment.end = endDate;
 
     onSubmit(submittedAppointment);

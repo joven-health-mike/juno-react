@@ -13,8 +13,8 @@ import { UsersContext, User } from '../../data/users';
 const fakeAppointment = {
   id: '0',
   title: 'CLINICAL',
-  start: new Date(),
-  end: new Date(),
+  start: new Date('2023-02-01T19:00:00.000Z'),
+  end: new Date('2023-02-01T19:00:00.000Z'),
   isRecurring: false,
   recurranceInfo: undefined,
   school: emptySchool,
@@ -83,12 +83,10 @@ const schoolsValue = {
 
 describe('CreateAppointmentForm', () => {
   beforeEach(() => {
-    const oldGlobalDate = global.Date;
+    const existingGlobalDate = global.Date;
     const mockDate = new Date(2023, 1, 1, 12, 0, 0);
-    jest
-      .spyOn(global, 'Date')
-      .mockImplementation(() => mockDate as unknown as string);
-    global.Date.UTC = oldGlobalDate.UTC;
+    jest.spyOn(global, 'Date').mockReturnValue(mockDate as unknown as string);
+    global.Date.UTC = existingGlobalDate.UTC;
   });
   afterEach(() => {
     jest.clearAllMocks();
