@@ -14,6 +14,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import AppointmentDetails from '../details/AppointmentDetails';
 import { AppointmentsContext, emptyAppointment } from '../../data/appointments';
 import { Computer, Delete, Edit, Email } from '@mui/icons-material';
+import { TablePagination } from '@mui/material';
 
 export type TableButtonInfo = {
   onDeleteRow?: (rowId: string) => void;
@@ -36,12 +37,37 @@ const MaterialTable: React.FC<MaterialTableProps> = ({
   tableButtonInfo,
 }) => {
   const { data: appointments } = React.useContext(AppointmentsContext);
+  const [visibleRows, setVisibleRows] = React.useState(rows);
+  const [pageSize, setPageSize] = React.useState(10);
+  const [pageIndex, setPageIndex] = React.useState(0);
+  const [canNextPage, setCanNextPage] = React.useState(false);
+  const [canPreviousPage, setCanPreviousPage] = React.useState(false);
+
+  React.useEffect(() => {
+    setCanNextPage(pageIndex <= rows.length / pageSize);
+    setCanPreviousPage(pageIndex > 0);
+  }, [rows, pageIndex, pageSize]);
+
   const getAppointmentForId = (id: string) => {
     return (
       appointments.find(appointment => appointment.id === id) ||
       emptyAppointment
     );
   };
+
+  const gotoPage = React.useCallback(
+    (newPage: number) => {
+      setPageIndex(newPage);
+      const firstRow =
+        newPage * (Math.trunc(rows.length / pageSize) + pageSize - 1);
+      const visibleRows = rows.slice(firstRow, firstRow + pageSize);
+      setVisibleRows(visibleRows);
+    },
+    [pageSize, rows]
+  );
+
+  React.useEffect(() => gotoPage(0), [gotoPage]);
+
   const showButtonColumn =
     typeof tableButtonInfo?.onDeleteRow !== 'undefined' ||
     typeof tableButtonInfo?.onEditRow !== 'undefined' ||
@@ -65,7 +91,7 @@ const MaterialTable: React.FC<MaterialTableProps> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, index) => (
+          {visibleRows.map((row, index) => (
             <Row
               key={index}
               rowData={row}
@@ -78,6 +104,21 @@ const MaterialTable: React.FC<MaterialTableProps> = ({
           ))}
         </TableBody>
       </Table>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={rows.length}
+        rowsPerPage={pageSize}
+        page={pageIndex}
+        showFirstButton={canPreviousPage}
+        showLastButton={canNextPage}
+        onPageChange={(e, newPage) => {
+          gotoPage(newPage);
+        }}
+        onRowsPerPageChange={e => {
+          setPageSize(Number(e.target.value));
+        }}
+      />
     </TableContainer>
   );
 };
