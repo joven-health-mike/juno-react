@@ -1,12 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import '@fullcalendar/react';
 import listPlugin from '@fullcalendar/list';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone';
@@ -167,12 +161,41 @@ const AdminView: React.FC = () => {
     [appointments]
   );
 
+  const onDeleteRow = (id: string) => {
+    const deletedAppointment = appointments.find(
+      appointment => appointment.id === id
+    );
+    alert('row delete: ' + deletedAppointment?.title);
+  };
+
+  const onEditRow = (id: string) => {
+    const editedAppointment = appointments.find(
+      appointment => appointment.id === id
+    );
+    alert('row edit: ' + editedAppointment?.title);
+  };
+
+  const onEmailRow = (id: string) => {
+    const emailAppointment = appointments.find(
+      appointment => appointment.id === id
+    );
+    alert('row email: ' + emailAppointment?.title);
+  };
+
+  const onRoomLinkRow = (id: string) => {
+    const roomLinkedAppointment = appointments.find(
+      appointment => appointment.id === id
+    );
+    alert('row roomLink: ' + roomLinkedAppointment?.title);
+  };
+
   return (
     <>
       <MaterialTable
         rows={tableData}
         columnHeaders={tableColumnHeaders}
         hideColumnIndexes={[0]}
+        tableButtonInfo={{ onDeleteRow, onEditRow, onEmailRow, onRoomLinkRow }}
       />
     </>
   );

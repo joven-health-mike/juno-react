@@ -1,6 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { AppointmentService } from '../services/appointment.service';
 import { AxiosResponse } from 'axios';
 import { ContextData } from './ContextData';

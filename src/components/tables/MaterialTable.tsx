@@ -13,17 +13,27 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import AppointmentDetails from '../details/AppointmentDetails';
 import { AppointmentsContext, emptyAppointment } from '../../data/appointments';
+import { Computer, Delete, Edit, Email } from '@mui/icons-material';
+
+export type TableButtonInfo = {
+  onDeleteRow?: (rowId: string) => void;
+  onEditRow?: (rowId: string) => void;
+  onEmailRow?: (rowId: string) => void;
+  onRoomLinkRow?: (rowId: string) => void;
+};
 
 type MaterialTableProps = {
   rows: string[][];
   columnHeaders: string[];
   hideColumnIndexes: number[];
+  tableButtonInfo?: TableButtonInfo;
 };
 
 const MaterialTable: React.FC<MaterialTableProps> = ({
   rows,
   columnHeaders,
   hideColumnIndexes,
+  tableButtonInfo,
 }) => {
   const { data: appointments } = React.useContext(AppointmentsContext);
   const getAppointmentForId = (id: string) => {
@@ -32,12 +42,19 @@ const MaterialTable: React.FC<MaterialTableProps> = ({
       emptyAppointment
     );
   };
+  const showButtonColumn =
+    typeof tableButtonInfo?.onDeleteRow !== 'undefined' ||
+    typeof tableButtonInfo?.onEditRow !== 'undefined' ||
+    typeof tableButtonInfo?.onEmailRow !== 'undefined' ||
+    typeof tableButtonInfo?.onRoomLinkRow !== 'undefined';
+
   return (
     <TableContainer component={Paper}>
-      <Table aria-label="collapsible table">
+      <Table aria-label="material table">
         <TableHead>
           <TableRow>
             <TableCell />
+            {showButtonColumn && <TableCell />}
             {columnHeaders.map((header, index) => {
               const show: boolean =
                 hideColumnIndexes.find(
@@ -56,6 +73,7 @@ const MaterialTable: React.FC<MaterialTableProps> = ({
                 <AppointmentDetails appointment={getAppointmentForId(row[0])} />
               }
               hideColumnIndexes={hideColumnIndexes}
+              tableButtonInfo={tableButtonInfo}
             />
           ))}
         </TableBody>
@@ -68,14 +86,23 @@ type RowProps = {
   rowData: string[];
   expandComponent: React.ReactNode;
   hideColumnIndexes: number[];
+  tableButtonInfo?: TableButtonInfo;
 };
 
 const Row: React.FC<RowProps> = ({
   rowData,
   expandComponent,
   hideColumnIndexes,
+  tableButtonInfo,
 }) => {
   const [open, setOpen] = React.useState(false);
+  const showButtonsCell =
+    typeof tableButtonInfo !== 'undefined' &&
+    (typeof tableButtonInfo.onDeleteRow !== 'undefined' ||
+      typeof tableButtonInfo.onEditRow !== 'undefined' ||
+      typeof tableButtonInfo.onEmailRow !== 'undefined' ||
+      typeof tableButtonInfo.onRoomLinkRow !== 'undefined');
+
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -88,6 +115,9 @@ const Row: React.FC<RowProps> = ({
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
+        {showButtonsCell && (
+          <ButtonsCell rowId={rowData[0]} tableButtonInfo={tableButtonInfo!} />
+        )}
         {rowData.map((colString, index) => {
           const show: boolean =
             hideColumnIndexes.find(
@@ -110,6 +140,62 @@ const Row: React.FC<RowProps> = ({
         </TableCell>
       </TableRow>
     </React.Fragment>
+  );
+};
+
+type ButtonsCellProps = {
+  rowId: string;
+  tableButtonInfo: TableButtonInfo;
+};
+
+const ButtonsCell: React.FC<ButtonsCellProps> = ({
+  rowId,
+  tableButtonInfo,
+}) => {
+  const showDelete = typeof tableButtonInfo.onDeleteRow !== 'undefined';
+  const showEdit = typeof tableButtonInfo.onEditRow !== 'undefined';
+  const showEmail = typeof tableButtonInfo.onEmailRow !== 'undefined';
+  const showRoomLink = typeof tableButtonInfo.onRoomLinkRow !== 'undefined';
+
+  return (
+    <TableCell>
+      {showDelete && (
+        <IconButton
+          aria-label="delete row"
+          size="small"
+          onClick={() => tableButtonInfo.onDeleteRow!(rowId)}
+        >
+          <Delete />
+        </IconButton>
+      )}
+      {showEdit && (
+        <IconButton
+          aria-label="edit row"
+          size="small"
+          onClick={() => tableButtonInfo.onEditRow!(rowId)}
+        >
+          <Edit />
+        </IconButton>
+      )}
+      {showEmail && (
+        <IconButton
+          aria-label="email row"
+          size="small"
+          onClick={() => tableButtonInfo.onEmailRow!(rowId)}
+        >
+          <Email />
+        </IconButton>
+      )}
+      {showRoomLink && (
+        <IconButton
+          aria-label="room link row"
+          size="small"
+          onClick={() => tableButtonInfo.onRoomLinkRow!(rowId)}
+        >
+          <Computer />
+        </IconButton>
+      )}
+    </TableCell>
   );
 };
 
