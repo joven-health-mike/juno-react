@@ -1,27 +1,11 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, {
-  MouseEvent,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { CellProps, Column, Row } from 'react-table';
-import styled from 'styled-components';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { deletePermission, updatePermission } from '../../auth/permissions';
 import { Counselor, getCounselors } from '../../data/counselors';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
-import XButton from '../buttons/XButton';
 import CounselorDetails from '../details/CounselorDetails';
-import { buttonStyles } from '../styles/mixins';
-import DataTable from './DataTable';
-import TableSearchFilter from './TableSearchFilter';
-
-const Button = styled.button`
-  ${buttonStyles}
-`;
+import MaterialTable from './MaterialTable';
 
 type CounselorsTableProps = {
   onDeleteClicked: (counselor: Counselor) => void;
@@ -73,134 +57,63 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
     setTableCounselors(mappedCounselors);
   }, [counselors]);
 
-  const getCounselorFromTableCounselor = useCallback(
-    (tableCounselor: TableCounselor): Counselor => {
-      return counselors.find(
-        counselor => counselor.id === tableCounselor.id
-      ) as Counselor;
-    },
-    [counselors]
-  );
+  const createTableData = (counselors: TableCounselor[]) => {
+    const tableData: string[][] = [];
 
-  const getButtonCell = useCallback(
-    (tableCounselor: TableCounselor, row: Row) => {
-      const counselor = getCounselorFromTableCounselor(tableCounselor);
-      if (!counselor) return <></>;
+    counselors.forEach(counselor => {
+      tableData.push([counselor.id, counselor.name]);
+    });
 
-      return (
-        <>
-          {isDeleteCounselorAllowed && (
-            <XButton
-              text="❌"
-              title={`Delete ${counselor.firstName}`}
-              value={counselor.id}
-              onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-                onDeleteClicked(counselor);
-              }}
-            />
-          )}
-          {isUpdateCounselorAllowed && (
-            <XButton
-              text="✏️"
-              title={`Edit ${counselor.firstName}`}
-              value={counselor.id}
-              onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-                onEditClicked(counselor);
-              }}
-            />
-          )}
-          <XButton
-            text="📧"
-            title={`Email ${counselor.firstName}`}
-            value={counselor.id}
-            onClick={(e: MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault();
-              onEmailClicked(counselor);
-            }}
-          />
-          <XButton
-            text="🖥️"
-            title={`Join ${counselor.firstName}'s Waiting Room`}
-            value={counselor.id}
-            onClick={(e: MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault();
-              onRoomLinkClicked(counselor);
-            }}
-          />
-          <XButton
-            text="📁"
-            title={`Open ${counselor.firstName}'s File`}
-            value={counselor.id}
-            onClick={(e: MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault();
-              onOpenFileClicked(counselor);
-            }}
-          />
-          <Button {...row.getToggleRowExpandedProps()}>
-            {row.isExpanded ? '👇' : '👉'}
-          </Button>
-        </>
-      );
-    },
-    [
-      getCounselorFromTableCounselor,
-      isDeleteCounselorAllowed,
-      isUpdateCounselorAllowed,
-      onDeleteClicked,
-      onEditClicked,
-      onEmailClicked,
-      onOpenFileClicked,
-      onRoomLinkClicked,
-    ]
-  );
+    return tableData;
+  };
 
-  const defaultColumn: Record<string, unknown> = React.useMemo(
-    () => ({
-      Filter: TableSearchFilter,
-    }),
-    []
-  );
+  const onDeleteRow = isDeleteCounselorAllowed
+    ? (id: string) => {
+        const counselor = counselors.find(counselor => counselor.id === id);
+        onDeleteClicked(counselor!);
+      }
+    : undefined;
 
-  const columns: Column[] = React.useMemo(
-    () => [
-      {
-        id: 'buttons',
-        Cell: ({ cell, row }: CellProps<object>) => {
-          const counselor = cell.row.original as TableCounselor;
-          return getButtonCell(counselor, row);
-        },
-      },
-      {
-        Header: 'ID',
-        accessor: 'id',
-      },
-      {
-        Header: 'Name',
-        accessor: 'name',
-      },
-    ],
-    [getButtonCell]
-  );
+  const onEditRow = isUpdateCounselorAllowed
+    ? (id: string) => {
+        const counselor = counselors.find(counselor => counselor.id === id);
+        onEditClicked(counselor!);
+      }
+    : undefined;
 
-  const renderRowSubComponent = useCallback(
-    (row: Row) => {
-      const rowObject = row.original as TableCounselor;
-      const counselor = getCounselorFromTableCounselor(rowObject);
-      if (typeof counselor === 'undefined') return <></>;
-      return <CounselorDetails counselor={counselor} />;
-    },
-    [getCounselorFromTableCounselor]
-  );
+  const onEmailRow = (id: string) => {
+    const counselor = counselors.find(counselor => counselor.id === id);
+    onEmailClicked(counselor!);
+  };
+
+  const onRoomLinkRow = (id: string) => {
+    const counselor = counselors.find(counselor => counselor.id === id);
+    onRoomLinkClicked(counselor!);
+  };
+
+  const onFolderRow = (id: string) => {
+    const counselor = counselors.find(counselor => counselor.id === id);
+    onOpenFileClicked(counselor!);
+  };
+
+  const getExpandComponent = (id: string) => {
+    const counselor = counselors.find(counselor => counselor.id === id);
+    return <CounselorDetails counselor={counselor!} />;
+  };
 
   return (
-    <DataTable
-      data={tableCounselors}
-      defaultColumn={defaultColumn}
-      columns={columns}
-      renderRowSubComponent={renderRowSubComponent}
-      hiddenColumns={['id']}
+    <MaterialTable
+      rows={createTableData(tableCounselors)}
+      columnHeaders={['id', 'Name']}
+      hideColumnIndexes={[0]}
+      tableButtonInfo={{
+        onDeleteRow,
+        onEditRow,
+        onEmailRow,
+        onRoomLinkRow,
+        onFolderRow,
+      }}
+      getExpandComponent={getExpandComponent}
     />
   );
 };

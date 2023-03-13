@@ -6,6 +6,7 @@ import { Appointment, AppointmentsContext } from '../../data/appointments';
 import { getCounselors } from '../../data/counselors';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
 import { formatDate, formatTime } from '../../utils/DateUtils';
+import AppointmentDetails from '../details/AppointmentDetails';
 import MaterialTable from './MaterialTable';
 
 type AppointmentsTableProps = {
@@ -126,12 +127,18 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
     onRoomLinkClicked(appointment!);
   };
 
+  const getExpandComponent = (id: string) => {
+    const appointment = appointments.find(appointment => appointment.id === id);
+    return <AppointmentDetails appointment={appointment!} />;
+  };
+
   return (
     <MaterialTable
       rows={createTableData(tableAppointments)}
       columnHeaders={['id', 'Title', 'Date', 'Time', 'Counselor']}
       hideColumnIndexes={hiddenColumns}
       tableButtonInfo={{ onDeleteRow, onEditRow, onEmailRow, onRoomLinkRow }}
+      getExpandComponent={getExpandComponent}
     />
   );
 };

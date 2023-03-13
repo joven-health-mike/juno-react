@@ -11,9 +11,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import AppointmentDetails from '../details/AppointmentDetails';
-import { AppointmentsContext, emptyAppointment } from '../../data/appointments';
-import { Computer, Delete, Edit, Email } from '@mui/icons-material';
+import { Computer, Delete, Edit, Email, Folder } from '@mui/icons-material';
 import { TablePagination } from '@mui/material';
 
 export type TableButtonInfo = {
@@ -21,6 +19,7 @@ export type TableButtonInfo = {
   onEditRow?: (rowId: string) => void;
   onEmailRow?: (rowId: string) => void;
   onRoomLinkRow?: (rowId: string) => void;
+  onFolderRow?: (rowId: string) => void;
 };
 
 type MaterialTableProps = {
@@ -28,6 +27,9 @@ type MaterialTableProps = {
   columnHeaders: string[];
   hideColumnIndexes: number[];
   tableButtonInfo?: TableButtonInfo;
+  defaultPageSize?: number;
+  defaultPageIndex?: number;
+  getExpandComponent?: (rowId: string) => React.ReactNode;
 };
 
 const MaterialTable: React.FC<MaterialTableProps> = ({
@@ -35,25 +37,26 @@ const MaterialTable: React.FC<MaterialTableProps> = ({
   columnHeaders,
   hideColumnIndexes,
   tableButtonInfo,
+  defaultPageSize = 10,
+  defaultPageIndex = 0,
+  getExpandComponent,
 }) => {
-  const { data: appointments } = React.useContext(AppointmentsContext);
   const [visibleRows, setVisibleRows] = React.useState(rows);
-  const [pageSize, setPageSize] = React.useState(10);
-  const [pageIndex, setPageIndex] = React.useState(0);
-  const [canNextPage, setCanNextPage] = React.useState(false);
-  const [canPreviousPage, setCanPreviousPage] = React.useState(false);
+  const [pageSize, setPageSize] = React.useState(defaultPageSize);
+  const [pageIndex, setPageIndex] = React.useState(defaultPageIndex);
+  const [canNextPage, setCanNextPage] = React.useState(
+    defaultPageIndex < rows.length - 1
+  );
+  const [canPreviousPage, setCanPreviousPage] = React.useState(
+    defaultPageIndex > 0
+  );
+
+  const rowsPerPageOptions = [5, 10, 25];
 
   React.useEffect(() => {
     setCanNextPage(pageIndex <= rows.length / pageSize);
     setCanPreviousPage(pageIndex > 0);
   }, [rows, pageIndex, pageSize]);
-
-  const getAppointmentForId = (id: string) => {
-    return (
-      appointments.find(appointment => appointment.id === id) ||
-      emptyAppointment
-    );
-  };
 
   const gotoPage = React.useCallback(
     (newPage: number) => {
@@ -71,14 +74,17 @@ const MaterialTable: React.FC<MaterialTableProps> = ({
     typeof tableButtonInfo?.onDeleteRow !== 'undefined' ||
     typeof tableButtonInfo?.onEditRow !== 'undefined' ||
     typeof tableButtonInfo?.onEmailRow !== 'undefined' ||
-    typeof tableButtonInfo?.onRoomLinkRow !== 'undefined';
+    typeof tableButtonInfo?.onRoomLinkRow !== 'undefined' ||
+    typeof tableButtonInfo?.onFolderRow !== 'undefined';
+
+  const showExpandColumn = typeof getExpandComponent !== 'undefined';
 
   return (
     <TableContainer component={Paper}>
       <Table aria-label="material table">
         <TableHead>
           <TableRow>
-            <TableCell />
+            {showExpandColumn && <TableCell />}
             {showButtonColumn && <TableCell />}
             {columnHeaders.map((header, index) => {
               const show: boolean =
@@ -95,7 +101,7 @@ const MaterialTable: React.FC<MaterialTableProps> = ({
               key={index}
               rowData={row}
               expandComponent={
-                <AppointmentDetails appointment={getAppointmentForId(row[0])} />
+                showExpandColumn ? getExpandComponent(row[0]) : undefined
               }
               hideColumnIndexes={hideColumnIndexes}
               tableButtonInfo={tableButtonInfo}
@@ -104,7 +110,7 @@ const MaterialTable: React.FC<MaterialTableProps> = ({
         </TableBody>
       </Table>
       <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={rowsPerPageOptions}
         component="div"
         count={rows.length}
         rowsPerPage={pageSize}
@@ -124,7 +130,7 @@ const MaterialTable: React.FC<MaterialTableProps> = ({
 
 type RowProps = {
   rowData: string[];
-  expandComponent: React.ReactNode;
+  expandComponent?: React.ReactNode;
   hideColumnIndexes: number[];
   tableButtonInfo?: TableButtonInfo;
 };
@@ -141,20 +147,25 @@ const Row: React.FC<RowProps> = ({
     (typeof tableButtonInfo.onDeleteRow !== 'undefined' ||
       typeof tableButtonInfo.onEditRow !== 'undefined' ||
       typeof tableButtonInfo.onEmailRow !== 'undefined' ||
-      typeof tableButtonInfo.onRoomLinkRow !== 'undefined');
+      typeof tableButtonInfo.onRoomLinkRow !== 'undefined' ||
+      typeof tableButtonInfo.onFolderRow !== 'undefined');
+
+  const showExpand = typeof expandComponent !== 'undefined';
 
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-        <TableCell>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
+        {showExpand && (
+          <TableCell>
+            <IconButton
+              aria-label="expand row"
+              size="small"
+              onClick={() => setOpen(!open)}
+            >
+              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+          </TableCell>
+        )}
         {showButtonsCell && (
           <ButtonsCell rowId={rowData[0]} tableButtonInfo={tableButtonInfo!} />
         )}
@@ -196,13 +207,13 @@ const ButtonsCell: React.FC<ButtonsCellProps> = ({
   const showEdit = typeof tableButtonInfo.onEditRow !== 'undefined';
   const showEmail = typeof tableButtonInfo.onEmailRow !== 'undefined';
   const showRoomLink = typeof tableButtonInfo.onRoomLinkRow !== 'undefined';
+  const showFolderRow = typeof tableButtonInfo.onFolderRow !== 'undefined';
 
   return (
     <TableCell>
       {showDelete && (
         <IconButton
           aria-label="delete row"
-          size="small"
           onClick={() => tableButtonInfo.onDeleteRow!(rowId)}
         >
           <Delete />
@@ -211,7 +222,6 @@ const ButtonsCell: React.FC<ButtonsCellProps> = ({
       {showEdit && (
         <IconButton
           aria-label="edit row"
-          size="small"
           onClick={() => tableButtonInfo.onEditRow!(rowId)}
         >
           <Edit />
@@ -220,7 +230,6 @@ const ButtonsCell: React.FC<ButtonsCellProps> = ({
       {showEmail && (
         <IconButton
           aria-label="email row"
-          size="small"
           onClick={() => tableButtonInfo.onEmailRow!(rowId)}
         >
           <Email />
@@ -229,10 +238,17 @@ const ButtonsCell: React.FC<ButtonsCellProps> = ({
       {showRoomLink && (
         <IconButton
           aria-label="room link row"
-          size="small"
           onClick={() => tableButtonInfo.onRoomLinkRow!(rowId)}
         >
           <Computer />
+        </IconButton>
+      )}
+      {showFolderRow && (
+        <IconButton
+          aria-label="folder row"
+          onClick={() => tableButtonInfo.onFolderRow!(rowId)}
+        >
+          <Folder />
         </IconButton>
       )}
     </TableCell>

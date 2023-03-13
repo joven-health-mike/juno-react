@@ -1,5 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
+import { Typography } from '@mui/material';
 import React from 'react';
 import styled from 'styled-components';
 import { Counselor } from '../../data/counselors';
@@ -19,12 +20,12 @@ const CounselorDetails: React.FC<CounselorDetailsProps> = ({ counselor }) => {
   return (
     <>
       <UserDetails user={counselor as User} />
-      <p>
+      <Typography>
         Room Link:{' '}
         <Link href={counselor.counselorRoomLink}>
           {counselor.counselorRoomLink}
         </Link>
-      </p>
+      </Typography>
     </>
   );
 };
