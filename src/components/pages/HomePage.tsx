@@ -11,8 +11,6 @@ import {
   Appointment,
   AppointmentsContext,
   emptyAppointment,
-  getTableColumnHeadersForAppointments,
-  getTableDataForAppointments,
 } from '../../data/appointments';
 import StudentsSmallTable from '../tables/StudentsSmallTable';
 import { Student } from '../../data/students';
@@ -23,7 +21,6 @@ import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import { createPermission, deletePermission } from '../../auth/permissions';
 import { h1Styles } from '../styles/mixins';
 import { getCounselors } from '../../data/counselors';
-import MaterialTable from '../tables/MaterialTable';
 
 const LeftSection = styled.section`
   margin-left: 25px;
@@ -151,52 +148,16 @@ const StudentsTableView: React.FC = () => {
 };
 
 const AdminView: React.FC = () => {
-  const { data: appointments } = useContext(AppointmentsContext);
-  const tableData: string[][] = useMemo(
-    () => getTableDataForAppointments(appointments),
-    [appointments]
-  );
-  const tableColumnHeaders: string[] = useMemo(
-    () => getTableColumnHeadersForAppointments(appointments),
-    [appointments]
-  );
-
-  const onDeleteRow = (id: string) => {
-    const deletedAppointment = appointments.find(
-      appointment => appointment.id === id
-    );
-    alert('row delete: ' + deletedAppointment?.title);
-  };
-
-  const onEditRow = (id: string) => {
-    const editedAppointment = appointments.find(
-      appointment => appointment.id === id
-    );
-    alert('row edit: ' + editedAppointment?.title);
-  };
-
-  const onEmailRow = (id: string) => {
-    const emailAppointment = appointments.find(
-      appointment => appointment.id === id
-    );
-    alert('row email: ' + emailAppointment?.title);
-  };
-
-  const onRoomLinkRow = (id: string) => {
-    const roomLinkedAppointment = appointments.find(
-      appointment => appointment.id === id
-    );
-    alert('row roomLink: ' + roomLinkedAppointment?.title);
-  };
-
   return (
     <>
-      <MaterialTable
-        rows={tableData}
-        columnHeaders={tableColumnHeaders}
-        hideColumnIndexes={[0]}
-        tableButtonInfo={{ onDeleteRow, onEditRow, onEmailRow, onRoomLinkRow }}
-      />
+      <LeftSection>
+        <Header>All Appointments</Header>
+        <AppointmentView />
+      </LeftSection>
+      <RightSection>
+        <Header>All Students</Header>
+        <StudentsTableView />
+      </RightSection>
     </>
   );
 };
