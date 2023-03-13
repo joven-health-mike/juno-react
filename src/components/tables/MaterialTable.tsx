@@ -58,8 +58,7 @@ const MaterialTable: React.FC<MaterialTableProps> = ({
   const gotoPage = React.useCallback(
     (newPage: number) => {
       setPageIndex(newPage);
-      const firstRow =
-        newPage * (Math.trunc(rows.length / pageSize) + pageSize - 1);
+      const firstRow = newPage * pageSize;
       const visibleRows = rows.slice(firstRow, firstRow + pageSize);
       setVisibleRows(visibleRows);
     },
