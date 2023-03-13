@@ -11,7 +11,14 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { Computer, Delete, Edit, Email, Folder } from '@mui/icons-material';
+import {
+  CalendarMonth,
+  Computer,
+  Delete,
+  Edit,
+  Email,
+  Folder,
+} from '@mui/icons-material';
 import { TablePagination } from '@mui/material';
 
 export type TableButtonInfo = {
@@ -20,6 +27,7 @@ export type TableButtonInfo = {
   onEmailRow?: (rowId: string) => void;
   onRoomLinkRow?: (rowId: string) => void;
   onFolderRow?: (rowId: string) => void;
+  onAppointmentRow?: (rowId: string) => void;
 };
 
 type MaterialTableProps = {
@@ -75,7 +83,8 @@ const MaterialTable: React.FC<MaterialTableProps> = ({
     typeof tableButtonInfo?.onEditRow !== 'undefined' ||
     typeof tableButtonInfo?.onEmailRow !== 'undefined' ||
     typeof tableButtonInfo?.onRoomLinkRow !== 'undefined' ||
-    typeof tableButtonInfo?.onFolderRow !== 'undefined';
+    typeof tableButtonInfo?.onFolderRow !== 'undefined' ||
+    typeof tableButtonInfo?.onAppointmentRow !== 'undefined';
 
   const showExpandColumn = typeof getExpandComponent !== 'undefined';
 
@@ -148,7 +157,8 @@ const Row: React.FC<RowProps> = ({
       typeof tableButtonInfo.onEditRow !== 'undefined' ||
       typeof tableButtonInfo.onEmailRow !== 'undefined' ||
       typeof tableButtonInfo.onRoomLinkRow !== 'undefined' ||
-      typeof tableButtonInfo.onFolderRow !== 'undefined');
+      typeof tableButtonInfo.onFolderRow !== 'undefined' ||
+      typeof tableButtonInfo.onAppointmentRow !== 'undefined');
 
   const showExpand = typeof expandComponent !== 'undefined';
 
@@ -208,6 +218,8 @@ const ButtonsCell: React.FC<ButtonsCellProps> = ({
   const showEmail = typeof tableButtonInfo.onEmailRow !== 'undefined';
   const showRoomLink = typeof tableButtonInfo.onRoomLinkRow !== 'undefined';
   const showFolderRow = typeof tableButtonInfo.onFolderRow !== 'undefined';
+  const showAppointmentRow =
+    typeof tableButtonInfo.onAppointmentRow !== 'undefined';
 
   return (
     <TableCell>
@@ -249,6 +261,14 @@ const ButtonsCell: React.FC<ButtonsCellProps> = ({
           onClick={() => tableButtonInfo.onFolderRow!(rowId)}
         >
           <Folder />
+        </IconButton>
+      )}
+      {showAppointmentRow && (
+        <IconButton
+          aria-label="folder row"
+          onClick={() => tableButtonInfo.onAppointmentRow!(rowId)}
+        >
+          <CalendarMonth />
         </IconButton>
       )}
     </TableCell>
