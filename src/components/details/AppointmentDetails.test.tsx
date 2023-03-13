@@ -55,7 +55,7 @@ describe('AppointmentDetails', () => {
   it('calls joinAppointmentStub when Join Appointment button is clicked', () => {
     renderComponent();
     const joinAppointmentButton = screen.getByRole('button', {
-      name: 'Join Appointment',
+      name: /roomLink/i,
     });
     userEvent.click(joinAppointmentButton);
     expect(joinAppointmentStub).toHaveBeenCalled();
@@ -63,7 +63,7 @@ describe('AppointmentDetails', () => {
   it('calls emailParticipantsStub when Email Participants button is clicked', () => {
     renderComponent();
     const emailParticipantsButton = screen.getByRole('button', {
-      name: 'Email Participants',
+      name: /email/i,
     });
     userEvent.click(emailParticipantsButton);
     expect(emailParticipantsStub).toHaveBeenCalled();
@@ -71,7 +71,7 @@ describe('AppointmentDetails', () => {
   it('calls cancelAppointmentStub when Email Participants button is clicked', () => {
     renderComponent();
     const cancelAppointmentButton = screen.getByRole('button', {
-      name: 'Cancel Appointment',
+      name: /delete/i,
     });
     userEvent.click(cancelAppointmentButton);
     expect(cancelAppointmentStub).toHaveBeenCalled();

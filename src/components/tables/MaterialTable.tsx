@@ -225,7 +225,7 @@ const ButtonsCell: React.FC<ButtonsCellProps> = ({
     <TableCell>
       {showDelete && (
         <IconButton
-          aria-label="delete row"
+          aria-label="delete"
           onClick={() => tableButtonInfo.onDeleteRow!(rowId)}
         >
           <Delete />
@@ -233,7 +233,7 @@ const ButtonsCell: React.FC<ButtonsCellProps> = ({
       )}
       {showEdit && (
         <IconButton
-          aria-label="edit row"
+          aria-label="edit"
           onClick={() => tableButtonInfo.onEditRow!(rowId)}
         >
           <Edit />
@@ -241,7 +241,7 @@ const ButtonsCell: React.FC<ButtonsCellProps> = ({
       )}
       {showEmail && (
         <IconButton
-          aria-label="email row"
+          aria-label="email"
           onClick={() => tableButtonInfo.onEmailRow!(rowId)}
         >
           <Email />
@@ -249,7 +249,7 @@ const ButtonsCell: React.FC<ButtonsCellProps> = ({
       )}
       {showRoomLink && (
         <IconButton
-          aria-label="room link row"
+          aria-label="roomLink"
           onClick={() => tableButtonInfo.onRoomLinkRow!(rowId)}
         >
           <Computer />
@@ -257,7 +257,7 @@ const ButtonsCell: React.FC<ButtonsCellProps> = ({
       )}
       {showFolderRow && (
         <IconButton
-          aria-label="folder row"
+          aria-label="folder"
           onClick={() => tableButtonInfo.onFolderRow!(rowId)}
         >
           <Folder />
@@ -265,7 +265,7 @@ const ButtonsCell: React.FC<ButtonsCellProps> = ({
       )}
       {showAppointmentRow && (
         <IconButton
-          aria-label="folder row"
+          aria-label="appointment"
           onClick={() => tableButtonInfo.onAppointmentRow!(rowId)}
         >
           <CalendarMonth />

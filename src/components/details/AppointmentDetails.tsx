@@ -71,6 +71,7 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
         {typeof onJoinAppointmentClicked !== 'undefined' && (
           <Button
             variant="contained"
+            aria-label="roomLink"
             onClick={() => {
               onJoinAppointmentClicked(appointment);
             }}
@@ -81,6 +82,7 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
         {typeof onEmailParticipantsClicked !== 'undefined' && (
           <Button
             variant="contained"
+            aria-label="email"
             onClick={() => {
               onEmailParticipantsClicked(appointment);
             }}
@@ -92,6 +94,7 @@ const AppointmentDetails: React.FC<AppointmentDetailsProps> = ({
           typeof onCancelAppointmentClicked !== 'undefined' && (
             <Button
               variant="contained"
+              aria-label="delete"
               onClick={() => {
                 onCancelAppointmentClicked(appointment);
               }}
