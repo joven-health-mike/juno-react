@@ -1,25 +1,10 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, {
-  MouseEvent,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
-import { CellProps, Column, Row } from 'react-table';
-import styled from 'styled-components';
+import React, { useContext, useEffect, useState } from 'react';
 import { deletePermission, updatePermission } from '../../auth/permissions';
 import { LoggedInUserContext, User, UsersContext } from '../../data/users';
-import XButton from '../buttons/XButton';
 import UserDetails from '../details/UserDetails';
-import { buttonStyles } from '../styles/mixins';
-import DataTable from './DataTable';
-import TableSearchFilter from './TableSearchFilter';
-
-const Button = styled.button`
-  ${buttonStyles}
-`;
+import MaterialTable from './MaterialTable';
 
 type UsersTableProps = {
   onDeleteClicked: (user: User) => void;
@@ -64,112 +49,51 @@ const UsersTable: React.FC<UsersTableProps> = ({
     setTableUsers(mappedUsers);
   }, [users]);
 
-  const getUserFromTableUser = useCallback(
-    (tableUser: TableUser): User => {
-      return users.find(user => user.id === tableUser.id) as User;
-    },
-    [users]
-  );
+  const createTableData = (students: TableUser[]) => {
+    const tableData: string[][] = [];
 
-  const getButtonCell = useCallback(
-    (tableUser: TableUser, row: Row) => {
-      const user = getUserFromTableUser(tableUser);
-      if (!user) return <></>;
+    students.forEach(student => {
+      tableData.push([student.id, student.name, student.role]);
+    });
 
-      return (
-        <>
-          {isDeleteUserAllowed && (
-            <XButton
-              text="❌"
-              title={`Delete ${user.firstName}`}
-              value={user.id}
-              onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-                onDeleteClicked(user);
-              }}
-            />
-          )}
-          {isUpdateUserAllowed && (
-            <XButton
-              text="✏️"
-              title={`Edit ${user.firstName}`}
-              value={user.id}
-              onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-                onEditClicked(user);
-              }}
-            />
-          )}
-          <XButton
-            text="📧"
-            title={`Email ${user.firstName}`}
-            value={user.id}
-            onClick={(e: MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault();
-              onEmailClicked(user);
-            }}
-          />
-          <Button {...row.getToggleRowExpandedProps()}>
-            {row.isExpanded ? '👇' : '👉'}
-          </Button>
-        </>
-      );
-    },
-    [
-      getUserFromTableUser,
-      isDeleteUserAllowed,
-      isUpdateUserAllowed,
-      onDeleteClicked,
-      onEditClicked,
-      onEmailClicked,
-    ]
-  );
+    return tableData;
+  };
 
-  const defaultColumn: Record<string, unknown> = React.useMemo(
-    () => ({
-      Filter: TableSearchFilter,
-    }),
-    []
-  );
+  const onDeleteRow = isDeleteUserAllowed
+    ? (id: string) => {
+        const user = users.find(user => user.id === id);
+        onDeleteClicked(user!);
+      }
+    : undefined;
 
-  const columns: Column[] = React.useMemo(
-    () => [
-      {
-        id: 'buttons',
-        Cell: ({ cell, row }: CellProps<object>) => {
-          const user = cell.row.original as TableUser;
-          return getButtonCell(user, row);
-        },
-      },
-      {
-        Header: 'Name',
-        accessor: 'name',
-      },
-      {
-        Header: 'Role',
-        accessor: 'role',
-      },
-    ],
-    [getButtonCell]
-  );
+  const onEditRow = isUpdateUserAllowed
+    ? (id: string) => {
+        const user = users.find(user => user.id === id);
+        onEditClicked(user!);
+      }
+    : undefined;
 
-  const renderRowSubComponent = useCallback(
-    (row: Row) => {
-      const rowObject = row.original as TableUser;
-      const user = getUserFromTableUser(rowObject);
-      if (typeof user === 'undefined') return <></>;
-      return <UserDetails user={user} />;
-    },
-    [getUserFromTableUser]
-  );
+  const onEmailRow = (id: string) => {
+    const user = users.find(user => user.id === id);
+    onEmailClicked(user!);
+  };
+
+  const getExpandComponent = (id: string) => {
+    const user = users.find(user => user.id === id);
+    return <UserDetails user={user!} />;
+  };
 
   return (
-    <DataTable
-      data={tableUsers}
-      defaultColumn={defaultColumn}
-      columns={columns}
-      renderRowSubComponent={renderRowSubComponent}
-      hiddenColumns={['id']}
+    <MaterialTable
+      rows={createTableData(tableUsers)}
+      columnHeaders={['id', 'Name', 'Role']}
+      hideColumnIndexes={[0]}
+      tableButtonInfo={{
+        onDeleteRow,
+        onEditRow,
+        onEmailRow,
+      }}
+      getExpandComponent={getExpandComponent}
     />
   );
 };
