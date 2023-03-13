@@ -19,8 +19,8 @@ import { LoggedInUserContext, UsersContext } from '../../data/users';
 import { Role } from '../../services/user.service';
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import { createPermission, deletePermission } from '../../auth/permissions';
-import { h1Styles } from '../styles/mixins';
 import { getCounselors } from '../../data/counselors';
+import { Typography } from '@mui/material';
 
 const LeftSection = styled.section`
   margin-left: 25px;
@@ -32,10 +32,6 @@ const RightSection = styled.section`
   margin-left: 25px;
   float: right;
   width: 47%;
-`;
-
-const Header = styled.h1`
-  ${h1Styles}
 `;
 
 const HomePage: React.FC = () => {
@@ -151,11 +147,11 @@ const AdminView: React.FC = () => {
   return (
     <>
       <LeftSection>
-        <Header>All Appointments</Header>
+        <Typography variant="h4">All Appointments</Typography>
         <AppointmentView />
       </LeftSection>
       <RightSection>
-        <Header>All Students</Header>
+        <Typography variant="h4">All Students</Typography>
         <StudentsTableView />
       </RightSection>
     </>
@@ -166,11 +162,11 @@ const CounselorView: React.FC = () => {
   return (
     <>
       <LeftSection>
-        <Header>My Appointments</Header>
+        <Typography variant="h4">My Appointments</Typography>
         <AppointmentView />
       </LeftSection>
       <RightSection>
-        <Header>My Caseload</Header>
+        <Typography variant="h4">My Caseload</Typography>
         <StudentsTableView />
       </RightSection>
     </>
@@ -181,11 +177,11 @@ const SchoolStaffView: React.FC = () => {
   return (
     <>
       <LeftSection>
-        <Header>My Appointments</Header>
+        <Typography variant="h4">My Appointments</Typography>
         <AppointmentView />
       </LeftSection>
       <RightSection>
-        <Header>My Students</Header>
+        <Typography variant="h4">My Students</Typography>
         <StudentsTableView />
       </RightSection>
     </>
@@ -196,11 +192,11 @@ const SchoolAdminView: React.FC = () => {
   return (
     <>
       <LeftSection>
-        <Header>My Appointments</Header>
+        <Typography variant="h4">My Appointments</Typography>
         <AppointmentView />
       </LeftSection>
       <RightSection>
-        <Header>My Students</Header>
+        <Typography variant="h4">My Students</Typography>
         <StudentsTableView />
       </RightSection>
     </>
@@ -218,13 +214,13 @@ const StudentView: React.FC = () => {
   return (
     <>
       <LeftSection>
-        <Header>My Appointments</Header>
+        <Typography variant="h4">My Appointments</Typography>
         <AppointmentView />
       </LeftSection>
       <RightSection>
         {myCounselor && (
           <>
-            <Header>My Counselor</Header>
+            <Typography variant="h4">My Counselor</Typography>
             <CounselorDetails counselor={myCounselor} />
           </>
         )}
@@ -237,11 +233,11 @@ const GuardianView: React.FC = () => {
   return (
     <>
       <LeftSection>
-        <Header>My Appointments</Header>
+        <Typography variant="h4">My Appointments</Typography>
         <AppointmentView />
       </LeftSection>
       <RightSection>
-        <Header>My Students</Header>
+        <Typography variant="h4">My Students</Typography>
         <StudentsTableView />
       </RightSection>
     </>
