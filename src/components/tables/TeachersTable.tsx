@@ -1,29 +1,13 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, {
-  MouseEvent,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { CellProps, Column, Row } from 'react-table';
-import styled from 'styled-components';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { deletePermission, updatePermission } from '../../auth/permissions';
 import { getCounselors } from '../../data/counselors';
 import { SchoolsContext } from '../../data/schools';
 import { getActiveTeachers, Teacher } from '../../data/teachers';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
-import XButton from '../buttons/XButton';
 import StudentDetails from '../details/StudentDetails';
-import { buttonStyles } from '../styles/mixins';
-import DataTable from './DataTable';
-import TableSearchFilter from './TableSearchFilter';
-
-const Button = styled.button`
-  ${buttonStyles}
-`;
+import MaterialTable from './MaterialTable';
 
 type TeachersTableProps = {
   onDeleteClicked: (student: Teacher) => void;
@@ -83,127 +67,62 @@ const TeachersTable: React.FC<TeachersTableProps> = ({
     setTableTeachers(mappedTeachers);
   }, [counselors, schools, teachers]);
 
-  const getTeacherFromTableTeacher = useCallback(
-    (tableTeacher: TableTeacher): Teacher => {
-      return teachers.find(
-        teacher => teacher.id === tableTeacher.id
-      ) as Teacher;
-    },
-    [teachers]
-  );
+  const createTableData = (students: TableTeacher[]) => {
+    const tableData: string[][] = [];
 
-  const getButtonCell = useCallback(
-    (tableTeacher: TableTeacher, row: Row) => {
-      const student = getTeacherFromTableTeacher(tableTeacher);
-      if (!student) return <></>;
+    students.forEach(student => {
+      tableData.push([
+        student.id,
+        student.name,
+        student.schoolName,
+        student.counselorName,
+      ]);
+    });
 
-      return (
-        <>
-          {isDeleteTeacherAllowed && (
-            <XButton
-              text="❌"
-              title="Delete Teacher"
-              value={student.id}
-              onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-                onDeleteClicked(student);
-              }}
-            />
-          )}
-          {isUpdateTeacherAllowed && (
-            <XButton
-              text="✏️"
-              title="Edit Teacher"
-              value={student.id}
-              onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-                onEditClicked(student);
-              }}
-            />
-          )}
-          <XButton
-            text="📅"
-            title="Schedule Appointment"
-            value={student.id}
-            onClick={(e: MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault();
-              onAppointmentClicked(student);
-            }}
-          />
-          <XButton
-            text="📁"
-            title={`Open ${student.firstName}'s File`}
-            value={student.id}
-            onClick={(e: MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault();
-              onOpenFileClicked(student);
-            }}
-          />
-          <Button {...row.getToggleRowExpandedProps()}>
-            {row.isExpanded ? '👇' : '👉'}
-          </Button>
-        </>
-      );
-    },
-    [
-      getTeacherFromTableTeacher,
-      isDeleteTeacherAllowed,
-      isUpdateTeacherAllowed,
-      onAppointmentClicked,
-      onDeleteClicked,
-      onEditClicked,
-      onOpenFileClicked,
-    ]
-  );
+    return tableData;
+  };
 
-  const defaultColumn: Record<string, unknown> = React.useMemo(
-    () => ({
-      Filter: TableSearchFilter,
-    }),
-    []
-  );
+  const onDeleteRow = isDeleteTeacherAllowed
+    ? (id: string) => {
+        const teacher = teachers.find(teacher => teacher.id === id);
+        onDeleteClicked(teacher!);
+      }
+    : undefined;
 
-  const columns: Column[] = React.useMemo(
-    () => [
-      {
-        id: 'buttons',
-        Cell: ({ cell, row }: CellProps<object>) => {
-          const student = cell.row.original as TableTeacher;
-          return getButtonCell(student, row);
-        },
-      },
-      {
-        Header: 'Name',
-        accessor: 'name',
-      },
-      {
-        Header: 'School',
-        accessor: 'schoolName',
-      },
-      {
-        Header: 'Counselor',
-        accessor: 'counselorName',
-      },
-    ],
-    [getButtonCell]
-  );
+  const onEditRow = isUpdateTeacherAllowed
+    ? (id: string) => {
+        const teacher = teachers.find(teacher => teacher.id === id);
+        onEditClicked(teacher!);
+      }
+    : undefined;
 
-  const renderRowSubComponent = useCallback(
-    (row: Row) => {
-      const tableTeacher = row.original as TableTeacher;
-      const teacher = getTeacherFromTableTeacher(tableTeacher);
-      if (typeof teacher === 'undefined') return <></>;
-      return <StudentDetails student={teacher} />;
-    },
-    [getTeacherFromTableTeacher]
-  );
+  const onAppointmentRow = (id: string) => {
+    const teacher = teachers.find(teacher => teacher.id === id);
+    onAppointmentClicked(teacher!);
+  };
+
+  const onFolderRow = (id: string) => {
+    const teacher = teachers.find(teacher => teacher.id === id);
+    onOpenFileClicked(teacher!);
+  };
+
+  const getExpandComponent = (id: string) => {
+    const teacher = teachers.find(teacher => teacher.id === id);
+    return <StudentDetails student={teacher!} />;
+  };
 
   return (
-    <DataTable
-      data={tableTeachers}
-      defaultColumn={defaultColumn}
-      columns={columns}
-      renderRowSubComponent={renderRowSubComponent}
+    <MaterialTable
+      rows={createTableData(tableTeachers)}
+      columnHeaders={['id', 'Name', 'School', 'Counselor']}
+      hideColumnIndexes={[0]}
+      tableButtonInfo={{
+        onDeleteRow,
+        onEditRow,
+        onAppointmentRow,
+        onFolderRow,
+      }}
+      getExpandComponent={getExpandComponent}
     />
   );
 };
