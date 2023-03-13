@@ -1,7 +1,9 @@
 // Copyright 2022 Social Fabric, LLC
 
+import { ThemeProvider } from '@mui/material';
 import React, { useState, useContext, useEffect } from 'react';
 import Modal from 'react-modal';
+import { AppTheme } from './components/styles/theme';
 import { AppointmentsContext, AppointmentsProvider } from './data/appointments';
 import { SchoolsContext, SchoolsProvider } from './data/schools';
 import {
@@ -51,16 +53,18 @@ function App() {
   }
 
   return (
-    <LoggedInUserContext.Provider value={loggedInUserContextValue}>
-      <AppointmentsProvider data={appointments}>
-        <SchoolsProvider data={schools}>
-          <UsersProvider data={users}>
-            {isLoading && <div>Loading...</div>}
-            {!isLoading && <AppRouter isAuthenticated={isAuthenticated} />}
-          </UsersProvider>
-        </SchoolsProvider>
-      </AppointmentsProvider>
-    </LoggedInUserContext.Provider>
+    <ThemeProvider theme={AppTheme}>
+      <LoggedInUserContext.Provider value={loggedInUserContextValue}>
+        <AppointmentsProvider data={appointments}>
+          <SchoolsProvider data={schools}>
+            <UsersProvider data={users}>
+              {isLoading && <div>Loading...</div>}
+              {!isLoading && <AppRouter isAuthenticated={isAuthenticated} />}
+            </UsersProvider>
+          </SchoolsProvider>
+        </AppointmentsProvider>
+      </LoggedInUserContext.Provider>
+    </ThemeProvider>
   );
 }
 

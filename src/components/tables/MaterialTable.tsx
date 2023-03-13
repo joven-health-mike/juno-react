@@ -4,10 +4,8 @@ import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -20,6 +18,7 @@ import {
   Folder,
 } from '@mui/icons-material';
 import { TablePagination } from '@mui/material';
+import { StyledTableCell, StyledTableRow } from '../styles/theme';
 
 export type TableButtonInfo = {
   onDeleteRow?: (rowId: string) => void;
@@ -92,17 +91,21 @@ const MaterialTable: React.FC<MaterialTableProps> = ({
     <TableContainer component={Paper}>
       <Table aria-label="material table">
         <TableHead>
-          <TableRow>
-            {showExpandColumn && <TableCell />}
-            {showButtonColumn && <TableCell />}
+          <StyledTableRow>
+            {showExpandColumn && <StyledTableCell />}
+            {showButtonColumn && <StyledTableCell />}
             {columnHeaders.map((header, index) => {
               const show: boolean =
                 hideColumnIndexes.find(
                   hideColumnIndex => hideColumnIndex === index
                 ) === undefined;
-              return show ? <TableCell key={index}>{header}</TableCell> : <></>;
+              return show ? (
+                <StyledTableCell key={index}>{header}</StyledTableCell>
+              ) : (
+                <></>
+              );
             })}
-          </TableRow>
+          </StyledTableRow>
         </TableHead>
         <TableBody>
           {visibleRows.map((row, index) => (
@@ -164,9 +167,9 @@ const Row: React.FC<RowProps> = ({
 
   return (
     <React.Fragment>
-      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+      <StyledTableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         {showExpand && (
-          <TableCell>
+          <StyledTableCell>
             <IconButton
               aria-label="expand row"
               size="small"
@@ -174,7 +177,7 @@ const Row: React.FC<RowProps> = ({
             >
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
-          </TableCell>
+          </StyledTableCell>
         )}
         {showButtonsCell && (
           <ButtonsCell rowId={rowData[0]} tableButtonInfo={tableButtonInfo!} />
@@ -185,21 +188,26 @@ const Row: React.FC<RowProps> = ({
               hideColumnIndex => hideColumnIndex === index
             ) === undefined;
           return show ? (
-            <TableCell component="th" scope="row" key={index}>
+            <StyledTableCell component="th" scope="row" key={index}>
               {colString}
-            </TableCell>
+            </StyledTableCell>
           ) : (
             <></>
           );
         })}
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 1 }}>{expandComponent}</Box>
-          </Collapse>
-        </TableCell>
-      </TableRow>
+      </StyledTableRow>
+      {showExpand && open && (
+        <StyledTableRow>
+          <StyledTableCell
+            style={{ paddingBottom: 0, paddingTop: 0 }}
+            colSpan={6}
+          >
+            <Collapse in={open} timeout="auto" unmountOnExit>
+              <Box sx={{ margin: 1 }}>{expandComponent}</Box>
+            </Collapse>
+          </StyledTableCell>
+        </StyledTableRow>
+      )}
     </React.Fragment>
   );
 };
@@ -222,7 +230,7 @@ const ButtonsCell: React.FC<ButtonsCellProps> = ({
     typeof tableButtonInfo.onAppointmentRow !== 'undefined';
 
   return (
-    <TableCell>
+    <StyledTableCell>
       {showDelete && (
         <IconButton
           aria-label="delete"
@@ -271,7 +279,7 @@ const ButtonsCell: React.FC<ButtonsCellProps> = ({
           <CalendarMonth />
         </IconButton>
       )}
-    </TableCell>
+    </StyledTableCell>
   );
 };
 
