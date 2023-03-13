@@ -1,7 +1,8 @@
 // Copyright 2022 Social Fabric, LLC
 
+import { Add } from '@mui/icons-material';
+import { Button, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import {
   createPermission,
   deletePermission,
@@ -19,15 +20,6 @@ import CreateStudentModal from '../modals/CreateStudentModal';
 import EditStudentModal from '../modals/EditStudentModal';
 import Navbar from '../navbar/Navbar';
 import StudentsTable from '../tables/StudentsTable';
-import { buttonStyles, h1Styles } from '../styles/mixins';
-
-const Button = styled.button`
-  ${buttonStyles}
-`;
-
-const Header = styled.h1`
-  ${h1Styles}
-`;
 
 const StudentsPage = () => {
   const { add: addStudent, update: updateStudent } = useContext(UsersContext);
@@ -112,13 +104,16 @@ const StudentsPage = () => {
       <nav>
         <Navbar />
       </nav>
-      <Header>Students</Header>
+      <Typography variant="h3">Students</Typography>
       <>
         {isCreateStudentAllowed && (
           <>
             <Button
-              type="button"
-              onClick={() => setIsCreateStudentModalOpen(true)}
+              variant="contained"
+              endIcon={<Add />}
+              onClick={() => {
+                setIsCreateStudentModalOpen(true);
+              }}
             >
               Add Student
             </Button>

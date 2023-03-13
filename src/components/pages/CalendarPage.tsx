@@ -26,13 +26,10 @@ import {
 } from '../selectList/SelectList';
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import AppointmentDetailsModal from '../modals/AppointmentDetailsModal';
-import { h1Styles, labelStyles } from '../styles/mixins';
+import { labelStyles } from '../styles/mixins';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
 import { createPermission, deletePermission } from '../../auth/permissions';
-
-const Header = styled.h1`
-  ${h1Styles}
-`;
+import { Typography } from '@mui/material';
 
 const Label = styled.label`
   ${labelStyles}
@@ -188,7 +185,7 @@ const CalendarPage: React.FC = () => {
       <nav>
         <Navbar />
       </nav>
-      <Header>Calendar</Header>
+      <Typography variant="h3">Calendar</Typography>
       {loggedInUser.role !== 'COUNSELOR' && counselors.length > 1 && (
         <Label>
           Counselor:{' '}

@@ -1,7 +1,8 @@
 // Copyright 2022 Social Fabric, LLC
 
+import { Add } from '@mui/icons-material';
+import { Button, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import {
   createPermission,
   deletePermission,
@@ -13,15 +14,6 @@ import CreateSchoolModal from '../modals/CreateSchoolModal';
 import EditSchoolModal from '../modals/EditSchoolModal';
 import Navbar from '../navbar/Navbar';
 import SchoolsTable from '../tables/SchoolsTable';
-import { buttonStyles, h1Styles } from '../styles/mixins';
-
-const Button = styled.button`
-  ${buttonStyles}
-`;
-
-const Header = styled.h1`
-  ${h1Styles}
-`;
 
 const SchoolsPage = () => {
   const {
@@ -85,13 +77,16 @@ const SchoolsPage = () => {
       <nav>
         <Navbar />
       </nav>
-      <Header>Schools</Header>
+      <Typography variant="h3">Schools</Typography>
       <>
         {isCreateSchoolAllowed && (
           <>
             <Button
-              type="button"
-              onClick={() => setIsCreateSchoolModalOpen(true)}
+              variant="contained"
+              endIcon={<Add />}
+              onClick={() => {
+                setIsCreateSchoolModalOpen(true);
+              }}
             >
               Add School
             </Button>

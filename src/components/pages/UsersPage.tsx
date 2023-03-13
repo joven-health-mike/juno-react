@@ -1,7 +1,8 @@
 // Copyright 2022 Social Fabric, LLC
 
+import { Add } from '@mui/icons-material';
+import { Button, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import {
   createPermission,
   deletePermission,
@@ -17,15 +18,6 @@ import CreateUserModal from '../modals/CreateUserModal';
 import EditUserModal from '../modals/EditUserModal';
 import Navbar from '../navbar/Navbar';
 import UsersTable from '../tables/UsersTable';
-import { buttonStyles, h1Styles } from '../styles/mixins';
-
-const Button = styled.button`
-  ${buttonStyles}
-`;
-
-const Header = styled.h1`
-  ${h1Styles}
-`;
 
 const UsersPage = () => {
   const {
@@ -87,13 +79,16 @@ const UsersPage = () => {
       <nav>
         <Navbar />
       </nav>
-      <Header>Users</Header>
+      <Typography variant="h3">Users</Typography>
       <>
         {isCreateUserAllowed && (
           <>
             <Button
-              type="button"
-              onClick={() => setIsCreateUserModalOpen(true)}
+              variant="contained"
+              endIcon={<Add />}
+              onClick={() => {
+                setIsCreateUserModalOpen(true);
+              }}
             >
               Add User
             </Button>

@@ -1,7 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import {
   createPermission,
   deletePermission,
@@ -16,18 +15,11 @@ import { LoggedInUserContext, UsersContext } from '../../data/users';
 import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import Navbar from '../navbar/Navbar';
 import TeachersTable from '../tables/TeachersTable';
-import { buttonStyles, h1Styles } from '../styles/mixins';
 import { emptyTeacher, Teacher } from '../../data/teachers';
 import CreateTeacherModal from '../modals/CreateTeacherModal';
 import EditTeacherModal from '../modals/EditTeacherModal';
-
-const Button = styled.button`
-  ${buttonStyles}
-`;
-
-const Header = styled.h1`
-  ${h1Styles}
-`;
+import { Button, Typography } from '@mui/material';
+import { Add } from '@mui/icons-material';
 
 const TeachersPage = () => {
   const { add: addTeacher, update: updateTeacher } = useContext(UsersContext);
@@ -112,13 +104,16 @@ const TeachersPage = () => {
       <nav>
         <Navbar />
       </nav>
-      <Header>Teachers</Header>
+      <Typography variant="h3">Teachers</Typography>
       <>
         {isCreateTeacherAllowed && (
           <>
             <Button
-              type="button"
-              onClick={() => setIsCreateTeacherModalOpen(true)}
+              variant="contained"
+              endIcon={<Add />}
+              onClick={() => {
+                setIsCreateTeacherModalOpen(true);
+              }}
             >
               Add Teacher
             </Button>

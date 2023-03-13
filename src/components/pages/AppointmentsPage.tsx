@@ -1,7 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import styled from 'styled-components';
 import {
   createPermission,
   deletePermission,
@@ -18,13 +17,8 @@ import CreateAppointmentModal from '../modals/CreateAppointmentModal';
 import EditAppointmentModal from '../modals/EditAppointmentModal';
 import Navbar from '../navbar/Navbar';
 import AppointmentsTable from '../tables/AppointmentsTable';
-import { h1Styles } from '../styles/mixins';
 import { Add } from '@mui/icons-material';
-import { Button } from '@mui/material';
-
-const Header = styled.h1`
-  ${h1Styles}
-`;
+import { Button, Typography } from '@mui/material';
 
 const AppointmentsPage: React.FC = () => {
   const {
@@ -123,7 +117,7 @@ const AppointmentsPage: React.FC = () => {
       <nav>
         <Navbar />
       </nav>
-      <Header>Appointments</Header>
+      <Typography variant="h3">Appointments</Typography>
       <>
         {isCreateAppointmentAllowed && (
           <Button
