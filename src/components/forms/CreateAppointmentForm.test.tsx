@@ -12,7 +12,7 @@ const fakeAppointment = {
   id: '0',
   title: 'CLINICAL',
   start: new Date(),
-  end: new Date(),
+  end: new Date(new Date().getTime() + 60000 * 30),
   isRecurring: false,
   recurranceInfo: undefined,
   school: emptySchool,

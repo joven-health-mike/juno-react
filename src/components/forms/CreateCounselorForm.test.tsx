@@ -21,6 +21,7 @@ const testCounselor: Counselor = {
   timeZoneIanaName: 'America/New_York',
   role: 'COUNSELOR' as Role,
   counselorRoomLink: 'https://www.zoomtest.com',
+  counselorRoomLink2: 'https://www.zoomtest.com',
 };
 
 describe('CreateCounselorForm', () => {
@@ -91,6 +92,11 @@ describe('CreateCounselorForm', () => {
       name: 'Room Link:',
     }) as HTMLInputElement;
     userEvent.type(inputRoomLink, 'https://www.zoomtest.com');
+
+    const inputRoomLink2 = screen.getByRole('textbox', {
+      name: 'Room Link 2:',
+    }) as HTMLInputElement;
+    userEvent.type(inputRoomLink2, 'https://www.zoomtest.com');
 
     //click submit button
     const button = screen.getByRole('button', { name: 'Submit' });
