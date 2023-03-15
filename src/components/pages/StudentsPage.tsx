@@ -15,7 +15,7 @@ import {
 } from '../../data/appointments';
 import { emptyStudent, Student } from '../../data/students';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
-import CreateAppointmentModal from '../modals/CreateAppointmentModal';
+import AppointmentModal from '../modals/AppointmentModal';
 import CreateStudentModal from '../modals/CreateStudentModal';
 import EditStudentModal from '../modals/EditStudentModal';
 import Navbar from '../navbar/Navbar';
@@ -125,7 +125,8 @@ const StudentsPage = () => {
           </>
         )}
         {isCreateAppointmentAllowed && (
-          <CreateAppointmentModal
+          <AppointmentModal
+            title="Create Appointment"
             isOpen={isCreateAppointmentModalOpen}
             onAppointmentAdded={handleAppointmentAdded}
             onClose={() => setIsCreateAppointmentModalOpen(false)}

@@ -12,7 +12,7 @@ import {
   emptyAppointment,
 } from '../../data/appointments';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
-import CreateAppointmentModal from '../modals/CreateAppointmentModal';
+import AppointmentModal from '../modals/AppointmentModal';
 import Navbar from '../navbar/Navbar';
 import TeachersTable from '../tables/TeachersTable';
 import { emptyTeacher, Teacher } from '../../data/teachers';
@@ -125,7 +125,8 @@ const TeachersPage = () => {
           </>
         )}
         {isCreateAppointmentAllowed && (
-          <CreateAppointmentModal
+          <AppointmentModal
+            title="Create Appointment"
             isOpen={isCreateAppointmentModalOpen}
             onAppointmentAdded={handleAppointmentAdded}
             onClose={() => setIsCreateAppointmentModalOpen(false)}

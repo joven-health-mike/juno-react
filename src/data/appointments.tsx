@@ -38,7 +38,7 @@ export const emptyAppointment = {
   numRepeats: 1,
   frequency: 'WEEKS',
   schoolId: '',
-  counselorId: '',
+  counselorUserId: '',
   participants: [] as User[],
   type: 'CLINICAL',
   status: 'SCHEDULED',
@@ -85,39 +85,11 @@ export const APPOINTMENT_STATUSES = [
   'DELETED',
 ];
 
-export const AppointmentTypes = {
-  Clinical: { id: 0, name: 'CLINICAL', color: 'green' },
-  Consultation: { id: 1, name: 'CONSULTATION', color: 'blue' },
-  Evaluation: { id: 2, name: 'EVALUATION', color: 'red' },
-};
+export type AppointmentType = 'CLINICAL' | 'CONSULTATION' | 'EVALUATION';
 
-const defaultAppointmentColor = 'lightgray';
-const defaultAppointmentType = AppointmentTypes.Clinical;
+export const APPOINTMENT_TYPES = ['CLINICAL', 'CONSULTATION', 'EVALUATION'];
 
-export type AppointmentType = {
-  id: number;
-  name: string;
-  color: string;
-};
-
-export const getColorForType = (type: string) => {
-  for (const k in AppointmentTypes) {
-    if (((AppointmentTypes as any)[k] as AppointmentType).name === type) {
-      return (AppointmentTypes as any)[k].color;
-    }
-  }
-
-  return defaultAppointmentColor;
-};
-
-export const getAppointmentTypeById = (id: number): AppointmentType => {
-  for (const k in AppointmentTypes) {
-    if (((AppointmentTypes as any)[k] as AppointmentType).id === id) {
-      return (AppointmentTypes as any)[k];
-    }
-  }
-  return defaultAppointmentType;
-};
+export const AppointmentColors = ['green', 'blue', 'red'];
 
 export const AppointmentsContext = React.createContext<
   ContextData<Appointment>

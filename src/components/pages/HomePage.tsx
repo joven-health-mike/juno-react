@@ -17,7 +17,7 @@ import { Student } from '../../data/students';
 import CounselorDetails from '../details/CounselorDetails';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
 import { Role } from '../../services/user.service';
-import CreateAppointmentModal from '../modals/CreateAppointmentModal';
+import AppointmentModal from '../modals/AppointmentModal';
 import { createPermission, deletePermission } from '../../auth/permissions';
 import { getCounselors } from '../../data/counselors';
 import { Typography } from '@mui/material';
@@ -132,7 +132,8 @@ const StudentsTableView: React.FC = () => {
         onOpenFileClicked={handleOpenFileClick}
       />
       {isCreateAppointmentAllowed && (
-        <CreateAppointmentModal
+        <AppointmentModal
+          title="Create Appointment"
           isOpen={isCreateAppointmentModalOpen}
           onClose={() => setIsCreateAppointmentModalOpen(false)}
           initialAppointment={initialAppointment}

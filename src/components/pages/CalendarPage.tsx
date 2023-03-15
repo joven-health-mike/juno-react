@@ -24,7 +24,7 @@ import {
   SelectCounselorList,
   SelectSchoolList,
 } from '../selectList/SelectList';
-import CreateAppointmentModal from '../modals/CreateAppointmentModal';
+import AppointmentModal from '../modals/AppointmentModal';
 import AppointmentDetailsModal from '../modals/AppointmentDetailsModal';
 import { labelStyles } from '../styles/mixins';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
@@ -215,7 +215,8 @@ const CalendarPage: React.FC = () => {
           onDateClick={handleDateClick}
         />
       )}
-      <CreateAppointmentModal
+      <AppointmentModal
+        title="Create Appointment"
         isOpen={isCreateAppointmentModalOpen}
         onClose={() => setIsCreateAppointmentModalOpen(false)}
         onAppointmentAdded={handleAppointmentAdded}

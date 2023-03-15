@@ -3,7 +3,11 @@
 import React, { useContext } from 'react';
 import FullCalendar, { EventClickArg, PluginDef } from '@fullcalendar/react';
 import styled from 'styled-components';
-import { Appointment, getColorForType } from '../../data/appointments';
+import {
+  Appointment,
+  AppointmentColors,
+  APPOINTMENT_TYPES,
+} from '../../data/appointments';
 import { DateClickArg } from '@fullcalendar/interaction';
 import { LoggedInUserContext } from '../../data/users';
 
@@ -30,7 +34,8 @@ const Calendar: React.FC<CalendarProps> = ({
   const { loggedInUser } = useContext(LoggedInUserContext);
 
   appointments.forEach(appointment => {
-    appointment.color = getColorForType(appointment.type);
+    appointment.color =
+      AppointmentColors[APPOINTMENT_TYPES.indexOf(appointment.type)];
   });
 
   const eventClicked = (info: EventClickArg) => {

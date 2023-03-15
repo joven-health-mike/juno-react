@@ -13,8 +13,7 @@ import {
 } from '../../data/appointments';
 import { emptyCounselor, getCounselors } from '../../data/counselors';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
-import CreateAppointmentModal from '../modals/CreateAppointmentModal';
-import EditAppointmentModal from '../modals/EditAppointmentModal';
+import AppointmentModal from '../modals/AppointmentModal';
 import Navbar from '../navbar/Navbar';
 import AppointmentsTable from '../tables/AppointmentsTable';
 import { Add } from '@mui/icons-material';
@@ -137,7 +136,8 @@ const AppointmentsPage: React.FC = () => {
           onRoomLinkClicked={onAppointmentRoomLinkClicked}
         />
         {isCreateAppointmentAllowed && (
-          <CreateAppointmentModal
+          <AppointmentModal
+            title="Create Appointment"
             isOpen={isCreateAppointmentModalOpen}
             onClose={() => setIsCreateAppointmentModalOpen(false)}
             onAppointmentAdded={onCreateAppointmentSubmit}
@@ -145,7 +145,8 @@ const AppointmentsPage: React.FC = () => {
           />
         )}
         {isUpdateAppointmentAllowed && (
-          <EditAppointmentModal
+          <AppointmentModal
+            title="Update Appointment"
             isOpen={isEditAppointmentModalOpen}
             onClose={() => setIsEditAppointmentModalOpen(false)}
             onAppointmentAdded={onEditAppointmentSubmit}

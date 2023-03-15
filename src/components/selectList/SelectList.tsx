@@ -1,10 +1,6 @@
 import React, { useContext, useMemo } from 'react';
 import styled from 'styled-components';
-import {
-  AppointmentType,
-  AppointmentTypes,
-  getAppointmentTypeById,
-} from '../../data/appointments';
+import { AppointmentType, APPOINTMENT_TYPES } from '../../data/appointments';
 import {
   Counselor,
   emptyCounselor,
@@ -275,16 +271,14 @@ type SelectTypeListProps = {
 };
 
 export function SelectTypeList({ value, onTypeChanged }: SelectTypeListProps) {
-  const typeNames = Object.keys(AppointmentTypes);
-
-  const handleTypeChange = (typeId: string) => {
-    onTypeChanged(getAppointmentTypeById(+typeId));
+  const handleTypeChange = (type: string) => {
+    onTypeChanged(type as AppointmentType);
   };
 
   return (
     <SelectList
       labelText={'Select Appointment Type'}
-      items={typeNames}
+      items={APPOINTMENT_TYPES}
       value={value}
       onItemChanged={handleTypeChange}
     />
