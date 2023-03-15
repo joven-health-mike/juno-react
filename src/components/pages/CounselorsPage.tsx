@@ -10,8 +10,7 @@ import {
 } from '../../auth/permissions';
 import { Counselor, emptyCounselor } from '../../data/counselors';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
-import CreateCounselorModal from '../modals/CreateCounselorModal';
-import EditCounselorModal from '../modals/EditCounselorModal';
+import CounselorDialog from '../modals/CounselorDialog';
 import Navbar from '../navbar/Navbar';
 import CounselorsTable from '../tables/CounselorsTable';
 
@@ -23,9 +22,9 @@ const CounselorsPage: React.FC = () => {
   } = useContext(UsersContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
-  const [isCreateCounselorModalOpen, setIsCreateCounselorModalOpen] =
+  const [isCreateCounselorDialogOpen, setIsCreateCounselorDialogOpen] =
     useState<boolean>(false);
-  const [isEditCounselorModalOpen, setIsEditCounselorModalOpen] =
+  const [isEditCounselorDialogOpen, setIsEditCounselorDialogOpen] =
     useState<boolean>(false);
   const [modalCounselor, setModalCounselor] =
     useState<Counselor>(emptyCounselor);
@@ -69,7 +68,7 @@ const CounselorsPage: React.FC = () => {
   const onCounselorEditClicked = (counselorToEdit: Counselor) => {
     if (isUpdateCounselorAllowed) {
       setModalCounselor(counselorToEdit);
-      setIsEditCounselorModalOpen(true);
+      setIsEditCounselorDialogOpen(true);
     }
   };
 
@@ -98,23 +97,26 @@ const CounselorsPage: React.FC = () => {
               variant="contained"
               endIcon={<Add />}
               onClick={() => {
-                setIsCreateCounselorModalOpen(true);
+                setIsCreateCounselorDialogOpen(true);
               }}
             >
               Add Counselor
             </Button>
-            <CreateCounselorModal
-              isOpen={isCreateCounselorModalOpen}
+            <CounselorDialog
+              title={'Create Counselor'}
+              isOpen={isCreateCounselorDialogOpen}
               onCounselorAdded={handleCounselorAdded}
-              onClose={() => setIsCreateCounselorModalOpen(false)}
+              onClose={() => setIsCreateCounselorDialogOpen(false)}
+              initialCounselor={emptyCounselor}
             />
           </>
         )}
         {isUpdateCounselorAllowed && (
-          <EditCounselorModal
-            isOpen={isEditCounselorModalOpen}
-            onCounselorEdited={handleCounselorEdited}
-            onClose={() => setIsEditCounselorModalOpen(false)}
+          <CounselorDialog
+            title={'Edit Counselor'}
+            isOpen={isEditCounselorDialogOpen}
+            onCounselorAdded={handleCounselorEdited}
+            onClose={() => setIsEditCounselorDialogOpen(false)}
             initialCounselor={modalCounselor}
           />
         )}
