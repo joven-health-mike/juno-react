@@ -24,7 +24,7 @@ import {
   SelectCounselorList,
   SelectSchoolList,
 } from '../selectList/SelectList';
-import AppointmentModal from '../modals/AppointmentModal';
+import AppointmentDialog from '../modals/AppointmentDialog';
 import AppointmentDetailsModal from '../modals/AppointmentDetailsModal';
 import { labelStyles } from '../styles/mixins';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
@@ -36,7 +36,7 @@ const Label = styled.label`
 `;
 
 const CalendarPage: React.FC = () => {
-  const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
+  const [isCreateAppointmentDialogOpen, setIsCreateAppointmentDialogOpen] =
     useState<boolean>(false);
   const [isAppointmentDetailsModalOpen, setIsAppointmentDetailsModalOpen] =
     useState<boolean>(false);
@@ -89,7 +89,7 @@ const CalendarPage: React.FC = () => {
         start: startTime,
         end: endTime,
       });
-      setIsCreateAppointmentModalOpen(true);
+      setIsCreateAppointmentDialogOpen(true);
     }
   };
 
@@ -104,15 +104,15 @@ const CalendarPage: React.FC = () => {
 
   useEffect(() => {
     setShowCalendar(
-      !isCreateAppointmentModalOpen && !isAppointmentDetailsModalOpen
+      !isCreateAppointmentDialogOpen && !isAppointmentDetailsModalOpen
     );
-  }, [isCreateAppointmentModalOpen, isAppointmentDetailsModalOpen]);
+  }, [isCreateAppointmentDialogOpen, isAppointmentDetailsModalOpen]);
 
   const handleAppointmentAdded = (appointment: Appointment) => {
     if (isCreateAppointmentAllowed) {
       addAppointment(appointment);
     }
-    setIsCreateAppointmentModalOpen(false);
+    setIsCreateAppointmentDialogOpen(false);
   };
 
   const handleSchoolChange = (selectedSchool: School) => {
@@ -215,10 +215,10 @@ const CalendarPage: React.FC = () => {
           onDateClick={handleDateClick}
         />
       )}
-      <AppointmentModal
+      <AppointmentDialog
         title="Create Appointment"
-        isOpen={isCreateAppointmentModalOpen}
-        onClose={() => setIsCreateAppointmentModalOpen(false)}
+        isOpen={isCreateAppointmentDialogOpen}
+        onClose={() => setIsCreateAppointmentDialogOpen(false)}
         onAppointmentAdded={handleAppointmentAdded}
         initialAppointment={initialAppointment}
       />

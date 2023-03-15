@@ -15,7 +15,7 @@ import {
 } from '../../data/appointments';
 import { emptyStudent, Student } from '../../data/students';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
-import AppointmentModal from '../modals/AppointmentModal';
+import AppointmentDialog from '../modals/AppointmentDialog';
 import CreateStudentModal from '../modals/CreateStudentModal';
 import EditStudentModal from '../modals/EditStudentModal';
 import Navbar from '../navbar/Navbar';
@@ -31,7 +31,7 @@ const StudentsPage = () => {
   const [isEditStudentModalOpen, setIsEditStudentModalOpen] =
     useState<boolean>(false);
   const [modalStudent, setModalStudent] = useState<Student>(emptyStudent);
-  const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
+  const [isCreateAppointmentDialogOpen, setIsCreateAppointmentDialogOpen] =
     useState<boolean>(false);
   const [modalAppointment, setModalAppointment] =
     useState<Appointment>(emptyAppointment);
@@ -91,7 +91,7 @@ const StudentsPage = () => {
       modalAppointment.counselorUserId =
         studentToSchedule.studentAssignedCounselorId;
       setModalAppointment(modalAppointment);
-      setIsCreateAppointmentModalOpen(true);
+      setIsCreateAppointmentDialogOpen(true);
     }
   };
 
@@ -125,11 +125,11 @@ const StudentsPage = () => {
           </>
         )}
         {isCreateAppointmentAllowed && (
-          <AppointmentModal
+          <AppointmentDialog
             title="Create Appointment"
-            isOpen={isCreateAppointmentModalOpen}
+            isOpen={isCreateAppointmentDialogOpen}
             onAppointmentAdded={handleAppointmentAdded}
-            onClose={() => setIsCreateAppointmentModalOpen(false)}
+            onClose={() => setIsCreateAppointmentDialogOpen(false)}
             initialAppointment={modalAppointment}
           />
         )}

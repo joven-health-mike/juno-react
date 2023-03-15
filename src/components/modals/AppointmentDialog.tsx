@@ -31,7 +31,7 @@ import { LoggedInUserContext, User, UsersContext } from '../../data/users';
 import DateSelector from '../dateSelector/DateSelector';
 import MaterialDialog from './MaterialDialog';
 
-type AppointmentModalProps = {
+type AppointmentDialogProps = {
   title: string;
   isOpen: boolean;
   onClose: () => void;
@@ -39,7 +39,7 @@ type AppointmentModalProps = {
   initialAppointment: Appointment;
 };
 
-const AppointmentModal: React.FC<AppointmentModalProps> = ({
+const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
   title,
   isOpen,
   onClose,
@@ -201,7 +201,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
           }
           label={'Start Time'}
         />
-        <FormControl fullWidth>
+        <FormControl fullWidth sx={{ mb: 2 }}>
           <InputLabel id="duration">Duration</InputLabel>
           <Select
             labelId="duration"
@@ -219,7 +219,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
           </Select>
         </FormControl>
         {shouldShowCounselorField && (
-          <FormControl fullWidth>
+          <FormControl fullWidth sx={{ mb: 2 }}>
             <InputLabel id="counselor">Counselor</InputLabel>
             <Select
               labelId="counselor"
@@ -249,7 +249,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
             </Select>
           </FormControl>
         )}
-        <FormControl fullWidth>
+        <FormControl fullWidth sx={{ mb: 2 }}>
           <InputLabel id="type">Type</InputLabel>
           <Select
             labelId="type"
@@ -271,7 +271,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
             ))}
           </Select>
         </FormControl>
-        <FormControl fullWidth>
+        <FormControl fullWidth sx={{ mb: 2 }}>
           <InputLabel id="status">Status</InputLabel>
           <Select
             labelId="status"
@@ -293,7 +293,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
             ))}
           </Select>
         </FormControl>
-        <FormControl fullWidth>
+        <FormControl fullWidth sx={{ mb: 2 }}>
           <InputLabel id="school">School</InputLabel>
           <Select
             labelId="school"
@@ -319,7 +319,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
             ))}
           </Select>
         </FormControl>
-        <FormControl fullWidth>
+        <FormControl fullWidth sx={{ mb: 2 }}>
           <InputLabel id="participants">Participants</InputLabel>
           <Select
             labelId="participants"
@@ -360,4 +360,4 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
   );
 };
 
-export default AppointmentModal;
+export default AppointmentDialog;

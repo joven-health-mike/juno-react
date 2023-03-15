@@ -17,7 +17,7 @@ import { Student } from '../../data/students';
 import CounselorDetails from '../details/CounselorDetails';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
 import { Role } from '../../services/user.service';
-import AppointmentModal from '../modals/AppointmentModal';
+import AppointmentDialog from '../modals/AppointmentDialog';
 import { createPermission, deletePermission } from '../../auth/permissions';
 import { getCounselors } from '../../data/counselors';
 import { Typography } from '@mui/material';
@@ -75,7 +75,7 @@ const AppointmentView: React.FC = () => {
 };
 
 const StudentsTableView: React.FC = () => {
-  const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
+  const [isCreateAppointmentDialogOpen, setIsCreateAppointmentDialogOpen] =
     useState<boolean>(false);
   const [initialAppointment, setInitialAppointment] =
     useState<Appointment>(emptyAppointment);
@@ -102,7 +102,7 @@ const StudentsTableView: React.FC = () => {
       appointment.counselorUserId =
         studentToSchedule.studentAssignedCounselorId;
       setInitialAppointment(appointment);
-      setIsCreateAppointmentModalOpen(true);
+      setIsCreateAppointmentDialogOpen(true);
     }
   };
 
@@ -120,7 +120,7 @@ const StudentsTableView: React.FC = () => {
   const handleAppointmentAdded = (appointmentToAdd: Appointment) => {
     if (isCreateAppointmentAllowed) {
       addAppointment(appointmentToAdd);
-      setIsCreateAppointmentModalOpen(false);
+      setIsCreateAppointmentDialogOpen(false);
     }
   };
 
@@ -132,10 +132,10 @@ const StudentsTableView: React.FC = () => {
         onOpenFileClicked={handleOpenFileClick}
       />
       {isCreateAppointmentAllowed && (
-        <AppointmentModal
+        <AppointmentDialog
           title="Create Appointment"
-          isOpen={isCreateAppointmentModalOpen}
-          onClose={() => setIsCreateAppointmentModalOpen(false)}
+          isOpen={isCreateAppointmentDialogOpen}
+          onClose={() => setIsCreateAppointmentDialogOpen(false)}
           initialAppointment={initialAppointment}
           onAppointmentAdded={handleAppointmentAdded}
         />
