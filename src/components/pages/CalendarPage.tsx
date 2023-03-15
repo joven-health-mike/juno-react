@@ -25,7 +25,7 @@ import {
   SelectSchoolList,
 } from '../selectList/SelectList';
 import AppointmentDialog from '../modals/AppointmentDialog';
-import AppointmentDetailsModal from '../modals/AppointmentDetailsModal';
+import AppointmentDetailsDialog from '../modals/AppointmentDetailsDialog';
 import { labelStyles } from '../styles/mixins';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
 import { createPermission, deletePermission } from '../../auth/permissions';
@@ -38,7 +38,7 @@ const Label = styled.label`
 const CalendarPage: React.FC = () => {
   const [isCreateAppointmentDialogOpen, setIsCreateAppointmentDialogOpen] =
     useState<boolean>(false);
-  const [isAppointmentDetailsModalOpen, setIsAppointmentDetailsModalOpen] =
+  const [isAppointmentDetailsDialogOpen, setIsAppointmentDetailsDialogOpen] =
     useState<boolean>(false);
   const [showCalendar, setShowCalendar] = useState<boolean>(true);
   const [filteredEvents, setFilteredEvents] = useState<Appointment[]>([]);
@@ -68,7 +68,7 @@ const CalendarPage: React.FC = () => {
 
   const handleAppointmentClick = (appointment: Appointment) => {
     setClickedAppointment(appointment);
-    setIsAppointmentDetailsModalOpen(true);
+    setIsAppointmentDetailsDialogOpen(true);
   };
 
   const handleDateClick = (utcDateStr: string) => {
@@ -104,9 +104,9 @@ const CalendarPage: React.FC = () => {
 
   useEffect(() => {
     setShowCalendar(
-      !isCreateAppointmentDialogOpen && !isAppointmentDetailsModalOpen
+      !isCreateAppointmentDialogOpen && !isAppointmentDetailsDialogOpen
     );
-  }, [isCreateAppointmentDialogOpen, isAppointmentDetailsModalOpen]);
+  }, [isCreateAppointmentDialogOpen, isAppointmentDetailsDialogOpen]);
 
   const handleAppointmentAdded = (appointment: Appointment) => {
     if (isCreateAppointmentAllowed) {
@@ -132,7 +132,7 @@ const CalendarPage: React.FC = () => {
     ) {
       deleteAppointment(appointmentToDelete);
     }
-    setIsAppointmentDetailsModalOpen(false);
+    setIsAppointmentDetailsDialogOpen(false);
   };
 
   const onAppointmentEmailClicked = (appointmentToEmail: Appointment) => {
@@ -222,9 +222,9 @@ const CalendarPage: React.FC = () => {
         onAppointmentAdded={handleAppointmentAdded}
         initialAppointment={initialAppointment}
       />
-      <AppointmentDetailsModal
-        isOpen={isAppointmentDetailsModalOpen}
-        onClose={() => setIsAppointmentDetailsModalOpen(false)}
+      <AppointmentDetailsDialog
+        isOpen={isAppointmentDetailsDialogOpen}
+        onClose={() => setIsAppointmentDetailsDialogOpen(false)}
         appointment={clickedAppointment}
         onRoomLinkClicked={onAppointmentRoomLinkClicked}
         onDeleteClicked={onAppointmentDeleteClicked}

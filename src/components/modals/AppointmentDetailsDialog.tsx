@@ -11,7 +11,7 @@ import { Appointment } from '../../data/appointments';
 import AppointmentDetails from '../details/AppointmentDetails';
 import MaterialDialog from './MaterialDialog';
 
-type AppointmentDetailsModalProps = {
+type AppointmentDetailsDialogProps = {
   isOpen: boolean;
   onClose: () => void;
   appointment: Appointment;
@@ -20,7 +20,7 @@ type AppointmentDetailsModalProps = {
   onRoomLinkClicked: (appointment: Appointment) => void;
 };
 
-const AppointmentDetailsModal: React.FC<AppointmentDetailsModalProps> = ({
+const AppointmentDetailsDialog: React.FC<AppointmentDetailsDialogProps> = ({
   isOpen,
   onClose,
   appointment,
@@ -44,4 +44,4 @@ const AppointmentDetailsModal: React.FC<AppointmentDetailsModalProps> = ({
   );
 };
 
-export default AppointmentDetailsModal;
+export default AppointmentDetailsDialog;
