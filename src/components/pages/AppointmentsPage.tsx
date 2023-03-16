@@ -17,7 +17,7 @@ import AppointmentDialog from '../modals/AppointmentDialog';
 import Navbar from '../navbar/Navbar';
 import AppointmentsTable from '../tables/AppointmentsTable';
 import { Add } from '@mui/icons-material';
-import { Button, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 
 const AppointmentsPage: React.FC = () => {
   const {
@@ -119,15 +119,17 @@ const AppointmentsPage: React.FC = () => {
       <Typography variant="h3">Appointments</Typography>
       <>
         {isCreateAppointmentAllowed && (
-          <Button
-            variant="contained"
-            endIcon={<Add />}
-            onClick={() => {
-              setIsCreateAppointmentDialogOpen(true);
-            }}
-          >
-            Add Appointment
-          </Button>
+          <Box sx={{ mb: 2, mt: 2 }} justifyContent="center" display="flex">
+            <Button
+              variant="contained"
+              endIcon={<Add />}
+              onClick={() => {
+                setIsCreateAppointmentDialogOpen(true);
+              }}
+            >
+              Add Appointment
+            </Button>
+          </Box>
         )}
         <AppointmentsTable
           onDeleteClicked={onAppointmentDeleteClicked}

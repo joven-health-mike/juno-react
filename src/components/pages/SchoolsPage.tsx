@@ -1,7 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
 import { Add } from '@mui/icons-material';
-import { Button, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import {
   createPermission,
@@ -80,15 +80,17 @@ const SchoolsPage = () => {
       <>
         {isCreateSchoolAllowed && (
           <>
-            <Button
-              variant="contained"
-              endIcon={<Add />}
-              onClick={() => {
-                setIsCreateSchoolDialogOpen(true);
-              }}
-            >
-              Add School
-            </Button>
+            <Box sx={{ mb: 2, mt: 2 }} justifyContent="center" display="flex">
+              <Button
+                variant="contained"
+                endIcon={<Add />}
+                onClick={() => {
+                  setIsCreateSchoolDialogOpen(true);
+                }}
+              >
+                Add School
+              </Button>
+            </Box>
             <SchoolDialog
               isOpen={isCreateSchoolDialogOpen}
               onSchoolAdded={handleSchoolAdded}

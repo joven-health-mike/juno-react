@@ -1,7 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
 import { Add } from '@mui/icons-material';
-import { Button, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import {
   createPermission,
@@ -82,15 +82,17 @@ const UsersPage = () => {
       <>
         {isCreateUserAllowed && (
           <>
-            <Button
-              variant="contained"
-              endIcon={<Add />}
-              onClick={() => {
-                setIsCreateUserDialogOpen(true);
-              }}
-            >
-              Add User
-            </Button>
+            <Box sx={{ mb: 2, mt: 2 }} justifyContent="center" display="flex">
+              <Button
+                variant="contained"
+                endIcon={<Add />}
+                onClick={() => {
+                  setIsCreateUserDialogOpen(true);
+                }}
+              >
+                Add User
+              </Button>
+            </Box>
             <UserDialog
               isOpen={isCreateUserDialogOpen}
               onUserAdded={handleUserAdded}

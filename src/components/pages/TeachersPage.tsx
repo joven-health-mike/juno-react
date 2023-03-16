@@ -17,7 +17,7 @@ import Navbar from '../navbar/Navbar';
 import TeachersTable from '../tables/TeachersTable';
 import { emptyTeacher, Teacher } from '../../data/teachers';
 import StudentDialog from '../modals/StudentDialog';
-import { Button, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { Add } from '@mui/icons-material';
 
 const TeachersPage = () => {
@@ -107,15 +107,17 @@ const TeachersPage = () => {
       <>
         {isCreateTeacherAllowed && (
           <>
-            <Button
-              variant="contained"
-              endIcon={<Add />}
-              onClick={() => {
-                setIsCreateTeacherDialogOpen(true);
-              }}
-            >
-              Add Teacher
-            </Button>
+            <Box sx={{ mb: 2, mt: 2 }} justifyContent="center" display="flex">
+              <Button
+                variant="contained"
+                endIcon={<Add />}
+                onClick={() => {
+                  setIsCreateTeacherDialogOpen(true);
+                }}
+              >
+                Add Teacher
+              </Button>
+            </Box>
             <StudentDialog
               isOpen={isCreateTeacherDialogOpen}
               onStudentAdded={handleTeacherAdded}

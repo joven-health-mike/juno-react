@@ -4,7 +4,6 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import '@fullcalendar/react';
 import listPlugin from '@fullcalendar/list';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone';
-import styled from 'styled-components';
 import Navbar from '../navbar/Navbar';
 import Calendar from '../calendar/Calendar';
 import {
@@ -20,19 +19,7 @@ import { Role } from '../../services/user.service';
 import AppointmentDialog from '../modals/AppointmentDialog';
 import { createPermission, deletePermission } from '../../auth/permissions';
 import { getCounselors } from '../../data/counselors';
-import { Typography } from '@mui/material';
-
-const LeftSection = styled.section`
-  margin-left: 25px;
-  float: left;
-  width: 47%;
-`;
-
-const RightSection = styled.section`
-  margin-left: 25px;
-  float: right;
-  width: 47%;
-`;
+import { Grid, Typography } from '@mui/material';
 
 const HomePage: React.FC = () => {
   const { loggedInUser } = useContext(LoggedInUserContext);
@@ -101,6 +88,7 @@ const StudentsTableView: React.FC = () => {
       appointment.participants = [studentToSchedule];
       appointment.counselorUserId =
         studentToSchedule.studentAssignedCounselorId;
+      appointment.schoolId = studentToSchedule.studentAssignedSchoolId;
       setInitialAppointment(appointment);
       setIsCreateAppointmentDialogOpen(true);
     }
@@ -146,61 +134,61 @@ const StudentsTableView: React.FC = () => {
 
 const AdminView: React.FC = () => {
   return (
-    <>
-      <LeftSection>
+    <Grid container>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
         <Typography variant="h4">All Appointments</Typography>
         <AppointmentView />
-      </LeftSection>
-      <RightSection>
+      </Grid>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
         <Typography variant="h4">All Students</Typography>
         <StudentsTableView />
-      </RightSection>
-    </>
+      </Grid>
+    </Grid>
   );
 };
 
 const CounselorView: React.FC = () => {
   return (
-    <>
-      <LeftSection>
+    <Grid container>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
         <Typography variant="h4">My Appointments</Typography>
         <AppointmentView />
-      </LeftSection>
-      <RightSection>
+      </Grid>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
         <Typography variant="h4">My Caseload</Typography>
         <StudentsTableView />
-      </RightSection>
-    </>
+      </Grid>
+    </Grid>
   );
 };
 
 const SchoolStaffView: React.FC = () => {
   return (
-    <>
-      <LeftSection>
+    <Grid container>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
         <Typography variant="h4">My Appointments</Typography>
         <AppointmentView />
-      </LeftSection>
-      <RightSection>
+      </Grid>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
         <Typography variant="h4">My Students</Typography>
         <StudentsTableView />
-      </RightSection>
-    </>
+      </Grid>
+    </Grid>
   );
 };
 
 const SchoolAdminView: React.FC = () => {
   return (
-    <>
-      <LeftSection>
+    <Grid container>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
         <Typography variant="h4">My Appointments</Typography>
         <AppointmentView />
-      </LeftSection>
-      <RightSection>
+      </Grid>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
         <Typography variant="h4">My Students</Typography>
         <StudentsTableView />
-      </RightSection>
-    </>
+      </Grid>
+    </Grid>
   );
 };
 
@@ -213,35 +201,35 @@ const StudentView: React.FC = () => {
   );
 
   return (
-    <>
-      <LeftSection>
+    <Grid container>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
         <Typography variant="h4">My Appointments</Typography>
         <AppointmentView />
-      </LeftSection>
-      <RightSection>
+      </Grid>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
         {myCounselor && (
           <>
             <Typography variant="h4">My Counselor</Typography>
             <CounselorDetails counselor={myCounselor} />
           </>
         )}
-      </RightSection>
-    </>
+      </Grid>
+    </Grid>
   );
 };
 
 const GuardianView: React.FC = () => {
   return (
-    <>
-      <LeftSection>
+    <Grid container>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
         <Typography variant="h4">My Appointments</Typography>
         <AppointmentView />
-      </LeftSection>
-      <RightSection>
+      </Grid>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
         <Typography variant="h4">My Students</Typography>
         <StudentsTableView />
-      </RightSection>
-    </>
+      </Grid>
+    </Grid>
   );
 };
 
