@@ -3,15 +3,19 @@
 import {
   Box,
   Button,
+  Checkbox,
   Chip,
   DialogActions,
   DialogContent,
   DialogTitle,
   FormControl,
+  FormControlLabel,
   InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
+  TextField,
+  Typography,
 } from '@mui/material';
 import React, {
   useCallback,
@@ -25,6 +29,7 @@ import {
   APPOINTMENT_STATUSES,
   APPOINTMENT_TYPES,
   emptyAppointment,
+  RECURRING_FREQUENCIES,
 } from '../../data/appointments';
 import { emptyCounselor, getCounselors } from '../../data/counselors';
 import { emptySchool, School, SchoolsContext } from '../../data/schools';
@@ -65,6 +70,9 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
   const [statusError, setStatusError] = useState(false);
   const [schoolError, setSchoolError] = useState(false);
   const [participantsError, setParticipantsError] = useState(false);
+  const [frequencyError, setFrequencyError] = useState(false);
+  const [frequencyNumError, setFrequencyNumError] = useState(false);
+  const [numOccurrencesError, setNumOccurrencesError] = useState(false);
 
   useEffect(() => {
     // hide counselor field for counselors, show for everyone else
@@ -221,6 +229,31 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
       allInputsValid = false;
     } else setParticipantsError(false);
 
+    if (appointment.isRecurring) {
+      if (RECURRING_FREQUENCIES.indexOf(`${appointment.frequency}`) === -1) {
+        setFrequencyError(true);
+        allInputsValid = false;
+      } else setFrequencyError(false);
+
+      if (
+        typeof appointment.numRepeats === 'undefined' ||
+        appointment.numRepeats <= 0 ||
+        appointment.numRepeats > 20
+      ) {
+        setFrequencyNumError(true);
+        allInputsValid = false;
+      } else setFrequencyNumError(false);
+
+      if (
+        typeof appointment.numOccurrences === 'undefined' ||
+        appointment.numOccurrences <= 0 ||
+        appointment.numOccurrences > 20
+      ) {
+        setNumOccurrencesError(true);
+        allInputsValid = false;
+      } else setNumOccurrencesError(false);
+    }
+
     return allInputsValid;
   };
 
@@ -260,6 +293,9 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
     setStatusError(false);
     setSchoolError(false);
     setParticipantsError(false);
+    setFrequencyError(false);
+    setFrequencyNumError(false);
+    setNumOccurrencesError(false);
     onClose();
   };
   return (
@@ -455,6 +491,111 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
             })}
           </Select>
         </FormControl>
+        <FormControlLabel
+          control={
+            <Checkbox
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setAppointment({
+                  ...appointment,
+                  isRecurring: e.target.checked,
+                });
+              }}
+            />
+          }
+          label="Is Recurring"
+        />
+        {appointment.isRecurring && (
+          <>
+            <Typography>Repeat every</Typography>
+            <Box sx={{ mt: 2 }} justifyContent="center" display="flex">
+              <TextField
+                type="number"
+                id="frequencyNumber"
+                label="Frequency Number"
+                variant="outlined"
+                error={frequencyNumError}
+                onChange={e => {
+                  setFrequencyNumError(false);
+                  setAppointment({
+                    ...appointment,
+                    numRepeats: parseInt(e.target.value),
+                  });
+                }}
+                value={appointment.numRepeats}
+              />
+              <FormControl sx={{ mb: 2 }}>
+                <InputLabel id="frequency" error={frequencyError}>
+                  Frequency
+                </InputLabel>
+                <Select
+                  labelId="frequency"
+                  id="frequency"
+                  defaultValue=""
+                  value={appointment.frequency}
+                  label="Frequency"
+                  onChange={e => {
+                    e.preventDefault();
+                    setFrequencyError(false);
+                    setAppointment({
+                      ...appointment,
+                      frequency: e.target.value,
+                    });
+                  }}
+                >
+                  {RECURRING_FREQUENCIES.map((frequency, index) => (
+                    <MenuItem value={frequency} key={index}>
+                      {frequency}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+            <Typography>for</Typography>
+            <Box sx={{ mt: 2 }} justifyContent="center" display="flex">
+              <TextField
+                type="number"
+                id="numOccurrences"
+                label="Occurrences"
+                variant="outlined"
+                error={numOccurrencesError}
+                onChange={e => {
+                  setNumOccurrencesError(false);
+                  setAppointment({
+                    ...appointment,
+                    numOccurrences: parseInt(e.target.value),
+                  });
+                }}
+                value={appointment.numOccurrences}
+              />
+              <FormControl sx={{ mb: 2 }}>
+                <InputLabel id="frequency" error={frequencyError}>
+                  Frequency
+                </InputLabel>
+                <Select
+                  labelId="frequency"
+                  id="frequency"
+                  defaultValue=""
+                  value={appointment.frequency}
+                  label="Frequency"
+                  onChange={e => {
+                    e.preventDefault();
+                    setFrequencyError(false);
+                    setAppointment({
+                      ...appointment,
+                      frequency: e.target.value,
+                    });
+                  }}
+                >
+                  {RECURRING_FREQUENCIES.map((frequency, index) => (
+                    <MenuItem value={frequency} key={index}>
+                      {frequency}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+          </>
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={onFormSubmit}>Submit</Button>

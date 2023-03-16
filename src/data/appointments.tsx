@@ -86,10 +86,11 @@ export const APPOINTMENT_STATUSES = [
 ];
 
 export type AppointmentType = 'CLINICAL' | 'CONSULTATION' | 'EVALUATION';
-
 export const APPOINTMENT_TYPES = ['CLINICAL', 'CONSULTATION', 'EVALUATION'];
-
 export const AppointmentColors = ['green', 'blue', 'red'];
+
+export type RecurringFrequency = 'DAYS' | 'WEEKS' | 'MONTHS' | 'YEARS';
+export const RECURRING_FREQUENCIES = ['DAYS', 'WEEKS', 'MONTHS', 'YEARS'];
 
 export const AppointmentsContext = React.createContext<
   ContextData<Appointment>
