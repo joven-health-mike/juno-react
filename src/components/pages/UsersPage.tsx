@@ -14,8 +14,7 @@ import {
   User,
   UsersContext,
 } from '../../data/users';
-import CreateUserModal from '../modals/CreateUserModal';
-import EditUserModal from '../modals/EditUserModal';
+import UserDialog from '../modals/UserDialog';
 import Navbar from '../navbar/Navbar';
 import UsersTable from '../tables/UsersTable';
 
@@ -27,9 +26,9 @@ const UsersPage = () => {
   } = useContext(UsersContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
-  const [isCreateUserModalOpen, setIsCreateUserModalOpen] =
+  const [isCreateUserDialogOpen, setIsCreateUserDialogOpen] =
     useState<boolean>(false);
-  const [isEditUserModalOpen, setIsEditUserModalOpen] =
+  const [isEditUserDialogOpen, setIsEditUserDialogOpen] =
     useState<boolean>(false);
   const [modalUser, setModalUser] = useState<User>(emptyUser);
   const [isCreateUserAllowed, setIsCreateUserAllowed] =
@@ -66,7 +65,7 @@ const UsersPage = () => {
   const onUserEditClicked = (userToEdit: User) => {
     if (isUpdateUserAllowed) {
       setModalUser(userToEdit);
-      setIsEditUserModalOpen(true);
+      setIsEditUserDialogOpen(true);
     }
   };
 
@@ -87,24 +86,27 @@ const UsersPage = () => {
               variant="contained"
               endIcon={<Add />}
               onClick={() => {
-                setIsCreateUserModalOpen(true);
+                setIsCreateUserDialogOpen(true);
               }}
             >
               Add User
             </Button>
-            <CreateUserModal
-              isOpen={isCreateUserModalOpen}
+            <UserDialog
+              isOpen={isCreateUserDialogOpen}
               onUserAdded={handleUserAdded}
-              onClose={() => setIsCreateUserModalOpen(false)}
+              onClose={() => setIsCreateUserDialogOpen(false)}
+              initialUser={emptyUser}
+              title={'Create User'}
             />
           </>
         )}
         {isUpdateUserAllowed && (
-          <EditUserModal
-            isOpen={isEditUserModalOpen}
-            onUserEdited={handleUserEdited}
-            onClose={() => setIsEditUserModalOpen(false)}
+          <UserDialog
+            isOpen={isEditUserDialogOpen}
+            onUserAdded={handleUserEdited}
+            onClose={() => setIsEditUserDialogOpen(false)}
             initialUser={modalUser}
+            title={'Edit User'}
           />
         )}
         <UsersTable
