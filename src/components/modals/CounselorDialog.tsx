@@ -149,6 +149,16 @@ const CounselorDialog: React.FC<CounselorDialogProps> = ({
   };
   const onFormCancel = () => {
     setCounselor(emptyCounselor);
+    setFirstNameError(false);
+    setLastNameError(false);
+    setEmailError(false);
+    setUsernameError(false);
+    setPhoneError(false);
+    setDocsUrlError(false);
+    setRoomLinkError(false);
+    setRoomLink2Error(false);
+    setTimeZoneError(false);
+    setSchoolsError(false);
     onClose();
   };
 

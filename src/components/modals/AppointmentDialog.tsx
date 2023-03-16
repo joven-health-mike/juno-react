@@ -253,6 +253,13 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
     setAppointment(emptyAppointment);
     setDuration(30);
     setParticipantNames([]);
+    setStartTimeError(false);
+    setDurationError(false);
+    setCounselorError(false);
+    setTypeError(false);
+    setStatusError(false);
+    setSchoolError(false);
+    setParticipantsError(false);
     onClose();
   };
   return (
