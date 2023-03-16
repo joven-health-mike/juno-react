@@ -57,6 +57,13 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
   const [filteredUserNames, setFilteredUserNames] = useState<string[]>([]);
   const [shouldShowCounselorField, setShouldShowCounselorField] =
     useState<boolean>(true);
+  const [startTimeError, setStartTimeError] = useState(false);
+  const [durationError, setDurationError] = useState(false);
+  const [counselorError, setCounselorError] = useState(false);
+  const [typeError, setTypeError] = useState(false);
+  const [statusError, setStatusError] = useState(false);
+  const [schoolError, setSchoolError] = useState(false);
+  const [participantsError, setParticipantsError] = useState(false);
 
   useEffect(() => {
     // hide counselor field for counselors, show for everyone else
@@ -169,7 +176,59 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
     determineAvailableParticipants(appointment.school);
   }, [appointment.school, determineAvailableParticipants]);
 
+  const validateInputs = () => {
+    let allInputsValid = true;
+
+    if (!(appointment.start instanceof Date)) {
+      setStartTimeError(true);
+      allInputsValid = false;
+    } else setStartTimeError(false);
+
+    if (DURATIONS.indexOf(`${duration}`) === -1) {
+      setDurationError(true);
+      allInputsValid = false;
+    } else setDurationError(false);
+
+    if (APPOINTMENT_TYPES.indexOf(`${appointment.type}`) === -1) {
+      setTypeError(true);
+      allInputsValid = false;
+    } else setTypeError(false);
+
+    if (APPOINTMENT_STATUSES.indexOf(`${appointment.status}`) === -1) {
+      setStatusError(true);
+      allInputsValid = false;
+    } else setStatusError(false);
+
+    if (
+      typeof appointment.counselorUserId === 'undefined' ||
+      appointment.counselorUserId.length === 0
+    ) {
+      setCounselorError(true);
+      allInputsValid = false;
+    } else setCounselorError(false);
+
+    if (
+      typeof appointment.schoolId === 'undefined' ||
+      appointment.schoolId.length === 0
+    ) {
+      setSchoolError(true);
+      allInputsValid = false;
+    } else setSchoolError(false);
+
+    if (participantNames.length === 0) {
+      setParticipantsError(true);
+      allInputsValid = false;
+    } else setParticipantsError(false);
+
+    return allInputsValid;
+  };
+
   const onFormSubmit = () => {
+    const validInputs = validateInputs();
+    if (!validInputs) {
+      return;
+    }
+
     const submittedAppointment = { ...appointment };
     const startDate = new Date(appointment.start);
     const endDate = new Date(startDate.getTime() + duration * 60000);
@@ -193,164 +252,197 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
     <MaterialDialog open={isOpen} onClose={onClose}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
-        <InputLabel id="startTime">Start Time</InputLabel>
-        <DateSelector
-          selected={new Date(appointment.start)}
-          onChange={(date: Date) =>
-            setAppointment({ ...appointment, start: date })
-          }
-          label={'Start Time'}
-        />
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel id="duration">Duration</InputLabel>
-          <Select
-            labelId="duration"
-            id="duration"
-            defaultValue={0}
-            value={duration}
-            label="Duration"
-            onChange={e => setDuration(e.target.value as number)}
-          >
-            {DURATIONS.map((duration, index) => (
-              <MenuItem value={duration} key={index}>
-                {duration} minutes
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        {shouldShowCounselorField && (
-          <FormControl fullWidth sx={{ mb: 2 }}>
-            <InputLabel id="counselor">Counselor</InputLabel>
+        <form onSubmit={onFormSubmit}>
+          <FormControl fullWidth required sx={{ mb: 2 }}>
+            <InputLabel id="startTime" error={startTimeError}>
+              Start Time
+            </InputLabel>
+            <DateSelector
+              selected={new Date(appointment.start)}
+              onChange={(date: Date) => {
+                setStartTimeError(false);
+                setAppointment({ ...appointment, start: date });
+              }}
+              label={'Start Time'}
+            />
+          </FormControl>
+          <FormControl fullWidth required sx={{ mb: 2 }}>
+            <InputLabel id="duration" error={durationError}>
+              Duration
+            </InputLabel>
             <Select
-              labelId="counselor"
-              id="counselor"
-              defaultValue=""
-              value={appointment.counselorUserId}
-              label="Counselor"
+              labelId="duration"
+              id="duration"
+              defaultValue={30}
+              value={duration}
+              label="Duration"
               onChange={e => {
-                const counselor = counselors.find(
-                  counselor => counselor.id === e.target.value
-                );
+                e.preventDefault();
+                setDurationError(false);
+                setDuration(e.target.value as number);
+              }}
+            >
+              {DURATIONS.map((duration, index) => (
+                <MenuItem value={duration} key={index}>
+                  {duration} minutes
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          {shouldShowCounselorField && (
+            <FormControl fullWidth required sx={{ mb: 2 }}>
+              <InputLabel id="counselor" error={counselorError}>
+                Counselor
+              </InputLabel>
+              <Select
+                labelId="counselor"
+                id="counselor"
+                defaultValue=""
+                value={appointment.counselorUserId}
+                label="Counselor"
+                onChange={e => {
+                  e.preventDefault();
+                  setCounselorError(false);
+                  const counselor = counselors.find(
+                    counselor => counselor.id === e.target.value
+                  );
+                  setAppointment({
+                    ...appointment,
+                    counselorUserId: e.target.value,
+                    counselor: counselor!,
+                  });
+                }}
+              >
+                {counselors.map((counselor, index) => {
+                  const counselorStr = `${counselor.firstName} ${counselor.lastName}`;
+                  return (
+                    <MenuItem value={counselor.id} key={index}>
+                      {counselorStr}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          )}
+          <FormControl fullWidth required sx={{ mb: 2 }}>
+            <InputLabel id="type" error={typeError}>
+              Type
+            </InputLabel>
+            <Select
+              labelId="type"
+              id="type"
+              defaultValue=""
+              value={appointment.type}
+              label="Type"
+              onChange={e => {
+                e.preventDefault();
+                setTypeError(false);
                 setAppointment({
                   ...appointment,
-                  counselorUserId: e.target.value,
-                  counselor: counselor!,
+                  type: e.target.value,
                 });
               }}
             >
-              {counselors.map((counselor, index) => {
-                const counselorStr = `${counselor.firstName} ${counselor.lastName}`;
+              {APPOINTMENT_TYPES.map((type, index) => (
+                <MenuItem value={type} key={index}>
+                  {type}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth required sx={{ mb: 2 }}>
+            <InputLabel id="status" error={statusError}>
+              Status
+            </InputLabel>
+            <Select
+              labelId="status"
+              id="status"
+              defaultValue=""
+              value={appointment.status}
+              label="Status"
+              onChange={e => {
+                e.preventDefault();
+                setStatusError(false);
+                setAppointment({
+                  ...appointment,
+                  status: e.target.value,
+                });
+              }}
+            >
+              {APPOINTMENT_STATUSES.map((status, index) => (
+                <MenuItem value={status} key={index}>
+                  {status}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth required sx={{ mb: 2 }}>
+            <InputLabel id="school" error={schoolError}>
+              School
+            </InputLabel>
+            <Select
+              labelId="school"
+              id="school"
+              defaultValue=""
+              value={appointment.schoolId}
+              label="School"
+              onChange={e => {
+                e.preventDefault();
+                setSchoolError(false);
+                const school = schools.find(
+                  school => school.id === e.target.value
+                );
+                setAppointment({
+                  ...appointment,
+                  schoolId: e.target.value,
+                  school: school!,
+                });
+              }}
+            >
+              {schools.map((school, index) => (
+                <MenuItem value={school.id} key={index}>
+                  {school.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth required sx={{ mb: 2 }}>
+            <InputLabel id="participants" error={participantsError}>
+              Participants
+            </InputLabel>
+            <Select
+              labelId="participants"
+              id="participants"
+              multiple
+              defaultValue={[]}
+              value={participantNames}
+              label="Participants"
+              renderValue={(selected: string[]) => (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  {selected.map((value: string) => {
+                    return <Chip key={value} label={value} />;
+                  })}
+                </Box>
+              )}
+              onChange={(e: SelectChangeEvent<typeof participantNames>) => {
+                e.preventDefault();
+                setParticipantsError(false);
+                const value = e.target.value;
+                const newValue =
+                  typeof value === 'string' ? value.split(',') : value;
+                setParticipantNames(newValue);
+              }}
+            >
+              {filteredUserNames.map((name, index) => {
                 return (
-                  <MenuItem value={counselor.id} key={index}>
-                    {counselorStr}
+                  <MenuItem value={name} key={index}>
+                    {name}
                   </MenuItem>
                 );
               })}
             </Select>
           </FormControl>
-        )}
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel id="type">Type</InputLabel>
-          <Select
-            labelId="type"
-            id="type"
-            defaultValue=""
-            value={appointment.type}
-            label="Type"
-            onChange={e =>
-              setAppointment({
-                ...appointment,
-                type: e.target.value,
-              })
-            }
-          >
-            {APPOINTMENT_TYPES.map((type, index) => (
-              <MenuItem value={type} key={index}>
-                {type}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel id="status">Status</InputLabel>
-          <Select
-            labelId="status"
-            id="status"
-            defaultValue=""
-            value={appointment.status}
-            label="Status"
-            onChange={e =>
-              setAppointment({
-                ...appointment,
-                status: e.target.value,
-              })
-            }
-          >
-            {APPOINTMENT_STATUSES.map((status, index) => (
-              <MenuItem value={status} key={index}>
-                {status}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel id="school">School</InputLabel>
-          <Select
-            labelId="school"
-            id="school"
-            defaultValue=""
-            value={appointment.schoolId}
-            label="School"
-            onChange={e => {
-              const school = schools.find(
-                school => school.id === e.target.value
-              );
-              setAppointment({
-                ...appointment,
-                schoolId: e.target.value,
-                school: school!,
-              });
-            }}
-          >
-            {schools.map((school, index) => (
-              <MenuItem value={school.id} key={index}>
-                {school.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel id="participants">Participants</InputLabel>
-          <Select
-            labelId="participants"
-            id="participants"
-            multiple
-            defaultValue={[]}
-            value={participantNames}
-            label="Participants"
-            renderValue={(selected: string[]) => (
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                {selected.map((value: string) => {
-                  return <Chip key={value} label={value} />;
-                })}
-              </Box>
-            )}
-            onChange={(e: SelectChangeEvent<typeof participantNames>) => {
-              const value = e.target.value;
-              const newValue =
-                typeof value === 'string' ? value.split(',') : value;
-              setParticipantNames(newValue);
-            }}
-          >
-            {filteredUserNames.map((name, index) => {
-              return (
-                <MenuItem value={name} key={index}>
-                  {name}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
+        </form>
       </DialogContent>
       <DialogActions>
         <Button onClick={onFormSubmit}>Submit</Button>

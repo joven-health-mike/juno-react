@@ -174,7 +174,7 @@ const CalendarPage: React.FC = () => {
 
       <Box justifyContent="center" display="flex" sx={{ mt: 2, mb: 2 }}>
         {loggedInUser.role !== 'COUNSELOR' && counselors.length > 1 && (
-          <FormControl fullWidth>
+          <FormControl fullWidth sx={{ mr: 10 }}>
             <InputLabel id="counselor">Counselor</InputLabel>
             <Select
               labelId="counselor"
@@ -205,7 +205,7 @@ const CalendarPage: React.FC = () => {
         {loggedInUser.role !== 'SCHOOL_ADMIN' &&
           loggedInUser.role !== 'SCHOOL_STAFF' &&
           schools.length > 1 && (
-            <FormControl fullWidth sx={{ ml: 10 }}>
+            <FormControl fullWidth>
               <InputLabel id="school">School</InputLabel>
               <Select
                 labelId="school"
