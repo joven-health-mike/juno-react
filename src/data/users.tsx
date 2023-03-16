@@ -31,7 +31,7 @@ export const emptyUser = {
   phone: '',
   docsUrl: '',
   timeZoneIanaName: '',
-  role: 'JOVEN_STAFF' as Role,
+  role: 'UNASSIGNED' as Role,
 };
 
 export const UsersContext = React.createContext<ContextData<User>>({
