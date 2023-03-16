@@ -160,7 +160,7 @@ const CounselorDialog: React.FC<CounselorDialogProps> = ({
               id="timeZone"
               defaultValue={TIME_ZONES[0]}
               value={counselor.timeZoneIanaName}
-              label="Duration"
+              label="Time Zone"
               onChange={e =>
                 setCounselor({
                   ...counselor,

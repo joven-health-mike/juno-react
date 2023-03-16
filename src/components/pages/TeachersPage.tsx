@@ -16,8 +16,7 @@ import AppointmentDialog from '../modals/AppointmentDialog';
 import Navbar from '../navbar/Navbar';
 import TeachersTable from '../tables/TeachersTable';
 import { emptyTeacher, Teacher } from '../../data/teachers';
-import CreateTeacherModal from '../modals/CreateTeacherModal';
-import EditTeacherModal from '../modals/EditTeacherModal';
+import StudentDialog from '../modals/StudentDialog';
 import { Button, Typography } from '@mui/material';
 import { Add } from '@mui/icons-material';
 
@@ -26,9 +25,9 @@ const TeachersPage = () => {
   const { add: addAppointment } = useContext(AppointmentsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
-  const [isCreateTeacherModalOpen, setIsCreateTeacherModalOpen] =
+  const [isCreateTeacherDialogOpen, setIsCreateTeacherDialogOpen] =
     useState<boolean>(false);
-  const [isEditTeacherModalOpen, setIsEditTeacherModalOpen] =
+  const [isEditTeacherDialogOpen, setIsEditTeacherDialogOpen] =
     useState<boolean>(false);
   const [modalTeacher, setModalTeacher] = useState<Teacher>(emptyTeacher);
   const [isCreateAppointmentDialogOpen, setIsCreateAppointmentDialogOpen] =
@@ -81,7 +80,7 @@ const TeachersPage = () => {
   const onEditTeacherClicked = (teacherToEdit: Teacher) => {
     if (isUpdateTeacherAllowed) {
       setModalTeacher(teacherToEdit);
-      setIsEditTeacherModalOpen(true);
+      setIsEditTeacherDialogOpen(true);
     }
   };
 
@@ -112,15 +111,18 @@ const TeachersPage = () => {
               variant="contained"
               endIcon={<Add />}
               onClick={() => {
-                setIsCreateTeacherModalOpen(true);
+                setIsCreateTeacherDialogOpen(true);
               }}
             >
               Add Teacher
             </Button>
-            <CreateTeacherModal
-              isOpen={isCreateTeacherModalOpen}
-              onTeacherAdded={handleTeacherAdded}
-              onClose={() => setIsCreateTeacherModalOpen(false)}
+            <StudentDialog
+              isOpen={isCreateTeacherDialogOpen}
+              onStudentAdded={handleTeacherAdded}
+              onClose={() => setIsCreateTeacherDialogOpen(false)}
+              initialStudent={emptyTeacher}
+              title={'Create Teacher'}
+              isTeacher={true}
             />
           </>
         )}
@@ -134,11 +136,13 @@ const TeachersPage = () => {
           />
         )}
         {isUpdateTeacherAllowed && (
-          <EditTeacherModal
-            isOpen={isEditTeacherModalOpen}
-            onTeacherEdited={handleTeacherEdited}
-            onClose={() => setIsEditTeacherModalOpen(false)}
-            initialTeacher={modalTeacher}
+          <StudentDialog
+            isOpen={isEditTeacherDialogOpen}
+            onStudentAdded={handleTeacherEdited}
+            onClose={() => setIsEditTeacherDialogOpen(false)}
+            initialStudent={modalTeacher}
+            title={'Edit Teacher'}
+            isTeacher={true}
           />
         )}
         <TeachersTable

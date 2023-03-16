@@ -16,8 +16,7 @@ import {
 import { emptyStudent, Student } from '../../data/students';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
 import AppointmentDialog from '../modals/AppointmentDialog';
-import CreateStudentModal from '../modals/CreateStudentModal';
-import EditStudentModal from '../modals/EditStudentModal';
+import StudentDialog from '../modals/StudentDialog';
 import Navbar from '../navbar/Navbar';
 import StudentsTable from '../tables/StudentsTable';
 
@@ -26,9 +25,9 @@ const StudentsPage = () => {
   const { add: addAppointment } = useContext(AppointmentsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
-  const [isCreateStudentModalOpen, setIsCreateStudentModalOpen] =
+  const [isCreateStudentDialogOpen, setIsCreateStudentDialogOpen] =
     useState<boolean>(false);
-  const [isEditStudentModalOpen, setIsEditStudentModalOpen] =
+  const [isEditStudentDialogOpen, setIsEditStudentDialogOpen] =
     useState<boolean>(false);
   const [modalStudent, setModalStudent] = useState<Student>(emptyStudent);
   const [isCreateAppointmentDialogOpen, setIsCreateAppointmentDialogOpen] =
@@ -81,7 +80,7 @@ const StudentsPage = () => {
   const onEditStudentClicked = (studentToEdit: Student) => {
     if (isUpdateStudentAllowed) {
       setModalStudent(studentToEdit);
-      setIsEditStudentModalOpen(true);
+      setIsEditStudentDialogOpen(true);
     }
   };
 
@@ -112,15 +111,17 @@ const StudentsPage = () => {
               variant="contained"
               endIcon={<Add />}
               onClick={() => {
-                setIsCreateStudentModalOpen(true);
+                setIsCreateStudentDialogOpen(true);
               }}
             >
               Add Student
             </Button>
-            <CreateStudentModal
-              isOpen={isCreateStudentModalOpen}
+            <StudentDialog
+              isOpen={isCreateStudentDialogOpen}
               onStudentAdded={handleStudentAdded}
-              onClose={() => setIsCreateStudentModalOpen(false)}
+              onClose={() => setIsCreateStudentDialogOpen(false)}
+              initialStudent={emptyStudent}
+              title={'Create Student'}
             />
           </>
         )}
@@ -134,11 +135,12 @@ const StudentsPage = () => {
           />
         )}
         {isUpdateStudentAllowed && (
-          <EditStudentModal
-            isOpen={isEditStudentModalOpen}
-            onStudentEdited={handleStudentEdited}
-            onClose={() => setIsEditStudentModalOpen(false)}
+          <StudentDialog
+            isOpen={isEditStudentDialogOpen}
+            onStudentAdded={handleStudentEdited}
+            onClose={() => setIsEditStudentDialogOpen(false)}
             initialStudent={modalStudent}
+            title={'Edit Student'}
           />
         )}
         <StudentsTable
