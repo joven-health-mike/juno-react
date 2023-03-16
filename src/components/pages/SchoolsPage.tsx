@@ -10,8 +10,7 @@ import {
 } from '../../auth/permissions';
 import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import { LoggedInUserContext } from '../../data/users';
-import CreateSchoolModal from '../modals/CreateSchoolModal';
-import EditSchoolModal from '../modals/EditSchoolModal';
+import SchoolDialog from '../modals/SchoolDialog';
 import Navbar from '../navbar/Navbar';
 import SchoolsTable from '../tables/SchoolsTable';
 
@@ -23,9 +22,9 @@ const SchoolsPage = () => {
   } = useContext(SchoolsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
-  const [isCreateSchoolModalOpen, setIsCreateSchoolModalOpen] =
+  const [isCreateSchoolDialogOpen, setIsCreateSchoolDialogOpen] =
     useState<boolean>(false);
-  const [isEditSchoolModalOpen, setIsEditSchoolModalOpen] =
+  const [isEditSchoolDialogOpen, setIsEditSchoolDialogOpen] =
     useState<boolean>(false);
   const [modalSchool, setModalSchool] = useState<School>(emptySchool);
   const [isCreateSchoolAllowed, setIsCreateSchoolAllowed] =
@@ -61,7 +60,7 @@ const SchoolsPage = () => {
 
   const onSchoolEditClicked = (schoolToEdit: School) => {
     setModalSchool(schoolToEdit);
-    setIsEditSchoolModalOpen(true);
+    setIsEditSchoolDialogOpen(true);
   };
 
   const onSchoolEmailClicked = (schoolToEmail: School) => {
@@ -85,24 +84,27 @@ const SchoolsPage = () => {
               variant="contained"
               endIcon={<Add />}
               onClick={() => {
-                setIsCreateSchoolModalOpen(true);
+                setIsCreateSchoolDialogOpen(true);
               }}
             >
               Add School
             </Button>
-            <CreateSchoolModal
-              isOpen={isCreateSchoolModalOpen}
+            <SchoolDialog
+              isOpen={isCreateSchoolDialogOpen}
               onSchoolAdded={handleSchoolAdded}
-              onClose={() => setIsCreateSchoolModalOpen(false)}
+              onClose={() => setIsCreateSchoolDialogOpen(false)}
+              initialSchool={emptySchool}
+              title="Create School"
             />
           </>
         )}
         {isUpdateSchoolAllowed && (
-          <EditSchoolModal
-            isOpen={isEditSchoolModalOpen}
-            onSchoolEdited={handleSchoolEdited}
-            onClose={() => setIsEditSchoolModalOpen(false)}
+          <SchoolDialog
+            isOpen={isEditSchoolDialogOpen}
+            onSchoolAdded={handleSchoolEdited}
+            onClose={() => setIsEditSchoolDialogOpen(false)}
             initialSchool={modalSchool}
+            title="Edit School"
           />
         )}
         <SchoolsTable
