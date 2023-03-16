@@ -129,6 +129,7 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
 
   const getExpandComponent = (id: string) => {
     const appointment = appointments.find(appointment => appointment.id === id);
+    if (typeof appointment === 'undefined') return <></>;
     return <AppointmentDetails appointment={appointment!} />;
   };
 

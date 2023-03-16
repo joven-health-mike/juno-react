@@ -107,6 +107,7 @@ const StudentsTable: React.FC<StudentsTableProps> = ({
 
   const getExpandComponent = (id: string) => {
     const student = students.find(student => student.id === id);
+    if (typeof student === 'undefined') return <></>;
     return <StudentDetails student={student!} />;
   };
 

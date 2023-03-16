@@ -80,6 +80,7 @@ const UsersTable: React.FC<UsersTableProps> = ({
 
   const getExpandComponent = (id: string) => {
     const user = users.find(user => user.id === id);
+    if (typeof user === 'undefined') return <></>;
     return <UserDetails user={user!} />;
   };
 

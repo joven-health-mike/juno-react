@@ -98,6 +98,7 @@ const CounselorsTable: React.FC<CounselorsTableProps> = ({
 
   const getExpandComponent = (id: string) => {
     const counselor = counselors.find(counselor => counselor.id === id);
+    if (typeof counselor === 'undefined') return <></>;
     return <CounselorDetails counselor={counselor!} />;
   };
 
