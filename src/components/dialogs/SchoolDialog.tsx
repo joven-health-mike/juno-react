@@ -20,7 +20,7 @@ type SchoolDialogProps = {
   isOpen: boolean;
   onClose: () => void;
   onSchoolAdded: (school: School) => void;
-  initialSchool: School;
+  readonly initialSchool: School;
   title: string;
 };
 

@@ -9,7 +9,7 @@ import {
   MenuItem,
   Select,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { emptyUser, User } from '../../data/users';
 import {
   isValidEmail,
@@ -24,7 +24,7 @@ type CreateUserModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onUserAdded: (user: User) => void;
-  initialUser: User;
+  readonly initialUser: User;
   title: string;
 };
 
@@ -44,6 +44,10 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
   const [docsUrlError, setDocsUrlError] = useState(false);
   const [timeZoneError, setTimeZoneError] = useState(false);
   const [roleError, setRoleError] = useState(false);
+
+  useEffect(() => {
+    setUser({ ...initialUser });
+  }, [initialUser]);
 
   const validateInputs = () => {
     let allInputsValid = true;
