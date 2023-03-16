@@ -13,7 +13,7 @@ import {
 } from '../../data/appointments';
 import { emptyCounselor, getCounselors } from '../../data/counselors';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
-import AppointmentDialog from '../modals/AppointmentDialog';
+import AppointmentDialog from '../dialogs/AppointmentDialog';
 import Navbar from '../navbar/Navbar';
 import AppointmentsTable from '../tables/AppointmentsTable';
 import { Add } from '@mui/icons-material';

@@ -16,7 +16,7 @@ import { Student } from '../../data/students';
 import CounselorDetails from '../details/CounselorDetails';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
 import { Role } from '../../services/user.service';
-import AppointmentDialog from '../modals/AppointmentDialog';
+import AppointmentDialog from '../dialogs/AppointmentDialog';
 import { createPermission, deletePermission } from '../../auth/permissions';
 import { getCounselors } from '../../data/counselors';
 import { Grid, Typography } from '@mui/material';

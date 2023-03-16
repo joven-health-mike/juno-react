@@ -19,8 +19,8 @@ import {
 import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import Calendar from '../calendar/Calendar';
 import Navbar from '../navbar/Navbar';
-import AppointmentDialog from '../modals/AppointmentDialog';
-import AppointmentDetailsDialog from '../modals/AppointmentDetailsDialog';
+import AppointmentDialog from '../dialogs/AppointmentDialog';
+import AppointmentDetailsDialog from '../dialogs/AppointmentDetailsDialog';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
 import { createPermission, deletePermission } from '../../auth/permissions';
 import {

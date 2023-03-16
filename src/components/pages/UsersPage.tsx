@@ -14,7 +14,7 @@ import {
   User,
   UsersContext,
 } from '../../data/users';
-import UserDialog from '../modals/UserDialog';
+import UserDialog from '../dialogs/UserDialog';
 import Navbar from '../navbar/Navbar';
 import UsersTable from '../tables/UsersTable';
 

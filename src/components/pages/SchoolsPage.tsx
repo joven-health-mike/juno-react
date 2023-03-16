@@ -10,7 +10,7 @@ import {
 } from '../../auth/permissions';
 import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import { LoggedInUserContext } from '../../data/users';
-import SchoolDialog from '../modals/SchoolDialog';
+import SchoolDialog from '../dialogs/SchoolDialog';
 import Navbar from '../navbar/Navbar';
 import SchoolsTable from '../tables/SchoolsTable';
 

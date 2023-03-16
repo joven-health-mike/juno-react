@@ -15,8 +15,8 @@ import {
 } from '../../data/appointments';
 import { emptyStudent, Student } from '../../data/students';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
-import AppointmentDialog from '../modals/AppointmentDialog';
-import StudentDialog from '../modals/StudentDialog';
+import AppointmentDialog from '../dialogs/AppointmentDialog';
+import StudentDialog from '../dialogs/StudentDialog';
 import Navbar from '../navbar/Navbar';
 import StudentsTable from '../tables/StudentsTable';
 

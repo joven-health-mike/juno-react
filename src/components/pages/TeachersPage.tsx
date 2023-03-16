@@ -12,11 +12,11 @@ import {
   emptyAppointment,
 } from '../../data/appointments';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
-import AppointmentDialog from '../modals/AppointmentDialog';
+import AppointmentDialog from '../dialogs/AppointmentDialog';
 import Navbar from '../navbar/Navbar';
 import TeachersTable from '../tables/TeachersTable';
 import { emptyTeacher, Teacher } from '../../data/teachers';
-import StudentDialog from '../modals/StudentDialog';
+import StudentDialog from '../dialogs/StudentDialog';
 import { Box, Button, Typography } from '@mui/material';
 import { Add } from '@mui/icons-material';
 

@@ -10,7 +10,7 @@ import {
 } from '../../auth/permissions';
 import { Counselor, emptyCounselor } from '../../data/counselors';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
-import CounselorDialog from '../modals/CounselorDialog';
+import CounselorDialog from '../dialogs/CounselorDialog';
 import Navbar from '../navbar/Navbar';
 import CounselorsTable from '../tables/CounselorsTable';
 
