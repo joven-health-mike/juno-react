@@ -37,7 +37,6 @@ const CalendarPage: React.FC = () => {
     useState<boolean>(false);
   const [isAppointmentDetailsDialogOpen, setIsAppointmentDetailsDialogOpen] =
     useState<boolean>(false);
-  const [showCalendar, setShowCalendar] = useState<boolean>(true);
   const [filteredEvents, setFilteredEvents] = useState<Appointment[]>([]);
   const [selectedSchool, setSelectedSchool] = useState<School>(emptySchool);
   const [selectedCounselor, setSelectedCounselor] =
@@ -96,12 +95,6 @@ const CalendarPage: React.FC = () => {
       deletePermission(loggedInUser.role, 'appointment')
     );
   }, [loggedInUser.role]);
-
-  useEffect(() => {
-    setShowCalendar(
-      !isCreateAppointmentDialogOpen && !isAppointmentDetailsDialogOpen
-    );
-  }, [isCreateAppointmentDialogOpen, isAppointmentDetailsDialogOpen]);
 
   const handleAppointmentAdded = (appointment: Appointment) => {
     if (isCreateAppointmentAllowed) {
@@ -233,15 +226,13 @@ const CalendarPage: React.FC = () => {
             </FormControl>
           )}
       </Box>
-      {showCalendar && (
-        <Calendar
-          view="dayGridMonth"
-          plugins={[dayGridPlugin, interactionPlugin, momentTimezonePlugin]}
-          appointments={filteredEvents}
-          onEventClick={handleAppointmentClick}
-          onDateClick={handleDateClick}
-        />
-      )}
+      <Calendar
+        view="dayGridMonth"
+        plugins={[dayGridPlugin, interactionPlugin, momentTimezonePlugin]}
+        appointments={filteredEvents}
+        onEventClick={handleAppointmentClick}
+        onDateClick={handleDateClick}
+      />
       <AppointmentDialog
         title="Create Appointment"
         isOpen={isCreateAppointmentDialogOpen}
