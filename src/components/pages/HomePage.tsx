@@ -4,7 +4,6 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import '@fullcalendar/react';
 import listPlugin from '@fullcalendar/list';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone';
-import styled from 'styled-components';
 import Navbar from '../navbar/Navbar';
 import Calendar from '../calendar/Calendar';
 import {
@@ -17,26 +16,10 @@ import { Student } from '../../data/students';
 import CounselorDetails from '../details/CounselorDetails';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
 import { Role } from '../../services/user.service';
-import CreateAppointmentModal from '../modals/CreateAppointmentModal';
+import AppointmentDialog from '../dialogs/AppointmentDialog';
 import { createPermission, deletePermission } from '../../auth/permissions';
-import { h1Styles } from '../styles/mixins';
 import { getCounselors } from '../../data/counselors';
-
-const LeftSection = styled.section`
-  margin-left: 25px;
-  float: left;
-  width: 47%;
-`;
-
-const RightSection = styled.section`
-  margin-left: 25px;
-  float: right;
-  width: 47%;
-`;
-
-const Header = styled.h1`
-  ${h1Styles}
-`;
+import { Grid, Typography } from '@mui/material';
 
 const HomePage: React.FC = () => {
   const { loggedInUser } = useContext(LoggedInUserContext);
@@ -79,7 +62,7 @@ const AppointmentView: React.FC = () => {
 };
 
 const StudentsTableView: React.FC = () => {
-  const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
+  const [isCreateAppointmentDialogOpen, setIsCreateAppointmentDialogOpen] =
     useState<boolean>(false);
   const [initialAppointment, setInitialAppointment] =
     useState<Appointment>(emptyAppointment);
@@ -105,8 +88,9 @@ const StudentsTableView: React.FC = () => {
       appointment.participants = [studentToSchedule];
       appointment.counselorUserId =
         studentToSchedule.studentAssignedCounselorId;
+      appointment.schoolId = studentToSchedule.studentAssignedSchoolId;
       setInitialAppointment(appointment);
-      setIsCreateAppointmentModalOpen(true);
+      setIsCreateAppointmentDialogOpen(true);
     }
   };
 
@@ -124,7 +108,7 @@ const StudentsTableView: React.FC = () => {
   const handleAppointmentAdded = (appointmentToAdd: Appointment) => {
     if (isCreateAppointmentAllowed) {
       addAppointment(appointmentToAdd);
-      setIsCreateAppointmentModalOpen(false);
+      setIsCreateAppointmentDialogOpen(false);
     }
   };
 
@@ -136,9 +120,10 @@ const StudentsTableView: React.FC = () => {
         onOpenFileClicked={handleOpenFileClick}
       />
       {isCreateAppointmentAllowed && (
-        <CreateAppointmentModal
-          isOpen={isCreateAppointmentModalOpen}
-          onClose={() => setIsCreateAppointmentModalOpen(false)}
+        <AppointmentDialog
+          title="Create Appointment"
+          isOpen={isCreateAppointmentDialogOpen}
+          onClose={() => setIsCreateAppointmentDialogOpen(false)}
           initialAppointment={initialAppointment}
           onAppointmentAdded={handleAppointmentAdded}
         />
@@ -149,61 +134,61 @@ const StudentsTableView: React.FC = () => {
 
 const AdminView: React.FC = () => {
   return (
-    <>
-      <LeftSection>
-        <Header>All Appointments</Header>
+    <Grid container>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
+        <Typography variant="h4">All Appointments</Typography>
         <AppointmentView />
-      </LeftSection>
-      <RightSection>
-        <Header>All Students</Header>
+      </Grid>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
+        <Typography variant="h4">All Students</Typography>
         <StudentsTableView />
-      </RightSection>
-    </>
+      </Grid>
+    </Grid>
   );
 };
 
 const CounselorView: React.FC = () => {
   return (
-    <>
-      <LeftSection>
-        <Header>My Appointments</Header>
+    <Grid container>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
+        <Typography variant="h4">My Appointments</Typography>
         <AppointmentView />
-      </LeftSection>
-      <RightSection>
-        <Header>My Caseload</Header>
+      </Grid>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
+        <Typography variant="h4">My Caseload</Typography>
         <StudentsTableView />
-      </RightSection>
-    </>
+      </Grid>
+    </Grid>
   );
 };
 
 const SchoolStaffView: React.FC = () => {
   return (
-    <>
-      <LeftSection>
-        <Header>My Appointments</Header>
+    <Grid container>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
+        <Typography variant="h4">My Appointments</Typography>
         <AppointmentView />
-      </LeftSection>
-      <RightSection>
-        <Header>My Students</Header>
+      </Grid>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
+        <Typography variant="h4">My Students</Typography>
         <StudentsTableView />
-      </RightSection>
-    </>
+      </Grid>
+    </Grid>
   );
 };
 
 const SchoolAdminView: React.FC = () => {
   return (
-    <>
-      <LeftSection>
-        <Header>My Appointments</Header>
+    <Grid container>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
+        <Typography variant="h4">My Appointments</Typography>
         <AppointmentView />
-      </LeftSection>
-      <RightSection>
-        <Header>My Students</Header>
+      </Grid>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
+        <Typography variant="h4">My Students</Typography>
         <StudentsTableView />
-      </RightSection>
-    </>
+      </Grid>
+    </Grid>
   );
 };
 
@@ -216,35 +201,35 @@ const StudentView: React.FC = () => {
   );
 
   return (
-    <>
-      <LeftSection>
-        <Header>My Appointments</Header>
+    <Grid container>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
+        <Typography variant="h4">My Appointments</Typography>
         <AppointmentView />
-      </LeftSection>
-      <RightSection>
+      </Grid>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
         {myCounselor && (
           <>
-            <Header>My Counselor</Header>
+            <Typography variant="h4">My Counselor</Typography>
             <CounselorDetails counselor={myCounselor} />
           </>
         )}
-      </RightSection>
-    </>
+      </Grid>
+    </Grid>
   );
 };
 
 const GuardianView: React.FC = () => {
   return (
-    <>
-      <LeftSection>
-        <Header>My Appointments</Header>
+    <Grid container>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
+        <Typography variant="h4">My Appointments</Typography>
         <AppointmentView />
-      </LeftSection>
-      <RightSection>
-        <Header>My Students</Header>
+      </Grid>
+      <Grid item xs={12} sm={12} md={12} lg={6} xl={4} sx={{ p: 1 }}>
+        <Typography variant="h4">My Students</Typography>
         <StudentsTableView />
-      </RightSection>
-    </>
+      </Grid>
+    </Grid>
   );
 };
 

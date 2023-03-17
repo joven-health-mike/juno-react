@@ -38,7 +38,7 @@ export const emptyAppointment = {
   numRepeats: 1,
   frequency: 'WEEKS',
   schoolId: '',
-  counselorId: '',
+  counselorUserId: '',
   participants: [] as User[],
   type: 'CLINICAL',
   status: 'SCHEDULED',
@@ -85,39 +85,12 @@ export const APPOINTMENT_STATUSES = [
   'DELETED',
 ];
 
-export const AppointmentTypes = {
-  Clinical: { id: 0, name: 'CLINICAL', color: 'green' },
-  Consultation: { id: 1, name: 'CONSULTATION', color: 'blue' },
-  Evaluation: { id: 2, name: 'EVALUATION', color: 'red' },
-};
+export type AppointmentType = 'CLINICAL' | 'CONSULTATION' | 'EVALUATION';
+export const APPOINTMENT_TYPES = ['CLINICAL', 'CONSULTATION', 'EVALUATION'];
+export const AppointmentColors = ['green', 'blue', 'red'];
 
-const defaultAppointmentColor = 'lightgray';
-const defaultAppointmentType = AppointmentTypes.Clinical;
-
-export type AppointmentType = {
-  id: number;
-  name: string;
-  color: string;
-};
-
-export const getColorForType = (type: string) => {
-  for (const k in AppointmentTypes) {
-    if (((AppointmentTypes as any)[k] as AppointmentType).name === type) {
-      return (AppointmentTypes as any)[k].color;
-    }
-  }
-
-  return defaultAppointmentColor;
-};
-
-export const getAppointmentTypeById = (id: number): AppointmentType => {
-  for (const k in AppointmentTypes) {
-    if (((AppointmentTypes as any)[k] as AppointmentType).id === id) {
-      return (AppointmentTypes as any)[k];
-    }
-  }
-  return defaultAppointmentType;
-};
+export type RecurringFrequency = 'DAYS' | 'WEEKS' | 'MONTHS' | 'YEARS';
+export const RECURRING_FREQUENCIES = ['DAYS', 'WEEKS', 'MONTHS', 'YEARS'];
 
 export const AppointmentsContext = React.createContext<
   ContextData<Appointment>
@@ -202,4 +175,21 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
       {children}
     </AppointmentsContext.Provider>
   );
+};
+
+export const getTableColumnHeadersForAppointments = (
+  appointments: Appointment[]
+): string[] => {
+  return ['id', 'Title', 'Start', 'End'];
+};
+
+export const getTableDataForAppointments = (
+  appointments: Appointment[]
+): string[][] => {
+  return appointments.map(appointment => [
+    appointment.id,
+    appointment.title,
+    new Date(appointment.start).toISOString(),
+    new Date(appointment.end).toISOString(),
+  ]);
 };

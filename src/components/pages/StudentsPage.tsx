@@ -1,7 +1,8 @@
 // Copyright 2022 Social Fabric, LLC
 
+import { Add } from '@mui/icons-material';
+import { Box, Button, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import {
   createPermission,
   deletePermission,
@@ -14,32 +15,22 @@ import {
 } from '../../data/appointments';
 import { emptyStudent, Student } from '../../data/students';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
-import CreateAppointmentModal from '../modals/CreateAppointmentModal';
-import CreateStudentModal from '../modals/CreateStudentModal';
-import EditStudentModal from '../modals/EditStudentModal';
+import AppointmentDialog from '../dialogs/AppointmentDialog';
+import StudentDialog from '../dialogs/StudentDialog';
 import Navbar from '../navbar/Navbar';
 import StudentsTable from '../tables/StudentsTable';
-import { buttonStyles, h1Styles } from '../styles/mixins';
-
-const Button = styled.button`
-  ${buttonStyles}
-`;
-
-const Header = styled.h1`
-  ${h1Styles}
-`;
 
 const StudentsPage = () => {
   const { add: addStudent, update: updateStudent } = useContext(UsersContext);
   const { add: addAppointment } = useContext(AppointmentsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
-  const [isCreateStudentModalOpen, setIsCreateStudentModalOpen] =
+  const [isCreateStudentDialogOpen, setIsCreateStudentDialogOpen] =
     useState<boolean>(false);
-  const [isEditStudentModalOpen, setIsEditStudentModalOpen] =
+  const [isEditStudentDialogOpen, setIsEditStudentDialogOpen] =
     useState<boolean>(false);
   const [modalStudent, setModalStudent] = useState<Student>(emptyStudent);
-  const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
+  const [isCreateAppointmentDialogOpen, setIsCreateAppointmentDialogOpen] =
     useState<boolean>(false);
   const [modalAppointment, setModalAppointment] =
     useState<Appointment>(emptyAppointment);
@@ -89,7 +80,7 @@ const StudentsPage = () => {
   const onEditStudentClicked = (studentToEdit: Student) => {
     if (isUpdateStudentAllowed) {
       setModalStudent(studentToEdit);
-      setIsEditStudentModalOpen(true);
+      setIsEditStudentDialogOpen(true);
     }
   };
 
@@ -99,7 +90,7 @@ const StudentsPage = () => {
       modalAppointment.counselorUserId =
         studentToSchedule.studentAssignedCounselorId;
       setModalAppointment(modalAppointment);
-      setIsCreateAppointmentModalOpen(true);
+      setIsCreateAppointmentDialogOpen(true);
     }
   };
 
@@ -112,37 +103,46 @@ const StudentsPage = () => {
       <nav>
         <Navbar />
       </nav>
-      <Header>Students</Header>
+      <Typography variant="h3">Students</Typography>
       <>
         {isCreateStudentAllowed && (
           <>
-            <Button
-              type="button"
-              onClick={() => setIsCreateStudentModalOpen(true)}
-            >
-              Add Student
-            </Button>
-            <CreateStudentModal
-              isOpen={isCreateStudentModalOpen}
+            <Box sx={{ mb: 2, mt: 2 }} justifyContent="center" display="flex">
+              <Button
+                variant="contained"
+                endIcon={<Add />}
+                onClick={() => {
+                  setIsCreateStudentDialogOpen(true);
+                }}
+              >
+                Add Student
+              </Button>
+            </Box>
+            <StudentDialog
+              isOpen={isCreateStudentDialogOpen}
               onStudentAdded={handleStudentAdded}
-              onClose={() => setIsCreateStudentModalOpen(false)}
+              onClose={() => setIsCreateStudentDialogOpen(false)}
+              initialStudent={emptyStudent}
+              title={'Create Student'}
             />
           </>
         )}
         {isCreateAppointmentAllowed && (
-          <CreateAppointmentModal
-            isOpen={isCreateAppointmentModalOpen}
+          <AppointmentDialog
+            title="Create Appointment"
+            isOpen={isCreateAppointmentDialogOpen}
             onAppointmentAdded={handleAppointmentAdded}
-            onClose={() => setIsCreateAppointmentModalOpen(false)}
+            onClose={() => setIsCreateAppointmentDialogOpen(false)}
             initialAppointment={modalAppointment}
           />
         )}
         {isUpdateStudentAllowed && (
-          <EditStudentModal
-            isOpen={isEditStudentModalOpen}
-            onStudentEdited={handleStudentEdited}
-            onClose={() => setIsEditStudentModalOpen(false)}
+          <StudentDialog
+            isOpen={isEditStudentDialogOpen}
+            onStudentAdded={handleStudentEdited}
+            onClose={() => setIsEditStudentDialogOpen(false)}
             initialStudent={modalStudent}
+            title={'Edit Student'}
           />
         )}
         <StudentsTable

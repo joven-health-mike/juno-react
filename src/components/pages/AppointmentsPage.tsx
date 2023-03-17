@@ -1,7 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import styled from 'styled-components';
 import {
   createPermission,
   deletePermission,
@@ -14,19 +13,11 @@ import {
 } from '../../data/appointments';
 import { emptyCounselor, getCounselors } from '../../data/counselors';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
-import CreateAppointmentModal from '../modals/CreateAppointmentModal';
-import EditAppointmentModal from '../modals/EditAppointmentModal';
+import AppointmentDialog from '../dialogs/AppointmentDialog';
 import Navbar from '../navbar/Navbar';
 import AppointmentsTable from '../tables/AppointmentsTable';
-import { buttonStyles, h1Styles } from '../styles/mixins';
-
-const Button = styled.button`
-  ${buttonStyles}
-`;
-
-const Header = styled.h1`
-  ${h1Styles}
-`;
+import { Add } from '@mui/icons-material';
+import { Box, Button, Typography } from '@mui/material';
 
 const AppointmentsPage: React.FC = () => {
   const {
@@ -38,9 +29,9 @@ const AppointmentsPage: React.FC = () => {
   const counselors = useMemo(() => getCounselors(users), [users]);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
-  const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
+  const [isCreateAppointmentDialogOpen, setIsCreateAppointmentDialogOpen] =
     useState<boolean>(false);
-  const [isEditAppointmentModalOpen, setIsEditAppointmentModalOpen] =
+  const [isEditAppointmentDialogOpen, setIsEditAppointmentDialogOpen] =
     useState<boolean>(false);
   const [initialAppointment, setInitialAppointment] =
     useState<Appointment>(emptyAppointment);
@@ -67,14 +58,14 @@ const AppointmentsPage: React.FC = () => {
     if (isCreateAppointmentAllowed) {
       addAppointment(appointment);
     }
-    setIsCreateAppointmentModalOpen(false);
+    setIsCreateAppointmentDialogOpen(false);
   };
 
   const onEditAppointmentSubmit = (appointment: Appointment) => {
     if (isUpdateAppointmentAllowed) {
       updateAppointment(appointment);
     }
-    setIsEditAppointmentModalOpen(false);
+    setIsEditAppointmentDialogOpen(false);
   };
 
   const onAppointmentDeleteClicked = (appointmentToDelete: Appointment) => {
@@ -89,7 +80,7 @@ const AppointmentsPage: React.FC = () => {
   const onAppointmentEditClicked = (appointmentToEdit: Appointment) => {
     if (isUpdateAppointmentAllowed) {
       setInitialAppointment(appointmentToEdit);
-      setIsEditAppointmentModalOpen(!isEditAppointmentModalOpen);
+      setIsEditAppointmentDialogOpen(!isEditAppointmentDialogOpen);
     }
   };
 
@@ -125,15 +116,20 @@ const AppointmentsPage: React.FC = () => {
       <nav>
         <Navbar />
       </nav>
-      <Header>Appointments</Header>
+      <Typography variant="h3">Appointments</Typography>
       <>
         {isCreateAppointmentAllowed && (
-          <Button
-            type="button"
-            onClick={() => setIsCreateAppointmentModalOpen(true)}
-          >
-            Add Appointment
-          </Button>
+          <Box sx={{ mb: 2, mt: 2 }} justifyContent="center" display="flex">
+            <Button
+              variant="contained"
+              endIcon={<Add />}
+              onClick={() => {
+                setIsCreateAppointmentDialogOpen(true);
+              }}
+            >
+              Add Appointment
+            </Button>
+          </Box>
         )}
         <AppointmentsTable
           onDeleteClicked={onAppointmentDeleteClicked}
@@ -142,17 +138,19 @@ const AppointmentsPage: React.FC = () => {
           onRoomLinkClicked={onAppointmentRoomLinkClicked}
         />
         {isCreateAppointmentAllowed && (
-          <CreateAppointmentModal
-            isOpen={isCreateAppointmentModalOpen}
-            onClose={() => setIsCreateAppointmentModalOpen(false)}
+          <AppointmentDialog
+            title="Create Appointment"
+            isOpen={isCreateAppointmentDialogOpen}
+            onClose={() => setIsCreateAppointmentDialogOpen(false)}
             onAppointmentAdded={onCreateAppointmentSubmit}
             initialAppointment={emptyAppointment}
           />
         )}
         {isUpdateAppointmentAllowed && (
-          <EditAppointmentModal
-            isOpen={isEditAppointmentModalOpen}
-            onClose={() => setIsEditAppointmentModalOpen(false)}
+          <AppointmentDialog
+            title="Update Appointment"
+            isOpen={isEditAppointmentDialogOpen}
+            onClose={() => setIsEditAppointmentDialogOpen(false)}
             onAppointmentAdded={onEditAppointmentSubmit}
             initialAppointment={initialAppointment}
           />

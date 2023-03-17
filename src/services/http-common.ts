@@ -21,3 +21,24 @@ export const HttpServer = axios.create({
 function unwrapData(data: any, _headers?: any) {
   return JSON.parse(data).data;
 }
+
+export function isValidURL(url: string) {
+  // regular expression to match URLs
+  const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
+
+  return urlRegex.test(url);
+}
+
+export function isValidEmail(email: string) {
+  // regular expression to match email address
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
+
+  return emailRegex.test(email);
+}
+
+export function isValidPhoneNumber(phoneNumber: string) {
+  // regular expression to match US phone number
+  const phoneRegex = /^\(?\d{3}\)?[-. ]?\d{3}[-. ]?\d{4}$/;
+
+  return phoneRegex.test(phoneNumber);
+}

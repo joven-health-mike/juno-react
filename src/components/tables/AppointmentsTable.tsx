@@ -1,29 +1,13 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, {
-  MouseEvent,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { CellProps, Column, Row } from 'react-table';
-import styled from 'styled-components';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { deletePermission, updatePermission } from '../../auth/permissions';
 import { Appointment, AppointmentsContext } from '../../data/appointments';
 import { getCounselors } from '../../data/counselors';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
 import { formatDate, formatTime } from '../../utils/DateUtils';
-import XButton from '../buttons/XButton';
 import AppointmentDetails from '../details/AppointmentDetails';
-import { buttonStyles } from '../styles/mixins';
-import DataTable from './DataTable';
-import TableSearchFilter from './TableSearchFilter';
-
-const Button = styled.button`
-  ${buttonStyles}
-`;
+import MaterialTable from './MaterialTable';
 
 type AppointmentsTableProps = {
   onDeleteClicked: (appointment: Appointment) => void;
@@ -51,7 +35,7 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
   const counselors = useMemo(() => getCounselors(users), [users]);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
-  const [hiddenColumns, setHiddenColumns] = useState<string[]>([]);
+  const [hiddenColumns, setHiddenColumns] = useState<number[]>([0]);
   const [isDeleteAppointmentAllowed, setIsDeleteAppointmentAllowed] =
     useState<boolean>(false);
   const [isUpdateAppointmentAllowed, setIsUpdateAppointmentAllowed] =
@@ -61,9 +45,9 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
   >([]);
 
   useEffect(() => {
-    const hiddenColumns = [];
+    const hiddenColumns = [0];
     if (loggedInUser.role === 'COUNSELOR') {
-      hiddenColumns.push('counselorName');
+      hiddenColumns.push(4);
     }
     setHiddenColumns(hiddenColumns);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -99,151 +83,63 @@ const AppointmentsTable: React.FC<AppointmentsTableProps> = ({
     setTableAppointments(mappedAppointments);
   }, [appointments, counselors, loggedInUser.timeZoneIanaName]);
 
-  const getAppointmentFromTableAppointment = useCallback(
-    (tableAppointment: TableAppointment): Appointment => {
-      return appointments.find(
-        appointment => appointment.id === tableAppointment.id
-      ) as Appointment;
-    },
-    [appointments]
-  );
+  const createTableData = (appointments: TableAppointment[]) => {
+    const tableData: string[][] = [];
 
-  const getButtonCell = useCallback(
-    (tableAppointment: TableAppointment, row: Row) => {
-      const appointment = getAppointmentFromTableAppointment(tableAppointment);
-      if (!appointment) return <></>;
+    appointments.forEach(appointment => {
+      tableData.push([
+        appointment.id,
+        appointment.title,
+        appointment.date,
+        appointment.time,
+        appointment.counselorName,
+      ]);
+    });
 
-      const counselor = counselors.find(
-        counselor => counselor.id === appointment.counselorUserId
-      );
+    return tableData;
+  };
 
-      return (
-        <>
-          {isDeleteAppointmentAllowed && (
-            <XButton
-              text="❌"
-              title="Delete Appointment"
-              value={appointment.id}
-              onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-                onDeleteClicked(appointment);
-              }}
-            />
-          )}
-          {isUpdateAppointmentAllowed && (
-            <XButton
-              text="✏️"
-              title="Edit Appointment"
-              value={appointment.id}
-              onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-                onEditClicked(appointment);
-              }}
-            />
-          )}
-          <XButton
-            text="📧"
-            title={`Email Participants`}
-            value={appointment.id}
-            onClick={(e: MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault();
-              onEmailClicked(appointment);
-            }}
-          />
-          {typeof counselor !== 'undefined' && (
-            <XButton
-              text="🖥️"
-              title={`Join ${counselor.firstName}'s Waiting Room`}
-              value={appointment.id}
-              onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-                onRoomLinkClicked(appointment);
-              }}
-            />
-          )}
-          <Button {...row.getToggleRowExpandedProps()}>
-            {row.isExpanded ? '👇' : '👉'}
-          </Button>
-        </>
-      );
-    },
-    [
-      counselors,
-      getAppointmentFromTableAppointment,
-      isDeleteAppointmentAllowed,
-      isUpdateAppointmentAllowed,
-      onDeleteClicked,
-      onEditClicked,
-      onEmailClicked,
-      onRoomLinkClicked,
-    ]
-  );
+  const onDeleteRow = isDeleteAppointmentAllowed
+    ? (id: string) => {
+        const appointment = appointments.find(
+          appointment => appointment.id === id
+        );
+        onDeleteClicked(appointment!);
+      }
+    : undefined;
 
-  const defaultColumn: Record<string, unknown> = React.useMemo(
-    () => ({
-      Filter: TableSearchFilter,
-    }),
-    []
-  );
+  const onEditRow = isUpdateAppointmentAllowed
+    ? (id: string) => {
+        const appointment = appointments.find(
+          appointment => appointment.id === id
+        );
+        onEditClicked(appointment!);
+      }
+    : undefined;
 
-  const columns: Column[] = useMemo(
-    () => [
-      {
-        id: 'buttons',
-        Cell: ({ cell, row }: CellProps<object>) => {
-          const appointment = cell.row.original as TableAppointment;
-          return getButtonCell(appointment, row);
-        },
-      },
-      {
-        Header: 'Title',
-        accessor: 'title',
-      },
-      {
-        Header: 'Date',
-        accessor: 'date',
-      },
-      {
-        Header: 'Time',
-        accessor: 'time',
-      },
-      {
-        Header: 'Counselor',
-        accessor: 'counselorName',
-      },
-    ],
-    [getButtonCell]
-  );
+  const onEmailRow = (id: string) => {
+    const appointment = appointments.find(appointment => appointment.id === id);
+    onEmailClicked(appointment!);
+  };
 
-  const renderRowSubComponent = useCallback(
-    (row: Row) => {
-      const tableAppointment = row.original as TableAppointment;
-      const appointment = getAppointmentFromTableAppointment(tableAppointment);
-      if (typeof appointment === 'undefined') return <></>;
-      return (
-        <AppointmentDetails
-          appointment={appointment}
-          onEmailParticipantsClicked={onEmailClicked}
-          onJoinAppointmentClicked={onRoomLinkClicked}
-          onCancelAppointmentClicked={onDeleteClicked}
-        />
-      );
-    },
-    [
-      getAppointmentFromTableAppointment,
-      onDeleteClicked,
-      onEmailClicked,
-      onRoomLinkClicked,
-    ]
-  );
+  const onRoomLinkRow = (id: string) => {
+    const appointment = appointments.find(appointment => appointment.id === id);
+    onRoomLinkClicked(appointment!);
+  };
+
+  const getExpandComponent = (id: string) => {
+    const appointment = appointments.find(appointment => appointment.id === id);
+    if (typeof appointment === 'undefined') return <></>;
+    return <AppointmentDetails appointment={appointment!} />;
+  };
 
   return (
-    <DataTable
-      data={tableAppointments}
-      defaultColumn={defaultColumn}
-      columns={columns}
-      renderRowSubComponent={renderRowSubComponent}
-      hiddenColumns={hiddenColumns}
+    <MaterialTable
+      rows={createTableData(tableAppointments)}
+      columnHeaders={['id', 'Title', 'Date', 'Time', 'Counselor']}
+      hideColumnIndexes={hiddenColumns}
+      tableButtonInfo={{ onDeleteRow, onEditRow, onEmailRow, onRoomLinkRow }}
+      getExpandComponent={getExpandComponent}
     />
   );
 };

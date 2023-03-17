@@ -1,7 +1,8 @@
 // Copyright 2022 Social Fabric, LLC
 
+import { Add } from '@mui/icons-material';
+import { Box, Button, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import {
   createPermission,
   deletePermission,
@@ -9,19 +10,9 @@ import {
 } from '../../auth/permissions';
 import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import { LoggedInUserContext } from '../../data/users';
-import CreateSchoolModal from '../modals/CreateSchoolModal';
-import EditSchoolModal from '../modals/EditSchoolModal';
+import SchoolDialog from '../dialogs/SchoolDialog';
 import Navbar from '../navbar/Navbar';
 import SchoolsTable from '../tables/SchoolsTable';
-import { buttonStyles, h1Styles } from '../styles/mixins';
-
-const Button = styled.button`
-  ${buttonStyles}
-`;
-
-const Header = styled.h1`
-  ${h1Styles}
-`;
 
 const SchoolsPage = () => {
   const {
@@ -31,9 +22,9 @@ const SchoolsPage = () => {
   } = useContext(SchoolsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
-  const [isCreateSchoolModalOpen, setIsCreateSchoolModalOpen] =
+  const [isCreateSchoolDialogOpen, setIsCreateSchoolDialogOpen] =
     useState<boolean>(false);
-  const [isEditSchoolModalOpen, setIsEditSchoolModalOpen] =
+  const [isEditSchoolDialogOpen, setIsEditSchoolDialogOpen] =
     useState<boolean>(false);
   const [modalSchool, setModalSchool] = useState<School>(emptySchool);
   const [isCreateSchoolAllowed, setIsCreateSchoolAllowed] =
@@ -69,7 +60,7 @@ const SchoolsPage = () => {
 
   const onSchoolEditClicked = (schoolToEdit: School) => {
     setModalSchool(schoolToEdit);
-    setIsEditSchoolModalOpen(true);
+    setIsEditSchoolDialogOpen(true);
   };
 
   const onSchoolEmailClicked = (schoolToEmail: School) => {
@@ -85,29 +76,37 @@ const SchoolsPage = () => {
       <nav>
         <Navbar />
       </nav>
-      <Header>Schools</Header>
+      <Typography variant="h3">Schools</Typography>
       <>
         {isCreateSchoolAllowed && (
           <>
-            <Button
-              type="button"
-              onClick={() => setIsCreateSchoolModalOpen(true)}
-            >
-              Add School
-            </Button>
-            <CreateSchoolModal
-              isOpen={isCreateSchoolModalOpen}
+            <Box sx={{ mb: 2, mt: 2 }} justifyContent="center" display="flex">
+              <Button
+                variant="contained"
+                endIcon={<Add />}
+                onClick={() => {
+                  setIsCreateSchoolDialogOpen(true);
+                }}
+              >
+                Add School
+              </Button>
+            </Box>
+            <SchoolDialog
+              isOpen={isCreateSchoolDialogOpen}
               onSchoolAdded={handleSchoolAdded}
-              onClose={() => setIsCreateSchoolModalOpen(false)}
+              onClose={() => setIsCreateSchoolDialogOpen(false)}
+              initialSchool={emptySchool}
+              title="Create School"
             />
           </>
         )}
         {isUpdateSchoolAllowed && (
-          <EditSchoolModal
-            isOpen={isEditSchoolModalOpen}
-            onSchoolEdited={handleSchoolEdited}
-            onClose={() => setIsEditSchoolModalOpen(false)}
+          <SchoolDialog
+            isOpen={isEditSchoolDialogOpen}
+            onSchoolAdded={handleSchoolEdited}
+            onClose={() => setIsEditSchoolDialogOpen(false)}
             initialSchool={modalSchool}
+            title="Edit School"
           />
         )}
         <SchoolsTable

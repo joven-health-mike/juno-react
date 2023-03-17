@@ -6,7 +6,6 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone';
 import { DateTime } from 'luxon';
-import styled from 'styled-components';
 import {
   Appointment,
   AppointmentsContext,
@@ -20,36 +19,29 @@ import {
 import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import Calendar from '../calendar/Calendar';
 import Navbar from '../navbar/Navbar';
-import {
-  SelectCounselorList,
-  SelectSchoolList,
-} from '../selectList/SelectList';
-import CreateAppointmentModal from '../modals/CreateAppointmentModal';
-import AppointmentDetailsModal from '../modals/AppointmentDetailsModal';
-import { h1Styles, labelStyles } from '../styles/mixins';
+import AppointmentDialog from '../dialogs/AppointmentDialog';
+import AppointmentDetailsDialog from '../dialogs/AppointmentDetailsDialog';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
 import { createPermission, deletePermission } from '../../auth/permissions';
-
-const Header = styled.h1`
-  ${h1Styles}
-`;
-
-const Label = styled.label`
-  ${labelStyles}
-`;
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Typography,
+} from '@mui/material';
 
 const CalendarPage: React.FC = () => {
-  const [isCreateAppointmentModalOpen, setIsCreateAppointmentModalOpen] =
+  const [isCreateAppointmentDialogOpen, setIsCreateAppointmentDialogOpen] =
     useState<boolean>(false);
-  const [isAppointmentDetailsModalOpen, setIsAppointmentDetailsModalOpen] =
+  const [isAppointmentDetailsDialogOpen, setIsAppointmentDetailsDialogOpen] =
     useState<boolean>(false);
   const [showCalendar, setShowCalendar] = useState<boolean>(true);
   const [filteredEvents, setFilteredEvents] = useState<Appointment[]>([]);
-  const [schoolSelection, setSchoolSelection] = useState<School>(emptySchool);
-  const [selectedSchoolIndex, setSelectedSchoolIndex] = useState(-1);
-  const [counselorSelection, setCounselorSelection] =
+  const [selectedSchool, setSelectedSchool] = useState<School>(emptySchool);
+  const [selectedCounselor, setSelectedCounselor] =
     useState<Counselor>(emptyCounselor);
-  const [selectedCounselorIndex, setSelectedCounselorIndex] = useState(-1);
   const [initialAppointment, setInitialAppointment] =
     useState<Appointment>(emptyAppointment);
   const [clickedAppointment, setClickedAppointment] =
@@ -71,7 +63,7 @@ const CalendarPage: React.FC = () => {
 
   const handleAppointmentClick = (appointment: Appointment) => {
     setClickedAppointment(appointment);
-    setIsAppointmentDetailsModalOpen(true);
+    setIsAppointmentDetailsDialogOpen(true);
   };
 
   const handleDateClick = (utcDateStr: string) => {
@@ -92,7 +84,7 @@ const CalendarPage: React.FC = () => {
         start: startTime,
         end: endTime,
       });
-      setIsCreateAppointmentModalOpen(true);
+      setIsCreateAppointmentDialogOpen(true);
     }
   };
 
@@ -107,25 +99,15 @@ const CalendarPage: React.FC = () => {
 
   useEffect(() => {
     setShowCalendar(
-      !isCreateAppointmentModalOpen && !isAppointmentDetailsModalOpen
+      !isCreateAppointmentDialogOpen && !isAppointmentDetailsDialogOpen
     );
-  }, [isCreateAppointmentModalOpen, isAppointmentDetailsModalOpen]);
+  }, [isCreateAppointmentDialogOpen, isAppointmentDetailsDialogOpen]);
 
   const handleAppointmentAdded = (appointment: Appointment) => {
     if (isCreateAppointmentAllowed) {
       addAppointment(appointment);
     }
-    setIsCreateAppointmentModalOpen(false);
-  };
-
-  const handleSchoolChange = (selectedSchool: School) => {
-    setSelectedSchoolIndex(schools.indexOf(selectedSchool));
-    setSchoolSelection(selectedSchool);
-  };
-
-  const handleCounselorChange = (selectedCounselor: Counselor) => {
-    setSelectedCounselorIndex(counselors.indexOf(selectedCounselor));
-    setCounselorSelection(selectedCounselor);
+    setIsCreateAppointmentDialogOpen(false);
   };
 
   const onAppointmentDeleteClicked = (appointmentToDelete: Appointment) => {
@@ -135,7 +117,7 @@ const CalendarPage: React.FC = () => {
     ) {
       deleteAppointment(appointmentToDelete);
     }
-    setIsAppointmentDetailsModalOpen(false);
+    setIsAppointmentDetailsDialogOpen(false);
   };
 
   const onAppointmentEmailClicked = (appointmentToEmail: Appointment) => {
@@ -168,16 +150,16 @@ const CalendarPage: React.FC = () => {
   useEffect(() => {
     const filteredEvents = appointments.filter(appointment => {
       const counselorMatch =
-        counselorSelection.id === '-1' ||
-        counselorSelection.id === appointment.counselorUserId ||
-        counselorSelection.id === appointment.counselor?.id;
+        selectedCounselor.id === '-1' ||
+        selectedCounselor.id === appointment.counselorUserId ||
+        selectedCounselor.id === appointment.counselor?.id;
       const schoolMatch =
-        schoolSelection.id === '-1' ||
-        schoolSelection.id === appointment.schoolId;
+        selectedSchool.id === '-1' ||
+        selectedSchool.id === appointment.schoolId;
       return counselorMatch && schoolMatch;
     });
     setFilteredEvents(filteredEvents);
-  }, [appointments, counselorSelection, schoolSelection]);
+  }, [appointments, selectedCounselor, selectedSchool]);
 
   useEffect(() => {
     setFilteredEvents(appointments);
@@ -188,27 +170,69 @@ const CalendarPage: React.FC = () => {
       <nav>
         <Navbar />
       </nav>
-      <Header>Calendar</Header>
-      {loggedInUser.role !== 'COUNSELOR' && counselors.length > 1 && (
-        <Label>
-          Counselor:{' '}
-          <SelectCounselorList
-            selectedIndex={selectedCounselorIndex}
-            onCounselorChanged={handleCounselorChange}
-          />
-        </Label>
-      )}
-      {loggedInUser.role !== 'SCHOOL_ADMIN' &&
-        loggedInUser.role !== 'SCHOOL_STAFF' &&
-        schools.length > 1 && (
-          <Label>
-            School:{' '}
-            <SelectSchoolList
-              selectedIndex={selectedSchoolIndex}
-              onSchoolChanged={handleSchoolChange}
-            />
-          </Label>
+      <Typography variant="h3">Calendar</Typography>
+
+      <Box justifyContent="center" display="flex" sx={{ mt: 2, mb: 2 }}>
+        {loggedInUser.role !== 'COUNSELOR' && counselors.length > 1 && (
+          <FormControl fullWidth sx={{ mr: 10 }}>
+            <InputLabel id="counselor">Counselor</InputLabel>
+            <Select
+              labelId="counselor"
+              id="counselor"
+              defaultValue=""
+              value={selectedCounselor.id}
+              label="Counselor"
+              onChange={e => {
+                const counselorId = e.target.value;
+                const newCounselor = counselors.find(
+                  counselor => counselor.id === counselorId
+                ) ?? { ...emptyCounselor };
+                setSelectedCounselor(newCounselor);
+              }}
+            >
+              <MenuItem value={'all'}>{'Select All'}</MenuItem>
+              {counselors.map((counselor, index) => {
+                const counselorStr = `${counselor.firstName} ${counselor.lastName}`;
+                return (
+                  <MenuItem value={counselor.id} key={index}>
+                    {counselorStr}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
         )}
+        {loggedInUser.role !== 'SCHOOL_ADMIN' &&
+          loggedInUser.role !== 'SCHOOL_STAFF' &&
+          schools.length > 1 && (
+            <FormControl fullWidth>
+              <InputLabel id="school">School</InputLabel>
+              <Select
+                labelId="school"
+                id="school"
+                defaultValue=""
+                value={selectedSchool.id}
+                label="School"
+                onChange={e => {
+                  const schoolId = e.target.value;
+                  const newSchool =
+                    schools.find(school => school.id === schoolId) ??
+                    emptySchool;
+                  setSelectedSchool(newSchool);
+                }}
+              >
+                <MenuItem value={'all'}>{'Select All'}</MenuItem>
+                {schools.map((school, index) => {
+                  return (
+                    <MenuItem value={school.id} key={index}>
+                      {school.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          )}
+      </Box>
       {showCalendar && (
         <Calendar
           view="dayGridMonth"
@@ -218,15 +242,16 @@ const CalendarPage: React.FC = () => {
           onDateClick={handleDateClick}
         />
       )}
-      <CreateAppointmentModal
-        isOpen={isCreateAppointmentModalOpen}
-        onClose={() => setIsCreateAppointmentModalOpen(false)}
+      <AppointmentDialog
+        title="Create Appointment"
+        isOpen={isCreateAppointmentDialogOpen}
+        onClose={() => setIsCreateAppointmentDialogOpen(false)}
         onAppointmentAdded={handleAppointmentAdded}
         initialAppointment={initialAppointment}
       />
-      <AppointmentDetailsModal
-        isOpen={isAppointmentDetailsModalOpen}
-        onClose={() => setIsAppointmentDetailsModalOpen(false)}
+      <AppointmentDetailsDialog
+        isOpen={isAppointmentDetailsDialogOpen}
+        onClose={() => setIsAppointmentDetailsDialogOpen(false)}
         appointment={clickedAppointment}
         onRoomLinkClicked={onAppointmentRoomLinkClicked}
         onDeleteClicked={onAppointmentDeleteClicked}

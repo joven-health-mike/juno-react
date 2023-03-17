@@ -1,7 +1,8 @@
 // Copyright 2022 Social Fabric, LLC
 
+import { Add } from '@mui/icons-material';
+import { Box, Button, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import {
   createPermission,
   deletePermission,
@@ -13,19 +14,9 @@ import {
   User,
   UsersContext,
 } from '../../data/users';
-import CreateUserModal from '../modals/CreateUserModal';
-import EditUserModal from '../modals/EditUserModal';
+import UserDialog from '../dialogs/UserDialog';
 import Navbar from '../navbar/Navbar';
 import UsersTable from '../tables/UsersTable';
-import { buttonStyles, h1Styles } from '../styles/mixins';
-
-const Button = styled.button`
-  ${buttonStyles}
-`;
-
-const Header = styled.h1`
-  ${h1Styles}
-`;
 
 const UsersPage = () => {
   const {
@@ -35,9 +26,9 @@ const UsersPage = () => {
   } = useContext(UsersContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
-  const [isCreateUserModalOpen, setIsCreateUserModalOpen] =
+  const [isCreateUserDialogOpen, setIsCreateUserDialogOpen] =
     useState<boolean>(false);
-  const [isEditUserModalOpen, setIsEditUserModalOpen] =
+  const [isEditUserDialogOpen, setIsEditUserDialogOpen] =
     useState<boolean>(false);
   const [modalUser, setModalUser] = useState<User>(emptyUser);
   const [isCreateUserAllowed, setIsCreateUserAllowed] =
@@ -74,7 +65,7 @@ const UsersPage = () => {
   const onUserEditClicked = (userToEdit: User) => {
     if (isUpdateUserAllowed) {
       setModalUser(userToEdit);
-      setIsEditUserModalOpen(true);
+      setIsEditUserDialogOpen(true);
     }
   };
 
@@ -87,29 +78,37 @@ const UsersPage = () => {
       <nav>
         <Navbar />
       </nav>
-      <Header>Users</Header>
+      <Typography variant="h3">Users</Typography>
       <>
         {isCreateUserAllowed && (
           <>
-            <Button
-              type="button"
-              onClick={() => setIsCreateUserModalOpen(true)}
-            >
-              Add User
-            </Button>
-            <CreateUserModal
-              isOpen={isCreateUserModalOpen}
+            <Box sx={{ mb: 2, mt: 2 }} justifyContent="center" display="flex">
+              <Button
+                variant="contained"
+                endIcon={<Add />}
+                onClick={() => {
+                  setIsCreateUserDialogOpen(true);
+                }}
+              >
+                Add User
+              </Button>
+            </Box>
+            <UserDialog
+              isOpen={isCreateUserDialogOpen}
               onUserAdded={handleUserAdded}
-              onClose={() => setIsCreateUserModalOpen(false)}
+              onClose={() => setIsCreateUserDialogOpen(false)}
+              initialUser={emptyUser}
+              title={'Create User'}
             />
           </>
         )}
         {isUpdateUserAllowed && (
-          <EditUserModal
-            isOpen={isEditUserModalOpen}
-            onUserEdited={handleUserEdited}
-            onClose={() => setIsEditUserModalOpen(false)}
+          <UserDialog
+            isOpen={isEditUserDialogOpen}
+            onUserAdded={handleUserEdited}
+            onClose={() => setIsEditUserDialogOpen(false)}
             initialUser={modalUser}
+            title={'Edit User'}
           />
         )}
         <UsersTable

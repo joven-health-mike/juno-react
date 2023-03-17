@@ -9,7 +9,8 @@ export type Student = User & {
   studentStatus: StudentStatus;
 };
 
-export type StudentStatus = 'ACTIVE' | 'DISCHARGED';
+export type StudentStatus = 'ACTIVE' | 'DISCHARGED' | 'DELETED';
+export const STUDENT_STATUSES = ['ACTIVE', 'DISCHARGED', 'DELETED'];
 
 export const emptyStudent: Student = {
   id: '-1',

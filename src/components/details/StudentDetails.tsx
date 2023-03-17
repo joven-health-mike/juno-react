@@ -1,5 +1,6 @@
 // Copyright 2022 Social Fabric, LLC
 
+import { Typography } from '@mui/material';
 import React, { useContext, useMemo } from 'react';
 import { getCounselors } from '../../data/counselors';
 import { SchoolsContext } from '../../data/schools';
@@ -31,9 +32,9 @@ const StudentDetails: React.FC<StudentDetailsProps> = ({ student }) => {
   return (
     <>
       <UserDetails user={student} />
-      <p>School: {schoolName}</p>
-      <p>Counselor: {counselorName}</p>
-      <p data-testid={'status'}>Status: {student.studentStatus}</p>
+      <Typography>School: {schoolName}</Typography>
+      <Typography>Counselor: {counselorName}</Typography>
+      <Typography>Status: {student.studentStatus}</Typography>
     </>
   );
 };

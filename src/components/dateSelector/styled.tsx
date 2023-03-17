@@ -243,12 +243,10 @@ const Wrapper = styled.div`
   }
 
   .react-datepicker__navigation--previous {
-    ${buttonStyles}
     left: 2px;
   }
 
   .react-datepicker__navigation--next {
-    ${buttonStyles}
     right: 2px;
   }
 
@@ -712,7 +710,15 @@ const Wrapper = styled.div`
 
   .react-datepicker__input-container {
     input {
-      ${inputStyles}
+      display: block;
+      padding: 1px;
+      width: 100%;
+      height: 3em;
+      margin: auto;
+      margin-bottom: 20px;
+      text-align: center;
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
     }
     position: relative;
     display: inline-block;

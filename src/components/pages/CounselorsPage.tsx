@@ -1,7 +1,8 @@
 // Copyright 2022 Social Fabric, LLC
 
+import { Add } from '@mui/icons-material';
+import { Box, Button, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import {
   createPermission,
   deletePermission,
@@ -9,19 +10,9 @@ import {
 } from '../../auth/permissions';
 import { Counselor, emptyCounselor } from '../../data/counselors';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
-import CreateCounselorModal from '../modals/CreateCounselorModal';
-import EditCounselorModal from '../modals/EditCounselorModal';
+import CounselorDialog from '../dialogs/CounselorDialog';
 import Navbar from '../navbar/Navbar';
 import CounselorsTable from '../tables/CounselorsTable';
-import { buttonStyles, h1Styles } from '../styles/mixins';
-
-const Button = styled.button`
-  ${buttonStyles}
-`;
-
-const Header = styled.h1`
-  ${h1Styles}
-`;
 
 const CounselorsPage: React.FC = () => {
   const {
@@ -31,9 +22,9 @@ const CounselorsPage: React.FC = () => {
   } = useContext(UsersContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
-  const [isCreateCounselorModalOpen, setIsCreateCounselorModalOpen] =
+  const [isCreateCounselorDialogOpen, setIsCreateCounselorDialogOpen] =
     useState<boolean>(false);
-  const [isEditCounselorModalOpen, setIsEditCounselorModalOpen] =
+  const [isEditCounselorDialogOpen, setIsEditCounselorDialogOpen] =
     useState<boolean>(false);
   const [modalCounselor, setModalCounselor] =
     useState<Counselor>(emptyCounselor);
@@ -77,7 +68,7 @@ const CounselorsPage: React.FC = () => {
   const onCounselorEditClicked = (counselorToEdit: Counselor) => {
     if (isUpdateCounselorAllowed) {
       setModalCounselor(counselorToEdit);
-      setIsEditCounselorModalOpen(true);
+      setIsEditCounselorDialogOpen(true);
     }
   };
 
@@ -98,28 +89,36 @@ const CounselorsPage: React.FC = () => {
       <nav>
         <Navbar />
       </nav>
-      <Header>Counselors</Header>
+      <Typography variant="h3">Counselors</Typography>
       <>
         {isCreateCounselorAllowed && (
           <>
-            <Button
-              type="button"
-              onClick={() => setIsCreateCounselorModalOpen(true)}
-            >
-              Add Counselor
-            </Button>
-            <CreateCounselorModal
-              isOpen={isCreateCounselorModalOpen}
+            <Box sx={{ mb: 2, mt: 2 }} justifyContent="center" display="flex">
+              <Button
+                variant="contained"
+                endIcon={<Add />}
+                onClick={() => {
+                  setIsCreateCounselorDialogOpen(true);
+                }}
+              >
+                Add Counselor
+              </Button>
+            </Box>
+            <CounselorDialog
+              title={'Create Counselor'}
+              isOpen={isCreateCounselorDialogOpen}
               onCounselorAdded={handleCounselorAdded}
-              onClose={() => setIsCreateCounselorModalOpen(false)}
+              onClose={() => setIsCreateCounselorDialogOpen(false)}
+              initialCounselor={emptyCounselor}
             />
           </>
         )}
         {isUpdateCounselorAllowed && (
-          <EditCounselorModal
-            isOpen={isEditCounselorModalOpen}
-            onCounselorEdited={handleCounselorEdited}
-            onClose={() => setIsEditCounselorModalOpen(false)}
+          <CounselorDialog
+            title={'Edit Counselor'}
+            isOpen={isEditCounselorDialogOpen}
+            onCounselorAdded={handleCounselorEdited}
+            onClose={() => setIsEditCounselorDialogOpen(false)}
             initialCounselor={modalCounselor}
           />
         )}

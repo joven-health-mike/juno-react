@@ -1,20 +1,10 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, {
-  MouseEvent,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { CellProps, Column, Row } from 'react-table';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { deletePermission } from '../../auth/permissions';
 import { getActiveStudents, Student } from '../../data/students';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
-import XButton from '../buttons/XButton';
-import DataTable from './DataTable';
-import TableSearchFilter from './TableSearchFilter';
+import MaterialTable from './MaterialTable';
 
 type StudentsSmallTableProps = {
   onDeleteClicked: (student: Student) => void;
@@ -55,92 +45,43 @@ const StudentsSmallTable: React.FC<StudentsSmallTableProps> = ({
     setTableStudents(mappedStudents);
   }, [students]);
 
-  const getStudentFromTableStudent = useCallback(
-    (tableStudent: TableStudentSmall): Student => {
-      return students.find(
-        student => student.id === tableStudent.id
-      ) as Student;
-    },
-    [students]
-  );
+  const createTableData = (students: TableStudentSmall[]) => {
+    const tableData: string[][] = [];
 
-  const getButtonCell = useCallback(
-    (tableStudent: TableStudentSmall, row: Row) => {
-      const student = getStudentFromTableStudent(tableStudent);
-      if (!student) return <></>;
+    students.forEach(student => {
+      tableData.push([student.id, student.name]);
+    });
 
-      return (
-        <>
-          {isDeleteStudentAllowed && (
-            <XButton
-              text="❌"
-              title="Delete Student"
-              value={student.id}
-              onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-                onDeleteClicked(student);
-              }}
-            />
-          )}
-          <XButton
-            text="📅"
-            title="Schedule Appointment"
-            value={student.id}
-            onClick={(e: MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault();
-              onAppointmentClicked(student);
-            }}
-          />
-          <XButton
-            text="📁"
-            title={`Open ${student.firstName}'s File`}
-            value={student.id}
-            onClick={(e: MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault();
-              onOpenFileClicked(student);
-            }}
-          />
-        </>
-      );
-    },
-    [
-      getStudentFromTableStudent,
-      isDeleteStudentAllowed,
-      onAppointmentClicked,
-      onDeleteClicked,
-      onOpenFileClicked,
-    ]
-  );
+    return tableData;
+  };
 
-  const defaultColumn: Record<string, unknown> = React.useMemo(
-    () => ({
-      Filter: TableSearchFilter,
-    }),
-    []
-  );
+  const onDeleteRow = isDeleteStudentAllowed
+    ? (id: string) => {
+        const student = students.find(student => student.id === id);
+        onDeleteClicked(student!);
+      }
+    : undefined;
 
-  const columns: Column[] = React.useMemo(
-    () => [
-      {
-        id: 'buttons',
-        Cell: ({ cell, row }: CellProps<object>) => {
-          const student = cell.row.original as TableStudentSmall;
-          return getButtonCell(student, row);
-        },
-      },
-      {
-        Header: 'Name',
-        accessor: 'name',
-      },
-    ],
-    [getButtonCell]
-  );
+  const onFolderRow = (id: string) => {
+    const student = students.find(student => student.id === id);
+    onOpenFileClicked(student!);
+  };
+
+  const onAppointmentRow = (id: string) => {
+    const student = students.find(student => student.id === id);
+    onAppointmentClicked(student!);
+  };
 
   return (
-    <DataTable
-      data={tableStudents}
-      defaultColumn={defaultColumn}
-      columns={columns}
+    <MaterialTable
+      rows={createTableData(tableStudents)}
+      columnHeaders={['id', 'Name']}
+      hideColumnIndexes={[0]}
+      tableButtonInfo={{
+        onDeleteRow,
+        onFolderRow,
+        onAppointmentRow,
+      }}
     />
   );
 };

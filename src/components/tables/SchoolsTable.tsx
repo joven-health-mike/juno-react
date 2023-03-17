@@ -1,26 +1,11 @@
 // Copyright 2022 Social Fabric, LLC
 
-import React, {
-  MouseEvent,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
-import { CellProps, Column, Row } from 'react-table';
-import styled from 'styled-components';
+import React, { useContext, useEffect, useState } from 'react';
 import { deletePermission, updatePermission } from '../../auth/permissions';
 import { School, SchoolsContext } from '../../data/schools';
 import { LoggedInUserContext } from '../../data/users';
-import XButton from '../buttons/XButton';
 import SchoolDetails from '../details/SchoolDetails';
-import { buttonStyles } from '../styles/mixins';
-import DataTable from './DataTable';
-import TableSearchFilter from './TableSearchFilter';
-
-const Button = styled.button`
-  ${buttonStyles}
-`;
+import MaterialTable from './MaterialTable';
 
 type SchoolsTableProps = {
   onDeleteClicked: (school: School) => void;
@@ -67,126 +52,58 @@ const SchoolsTable: React.FC<SchoolsTableProps> = ({
     setTableSchools(mappedSchools);
   }, [schools]);
 
-  const getSchoolFromTableSchool = useCallback(
-    (tableSchool: TableSchool): School => {
-      return schools.find(school => school.id === tableSchool.id) as School;
-    },
-    [schools]
-  );
+  const createTableData = (schools: TableSchool[]) => {
+    const tableData: string[][] = [];
 
-  const getButtonCell = useCallback(
-    (tableSchool: TableSchool, row: Row) => {
-      const school = getSchoolFromTableSchool(tableSchool);
-      if (!school) return <></>;
+    schools.forEach(school => {
+      tableData.push([school.id, school.name, school.state]);
+    });
 
-      return (
-        <>
-          {isDeleteSchoolAllowed && (
-            <XButton
-              text="❌"
-              title={`Delete ${school.name}`}
-              value={school.id}
-              onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-                onDeleteClicked(school);
-              }}
-            />
-          )}
-          {isUpdateSchoolAllowed && (
-            <XButton
-              text="✏️"
-              title={`Edit ${school.name}`}
-              value={school.id}
-              onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                e.preventDefault();
-                onEditClicked(school);
-              }}
-            />
-          )}
-          <XButton
-            text="📧"
-            title={`Email ${school.name}`}
-            value={school.id}
-            onClick={(e: MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault();
-              onEmailClicked(school);
-            }}
-          />
-          <XButton
-            text="📁"
-            title={`Open ${school.name}'s File`}
-            value={school.id}
-            onClick={(e: MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault();
-              onOpenFileClicked(school);
-            }}
-          />
-          <Button {...row.getToggleRowExpandedProps()}>
-            {row.isExpanded ? '👇' : '👉'}
-          </Button>
-        </>
-      );
-    },
-    [
-      getSchoolFromTableSchool,
-      isDeleteSchoolAllowed,
-      isUpdateSchoolAllowed,
-      onDeleteClicked,
-      onEditClicked,
-      onEmailClicked,
-      onOpenFileClicked,
-    ]
-  );
+    return tableData;
+  };
 
-  const defaultColumn: Record<string, unknown> = React.useMemo(
-    () => ({
-      Filter: TableSearchFilter,
-    }),
-    []
-  );
+  const onDeleteRow = isDeleteSchoolAllowed
+    ? (id: string) => {
+        const school = schools.find(school => school.id === id);
+        onDeleteClicked(school!);
+      }
+    : undefined;
 
-  const columns: Column[] = React.useMemo(
-    () => [
-      {
-        id: 'buttons',
-        Cell: ({ cell, row }: CellProps<object>) => {
-          const school = cell.row.original as TableSchool;
-          return getButtonCell(school, row);
-        },
-      },
-      {
-        Header: 'ID',
-        accessor: 'id',
-      },
-      {
-        Header: 'Name',
-        accessor: 'name',
-      },
-      {
-        Header: 'State',
-        accessor: 'state',
-      },
-    ],
-    [getButtonCell]
-  );
+  const onEditRow = isUpdateSchoolAllowed
+    ? (id: string) => {
+        const school = schools.find(school => school.id === id);
+        onEditClicked(school!);
+      }
+    : undefined;
 
-  const renderRowSubComponent = useCallback(
-    (row: Row) => {
-      const rowObject = row.original as TableSchool;
-      const school = getSchoolFromTableSchool(rowObject);
-      if (typeof school === 'undefined') return <></>;
-      return <SchoolDetails school={school} />;
-    },
-    [getSchoolFromTableSchool]
-  );
+  const onEmailRow = (id: string) => {
+    const school = schools.find(school => school.id === id);
+    onEmailClicked(school!);
+  };
+
+  const onFolderRow = (id: string) => {
+    const school = schools.find(school => school.id === id);
+    onOpenFileClicked(school!);
+  };
+
+  const getExpandComponent = (id: string) => {
+    const school = schools.find(school => school.id === id);
+    if (typeof school === 'undefined') return <></>;
+    return <SchoolDetails school={school!} />;
+  };
 
   return (
-    <DataTable
-      data={tableSchools}
-      defaultColumn={defaultColumn}
-      columns={columns}
-      renderRowSubComponent={renderRowSubComponent}
-      hiddenColumns={['id']}
+    <MaterialTable
+      rows={createTableData(tableSchools)}
+      columnHeaders={['id', 'Name', 'State']}
+      hideColumnIndexes={[0]}
+      tableButtonInfo={{
+        onDeleteRow,
+        onEditRow,
+        onEmailRow,
+        onFolderRow,
+      }}
+      getExpandComponent={getExpandComponent}
     />
   );
 };
