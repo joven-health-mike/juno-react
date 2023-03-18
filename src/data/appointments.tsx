@@ -7,7 +7,6 @@ import { ContextData } from './ContextData';
 import { DataProviderProps } from './DataProviderProps';
 import { School } from './schools';
 import { User } from './users';
-import { formatDate } from '../utils/DateUtils';
 
 export type Appointment = {
   id: string;
