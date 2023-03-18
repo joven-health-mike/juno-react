@@ -32,6 +32,12 @@ export const emptySchool = {
   docsUrl: '',
 };
 
+export const SchoolComparator = (a: School, b: School) => {
+  if (a.name < b.name) return -1;
+  if (a.name > b.name) return 1;
+  return 0;
+};
+
 export const SchoolsContext = React.createContext<ContextData<School>>({
   data: [],
   getAll: () => null,
@@ -52,23 +58,18 @@ export const SchoolsProvider: FC<DataProviderProps<School[]>> = ({
     getAll: async function (): Promise<void> {
       try {
         const { data: schools } = await service.getAll();
-        setSchools(schools);
+        setSchools(schools.sort(SchoolComparator));
       } catch (error) {
         console.error(error);
       }
     },
     get: async function (id: string): Promise<void> {
-      try {
-        const { data: school } = await service.get(id);
-        setSchools([...schools, school]);
-      } catch (error) {
-        console.error(error);
-      }
+      // do nothing - unused function
     },
     add: async function (data: School): Promise<void> {
       try {
         const { data: school } = await service.create(data);
-        setSchools([...schools, school]);
+        setSchools([...schools, school].sort(SchoolComparator));
       } catch (error) {
         console.error(error);
       }
@@ -84,7 +85,7 @@ export const SchoolsProvider: FC<DataProviderProps<School[]>> = ({
           school => school.id !== updatedSchool.id
         );
         // and add the updated one
-        setSchools([...newSchools, updatedSchool]);
+        setSchools([...newSchools, updatedSchool].sort(SchoolComparator));
       } catch (error) {
         console.error(error);
       }

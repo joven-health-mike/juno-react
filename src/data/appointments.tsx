@@ -7,6 +7,7 @@ import { ContextData } from './ContextData';
 import { DataProviderProps } from './DataProviderProps';
 import { School } from './schools';
 import { User } from './users';
+import { formatDate } from '../utils/DateUtils';
 
 export type Appointment = {
   id: string;
@@ -43,6 +44,15 @@ export const emptyAppointment = {
   type: 'CLINICAL',
   status: 'SCHEDULED',
   location: 'VIRTUAL_SCHOOL',
+};
+
+const AppointmentComparator = (a: Appointment, b: Appointment) => {
+  const aDate = formatDate(new Date(a.start));
+  const bDate = formatDate(new Date(b.start));
+
+  if (aDate < bDate) return -1;
+  if (aDate > bDate) return 1;
+  return 0;
 };
 
 /* <Name> + <Name> + <Name> (<SchoolName>) - <AppointmentType> */
@@ -127,13 +137,13 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
     getAll: async function (): Promise<void> {
       try {
         const { data: appointments } = await service.getAll();
-        setAppointments(appointments);
+        setAppointments(appointments.sort(AppointmentComparator));
       } catch (error) {
         console.error(error);
       }
     },
     get: async function (id: string): Promise<void> {
-      // do nothing (unused)
+      // do nothing - unused function
     },
     add: async function (data: Appointment): Promise<void> {
       try {
@@ -147,7 +157,9 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
           appt.school = data.school;
           appt.counselor = data.counselor;
         });
-        setAppointments([...appointments, ...apptArray]);
+        setAppointments(
+          [...appointments, ...apptArray].sort(AppointmentComparator)
+        );
       } catch (error) {
         console.error(error);
       }
@@ -162,7 +174,7 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
           appointment => appointment.id !== data.id
         );
         newAppointments.push(appointment);
-        setAppointments(newAppointments);
+        setAppointments(newAppointments.sort(AppointmentComparator));
       } catch (error) {
         console.error(error);
       }
