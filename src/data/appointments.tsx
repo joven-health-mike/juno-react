@@ -47,8 +47,8 @@ export const emptyAppointment = {
 };
 
 const AppointmentComparator = (a: Appointment, b: Appointment) => {
-  const aDate = formatDate(new Date(a.start));
-  const bDate = formatDate(new Date(b.start));
+  const aDate = new Date(a.start);
+  const bDate = new Date(b.start);
 
   if (aDate < bDate) return -1;
   if (aDate > bDate) return 1;
