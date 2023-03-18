@@ -2,6 +2,7 @@
 
 import React, { FC, useState } from 'react';
 import { SchoolService } from '../services/school.service';
+import { AvailableTimeZone } from '../utils/DateUtils';
 import { ContextData } from './ContextData';
 import { DataProviderProps } from './DataProviderProps';
 
@@ -12,6 +13,7 @@ export type School = {
   city?: string;
   state?: string;
   zip?: string;
+  timeZoneIanaName?: AvailableTimeZone;
   primaryEmail?: string;
   primaryPhone?: string;
   docsUrl?: string;
@@ -24,6 +26,7 @@ export const emptySchool = {
   city: '',
   state: '',
   zip: '',
+  timeZoneIanaName: 'America/New_York' as AvailableTimeZone,
   primaryEmail: '',
   primaryPhone: '',
   docsUrl: '',
