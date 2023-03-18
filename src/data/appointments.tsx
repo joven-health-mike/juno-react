@@ -32,7 +32,7 @@ export const emptyAppointment = {
   id: '-1',
   title: '',
   start: new Date(),
-  end: new Date(),
+  end: new Date(new Date().getTime() + 60000 * 30),
   isRecurring: false,
   numOccurrences: 4,
   numRepeats: 1,
@@ -42,7 +42,7 @@ export const emptyAppointment = {
   participants: [] as User[],
   type: 'CLINICAL',
   status: 'SCHEDULED',
-  location: 'UNKNOWN',
+  location: 'VIRTUAL_SCHOOL',
 };
 
 /* <Name> + <Name> + <Name> (<SchoolName>) - <AppointmentType> */
@@ -83,6 +83,19 @@ export const APPOINTMENT_STATUSES = [
   'ONGOING',
   'FINISHED',
   'DELETED',
+];
+
+export type AppointmentLocation =
+  | 'VIRTUAL_SCHOOL'
+  | 'VIRTUAL_HOME'
+  | 'IN_PERSON'
+  | 'UNKNOWN';
+
+export const APPOINTMENT_LOCATIONS = [
+  'VIRTUAL_SCHOOL',
+  'VIRTUAL_HOME',
+  'IN_PERSON',
+  'UNKNOWN',
 ];
 
 export type AppointmentType = 'CLINICAL' | 'CONSULTATION' | 'EVALUATION';

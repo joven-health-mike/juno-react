@@ -2,7 +2,7 @@
 
 import { Role } from '../services/user.service';
 import { School } from './schools';
-import { User } from './users';
+import { User, UserComparator } from './users';
 
 export type Counselor = User & {
   counselorRoomLink?: string;
@@ -18,7 +18,7 @@ export const emptyCounselor: Counselor = {
   username: '',
   phone: '',
   docsUrl: '',
-  timeZoneIanaName: '',
+  timeZoneIanaName: 'America/New_York',
   role: 'COUNSELOR' as Role,
   counselorRoomLink: '',
   counselorRoomLink2: '',
@@ -28,5 +28,6 @@ export const emptyCounselor: Counselor = {
 export const getCounselors = (users: User[]) => {
   return users
     .filter(user => user.role === 'COUNSELOR')
-    .map(counselor => counselor as Counselor);
+    .map(counselor => counselor as Counselor)
+    .sort(UserComparator);
 };

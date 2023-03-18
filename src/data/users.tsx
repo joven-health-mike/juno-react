@@ -43,6 +43,15 @@ export const UsersContext = React.createContext<ContextData<User>>({
   delete: (user: User) => null,
 });
 
+export const UserComparator = (a: User, b: User) => {
+  const aName = `${a.firstName} ${a.lastName}`;
+  const bName = `${b.firstName} ${b.lastName}`;
+
+  if (aName < bName) return -1;
+  if (aName > bName) return 1;
+  return 0;
+};
+
 export const UsersProvider: FC<DataProviderProps<User[]>> = ({ children }) => {
   const [users, setUsers] = useState<User[]>([]);
   const { loggedInUser, setLoggedInUser } = useContext(LoggedInUserContext);
@@ -53,23 +62,18 @@ export const UsersProvider: FC<DataProviderProps<User[]>> = ({ children }) => {
     getAll: async function (): Promise<void> {
       try {
         const { data: users } = await service.getAll();
-        setUsers(users);
+        setUsers(users.sort(UserComparator));
       } catch (error) {
         console.error(error);
       }
     },
     get: async function (id: string): Promise<void> {
-      try {
-        const { data: user } = await service.get(id);
-        setUsers([...users, user]);
-      } catch (error) {
-        console.error(error);
-      }
+      // do nothing - unused function
     },
     add: async function (data: User): Promise<void> {
       try {
         const { data: user } = await service.create(data);
-        setUsers([...users, user]);
+        setUsers([...users, user].sort(UserComparator));
       } catch (error) {
         console.error(error);
       }
@@ -81,7 +85,7 @@ export const UsersProvider: FC<DataProviderProps<User[]>> = ({ children }) => {
         const newUsers = [...users].filter(user => user.id !== data.id);
         // and add the new one
         newUsers.push(user);
-        setUsers(newUsers);
+        setUsers(newUsers.sort(UserComparator));
 
         if (user.id === loggedInUser.id) {
           setLoggedInUser(user);
