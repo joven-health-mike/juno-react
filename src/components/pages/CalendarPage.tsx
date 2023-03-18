@@ -54,6 +54,7 @@ const CalendarPage: React.FC = () => {
     data: appointments,
     add: addAppointment,
     delete: deleteAppointment,
+    update: updateAppointment,
   } = useContext(AppointmentsContext);
   const { data: users } = useContext(UsersContext);
   const counselors = useMemo(() => getCounselors(users), [users]);
@@ -127,6 +128,11 @@ const CalendarPage: React.FC = () => {
     mailToUrl += `?subject=${encodeURIComponent(appointmentToEmail.title)}`;
 
     window.open(mailToUrl);
+  };
+
+  const onAppointmentEdited = (appointment: Appointment) => {
+    setClickedAppointment({ ...appointment });
+    updateAppointment(appointment);
   };
 
   const onAppointmentRoomLinkClicked = (
@@ -247,6 +253,7 @@ const CalendarPage: React.FC = () => {
         onRoomLinkClicked={onAppointmentRoomLinkClicked}
         onDeleteClicked={onAppointmentDeleteClicked}
         onEmailClicked={onAppointmentEmailClicked}
+        onAppointmentEdited={onAppointmentEdited}
       />
     </>
   );

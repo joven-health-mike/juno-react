@@ -24,7 +24,7 @@ export type AvailableRoute =
 const pagePermissions = {
   '/': allRoles,
   '/account': allRoles,
-  '/appointments': everyoneExceptClients,
+  '/appointments': adminsOnly,
   '/calendar': allRoles,
   '/counselors': everyoneExceptClients,
   '/schools': allRoles,

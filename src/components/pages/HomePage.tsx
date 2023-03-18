@@ -52,8 +52,11 @@ const AppointmentView: React.FC = () => {
   const { data: users } = useContext(UsersContext);
   const counselors = useMemo(() => getCounselors(users), [users]);
 
-  const { data: appointments, delete: deleteAppointment } =
-    useContext(AppointmentsContext);
+  const {
+    data: appointments,
+    delete: deleteAppointment,
+    update: updateAppointment,
+  } = useContext(AppointmentsContext);
   const { loggedInUser } = useContext(LoggedInUserContext);
 
   useEffect(() => {
@@ -102,6 +105,12 @@ const AppointmentView: React.FC = () => {
       window.open(counselor.counselorRoomLink);
     }
   };
+
+  const onAppointmentEdited = (appointment: Appointment) => {
+    setDialogAppointment({ ...appointment });
+    updateAppointment(appointment);
+  };
+
   return (
     <>
       <Calendar
@@ -117,6 +126,7 @@ const AppointmentView: React.FC = () => {
         onRoomLinkClicked={onAppointmentRoomLinkClicked}
         onDeleteClicked={onAppointmentDeleteClicked}
         onEmailClicked={onAppointmentEmailClicked}
+        onAppointmentEdited={onAppointmentEdited}
       />
     </>
   );
