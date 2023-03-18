@@ -44,7 +44,6 @@ const CounselorDialog: React.FC<CounselorDialogProps> = ({
   const [firstNameError, setFirstNameError] = useState(false);
   const [lastNameError, setLastNameError] = useState(false);
   const [emailError, setEmailError] = useState(false);
-  const [usernameError, setUsernameError] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
   const [docsUrlError, setDocsUrlError] = useState(false);
   const [roomLinkError, setRoomLinkError] = useState(false);
@@ -83,15 +82,6 @@ const CounselorDialog: React.FC<CounselorDialogProps> = ({
       setEmailError(true);
       allInputsValid = false;
     } else setEmailError(false);
-
-    if (
-      typeof counselor.username === 'undefined' ||
-      counselor.username.length === 0 ||
-      counselor.username.length > 15
-    ) {
-      setUsernameError(true);
-      allInputsValid = false;
-    } else setUsernameError(false);
 
     if (
       typeof counselor.docsUrl === 'undefined' ||
@@ -152,7 +142,6 @@ const CounselorDialog: React.FC<CounselorDialogProps> = ({
     setFirstNameError(false);
     setLastNameError(false);
     setEmailError(false);
-    setUsernameError(false);
     setPhoneError(false);
     setDocsUrlError(false);
     setRoomLinkError(false);
@@ -206,20 +195,6 @@ const CounselorDialog: React.FC<CounselorDialogProps> = ({
                 e.preventDefault();
                 setEmailError(false);
                 setCounselor({ ...counselor, email: e.target.value });
-              }}
-            />
-          </FormControl>
-          <FormControl fullWidth required sx={{ mb: 2 }}>
-            <InputLabel id="username" error={usernameError}>
-              Username
-            </InputLabel>
-            <Input
-              id="username"
-              value={counselor.username}
-              onChange={e => {
-                e.preventDefault();
-                setUsernameError(false);
-                setCounselor({ ...counselor, username: e.target.value });
               }}
             />
           </FormControl>

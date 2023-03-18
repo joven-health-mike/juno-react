@@ -50,7 +50,6 @@ const StudentDialog: React.FC<StudentDialogProps> = ({
   const [firstNameError, setFirstNameError] = useState(false);
   const [lastNameError, setLastNameError] = useState(false);
   const [emailError, setEmailError] = useState(false);
-  const [usernameError, setUsernameError] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
   const [docsUrlError, setDocsUrlError] = useState(false);
   const [statusError, setStatusError] = useState(false);
@@ -78,15 +77,6 @@ const StudentDialog: React.FC<StudentDialogProps> = ({
       setEmailError(true);
       allInputsValid = false;
     } else setEmailError(false);
-
-    if (
-      typeof student.username === 'undefined' ||
-      student.username.length === 0 ||
-      student.username.length > 15
-    ) {
-      setUsernameError(true);
-      allInputsValid = false;
-    } else setUsernameError(false);
 
     if (
       typeof student.docsUrl === 'undefined' ||
@@ -135,7 +125,6 @@ const StudentDialog: React.FC<StudentDialogProps> = ({
     setFirstNameError(false);
     setLastNameError(false);
     setEmailError(false);
-    setUsernameError(false);
     setPhoneError(false);
     setDocsUrlError(false);
     setStatusError(false);
@@ -188,20 +177,6 @@ const StudentDialog: React.FC<StudentDialogProps> = ({
                 e.preventDefault();
                 setEmailError(false);
                 setStudent({ ...student, email: e.target.value });
-              }}
-            />
-          </FormControl>
-          <FormControl fullWidth required sx={{ mb: 2 }}>
-            <InputLabel id="username" error={usernameError}>
-              Username
-            </InputLabel>
-            <Input
-              id="username"
-              value={student.username}
-              onChange={e => {
-                e.preventDefault();
-                setUsernameError(false);
-                setStudent({ ...student, username: e.target.value });
               }}
             />
           </FormControl>
