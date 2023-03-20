@@ -77,16 +77,6 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
   useEffect(() => {
     // hide counselor field for counselors, show for everyone else
     setShouldShowCounselorField(loggedInUser.role !== 'COUNSELOR');
-
-    // if the user is a counselor, set their ID on the appointment
-    if (loggedInUser.role === 'COUNSELOR') {
-      setAppointment(oldAppointment => {
-        return {
-          ...oldAppointment,
-          counselorUserId: loggedInUser.id,
-        };
-      });
-    }
   }, [loggedInUser]);
 
   // filter available participants by the selected school
@@ -209,8 +199,10 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
     } else setStatusError(false);
 
     if (
-      typeof appointment.counselorUserId === 'undefined' ||
-      appointment.counselorUserId.length === 0
+      // only check this if the counselor field is shown
+      shouldShowCounselorField &&
+      (typeof appointment.counselorUserId === 'undefined' ||
+        appointment.counselorUserId.length === 0)
     ) {
       setCounselorError(true);
       allInputsValid = false;
@@ -264,6 +256,11 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
     }
 
     const submittedAppointment = { ...appointment };
+    // if the user is a counselor, set their ID on the appointment
+    if (loggedInUser.role === 'COUNSELOR') {
+      submittedAppointment.counselorUserId = loggedInUser.id;
+      submittedAppointment.counselor = loggedInUser;
+    }
     const startDate = new Date(appointment.start);
     const endDate = new Date(startDate.getTime() + duration * 60000);
     submittedAppointment.end = endDate;
