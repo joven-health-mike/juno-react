@@ -170,7 +170,7 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
     );
 
     // prefer the client's name over other participants
-    if (clients) {
+    if (clients.length > 0) {
       result += formatUserName(clients[0]);
     } else {
       result += formatUserName(participants[0]);
