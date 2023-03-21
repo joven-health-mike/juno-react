@@ -4,7 +4,8 @@ import { Role, ROLES } from '../services/user.service';
 
 const allRoles = ROLES;
 const adminsOnly = ['SYSADMIN', 'JOVEN_ADMIN'];
-const jovenStaff = ['SYSADMIN', 'JOVEN_ADMIN', 'JOVEN_STAFF'];
+const counselorsOnly = [...adminsOnly, 'COUNSELOR'];
+const jovenStaff = [...adminsOnly, 'JOVEN_STAFF'];
 const everyoneExceptClients = allRoles.filter(
   role => role !== 'STUDENT' && role !== 'TEACHER' && role !== 'GUARDIAN'
 );
@@ -19,7 +20,8 @@ export type AvailableRoute =
   | '/students'
   | '/teachers'
   | '/users'
-  | '/logout';
+  | '/logout'
+  | '/eosr';
 
 const pagePermissions = {
   '/': allRoles,
@@ -32,6 +34,7 @@ const pagePermissions = {
   '/teachers': everyoneExceptClients,
   '/users': adminsOnly,
   '/logout': allRoles,
+  '/eosr': counselorsOnly,
 };
 
 export type AvailableDbCrudObject =

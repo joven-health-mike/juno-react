@@ -9,7 +9,12 @@ import {
   FaUserAstronaut,
   FaUserFriends,
 } from 'react-icons/fa';
-import { IoMdLogOut, IoMdBusiness, IoMdContacts } from 'react-icons/io';
+import {
+  IoMdLogOut,
+  IoMdBusiness,
+  IoMdContacts,
+  IoMdDocument,
+} from 'react-icons/io';
 import styled from 'styled-components';
 import image from '../../assets/Logo-192sq-alphabg.png';
 
@@ -69,6 +74,11 @@ export const allNavItems: NavItem[] = [
     title: 'Users',
     icon: <FaUserAstronaut />,
     path: '/users',
+  },
+  {
+    title: 'EoSR',
+    icon: <IoMdDocument />,
+    path: '/eosr',
   },
   {
     title: 'Account',

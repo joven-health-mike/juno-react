@@ -16,6 +16,7 @@ import { AvailableRoute, pagePermission } from '../auth/permissions';
 import { getActiveTeachers } from '../data/teachers';
 import { User } from '../data/users';
 import { Role } from '../services/user.service';
+import EosrPage from '../components/pages/EosrPage';
 
 interface IAppRouterParams {
   isAuthenticated: boolean;
@@ -42,6 +43,7 @@ export const AvailableRoutes = [
   { url: '/teachers', element: <TeachersPage /> },
   { url: '/users', element: <UsersPage /> },
   { url: '/logout', element: <RedirectToLogoutPage /> },
+  { url: '/eosr', element: <EosrPage /> },
 ];
 
 export const isRouteAllowed = (
@@ -55,6 +57,12 @@ export const isRouteAllowed = (
     const teacherRouteAllowed =
       role === 'SYSADMIN' || (route === '/teachers' && teachersExist);
     return teacherRouteAllowed && pagePermission(role, route);
+  }
+
+  if (route === '/eosr') {
+    // only show EoSR page for counselors & SYSADMINs
+    const eosrRouteAllowed = role === 'COUNSELOR' || role === 'SYSADMIN';
+    return eosrRouteAllowed && pagePermission(role, route);
   }
 
   return pagePermission(role, route);
