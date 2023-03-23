@@ -6,6 +6,8 @@ import {
   FormControl,
   Input,
   InputLabel,
+  MenuItem,
+  Select,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { emptySchool, School } from '../../data/schools';
@@ -14,6 +16,7 @@ import {
   isValidPhoneNumber,
   isValidURL,
 } from '../../services/http-common';
+import { AvailableTimeZone, TIME_ZONES } from '../../utils/DateUtils';
 import MaterialDialog from './MaterialDialog';
 
 type SchoolDialogProps = {
@@ -40,6 +43,7 @@ const SchoolDialog: React.FC<SchoolDialogProps> = ({
   const [cityError, setCityError] = useState(false);
   const [stateError, setStateError] = useState(false);
   const [zipError, setZipError] = useState(false);
+  const [timeZoneError, setTimeZoneError] = useState(false);
 
   useEffect(() => {
     setSchool({ ...initialSchool });
@@ -88,6 +92,11 @@ const SchoolDialog: React.FC<SchoolDialogProps> = ({
       setZipError(true);
       allInputsValid = false;
     } else setZipError(false);
+
+    if (TIME_ZONES.indexOf(school?.timeZoneIanaName!) < 0) {
+      setTimeZoneError(true);
+      allInputsValid = false;
+    } else setTimeZoneError(false);
 
     return allInputsValid;
   };
@@ -217,6 +226,32 @@ const SchoolDialog: React.FC<SchoolDialogProps> = ({
                 setSchool({ ...school, zip: e.target.value });
               }}
             />
+          </FormControl>
+          <FormControl fullWidth required sx={{ mb: 2 }}>
+            <InputLabel id="timeZone" error={timeZoneError}>
+              Time Zone
+            </InputLabel>
+            <Select
+              labelId="timeZone"
+              id="timeZone"
+              defaultValue={TIME_ZONES[0]}
+              value={school.timeZoneIanaName}
+              label="Time Zone"
+              onChange={e => {
+                e.preventDefault();
+                setTimeZoneError(false);
+                setSchool({
+                  ...school,
+                  timeZoneIanaName: e.target.value as AvailableTimeZone,
+                });
+              }}
+            >
+              {TIME_ZONES.map((timeZone, index) => (
+                <MenuItem value={timeZone} key={index}>
+                  {timeZone}
+                </MenuItem>
+              ))}
+            </Select>
           </FormControl>
         </DialogContent>
         <DialogActions>

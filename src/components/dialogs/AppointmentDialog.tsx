@@ -26,6 +26,7 @@ import React, {
 } from 'react';
 import {
   Appointment,
+  APPOINTMENT_LOCATIONS,
   APPOINTMENT_STATUSES,
   APPOINTMENT_TYPES,
   emptyAppointment,
@@ -67,6 +68,7 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
   const [durationError, setDurationError] = useState(false);
   const [counselorError, setCounselorError] = useState(false);
   const [typeError, setTypeError] = useState(false);
+  const [locationError, setLocationError] = useState(false);
   const [statusError, setStatusError] = useState(false);
   const [schoolError, setSchoolError] = useState(false);
   const [participantsError, setParticipantsError] = useState(false);
@@ -197,6 +199,11 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
       setStatusError(true);
       allInputsValid = false;
     } else setStatusError(false);
+
+    if (APPOINTMENT_LOCATIONS.indexOf(`${appointment.location}`) === -1) {
+      setLocationError(true);
+      allInputsValid = false;
+    } else setLocationError(false);
 
     if (
       // only check this if the counselor field is shown
@@ -418,6 +425,32 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
             {APPOINTMENT_STATUSES.map((status, index) => (
               <MenuItem value={status} key={index}>
                 {status}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth required sx={{ mb: 2 }}>
+          <InputLabel id="location" error={locationError}>
+            Location
+          </InputLabel>
+          <Select
+            labelId="location"
+            id="location"
+            defaultValue=""
+            value={appointment.location}
+            label="Location"
+            onChange={e => {
+              e.preventDefault();
+              setLocationError(false);
+              setAppointment({
+                ...appointment,
+                location: e.target.value,
+              });
+            }}
+          >
+            {APPOINTMENT_LOCATIONS.map((location, index) => (
+              <MenuItem value={location} key={index}>
+                {location}
               </MenuItem>
             ))}
           </Select>

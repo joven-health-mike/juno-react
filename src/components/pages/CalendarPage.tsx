@@ -37,7 +37,6 @@ const CalendarPage: React.FC = () => {
     useState<boolean>(false);
   const [isAppointmentDetailsDialogOpen, setIsAppointmentDetailsDialogOpen] =
     useState<boolean>(false);
-  const [showCalendar, setShowCalendar] = useState<boolean>(true);
   const [filteredEvents, setFilteredEvents] = useState<Appointment[]>([]);
   const [selectedSchool, setSelectedSchool] = useState<School>(emptySchool);
   const [selectedCounselor, setSelectedCounselor] =
@@ -55,6 +54,7 @@ const CalendarPage: React.FC = () => {
     data: appointments,
     add: addAppointment,
     delete: deleteAppointment,
+    update: updateAppointment,
   } = useContext(AppointmentsContext);
   const { data: users } = useContext(UsersContext);
   const counselors = useMemo(() => getCounselors(users), [users]);
@@ -97,12 +97,6 @@ const CalendarPage: React.FC = () => {
     );
   }, [loggedInUser.role]);
 
-  useEffect(() => {
-    setShowCalendar(
-      !isCreateAppointmentDialogOpen && !isAppointmentDetailsDialogOpen
-    );
-  }, [isCreateAppointmentDialogOpen, isAppointmentDetailsDialogOpen]);
-
   const handleAppointmentAdded = (appointment: Appointment) => {
     if (isCreateAppointmentAllowed) {
       addAppointment(appointment);
@@ -134,6 +128,11 @@ const CalendarPage: React.FC = () => {
     mailToUrl += `?subject=${encodeURIComponent(appointmentToEmail.title)}`;
 
     window.open(mailToUrl);
+  };
+
+  const onAppointmentEdited = (appointment: Appointment) => {
+    setClickedAppointment({ ...appointment });
+    updateAppointment(appointment);
   };
 
   const onAppointmentRoomLinkClicked = (
@@ -233,15 +232,13 @@ const CalendarPage: React.FC = () => {
             </FormControl>
           )}
       </Box>
-      {showCalendar && (
-        <Calendar
-          view="dayGridMonth"
-          plugins={[dayGridPlugin, interactionPlugin, momentTimezonePlugin]}
-          appointments={filteredEvents}
-          onEventClick={handleAppointmentClick}
-          onDateClick={handleDateClick}
-        />
-      )}
+      <Calendar
+        view="dayGridMonth"
+        plugins={[dayGridPlugin, interactionPlugin, momentTimezonePlugin]}
+        appointments={filteredEvents}
+        onEventClick={handleAppointmentClick}
+        onDateClick={handleDateClick}
+      />
       <AppointmentDialog
         title="Create Appointment"
         isOpen={isCreateAppointmentDialogOpen}
@@ -256,6 +253,7 @@ const CalendarPage: React.FC = () => {
         onRoomLinkClicked={onAppointmentRoomLinkClicked}
         onDeleteClicked={onAppointmentDeleteClicked}
         onEmailClicked={onAppointmentEmailClicked}
+        onAppointmentEdited={onAppointmentEdited}
       />
     </>
   );

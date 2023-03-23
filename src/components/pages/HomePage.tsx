@@ -18,8 +18,9 @@ import { LoggedInUserContext, UsersContext } from '../../data/users';
 import { Role } from '../../services/user.service';
 import AppointmentDialog from '../dialogs/AppointmentDialog';
 import { createPermission, deletePermission } from '../../auth/permissions';
-import { getCounselors } from '../../data/counselors';
+import { emptyCounselor, getCounselors } from '../../data/counselors';
 import { Grid, Typography } from '@mui/material';
+import AppointmentDetailsDialog from '../dialogs/AppointmentDetailsDialog';
 
 const HomePage: React.FC = () => {
   const { loggedInUser } = useContext(LoggedInUserContext);
@@ -42,11 +43,72 @@ const HomePage: React.FC = () => {
 };
 
 const AppointmentView: React.FC = () => {
-  const { data: appointments } = useContext(AppointmentsContext);
+  const [isAppointmentDetailsDialogOpen, setIsAppointmentDetailsDialogOpen] =
+    useState<boolean>(false);
+  const [dialogAppointment, setDialogAppointment] =
+    useState<Appointment>(emptyAppointment);
+  const [isDeleteAppointmentAllowed, setIsDeleteAppointmentAllowed] =
+    useState<boolean>(false);
+  const { data: users } = useContext(UsersContext);
+  const counselors = useMemo(() => getCounselors(users), [users]);
+
+  const {
+    data: appointments,
+    delete: deleteAppointment,
+    update: updateAppointment,
+  } = useContext(AppointmentsContext);
+  const { loggedInUser } = useContext(LoggedInUserContext);
+
+  useEffect(() => {
+    setIsDeleteAppointmentAllowed(
+      deletePermission(loggedInUser.role, 'appointment')
+    );
+  }, [loggedInUser.role]);
 
   const onEventClick = (event: Appointment) => {
-    // TODO: display AppointmentDetailPage with this event
-    console.log('eventClicked:', event);
+    setDialogAppointment(event);
+    setIsAppointmentDetailsDialogOpen(true);
+  };
+  const onAppointmentDeleteClicked = (appointmentToDelete: Appointment) => {
+    if (
+      isDeleteAppointmentAllowed &&
+      window.confirm('Delete this appointment?')
+    ) {
+      deleteAppointment(appointmentToDelete);
+    }
+    setIsAppointmentDetailsDialogOpen(false);
+  };
+
+  const onAppointmentEmailClicked = (appointmentToEmail: Appointment) => {
+    const appointmentCounselor =
+      counselors.find(
+        counselor => counselor.id === appointmentToEmail.counselorUserId
+      ) || emptyCounselor;
+    let mailToUrl = `mailto:${appointmentCounselor.email}`;
+
+    for (const participant of appointmentToEmail.participants) {
+      mailToUrl += `,${participant.email}`;
+    }
+
+    mailToUrl += `?subject=${encodeURIComponent(appointmentToEmail.title)}`;
+
+    window.open(mailToUrl);
+  };
+
+  const onAppointmentRoomLinkClicked = (
+    appointmentToOpenRoomLink: Appointment
+  ) => {
+    const counselor = counselors.find(
+      counselor => counselor.id === appointmentToOpenRoomLink.counselorUserId
+    );
+    if (counselor?.counselorRoomLink) {
+      window.open(counselor.counselorRoomLink);
+    }
+  };
+
+  const onAppointmentEdited = (appointment: Appointment) => {
+    setDialogAppointment({ ...appointment });
+    updateAppointment(appointment);
   };
 
   return (
@@ -56,6 +118,15 @@ const AppointmentView: React.FC = () => {
         plugins={[listPlugin, momentTimezonePlugin]}
         appointments={appointments}
         onEventClick={onEventClick}
+      />
+      <AppointmentDetailsDialog
+        isOpen={isAppointmentDetailsDialogOpen}
+        onClose={() => setIsAppointmentDetailsDialogOpen(false)}
+        appointment={dialogAppointment}
+        onRoomLinkClicked={onAppointmentRoomLinkClicked}
+        onDeleteClicked={onAppointmentDeleteClicked}
+        onEmailClicked={onAppointmentEmailClicked}
+        onAppointmentEdited={onAppointmentEdited}
       />
     </>
   );

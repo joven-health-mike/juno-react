@@ -1,7 +1,7 @@
 // Copyright 2022 Social Fabric, LLC
 
 import { Role } from '../services/user.service';
-import { User } from './users';
+import { User, UserComparator } from './users';
 
 export type Student = User & {
   studentAssignedCounselorId?: string;
@@ -32,5 +32,6 @@ export const getActiveStudents = (users: User[]) => {
         user.role === 'STUDENT' &&
         (user as Student).studentStatus !== 'DISCHARGED'
     )
-    .map(student => student as Student);
+    .map(student => student as Student)
+    .sort(UserComparator);
 };

@@ -32,7 +32,7 @@ export const emptyAppointment = {
   id: '-1',
   title: '',
   start: new Date(),
-  end: new Date(),
+  end: new Date(new Date().getTime() + 60000 * 30),
   isRecurring: false,
   numOccurrences: 4,
   numRepeats: 1,
@@ -42,7 +42,16 @@ export const emptyAppointment = {
   participants: [] as User[],
   type: 'CLINICAL',
   status: 'SCHEDULED',
-  location: 'UNKNOWN',
+  location: 'VIRTUAL_SCHOOL',
+};
+
+const AppointmentComparator = (a: Appointment, b: Appointment) => {
+  const aDate = new Date(a.start);
+  const bDate = new Date(b.start);
+
+  if (aDate < bDate) return -1;
+  if (aDate > bDate) return 1;
+  return 0;
 };
 
 /* <Name> + <Name> + <Name> (<SchoolName>) - <AppointmentType> */
@@ -85,6 +94,19 @@ export const APPOINTMENT_STATUSES = [
   'DELETED',
 ];
 
+export type AppointmentLocation =
+  | 'VIRTUAL_SCHOOL'
+  | 'VIRTUAL_HOME'
+  | 'IN_PERSON'
+  | 'UNKNOWN';
+
+export const APPOINTMENT_LOCATIONS = [
+  'VIRTUAL_SCHOOL',
+  'VIRTUAL_HOME',
+  'IN_PERSON',
+  'UNKNOWN',
+];
+
 export type AppointmentType = 'CLINICAL' | 'CONSULTATION' | 'EVALUATION';
 export const APPOINTMENT_TYPES = ['CLINICAL', 'CONSULTATION', 'EVALUATION'];
 export const AppointmentColors = ['green', 'blue', 'red'];
@@ -114,13 +136,13 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
     getAll: async function (): Promise<void> {
       try {
         const { data: appointments } = await service.getAll();
-        setAppointments(appointments);
+        setAppointments(appointments.sort(AppointmentComparator));
       } catch (error) {
         console.error(error);
       }
     },
     get: async function (id: string): Promise<void> {
-      // do nothing (unused)
+      // do nothing - unused function
     },
     add: async function (data: Appointment): Promise<void> {
       try {
@@ -134,7 +156,9 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
           appt.school = data.school;
           appt.counselor = data.counselor;
         });
-        setAppointments([...appointments, ...apptArray]);
+        setAppointments(
+          [...appointments, ...apptArray].sort(AppointmentComparator)
+        );
       } catch (error) {
         console.error(error);
       }
@@ -149,7 +173,7 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
           appointment => appointment.id !== data.id
         );
         newAppointments.push(appointment);
-        setAppointments(newAppointments);
+        setAppointments(newAppointments.sort(AppointmentComparator));
       } catch (error) {
         console.error(error);
       }

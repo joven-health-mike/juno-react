@@ -39,7 +39,6 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
   const [firstNameError, setFirstNameError] = useState(false);
   const [lastNameError, setLastNameError] = useState(false);
   const [emailError, setEmailError] = useState(false);
-  const [usernameError, setUsernameError] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
   const [docsUrlError, setDocsUrlError] = useState(false);
   const [timeZoneError, setTimeZoneError] = useState(false);
@@ -66,15 +65,6 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
       setEmailError(true);
       allInputsValid = false;
     } else setEmailError(false);
-
-    if (
-      typeof user.username === 'undefined' ||
-      user.username.length === 0 ||
-      user.username.length > 15
-    ) {
-      setUsernameError(true);
-      allInputsValid = false;
-    } else setUsernameError(false);
 
     if (user.docsUrl?.length! > 0 && !isValidURL(user.docsUrl!)) {
       setDocsUrlError(true);
@@ -112,7 +102,6 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
     setFirstNameError(false);
     setLastNameError(false);
     setEmailError(false);
-    setUsernameError(false);
     setPhoneError(false);
     setDocsUrlError(false);
     setTimeZoneError(false);
@@ -163,20 +152,6 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({
                 e.preventDefault();
                 setEmailError(false);
                 setUser({ ...user, email: e.target.value });
-              }}
-            />
-          </FormControl>
-          <FormControl fullWidth required sx={{ mb: 2 }}>
-            <InputLabel id="username" error={usernameError}>
-              Username
-            </InputLabel>
-            <Input
-              id="username"
-              value={user.username}
-              onChange={e => {
-                e.preventDefault();
-                setUsernameError(false);
-                setUser({ ...user, username: e.target.value });
               }}
             />
           </FormControl>

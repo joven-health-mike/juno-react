@@ -27,6 +27,7 @@ const SchoolDetails: React.FC<SchoolDetailsProps> = ({ school }) => {
       <Typography>
         Docs URL: <Link href={school.docsUrl}>{school.docsUrl}</Link>
       </Typography>
+      <Typography>Time Zone: {school.timeZoneIanaName}</Typography>
     </>
   );
 };
