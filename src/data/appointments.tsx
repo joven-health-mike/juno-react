@@ -13,10 +13,11 @@ export type Appointment = {
   title: string;
   start: Date;
   end: Date;
-  isRecurring?: boolean;
-  numOccurrences?: number;
-  numRepeats?: number;
-  frequency?: string;
+  isSeries?: boolean;
+  seriesId?: string;
+  seriesRule?: string;
+  seriesExceptions?: string[];
+  seriesProtoId?: string;
   school?: School;
   schoolId?: string;
   counselor?: User;
@@ -33,10 +34,10 @@ export const emptyAppointment = {
   title: '',
   start: new Date(),
   end: new Date(new Date().getTime() + 60000 * 30),
-  isRecurring: false,
-  numOccurrences: 4,
-  numRepeats: 1,
-  frequency: 'WEEKS',
+  isSeries: false,
+  seriesRule: '',
+  seriesExceptions: [],
+  seriesProtoId: '',
   schoolId: '',
   counselorUserId: '',
   participants: [] as User[],
@@ -147,17 +148,9 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
     add: async function (data: Appointment): Promise<void> {
       try {
         // since recurring meetings create multiple appointments, this response actually returns an array of appointments.
-        const { data: appointment } = (await service.create(
-          data
-        )) as AxiosResponse<unknown>;
-        const apptArray = appointment as Appointment[];
-        apptArray.forEach(appt => {
-          appt.participants = data.participants;
-          appt.school = data.school;
-          appt.counselor = data.counselor;
-        });
+        const { data: appointment } = await service.create(data);
         setAppointments(
-          [...appointments, ...apptArray].sort(AppointmentComparator)
+          [...appointments, appointment].sort(AppointmentComparator)
         );
       } catch (error) {
         console.error(error);
