@@ -5,7 +5,6 @@ import '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone';
-import { DateTime } from 'luxon';
 import {
   Appointment,
   AppointmentsContext,
@@ -31,6 +30,8 @@ import {
   Select,
   Typography,
 } from '@mui/material';
+import { defaultStartEndTime } from '../../utils/DateUtils';
+import { DateTime } from 'luxon';
 
 const CalendarPage: React.FC = () => {
   const [isCreateAppointmentDialogOpen, setIsCreateAppointmentDialogOpen] =
@@ -68,17 +69,9 @@ const CalendarPage: React.FC = () => {
 
   const handleDateClick = (utcDateStr: string) => {
     if (isCreateAppointmentAllowed) {
-      const startTime = DateTime.fromFormat(utcDateStr, 'yyyy-MM-dd')
-        .set({
-          hour: 8,
-          minute: 0,
-          second: 0,
-          millisecond: 0,
-        })
-        .toJSDate();
-      const endTime = DateTime.fromJSDate(startTime)
-        .set({ minute: 30 })
-        .toJSDate();
+      const { startTime, endTime } = defaultStartEndTime(
+        DateTime.fromFormat(utcDateStr, 'yyyy-MM-dd')
+      );
       setInitialAppointment({
         ...initialAppointment,
         start: startTime,
