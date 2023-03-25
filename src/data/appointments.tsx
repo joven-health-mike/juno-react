@@ -2,7 +2,7 @@
 
 import React, { FC, useState } from 'react';
 import { AppointmentService } from '../services/appointment.service';
-import { AxiosResponse } from 'axios';
+import { rrulestr } from 'rrule';
 import { ContextData } from './ContextData';
 import { DataProviderProps } from './DataProviderProps';
 import { School } from './schools';
@@ -27,6 +27,7 @@ export type Appointment = {
   status: string;
   location: string;
   color?: string;
+  getSeriesVirtualAppointments?: () => Appointment[];
 };
 
 export const emptyAppointment = {
@@ -137,6 +138,11 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
     getAll: async function (): Promise<void> {
       try {
         const { data: appointments } = await service.getAll();
+        appointments.forEach(appointment => {
+          if (appointment.isSeries) {
+            appointments.push(...getSeriesVirtualAppointments(appointment));
+          }
+        });
         setAppointments(appointments.sort(AppointmentComparator));
       } catch (error) {
         console.error(error);
@@ -147,11 +153,12 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
     },
     add: async function (data: Appointment): Promise<void> {
       try {
-        // since recurring meetings create multiple appointments, this response actually returns an array of appointments.
         const { data: appointment } = await service.create(data);
-        setAppointments(
-          [...appointments, appointment].sort(AppointmentComparator)
-        );
+        const newAppointments = [...appointments, appointment];
+        if (appointment.isSeries) {
+          newAppointments.push(...getSeriesVirtualAppointments(appointment));
+        }
+        setAppointments(newAppointments.sort(AppointmentComparator));
       } catch (error) {
         console.error(error);
       }
@@ -173,11 +180,16 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
     },
     delete: async function (data: Appointment): Promise<void> {
       try {
+        // TODO: handle "deleting" a virtual appointment (add it to exception list)
         const { data: deletedAppointment } = await service.delete(`${data.id}`);
         setAppointments(
-          appointments.filter(
-            appointment => appointment.id !== deletedAppointment.id
-          )
+          appointments
+            // remove deleted appointment
+            .filter(appointment => appointment.id !== deletedAppointment.id)
+            // remove virtual appointments (if deleted appointment was a series)
+            .filter(
+              appointment => appointment.seriesProtoId !== deletedAppointment.id
+            )
         );
       } catch (error) {}
     },
@@ -192,6 +204,27 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
       {children}
     </AppointmentsContext.Provider>
   );
+};
+
+const getSeriesVirtualAppointments = (appointment: Appointment) => {
+  const series: Appointment[] = [];
+  const rrule = rrulestr(appointment.seriesRule!);
+  const futureDates = rrule.all().slice(1); // get all appointment dates, skipping the original one
+
+  futureDates.forEach(virtualDate => {
+    const virtualAppointment = { ...appointment };
+    virtualAppointment.id = '-1';
+    const duration =
+      new Date(appointment.end).getTime() -
+      new Date(appointment.start).getTime();
+    virtualAppointment.start = new Date(virtualDate);
+    virtualAppointment.end = new Date(
+      virtualAppointment.start.getTime() + duration
+    );
+    series.push(virtualAppointment);
+  });
+
+  return series;
 };
 
 export const getTableColumnHeadersForAppointments = (
