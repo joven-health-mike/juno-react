@@ -17,6 +17,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { RRule } from 'rrule';
 import React, {
   useCallback,
   useContext,
@@ -56,6 +57,9 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
   const [appointment, setAppointment] = useState(initialAppointment);
   const [duration, setDuration] = useState(30);
   const [participantNames, setParticipantNames] = useState<string[]>([]);
+  const [frequency, setFrequency] = useState<string>('WEEKS');
+  const [interval, setInterval] = useState<number>(1);
+  const [seriesOccurrences, setSeriesOccurrences] = useState<number>(4);
   const DURATIONS = ['15', '30', '45', '60', '75', '90'];
   const { data: users } = useContext(UsersContext);
   const { data: schools } = useContext(SchoolsContext);
@@ -73,7 +77,7 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
   const [schoolError, setSchoolError] = useState(false);
   const [participantsError, setParticipantsError] = useState(false);
   const [frequencyError, setFrequencyError] = useState(false);
-  const [frequencyNumError, setFrequencyNumError] = useState(false);
+  const [intervalError, setIntervalError] = useState(false);
   const [numOccurrencesError, setNumOccurrencesError] = useState(false);
 
   useEffect(() => {
@@ -228,25 +232,21 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
       allInputsValid = false;
     } else setParticipantsError(false);
 
-    if (appointment.isRecurring) {
-      if (RECURRING_FREQUENCIES.indexOf(`${appointment.frequency}`) === -1) {
+    if (appointment.isSeries) {
+      if (RECURRING_FREQUENCIES.indexOf(`${frequency}`) === -1) {
         setFrequencyError(true);
         allInputsValid = false;
       } else setFrequencyError(false);
 
-      if (
-        typeof appointment.numRepeats === 'undefined' ||
-        appointment.numRepeats <= 0 ||
-        appointment.numRepeats > 20
-      ) {
-        setFrequencyNumError(true);
+      if (typeof interval === 'undefined' || interval <= 0 || interval > 20) {
+        setIntervalError(true);
         allInputsValid = false;
-      } else setFrequencyNumError(false);
+      } else setIntervalError(false);
 
       if (
-        typeof appointment.numOccurrences === 'undefined' ||
-        appointment.numOccurrences <= 0 ||
-        appointment.numOccurrences > 20
+        typeof seriesOccurrences === 'undefined' ||
+        seriesOccurrences <= 0 ||
+        seriesOccurrences > 20
       ) {
         setNumOccurrencesError(true);
         allInputsValid = false;
@@ -271,6 +271,34 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
     const startDate = new Date(appointment.start);
     const endDate = new Date(startDate.getTime() + duration * 60000);
     submittedAppointment.end = endDate;
+
+    let freq;
+    switch (frequency) {
+      case 'WEEKS':
+        freq = RRule.WEEKLY;
+        break;
+      case 'DAYS':
+        freq = RRule.DAILY;
+        break;
+      case 'MONTHS':
+        freq = RRule.MONTHLY;
+        break;
+      case 'YEARS':
+        freq = RRule.YEARLY;
+        break;
+      default:
+        freq = RRule.WEEKLY;
+        break;
+    }
+
+    const rule = new RRule({
+      freq: freq,
+      interval: interval,
+      count: seriesOccurrences,
+      dtstart: new Date(appointment.start),
+    });
+
+    submittedAppointment.seriesRule = rule.toString();
     submittedAppointment.participants = users.filter(user =>
       participantNames.includes(formatUserName(user))
     );
@@ -298,7 +326,7 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
     setSchoolError(false);
     setParticipantsError(false);
     setFrequencyError(false);
-    setFrequencyNumError(false);
+    setIntervalError(false);
     setNumOccurrencesError(false);
     onClose();
   };
@@ -527,31 +555,28 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 setAppointment({
                   ...appointment,
-                  isRecurring: e.target.checked,
+                  isSeries: e.target.checked,
                 });
               }}
             />
           }
           label="Is Recurring"
         />
-        {appointment.isRecurring && (
+        {appointment.isSeries && (
           <>
             <Typography>Repeat every</Typography>
             <Box sx={{ mt: 2 }} justifyContent="center" display="flex">
               <TextField
                 type="number"
-                id="frequencyNumber"
+                id="frequencyNum"
                 label="Frequency Number"
                 variant="outlined"
-                error={frequencyNumError}
+                error={intervalError}
                 onChange={e => {
-                  setFrequencyNumError(false);
-                  setAppointment({
-                    ...appointment,
-                    numRepeats: parseInt(e.target.value),
-                  });
+                  setIntervalError(false);
+                  setInterval(parseInt(e.target.value));
                 }}
-                value={appointment.numRepeats}
+                value={interval}
               />
               <FormControl sx={{ mb: 2 }}>
                 <InputLabel id="frequency" error={frequencyError}>
@@ -561,15 +586,12 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
                   labelId="frequency"
                   id="frequency"
                   defaultValue=""
-                  value={appointment.frequency}
+                  value={frequency}
                   label="Frequency"
                   onChange={e => {
                     e.preventDefault();
                     setFrequencyError(false);
-                    setAppointment({
-                      ...appointment,
-                      frequency: e.target.value,
-                    });
+                    setFrequency(e.target.value);
                   }}
                 >
                   {RECURRING_FREQUENCIES.map((frequency, index) => (
@@ -584,18 +606,15 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
             <Box sx={{ mt: 2 }} justifyContent="center" display="flex">
               <TextField
                 type="number"
-                id="numOccurrences"
+                id="seriesOccurrences"
                 label="Occurrences"
                 variant="outlined"
                 error={numOccurrencesError}
                 onChange={e => {
                   setNumOccurrencesError(false);
-                  setAppointment({
-                    ...appointment,
-                    numOccurrences: parseInt(e.target.value),
-                  });
+                  setSeriesOccurrences(parseInt(e.target.value));
                 }}
-                value={appointment.numOccurrences}
+                value={seriesOccurrences}
               />
               <FormControl sx={{ mb: 2 }}>
                 <InputLabel id="frequency" error={frequencyError}>
@@ -605,15 +624,12 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
                   labelId="frequency"
                   id="frequency"
                   defaultValue=""
-                  value={appointment.frequency}
+                  value={frequency}
                   label="Frequency"
                   onChange={e => {
                     e.preventDefault();
                     setFrequencyError(false);
-                    setAppointment({
-                      ...appointment,
-                      frequency: e.target.value,
-                    });
+                    setFrequency(e.target.value);
                   }}
                 >
                   {RECURRING_FREQUENCIES.map((frequency, index) => (

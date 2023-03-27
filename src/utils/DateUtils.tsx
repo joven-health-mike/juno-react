@@ -28,3 +28,16 @@ export function formatTime(date: Date): string {
 export function formatDateTime(date: Date): string {
   return `${formatDate(date)} ${formatTime(date)}`;
 }
+
+export function defaultStartEndTime(now: DateTime) {
+  const startTime = now
+    .set({
+      hour: 8,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+    })
+    .toJSDate();
+  const endTime = DateTime.fromJSDate(startTime).set({ minute: 30 }).toJSDate();
+  return { startTime, endTime };
+}
