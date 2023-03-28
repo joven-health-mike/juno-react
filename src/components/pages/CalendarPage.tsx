@@ -5,6 +5,7 @@ import '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone';
+import rrulePlugin from '@fullcalendar/rrule';
 import {
   Appointment,
   AppointmentsContext,
@@ -251,7 +252,12 @@ const CalendarPage: React.FC = () => {
       </Box>
       <Calendar
         view="dayGridMonth"
-        plugins={[dayGridPlugin, interactionPlugin, momentTimezonePlugin]}
+        plugins={[
+          dayGridPlugin,
+          interactionPlugin,
+          momentTimezonePlugin,
+          rrulePlugin,
+        ]}
         appointments={filteredEvents}
         onEventClick={handleAppointmentClick}
         onDateClick={handleDateClick}
