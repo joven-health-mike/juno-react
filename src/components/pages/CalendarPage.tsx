@@ -21,7 +21,11 @@ import Navbar from '../navbar/Navbar';
 import AppointmentDialog from '../dialogs/AppointmentDialog';
 import AppointmentDetailsDialog from '../dialogs/AppointmentDetailsDialog';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
-import { createPermission, deletePermission } from '../../auth/permissions';
+import {
+  createPermission,
+  deletePermission,
+  updatePermission,
+} from '../../auth/permissions';
 import {
   Box,
   FormControl,
@@ -47,6 +51,8 @@ const CalendarPage: React.FC = () => {
   const [clickedAppointment, setClickedAppointment] =
     useState<Appointment>(emptyAppointment);
   const [isCreateAppointmentAllowed, setIsCreateAppointmentAllowed] =
+    useState<boolean>(false);
+  const [isUpdateAppointmentAllowed, setIsUpdateAppointmentAllowed] =
     useState<boolean>(false);
   const [isDeleteAppointmentAllowed, setIsDeleteAppointmentAllowed] =
     useState<boolean>(false);
@@ -81,9 +87,25 @@ const CalendarPage: React.FC = () => {
     }
   };
 
+  const handleDateChange = (
+    appointment: Appointment,
+    newStart: Date,
+    newEnd: Date
+  ) => {
+    if (isUpdateAppointmentAllowed) {
+      const newAppointment = { ...appointment };
+      newAppointment.start = newStart;
+      newAppointment.end = newEnd;
+      updateAppointment(newAppointment);
+    }
+  };
+
   useEffect(() => {
     setIsCreateAppointmentAllowed(
       createPermission(loggedInUser.role, 'appointment')
+    );
+    setIsUpdateAppointmentAllowed(
+      updatePermission(loggedInUser.role, 'appointment')
     );
     setIsDeleteAppointmentAllowed(
       deletePermission(loggedInUser.role, 'appointment')
@@ -124,8 +146,10 @@ const CalendarPage: React.FC = () => {
   };
 
   const onAppointmentEdited = (appointment: Appointment) => {
-    setClickedAppointment({ ...appointment });
-    updateAppointment(appointment);
+    if (isUpdateAppointmentAllowed) {
+      setClickedAppointment({ ...appointment });
+      updateAppointment(appointment);
+    }
   };
 
   const onAppointmentRoomLinkClicked = (
@@ -231,6 +255,9 @@ const CalendarPage: React.FC = () => {
         appointments={filteredEvents}
         onEventClick={handleAppointmentClick}
         onDateClick={handleDateClick}
+        onEventDateChanged={
+          isUpdateAppointmentAllowed ? handleDateChange : undefined
+        }
       />
       <AppointmentDialog
         title="Create Appointment"
