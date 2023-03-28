@@ -14,6 +14,7 @@ import {
 } from '../../data/appointments';
 import { DateClickArg } from '@fullcalendar/interaction';
 import { LoggedInUserContext } from '../../data/users';
+import { deltaDayStartEndTime } from '../../utils/DateUtils';
 
 const Wrapper = styled.div`
   margin: 0 auto;
@@ -62,16 +63,15 @@ const Calendar: React.FC<CalendarProps> = ({
   });
 
   const eventClicked = (info: EventClickArg) => {
-    info.jsEvent.preventDefault();
     let eventId = info.event.id;
     const theEvent = appointments.find(
       appointment => appointment.id === eventId
-    );
-    if (theEvent) onEventClick(theEvent);
+    )!;
+    onEventClick(theEvent);
   };
 
   const dateClicked = (info: DateClickArg) => {
-    if (onDateClick) {
+    if (typeof onDateClick !== 'undefined') {
       info.jsEvent.preventDefault();
       onDateClick(info.dateStr);
     }
@@ -82,13 +82,10 @@ const Calendar: React.FC<CalendarProps> = ({
 
     const eventId = info.event.id;
     const appointment = appointments.find(_appt => _appt.id === eventId)!;
-    const newStart = new Date(
-      new Date(appointment.start).getTime() +
-        info.delta.days * 24 * 60 * 60 * 1000
-    );
-    const newEnd = new Date(
-      new Date(appointment.end).getTime() +
-        info.delta.days * 24 * 60 * 60 * 1000
+    const { newStart, newEnd } = deltaDayStartEndTime(
+      appointment.start,
+      appointment.end,
+      info.delta.days
     );
 
     onEventDateChanged(appointment, newStart, newEnd);

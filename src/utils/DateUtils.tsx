@@ -2,6 +2,20 @@
 
 import { DateTime } from 'luxon';
 
+const oneDayInMs = 24 * 60 * 60 * 1000;
+const am8 = {
+  hour: 9,
+  minute: 0,
+  second: 0,
+  millisecond: 0,
+};
+const am830 = {
+  hour: 9,
+  minute: 30,
+  second: 0,
+  millisecond: 0,
+};
+
 export type AvailableTimeZone =
   | 'America/New_York' // Eastern
   | 'America/Chicago' // Central
@@ -30,14 +44,21 @@ export function formatDateTime(date: Date): string {
 }
 
 export function defaultStartEndTime(now: DateTime) {
-  const startTime = now
-    .set({
-      hour: 8,
-      minute: 0,
-      second: 0,
-      millisecond: 0,
-    })
-    .toJSDate();
-  const endTime = DateTime.fromJSDate(startTime).set({ minute: 30 }).toJSDate();
+  const startTime = now.set(am8).toJSDate();
+  const endTime = now.set(am830).toJSDate();
   return { startTime, endTime };
+}
+
+export function deltaDayStartEndTime(
+  originalStart: Date,
+  originalEnd: Date,
+  dayDelta: number
+) {
+  const newStart = new Date(
+    new Date(originalStart).getTime() + dayDelta * oneDayInMs
+  );
+  const newEnd = new Date(
+    new Date(originalEnd).getTime() + dayDelta * oneDayInMs
+  );
+  return { newStart, newEnd };
 }
