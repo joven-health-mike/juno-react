@@ -149,6 +149,12 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
           formatUserName(participant)
         )
       );
+
+      const durationInMinutes =
+        (new Date(initialAppointment.end).getTime() -
+          new Date(initialAppointment.start).getTime()) /
+        60000;
+      setDuration(durationInMinutes);
     }
   }, [counselors, initialAppointment, schools]);
 
