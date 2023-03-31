@@ -2,11 +2,12 @@
 
 import React, { FC, useState } from 'react';
 import { AppointmentService } from '../services/appointment.service';
-import { rrulestr } from 'rrule';
+import { RRuleSet, rrulestr } from 'rrule';
 import { ContextData } from './ContextData';
 import { DataProviderProps } from './DataProviderProps';
 import { School } from './schools';
 import { User } from './users';
+import { v4 as uuid } from 'uuid';
 
 export type Appointment = {
   id: string;
@@ -27,6 +28,8 @@ export type Appointment = {
   status: string;
   location: string;
   color?: string;
+  editType?: string;
+  isVirtual?: boolean;
   getSeriesVirtualAppointments?: () => Appointment[];
 };
 
@@ -45,6 +48,7 @@ export const emptyAppointment = {
   type: 'CLINICAL',
   status: 'SCHEDULED',
   location: 'VIRTUAL_SCHOOL',
+  isVirtual: false,
 };
 
 const AppointmentComparator = (a: Appointment, b: Appointment) => {
@@ -139,6 +143,7 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
       try {
         const { data: appointments } = await service.getAll();
         appointments.forEach(appointment => {
+          appointment.isVirtual = false;
           if (appointment.isSeries) {
             appointments.push(...getSeriesVirtualAppointments(appointment));
           }
@@ -155,6 +160,7 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
       try {
         const { data: appointment } = await service.create(data);
         const newAppointments = [...appointments, appointment];
+        appointment.isVirtual = false;
         if (appointment.isSeries) {
           newAppointments.push(...getSeriesVirtualAppointments(appointment));
         }
@@ -169,10 +175,18 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
         appointment.participants = data.participants;
         appointment.counselor = data.counselor;
         appointment.school = data.school;
-        const newAppointments = [...appointments].filter(
+        appointment.isVirtual = false;
+        let newAppointments = [...appointments].filter(
           appointment => appointment.id !== data.id
         );
         newAppointments.push(appointment);
+        if (appointment.isSeries) {
+          // remove old virtual appointments and calculate new ones
+          newAppointments = newAppointments.filter(
+            appt => appt.seriesProtoId !== appointment.id || !appt.isVirtual
+          );
+          newAppointments.push(...getSeriesVirtualAppointments(appointment));
+        }
         setAppointments(newAppointments.sort(AppointmentComparator));
       } catch (error) {
         console.error(error);
@@ -209,11 +223,23 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
 const getSeriesVirtualAppointments = (appointment: Appointment) => {
   const series: Appointment[] = [];
   const rrule = rrulestr(appointment.seriesRule!);
-  const futureDates = rrule.all().slice(1); // get all appointment dates, skipping the original one
+  const ruleSet = new RRuleSet();
+  ruleSet.rrule(rrule);
+  if (
+    typeof appointment.seriesExceptions !== 'undefined' &&
+    appointment.seriesExceptions.length > 0
+  ) {
+    appointment.seriesExceptions.forEach(exc => ruleSet.exdate(new Date(exc)));
+  }
 
-  futureDates.forEach(virtualDate => {
+  const appointmentStartDate = new Date(appointment.start);
+  const virtualDates = ruleSet.all().filter(date => {
+    return date.getTime() !== appointmentStartDate.getTime();
+  });
+
+  virtualDates.forEach(virtualDate => {
     const virtualAppointment = { ...appointment };
-    virtualAppointment.id = '-1';
+    virtualAppointment.id = uuid();
     const duration =
       new Date(appointment.end).getTime() -
       new Date(appointment.start).getTime();
@@ -221,6 +247,7 @@ const getSeriesVirtualAppointments = (appointment: Appointment) => {
     virtualAppointment.end = new Date(
       virtualAppointment.start.getTime() + duration
     );
+    virtualAppointment.isVirtual = true;
     series.push(virtualAppointment);
   });
 

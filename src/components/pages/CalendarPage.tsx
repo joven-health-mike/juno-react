@@ -146,10 +146,29 @@ const CalendarPage: React.FC = () => {
     window.open(mailToUrl);
   };
 
-  const onAppointmentEdited = (appointment: Appointment) => {
+  const onAppointmentEdited = (oldAppt: Appointment, newAppt: Appointment) => {
     if (isUpdateAppointmentAllowed) {
-      setClickedAppointment({ ...appointment });
-      updateAppointment(appointment);
+      setClickedAppointment({ ...newAppt });
+      switch (newAppt.editType) {
+        case 'single':
+          // if updating a virtual appointment, we need to add it as a new appointment...
+          const newVirtualAppt = { ...newAppt };
+          newVirtualAppt.id = '-1'; // indicates to create a new appointment
+          newVirtualAppt.isSeries = false;
+          addAppointment(newVirtualAppt);
+          // ... and add it as an exception to the prototype appointment
+          const exceptionStr = new Date(oldAppt.start).toISOString();
+          const protoAppt = appointments.find(
+            appt => appt.id === newVirtualAppt.seriesProtoId
+          )!;
+          if (typeof protoAppt.seriesExceptions === 'undefined') {
+            protoAppt.seriesExceptions = [exceptionStr];
+          } else {
+            protoAppt.seriesExceptions.push(exceptionStr);
+          }
+          updateAppointment(protoAppt);
+          break;
+      }
     }
   };
 
@@ -275,7 +294,7 @@ const CalendarPage: React.FC = () => {
       <AppointmentDetailsDialog
         isOpen={isAppointmentDetailsDialogOpen}
         onClose={() => setIsAppointmentDetailsDialogOpen(false)}
-        appointment={clickedAppointment}
+        initialAppointment={clickedAppointment}
         onRoomLinkClicked={onAppointmentRoomLinkClicked}
         onDeleteClicked={onAppointmentDeleteClicked}
         onEmailClicked={onAppointmentEmailClicked}
