@@ -622,29 +622,6 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
                 }}
                 value={seriesOccurrences}
               />
-              <FormControl sx={{ mb: 2 }}>
-                <InputLabel id="frequency" error={frequencyError}>
-                  Frequency
-                </InputLabel>
-                <Select
-                  labelId="frequency"
-                  id="frequency"
-                  defaultValue=""
-                  value={frequency}
-                  label="Frequency"
-                  onChange={e => {
-                    e.preventDefault();
-                    setFrequencyError(false);
-                    setFrequency(e.target.value);
-                  }}
-                >
-                  {RECURRING_FREQUENCIES.map((frequency, index) => (
-                    <MenuItem value={frequency} key={index}>
-                      {frequency}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
             </Box>
           </>
         )}
