@@ -106,9 +106,9 @@ const AppointmentView: React.FC = () => {
     }
   };
 
-  const onAppointmentEdited = (appointment: Appointment) => {
-    setDialogAppointment({ ...appointment });
-    updateAppointment(appointment);
+  const onAppointmentEdited = (_: Appointment, newAppt: Appointment) => {
+    setDialogAppointment({ ...newAppt });
+    updateAppointment(newAppt);
   };
 
   return (
@@ -122,7 +122,7 @@ const AppointmentView: React.FC = () => {
       <AppointmentDetailsDialog
         isOpen={isAppointmentDetailsDialogOpen}
         onClose={() => setIsAppointmentDetailsDialogOpen(false)}
-        appointment={dialogAppointment}
+        initialAppointment={dialogAppointment}
         onRoomLinkClicked={onAppointmentRoomLinkClicked}
         onDeleteClicked={onAppointmentDeleteClicked}
         onEmailClicked={onAppointmentEmailClicked}

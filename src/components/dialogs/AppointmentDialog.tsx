@@ -17,6 +17,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { RRule } from 'rrule';
 import React, {
   useCallback,
   useContext,
@@ -37,6 +38,7 @@ import { emptySchool, School, SchoolsContext } from '../../data/schools';
 import { LoggedInUserContext, User, UsersContext } from '../../data/users';
 import DateSelector from '../dateSelector/DateSelector';
 import MaterialDialog from './MaterialDialog';
+import RecurrenceEditTypeDialog from './RecurrenceEditTypeDialog';
 
 type AppointmentDialogProps = {
   title: string;
@@ -56,6 +58,9 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
   const [appointment, setAppointment] = useState(initialAppointment);
   const [duration, setDuration] = useState(30);
   const [participantNames, setParticipantNames] = useState<string[]>([]);
+  const [frequency, setFrequency] = useState<string>('WEEKS');
+  const [interval, setInterval] = useState<number>(1);
+  const [seriesOccurrences, setSeriesOccurrences] = useState<number>(4);
   const DURATIONS = ['15', '30', '45', '60', '75', '90'];
   const { data: users } = useContext(UsersContext);
   const { data: schools } = useContext(SchoolsContext);
@@ -64,6 +69,8 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
   const [filteredUserNames, setFilteredUserNames] = useState<string[]>([]);
   const [shouldShowCounselorField, setShouldShowCounselorField] =
     useState<boolean>(true);
+  const [isRecurrenceEditTypeDialogOpen, setIsRecurrenceEditTypeDialogOpen] =
+    useState(false);
   const [startTimeError, setStartTimeError] = useState(false);
   const [durationError, setDurationError] = useState(false);
   const [counselorError, setCounselorError] = useState(false);
@@ -73,7 +80,7 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
   const [schoolError, setSchoolError] = useState(false);
   const [participantsError, setParticipantsError] = useState(false);
   const [frequencyError, setFrequencyError] = useState(false);
-  const [frequencyNumError, setFrequencyNumError] = useState(false);
+  const [intervalError, setIntervalError] = useState(false);
   const [numOccurrencesError, setNumOccurrencesError] = useState(false);
 
   useEffect(() => {
@@ -145,6 +152,12 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
           formatUserName(participant)
         )
       );
+
+      const durationInMinutes =
+        (new Date(initialAppointment.end).getTime() -
+          new Date(initialAppointment.start).getTime()) /
+        60000;
+      setDuration(durationInMinutes);
     }
   }, [counselors, initialAppointment, schools]);
 
@@ -176,6 +189,10 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
   useEffect(() => {
     determineAvailableParticipants(appointment.school);
   }, [appointment.school, determineAvailableParticipants]);
+
+  const handleRecurrenceEditTypeSelected = (type: string) => {
+    submitAppointment(type);
+  };
 
   const validateInputs = () => {
     let allInputsValid = true;
@@ -228,25 +245,21 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
       allInputsValid = false;
     } else setParticipantsError(false);
 
-    if (appointment.isRecurring) {
-      if (RECURRING_FREQUENCIES.indexOf(`${appointment.frequency}`) === -1) {
+    if (appointment.isSeries) {
+      if (RECURRING_FREQUENCIES.indexOf(`${frequency}`) === -1) {
         setFrequencyError(true);
         allInputsValid = false;
       } else setFrequencyError(false);
 
-      if (
-        typeof appointment.numRepeats === 'undefined' ||
-        appointment.numRepeats <= 0 ||
-        appointment.numRepeats > 20
-      ) {
-        setFrequencyNumError(true);
+      if (typeof interval === 'undefined' || interval <= 0 || interval > 20) {
+        setIntervalError(true);
         allInputsValid = false;
-      } else setFrequencyNumError(false);
+      } else setIntervalError(false);
 
       if (
-        typeof appointment.numOccurrences === 'undefined' ||
-        appointment.numOccurrences <= 0 ||
-        appointment.numOccurrences > 20
+        typeof seriesOccurrences === 'undefined' ||
+        seriesOccurrences <= 0 ||
+        seriesOccurrences > 20
       ) {
         setNumOccurrencesError(true);
         allInputsValid = false;
@@ -262,7 +275,15 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
       return;
     }
 
-    const submittedAppointment = { ...appointment };
+    if (initialAppointment.id !== '-1' && appointment.isSeries) {
+      setIsRecurrenceEditTypeDialogOpen(true);
+    } else {
+      submitAppointment('single');
+    }
+  };
+
+  const submitAppointment = (type: string) => {
+    const submittedAppointment = { ...appointment, editType: type };
     // if the user is a counselor, set their ID on the appointment
     if (loggedInUser.role === 'COUNSELOR') {
       submittedAppointment.counselorUserId = loggedInUser.id;
@@ -271,6 +292,34 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
     const startDate = new Date(appointment.start);
     const endDate = new Date(startDate.getTime() + duration * 60000);
     submittedAppointment.end = endDate;
+
+    let freq;
+    switch (frequency) {
+      case 'WEEKS':
+        freq = RRule.WEEKLY;
+        break;
+      case 'DAYS':
+        freq = RRule.DAILY;
+        break;
+      case 'MONTHS':
+        freq = RRule.MONTHLY;
+        break;
+      case 'YEARS':
+        freq = RRule.YEARLY;
+        break;
+      default:
+        freq = RRule.WEEKLY;
+        break;
+    }
+
+    const rule = new RRule({
+      freq: freq,
+      interval: interval,
+      count: seriesOccurrences,
+      dtstart: new Date(appointment.start),
+    });
+
+    submittedAppointment.seriesRule = rule.toString();
     submittedAppointment.participants = users.filter(user =>
       participantNames.includes(formatUserName(user))
     );
@@ -286,6 +335,7 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
     setParticipantNames([]);
     onClose();
   };
+
   const onFormCancel = () => {
     setAppointment(emptyAppointment);
     setDuration(30);
@@ -298,340 +348,313 @@ const AppointmentDialog: React.FC<AppointmentDialogProps> = ({
     setSchoolError(false);
     setParticipantsError(false);
     setFrequencyError(false);
-    setFrequencyNumError(false);
+    setIntervalError(false);
     setNumOccurrencesError(false);
     onClose();
   };
   return (
-    <MaterialDialog open={isOpen} onClose={onClose}>
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent>
-        <FormControl fullWidth required sx={{ mb: 2 }}>
-          <InputLabel id="startTime" error={startTimeError}>
-            Start Time
-          </InputLabel>
-          <DateSelector
-            selected={new Date(appointment.start)}
-            onChange={(date: Date) => {
-              setStartTimeError(false);
-              setAppointment({ ...appointment, start: date });
-            }}
-            label={'Start Time'}
-          />
-        </FormControl>
-        <FormControl fullWidth required sx={{ mb: 2 }}>
-          <InputLabel id="duration" error={durationError}>
-            Duration
-          </InputLabel>
-          <Select
-            labelId="duration"
-            id="duration"
-            defaultValue={30}
-            value={duration}
-            label="Duration"
-            onChange={e => {
-              e.preventDefault();
-              setDurationError(false);
-              setDuration(e.target.value as number);
-            }}
-          >
-            {DURATIONS.map((duration, index) => (
-              <MenuItem value={duration} key={index}>
-                {duration} minutes
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        {shouldShowCounselorField && (
+    <>
+      <RecurrenceEditTypeDialog
+        isOpen={isRecurrenceEditTypeDialogOpen}
+        onClose={() => setIsRecurrenceEditTypeDialogOpen(false)}
+        onRecurrenceEditTypeSelected={handleRecurrenceEditTypeSelected}
+      />
+      <MaterialDialog open={isOpen} onClose={onClose}>
+        <DialogTitle>{title}</DialogTitle>
+        <DialogContent>
           <FormControl fullWidth required sx={{ mb: 2 }}>
-            <InputLabel id="counselor" error={counselorError}>
-              Counselor
+            <InputLabel id="startTime" error={startTimeError}>
+              Start Time
+            </InputLabel>
+            <DateSelector
+              selected={new Date(appointment.start)}
+              onChange={(date: Date) => {
+                setStartTimeError(false);
+                setAppointment({ ...appointment, start: date });
+              }}
+              label={'Start Time'}
+            />
+          </FormControl>
+          <FormControl fullWidth required sx={{ mb: 2 }}>
+            <InputLabel id="duration" error={durationError}>
+              Duration
             </InputLabel>
             <Select
-              labelId="counselor"
-              id="counselor"
-              defaultValue=""
-              value={appointment.counselorUserId}
-              label="Counselor"
+              labelId="duration"
+              id="duration"
+              defaultValue={30}
+              value={duration}
+              label="Duration"
               onChange={e => {
                 e.preventDefault();
-                setCounselorError(false);
-                const counselor = counselors.find(
-                  counselor => counselor.id === e.target.value
-                );
+                setDurationError(false);
+                setDuration(e.target.value as number);
+              }}
+            >
+              {DURATIONS.map((duration, index) => (
+                <MenuItem value={duration} key={index}>
+                  {duration} minutes
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          {shouldShowCounselorField && (
+            <FormControl fullWidth required sx={{ mb: 2 }}>
+              <InputLabel id="counselor" error={counselorError}>
+                Counselor
+              </InputLabel>
+              <Select
+                labelId="counselor"
+                id="counselor"
+                defaultValue=""
+                value={appointment.counselorUserId}
+                label="Counselor"
+                onChange={e => {
+                  e.preventDefault();
+                  setCounselorError(false);
+                  const counselor = counselors.find(
+                    counselor => counselor.id === e.target.value
+                  );
+                  setAppointment({
+                    ...appointment,
+                    counselorUserId: e.target.value,
+                    counselor: counselor!,
+                  });
+                }}
+              >
+                {counselors.map((counselor, index) => {
+                  const counselorStr = `${counselor.firstName} ${counselor.lastName}`;
+                  return (
+                    <MenuItem value={counselor.id} key={index}>
+                      {counselorStr}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          )}
+          <FormControl fullWidth required sx={{ mb: 2 }}>
+            <InputLabel id="type" error={typeError}>
+              Type
+            </InputLabel>
+            <Select
+              labelId="type"
+              id="type"
+              defaultValue=""
+              value={appointment.type}
+              label="Type"
+              onChange={e => {
+                e.preventDefault();
+                setTypeError(false);
                 setAppointment({
                   ...appointment,
-                  counselorUserId: e.target.value,
-                  counselor: counselor!,
+                  type: e.target.value,
                 });
               }}
             >
-              {counselors.map((counselor, index) => {
-                const counselorStr = `${counselor.firstName} ${counselor.lastName}`;
+              {APPOINTMENT_TYPES.map((type, index) => (
+                <MenuItem value={type} key={index}>
+                  {type}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth required sx={{ mb: 2 }}>
+            <InputLabel id="status" error={statusError}>
+              Status
+            </InputLabel>
+            <Select
+              labelId="status"
+              id="status"
+              defaultValue=""
+              value={appointment.status}
+              label="Status"
+              onChange={e => {
+                e.preventDefault();
+                setStatusError(false);
+                setAppointment({
+                  ...appointment,
+                  status: e.target.value,
+                });
+              }}
+            >
+              {APPOINTMENT_STATUSES.map((status, index) => (
+                <MenuItem value={status} key={index}>
+                  {status}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth required sx={{ mb: 2 }}>
+            <InputLabel id="location" error={locationError}>
+              Location
+            </InputLabel>
+            <Select
+              labelId="location"
+              id="location"
+              defaultValue=""
+              value={appointment.location}
+              label="Location"
+              onChange={e => {
+                e.preventDefault();
+                setLocationError(false);
+                setAppointment({
+                  ...appointment,
+                  location: e.target.value,
+                });
+              }}
+            >
+              {APPOINTMENT_LOCATIONS.map((location, index) => (
+                <MenuItem value={location} key={index}>
+                  {location}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth required sx={{ mb: 2 }}>
+            <InputLabel id="school" error={schoolError}>
+              School
+            </InputLabel>
+            <Select
+              labelId="school"
+              id="school"
+              defaultValue=""
+              value={appointment.schoolId}
+              label="School"
+              onChange={e => {
+                e.preventDefault();
+                setSchoolError(false);
+                const school = schools.find(
+                  school => school.id === e.target.value
+                );
+                setAppointment({
+                  ...appointment,
+                  schoolId: e.target.value,
+                  school: school!,
+                });
+              }}
+            >
+              {schools.map((school, index) => (
+                <MenuItem value={school.id} key={index}>
+                  {school.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth required sx={{ mb: 2 }}>
+            <InputLabel id="participants" error={participantsError}>
+              Participants
+            </InputLabel>
+            <Select
+              labelId="participants"
+              id="participants"
+              multiple
+              defaultValue={[]}
+              value={participantNames}
+              label="Participants"
+              renderValue={(selected: string[]) => (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  {selected.map((value: string) => {
+                    return <Chip key={value} label={value} />;
+                  })}
+                </Box>
+              )}
+              onChange={(e: SelectChangeEvent<typeof participantNames>) => {
+                e.preventDefault();
+                setParticipantsError(false);
+                const value = e.target.value;
+                const newValue =
+                  typeof value === 'string' ? value.split(',') : value;
+                setParticipantNames(newValue);
+              }}
+            >
+              {filteredUserNames.map((name, index) => {
                 return (
-                  <MenuItem value={counselor.id} key={index}>
-                    {counselorStr}
+                  <MenuItem value={name} key={index}>
+                    {name}
                   </MenuItem>
                 );
               })}
             </Select>
           </FormControl>
-        )}
-        <FormControl fullWidth required sx={{ mb: 2 }}>
-          <InputLabel id="type" error={typeError}>
-            Type
-          </InputLabel>
-          <Select
-            labelId="type"
-            id="type"
-            defaultValue=""
-            value={appointment.type}
-            label="Type"
-            onChange={e => {
-              e.preventDefault();
-              setTypeError(false);
-              setAppointment({
-                ...appointment,
-                type: e.target.value,
-              });
-            }}
-          >
-            {APPOINTMENT_TYPES.map((type, index) => (
-              <MenuItem value={type} key={index}>
-                {type}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl fullWidth required sx={{ mb: 2 }}>
-          <InputLabel id="status" error={statusError}>
-            Status
-          </InputLabel>
-          <Select
-            labelId="status"
-            id="status"
-            defaultValue=""
-            value={appointment.status}
-            label="Status"
-            onChange={e => {
-              e.preventDefault();
-              setStatusError(false);
-              setAppointment({
-                ...appointment,
-                status: e.target.value,
-              });
-            }}
-          >
-            {APPOINTMENT_STATUSES.map((status, index) => (
-              <MenuItem value={status} key={index}>
-                {status}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl fullWidth required sx={{ mb: 2 }}>
-          <InputLabel id="location" error={locationError}>
-            Location
-          </InputLabel>
-          <Select
-            labelId="location"
-            id="location"
-            defaultValue=""
-            value={appointment.location}
-            label="Location"
-            onChange={e => {
-              e.preventDefault();
-              setLocationError(false);
-              setAppointment({
-                ...appointment,
-                location: e.target.value,
-              });
-            }}
-          >
-            {APPOINTMENT_LOCATIONS.map((location, index) => (
-              <MenuItem value={location} key={index}>
-                {location}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl fullWidth required sx={{ mb: 2 }}>
-          <InputLabel id="school" error={schoolError}>
-            School
-          </InputLabel>
-          <Select
-            labelId="school"
-            id="school"
-            defaultValue=""
-            value={appointment.schoolId}
-            label="School"
-            onChange={e => {
-              e.preventDefault();
-              setSchoolError(false);
-              const school = schools.find(
-                school => school.id === e.target.value
-              );
-              setAppointment({
-                ...appointment,
-                schoolId: e.target.value,
-                school: school!,
-              });
-            }}
-          >
-            {schools.map((school, index) => (
-              <MenuItem value={school.id} key={index}>
-                {school.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl fullWidth required sx={{ mb: 2 }}>
-          <InputLabel id="participants" error={participantsError}>
-            Participants
-          </InputLabel>
-          <Select
-            labelId="participants"
-            id="participants"
-            multiple
-            defaultValue={[]}
-            value={participantNames}
-            label="Participants"
-            renderValue={(selected: string[]) => (
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                {selected.map((value: string) => {
-                  return <Chip key={value} label={value} />;
-                })}
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={appointment.isSeries}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setAppointment({
+                    ...appointment,
+                    isSeries: e.target.checked,
+                  });
+                }}
+              />
+            }
+            label="Is Recurring"
+          />
+          {appointment.isSeries && (
+            <>
+              <Typography>Repeat every</Typography>
+              <Box sx={{ mt: 2 }} justifyContent="center" display="flex">
+                <TextField
+                  type="number"
+                  id="frequencyNum"
+                  label="Frequency Number"
+                  variant="outlined"
+                  error={intervalError}
+                  onChange={e => {
+                    setIntervalError(false);
+                    setInterval(parseInt(e.target.value));
+                  }}
+                  value={interval}
+                />
+                <FormControl sx={{ mb: 2 }}>
+                  <InputLabel id="frequency" error={frequencyError}>
+                    Frequency
+                  </InputLabel>
+                  <Select
+                    labelId="frequency"
+                    id="frequency"
+                    defaultValue=""
+                    value={frequency}
+                    label="Frequency"
+                    onChange={e => {
+                      e.preventDefault();
+                      setFrequencyError(false);
+                      setFrequency(e.target.value);
+                    }}
+                  >
+                    {RECURRING_FREQUENCIES.map((frequency, index) => (
+                      <MenuItem value={frequency} key={index}>
+                        {frequency}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Box>
-            )}
-            onChange={(e: SelectChangeEvent<typeof participantNames>) => {
-              e.preventDefault();
-              setParticipantsError(false);
-              const value = e.target.value;
-              const newValue =
-                typeof value === 'string' ? value.split(',') : value;
-              setParticipantNames(newValue);
-            }}
-          >
-            {filteredUserNames.map((name, index) => {
-              return (
-                <MenuItem value={name} key={index}>
-                  {name}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
-        <FormControlLabel
-          control={
-            <Checkbox
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setAppointment({
-                  ...appointment,
-                  isRecurring: e.target.checked,
-                });
-              }}
-            />
-          }
-          label="Is Recurring"
-        />
-        {appointment.isRecurring && (
-          <>
-            <Typography>Repeat every</Typography>
-            <Box sx={{ mt: 2 }} justifyContent="center" display="flex">
-              <TextField
-                type="number"
-                id="frequencyNumber"
-                label="Frequency Number"
-                variant="outlined"
-                error={frequencyNumError}
-                onChange={e => {
-                  setFrequencyNumError(false);
-                  setAppointment({
-                    ...appointment,
-                    numRepeats: parseInt(e.target.value),
-                  });
-                }}
-                value={appointment.numRepeats}
-              />
-              <FormControl sx={{ mb: 2 }}>
-                <InputLabel id="frequency" error={frequencyError}>
-                  Frequency
-                </InputLabel>
-                <Select
-                  labelId="frequency"
-                  id="frequency"
-                  defaultValue=""
-                  value={appointment.frequency}
-                  label="Frequency"
+              <Typography>for</Typography>
+              <Box sx={{ mt: 2 }} justifyContent="center" display="flex">
+                <TextField
+                  type="number"
+                  id="seriesOccurrences"
+                  label="Occurrences"
+                  variant="outlined"
+                  error={numOccurrencesError}
                   onChange={e => {
-                    e.preventDefault();
-                    setFrequencyError(false);
-                    setAppointment({
-                      ...appointment,
-                      frequency: e.target.value,
-                    });
+                    setNumOccurrencesError(false);
+                    setSeriesOccurrences(parseInt(e.target.value));
                   }}
-                >
-                  {RECURRING_FREQUENCIES.map((frequency, index) => (
-                    <MenuItem value={frequency} key={index}>
-                      {frequency}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-            <Typography>for</Typography>
-            <Box sx={{ mt: 2 }} justifyContent="center" display="flex">
-              <TextField
-                type="number"
-                id="numOccurrences"
-                label="Occurrences"
-                variant="outlined"
-                error={numOccurrencesError}
-                onChange={e => {
-                  setNumOccurrencesError(false);
-                  setAppointment({
-                    ...appointment,
-                    numOccurrences: parseInt(e.target.value),
-                  });
-                }}
-                value={appointment.numOccurrences}
-              />
-              <FormControl sx={{ mb: 2 }}>
-                <InputLabel id="frequency" error={frequencyError}>
-                  Frequency
-                </InputLabel>
-                <Select
-                  labelId="frequency"
-                  id="frequency"
-                  defaultValue=""
-                  value={appointment.frequency}
-                  label="Frequency"
-                  onChange={e => {
-                    e.preventDefault();
-                    setFrequencyError(false);
-                    setAppointment({
-                      ...appointment,
-                      frequency: e.target.value,
-                    });
-                  }}
-                >
-                  {RECURRING_FREQUENCIES.map((frequency, index) => (
-                    <MenuItem value={frequency} key={index}>
-                      {frequency}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-          </>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onFormSubmit}>Submit</Button>
-        <Button onClick={onFormCancel}>Cancel</Button>
-      </DialogActions>
-    </MaterialDialog>
+                  value={seriesOccurrences}
+                />
+              </Box>
+            </>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onFormSubmit}>Submit</Button>
+          <Button onClick={onFormCancel}>Cancel</Button>
+        </DialogActions>
+      </MaterialDialog>
+    </>
   );
 };
 

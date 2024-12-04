@@ -2,21 +2,23 @@
 
 import React, { FC, useState } from 'react';
 import { AppointmentService } from '../services/appointment.service';
-import { AxiosResponse } from 'axios';
+import { RRuleSet, rrulestr } from 'rrule';
 import { ContextData } from './ContextData';
 import { DataProviderProps } from './DataProviderProps';
 import { School } from './schools';
 import { User } from './users';
+import { v4 as uuid } from 'uuid';
 
 export type Appointment = {
   id: string;
   title: string;
   start: Date;
   end: Date;
-  isRecurring?: boolean;
-  numOccurrences?: number;
-  numRepeats?: number;
-  frequency?: string;
+  isSeries?: boolean;
+  seriesId?: string;
+  seriesRule?: string;
+  seriesExceptions?: string[];
+  seriesProtoId?: string;
   school?: School;
   schoolId?: string;
   counselor?: User;
@@ -26,6 +28,9 @@ export type Appointment = {
   status: string;
   location: string;
   color?: string;
+  editType?: string;
+  isVirtual?: boolean;
+  getSeriesVirtualAppointments?: () => Appointment[];
 };
 
 export const emptyAppointment = {
@@ -33,16 +38,17 @@ export const emptyAppointment = {
   title: '',
   start: new Date(),
   end: new Date(new Date().getTime() + 60000 * 30),
-  isRecurring: false,
-  numOccurrences: 4,
-  numRepeats: 1,
-  frequency: 'WEEKS',
+  isSeries: false,
+  seriesRule: '',
+  seriesExceptions: [],
+  seriesProtoId: '',
   schoolId: '',
   counselorUserId: '',
   participants: [] as User[],
   type: 'CLINICAL',
   status: 'SCHEDULED',
   location: 'VIRTUAL_SCHOOL',
+  isVirtual: false,
 };
 
 const AppointmentComparator = (a: Appointment, b: Appointment) => {
@@ -136,6 +142,12 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
     getAll: async function (): Promise<void> {
       try {
         const { data: appointments } = await service.getAll();
+        appointments.forEach(appointment => {
+          appointment.isVirtual = false;
+          if (appointment.isSeries) {
+            appointments.push(...getSeriesVirtualAppointments(appointment));
+          }
+        });
         setAppointments(appointments.sort(AppointmentComparator));
       } catch (error) {
         console.error(error);
@@ -146,19 +158,13 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
     },
     add: async function (data: Appointment): Promise<void> {
       try {
-        // since recurring meetings create multiple appointments, this response actually returns an array of appointments.
-        const { data: appointment } = (await service.create(
-          data
-        )) as AxiosResponse<unknown>;
-        const apptArray = appointment as Appointment[];
-        apptArray.forEach(appt => {
-          appt.participants = data.participants;
-          appt.school = data.school;
-          appt.counselor = data.counselor;
-        });
-        setAppointments(
-          [...appointments, ...apptArray].sort(AppointmentComparator)
-        );
+        const { data: appointment } = await service.create(data);
+        const newAppointments = [...appointments, appointment];
+        appointment.isVirtual = false;
+        if (appointment.isSeries) {
+          newAppointments.push(...getSeriesVirtualAppointments(appointment));
+        }
+        setAppointments(newAppointments.sort(AppointmentComparator));
       } catch (error) {
         console.error(error);
       }
@@ -169,10 +175,18 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
         appointment.participants = data.participants;
         appointment.counselor = data.counselor;
         appointment.school = data.school;
-        const newAppointments = [...appointments].filter(
+        appointment.isVirtual = false;
+        let newAppointments = [...appointments].filter(
           appointment => appointment.id !== data.id
         );
         newAppointments.push(appointment);
+        if (appointment.isSeries) {
+          // remove old virtual appointments and calculate new ones
+          newAppointments = newAppointments.filter(
+            appt => appt.seriesProtoId !== appointment.id || !appt.isVirtual
+          );
+          newAppointments.push(...getSeriesVirtualAppointments(appointment));
+        }
         setAppointments(newAppointments.sort(AppointmentComparator));
       } catch (error) {
         console.error(error);
@@ -180,11 +194,16 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
     },
     delete: async function (data: Appointment): Promise<void> {
       try {
+        // TODO: handle "deleting" a virtual appointment (add it to exception list)
         const { data: deletedAppointment } = await service.delete(`${data.id}`);
         setAppointments(
-          appointments.filter(
-            appointment => appointment.id !== deletedAppointment.id
-          )
+          appointments
+            // remove deleted appointment
+            .filter(appointment => appointment.id !== deletedAppointment.id)
+            // remove virtual appointments (if deleted appointment was a series)
+            .filter(
+              appointment => appointment.seriesProtoId !== deletedAppointment.id
+            )
         );
       } catch (error) {}
     },
@@ -199,6 +218,40 @@ export const AppointmentsProvider: FC<DataProviderProps<Appointment[]>> = ({
       {children}
     </AppointmentsContext.Provider>
   );
+};
+
+const getSeriesVirtualAppointments = (appointment: Appointment) => {
+  const series: Appointment[] = [];
+  const rrule = rrulestr(appointment.seriesRule!);
+  const ruleSet = new RRuleSet();
+  ruleSet.rrule(rrule);
+  if (
+    typeof appointment.seriesExceptions !== 'undefined' &&
+    appointment.seriesExceptions.length > 0
+  ) {
+    appointment.seriesExceptions.forEach(exc => ruleSet.exdate(new Date(exc)));
+  }
+
+  const appointmentStartDate = new Date(appointment.start);
+  const virtualDates = ruleSet.all().filter(date => {
+    return date.getTime() !== appointmentStartDate.getTime();
+  });
+
+  virtualDates.forEach(virtualDate => {
+    const virtualAppointment = { ...appointment };
+    virtualAppointment.id = uuid();
+    const duration =
+      new Date(appointment.end).getTime() -
+      new Date(appointment.start).getTime();
+    virtualAppointment.start = new Date(virtualDate);
+    virtualAppointment.end = new Date(
+      virtualAppointment.start.getTime() + duration
+    );
+    virtualAppointment.isVirtual = true;
+    series.push(virtualAppointment);
+  });
+
+  return series;
 };
 
 export const getTableColumnHeadersForAppointments = (

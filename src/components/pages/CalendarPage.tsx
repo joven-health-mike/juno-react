@@ -5,7 +5,7 @@ import '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone';
-import { DateTime } from 'luxon';
+import rrulePlugin from '@fullcalendar/rrule';
 import {
   Appointment,
   AppointmentsContext,
@@ -22,7 +22,11 @@ import Navbar from '../navbar/Navbar';
 import AppointmentDialog from '../dialogs/AppointmentDialog';
 import AppointmentDetailsDialog from '../dialogs/AppointmentDetailsDialog';
 import { LoggedInUserContext, UsersContext } from '../../data/users';
-import { createPermission, deletePermission } from '../../auth/permissions';
+import {
+  createPermission,
+  deletePermission,
+  updatePermission,
+} from '../../auth/permissions';
 import {
   Box,
   FormControl,
@@ -31,6 +35,8 @@ import {
   Select,
   Typography,
 } from '@mui/material';
+import { defaultStartEndTime } from '../../utils/DateUtils';
+import { DateTime } from 'luxon';
 
 const CalendarPage: React.FC = () => {
   const [isCreateAppointmentDialogOpen, setIsCreateAppointmentDialogOpen] =
@@ -46,6 +52,8 @@ const CalendarPage: React.FC = () => {
   const [clickedAppointment, setClickedAppointment] =
     useState<Appointment>(emptyAppointment);
   const [isCreateAppointmentAllowed, setIsCreateAppointmentAllowed] =
+    useState<boolean>(false);
+  const [isUpdateAppointmentAllowed, setIsUpdateAppointmentAllowed] =
     useState<boolean>(false);
   const [isDeleteAppointmentAllowed, setIsDeleteAppointmentAllowed] =
     useState<boolean>(false);
@@ -68,17 +76,9 @@ const CalendarPage: React.FC = () => {
 
   const handleDateClick = (utcDateStr: string) => {
     if (isCreateAppointmentAllowed) {
-      const startTime = DateTime.fromFormat(utcDateStr, 'yyyy-MM-dd')
-        .set({
-          hour: 8,
-          minute: 0,
-          second: 0,
-          millisecond: 0,
-        })
-        .toJSDate();
-      const endTime = DateTime.fromJSDate(startTime)
-        .set({ minute: 30 })
-        .toJSDate();
+      const { startTime, endTime } = defaultStartEndTime(
+        DateTime.fromFormat(utcDateStr, 'yyyy-MM-dd')
+      );
       setInitialAppointment({
         ...initialAppointment,
         start: startTime,
@@ -88,9 +88,25 @@ const CalendarPage: React.FC = () => {
     }
   };
 
+  const handleDateChange = (
+    appointment: Appointment,
+    newStart: Date,
+    newEnd: Date
+  ) => {
+    if (isUpdateAppointmentAllowed) {
+      const newAppointment = { ...appointment };
+      newAppointment.start = newStart;
+      newAppointment.end = newEnd;
+      updateAppointment(newAppointment);
+    }
+  };
+
   useEffect(() => {
     setIsCreateAppointmentAllowed(
       createPermission(loggedInUser.role, 'appointment')
+    );
+    setIsUpdateAppointmentAllowed(
+      updatePermission(loggedInUser.role, 'appointment')
     );
     setIsDeleteAppointmentAllowed(
       deletePermission(loggedInUser.role, 'appointment')
@@ -130,9 +146,30 @@ const CalendarPage: React.FC = () => {
     window.open(mailToUrl);
   };
 
-  const onAppointmentEdited = (appointment: Appointment) => {
-    setClickedAppointment({ ...appointment });
-    updateAppointment(appointment);
+  const onAppointmentEdited = (oldAppt: Appointment, newAppt: Appointment) => {
+    if (isUpdateAppointmentAllowed) {
+      setClickedAppointment({ ...newAppt });
+      switch (newAppt.editType) {
+        case 'single':
+          // if updating a virtual appointment, we need to add it as a new appointment...
+          const newVirtualAppt = { ...newAppt };
+          newVirtualAppt.id = '-1'; // indicates to create a new appointment
+          newVirtualAppt.isSeries = false;
+          addAppointment(newVirtualAppt);
+          // ... and add it as an exception to the prototype appointment
+          const exceptionStr = new Date(oldAppt.start).toISOString();
+          const protoAppt = appointments.find(
+            appt => appt.id === newVirtualAppt.seriesProtoId
+          )!;
+          if (typeof protoAppt.seriesExceptions === 'undefined') {
+            protoAppt.seriesExceptions = [exceptionStr];
+          } else {
+            protoAppt.seriesExceptions.push(exceptionStr);
+          }
+          updateAppointment(protoAppt);
+          break;
+      }
+    }
   };
 
   const onAppointmentRoomLinkClicked = (
@@ -234,10 +271,18 @@ const CalendarPage: React.FC = () => {
       </Box>
       <Calendar
         view="dayGridMonth"
-        plugins={[dayGridPlugin, interactionPlugin, momentTimezonePlugin]}
+        plugins={[
+          dayGridPlugin,
+          interactionPlugin,
+          momentTimezonePlugin,
+          rrulePlugin,
+        ]}
         appointments={filteredEvents}
         onEventClick={handleAppointmentClick}
         onDateClick={handleDateClick}
+        onEventDateChanged={
+          isUpdateAppointmentAllowed ? handleDateChange : undefined
+        }
       />
       <AppointmentDialog
         title="Create Appointment"
@@ -249,7 +294,7 @@ const CalendarPage: React.FC = () => {
       <AppointmentDetailsDialog
         isOpen={isAppointmentDetailsDialogOpen}
         onClose={() => setIsAppointmentDetailsDialogOpen(false)}
-        appointment={clickedAppointment}
+        initialAppointment={clickedAppointment}
         onRoomLinkClicked={onAppointmentRoomLinkClicked}
         onDeleteClicked={onAppointmentDeleteClicked}
         onEmailClicked={onAppointmentEmailClicked}

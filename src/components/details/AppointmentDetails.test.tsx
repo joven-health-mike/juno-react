@@ -15,7 +15,6 @@ const fakeAppointment: Appointment = {
   title: 'Hello World',
   start: new Date(),
   end: new Date(new Date().getTime() + 60000 * 30),
-  isRecurring: false,
   counselor: { ...emptyUser, firstName: 'Jacek', lastName: 'McGuinness' },
   school: emptySchool,
   participants: [],

@@ -15,37 +15,38 @@ import MaterialDialog from './MaterialDialog';
 type AppointmentDetailsDialogProps = {
   isOpen: boolean;
   onClose: () => void;
-  readonly appointment: Appointment;
+  readonly initialAppointment: Appointment;
   onDeleteClicked: (appointment: Appointment) => void;
   onEmailClicked: (appointment: Appointment) => void;
   onRoomLinkClicked: (appointment: Appointment) => void;
-  onAppointmentEdited: (appointment: Appointment) => void;
+  onAppointmentEdited: (oldAppt: Appointment, newAppt: Appointment) => void;
 };
 
 const AppointmentDetailsDialog: React.FC<AppointmentDetailsDialogProps> = ({
   isOpen,
   onClose,
-  appointment,
+  initialAppointment,
   onDeleteClicked,
   onEmailClicked,
   onRoomLinkClicked,
   onAppointmentEdited,
 }) => {
   const [childDialogOpen, setChildDialogOpen] = useState(false);
-  const [detailsAppointment, setDetailsAppointment] = useState(appointment);
+  const [detailsAppointment, setDetailsAppointment] =
+    useState(initialAppointment);
 
   useEffect(() => {
-    setDetailsAppointment({ ...appointment });
-  }, [appointment]);
+    setDetailsAppointment({ ...initialAppointment });
+  }, [initialAppointment]);
 
   const handleAppointmentEdit = (appointment: Appointment) => {
     setDetailsAppointment(appointment);
-    onAppointmentEdited(appointment);
+    onAppointmentEdited(initialAppointment, appointment);
   };
 
   return (
     <MaterialDialog open={isOpen} onClose={onClose}>
-      <DialogTitle>{appointment.title}</DialogTitle>
+      <DialogTitle>{initialAppointment.title}</DialogTitle>
       <DialogContent>
         <AppointmentDetails appointment={detailsAppointment} hideTitle={true} />
         <AppointmentDialog
@@ -53,14 +54,20 @@ const AppointmentDetailsDialog: React.FC<AppointmentDetailsDialogProps> = ({
           isOpen={childDialogOpen}
           onClose={() => setChildDialogOpen(false)}
           onAppointmentAdded={appointment => handleAppointmentEdit(appointment)}
-          initialAppointment={appointment}
+          initialAppointment={initialAppointment}
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => onRoomLinkClicked(appointment)}>Join</Button>
-        <Button onClick={() => onEmailClicked(appointment)}>Email</Button>
+        <Button onClick={() => onRoomLinkClicked(initialAppointment)}>
+          Join
+        </Button>
+        <Button onClick={() => onEmailClicked(initialAppointment)}>
+          Email
+        </Button>
         <Button onClick={() => setChildDialogOpen(true)}>Edit</Button>
-        <Button onClick={() => onDeleteClicked(appointment)}>Delete</Button>
+        <Button onClick={() => onDeleteClicked(initialAppointment)}>
+          Delete
+        </Button>
         <Button onClick={() => onClose()}>Close</Button>
       </DialogActions>
     </MaterialDialog>

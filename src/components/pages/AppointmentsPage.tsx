@@ -18,6 +18,8 @@ import Navbar from '../navbar/Navbar';
 import AppointmentsTable from '../tables/AppointmentsTable';
 import { Add } from '@mui/icons-material';
 import { Box, Button, Typography } from '@mui/material';
+import { defaultStartEndTime } from '../../utils/DateUtils';
+import { DateTime } from 'luxon';
 
 const AppointmentsPage: React.FC = () => {
   const {
@@ -41,6 +43,10 @@ const AppointmentsPage: React.FC = () => {
     useState<boolean>(false);
   const [isUpdateAppointmentAllowed, setIsUpdateAppointmentAllowed] =
     useState<boolean>(false);
+
+  const { startTime, endTime } = defaultStartEndTime(
+    DateTime.fromJSDate(new Date())
+  );
 
   useEffect(() => {
     setIsCreateAppointmentAllowed(
@@ -143,7 +149,11 @@ const AppointmentsPage: React.FC = () => {
             isOpen={isCreateAppointmentDialogOpen}
             onClose={() => setIsCreateAppointmentDialogOpen(false)}
             onAppointmentAdded={onCreateAppointmentSubmit}
-            initialAppointment={emptyAppointment}
+            initialAppointment={{
+              ...emptyAppointment,
+              start: startTime,
+              end: endTime,
+            }}
           />
         )}
         {isUpdateAppointmentAllowed && (
